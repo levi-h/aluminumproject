@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-rootProject.name = 'aluminum'
-
-[
-	'core': 'core',
-	'core-library': 'libraries/core'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+dependencies {
+	compile project(':aluminum-core')
 }
