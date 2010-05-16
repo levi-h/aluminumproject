@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.libraries.text.actions;
 
-rootProject.name = 'aluminum'
+import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;
 
-[
-	'core': 'core',
-
-	'core-library': 'libraries/core',
-	'text-library': 'libraries/text',
-
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+/**
+ * Preserves a number of connecting newlines of the body text of the action that it contributes to. How many newlines
+ * are kept depends on the parameter that was passed.
+ *
+ * @author levi_h
+ */
+public class NewlinesToPreserve extends WhitespaceToPreserve {
+	/**
+	 * Creates a <em>newlines to preserve</em> action contribution.
+	 */
+	public NewlinesToPreserve() {
+		super(WhitespaceType.NEWLINE);
+	}
 }

@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.libraries.text.actions;
 
-rootProject.name = 'aluminum'
+import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;
 
-[
-	'core': 'core',
-
-	'core-library': 'libraries/core',
-	'text-library': 'libraries/text',
-
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+/**
+ * Preserves a number of adjacent tabs of the body text of the action that it contributes to. How many tabs are
+ * preserved depends on the parameter of the action contribution.
+ *
+ * @author levi_h
+ */
+public class TabsToPreserve extends WhitespaceToPreserve {
+	/**
+	 * Creates a <em>tabs to preserve</em> action contribution.
+	 */
+	public TabsToPreserve() {
+		super(WhitespaceType.TAB);
+	}
 }

@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.libraries.text.actions;
 
-rootProject.name = 'aluminum'
-
-[
-	'core': 'core',
-
-	'core-library': 'libraries/core',
-	'text-library': 'libraries/text',
-
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+/**
+ * Trims the body text of the action it contributes to.
+ *
+ * @author levi_h
+ */
+public class Trim extends AbstractTrim {
+	/**
+	 * Creates a <em>trim</em> action contribution.
+	 */
+	public Trim() {
+		super(false);
+	}
 }
