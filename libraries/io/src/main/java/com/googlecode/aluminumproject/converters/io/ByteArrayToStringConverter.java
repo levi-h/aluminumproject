@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.converters.io;
 
-rootProject.name = 'aluminum'
+import com.googlecode.aluminumproject.converters.SimpleConverter;
 
-[
-	'core': 'core',
+/**
+ * Converts byte arrays to {@link String strings} using the {@link String#String(byte[]) constructor that accepts byte
+ * arrays}.
+ *
+ * @author levi_h
+ */
+public class ByteArrayToStringConverter extends SimpleConverter<byte[], String> {
+	/**
+	 * Creates a byte array to string converter.
+	 */
+	public ByteArrayToStringConverter() {}
 
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	@Override
+	protected String convert(byte[] value) {
+		return new String(value);
+	}
 }
