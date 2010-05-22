@@ -14,24 +14,8 @@
  * limitations under the License.
  */
 
-rootProject.name = 'aluminum'
+dependencies {
+	compile project(':aluminum-core')
 
-[
-	'core': 'core',
-
-	'servlet': 'integration/servlet',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 }
