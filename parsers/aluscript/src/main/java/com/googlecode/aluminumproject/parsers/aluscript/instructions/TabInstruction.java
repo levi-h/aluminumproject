@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2010 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
-rootProject.name = 'aluminum'
+/**
+ * Adds a text element that contains a tab character to the context. The name of the instruction is {@value #NAME}.
+ *
+ * @author levi_h
+ */
+public class TabInstruction extends TextInstruction {
+	/**
+	 * Creates a tab instruction.
+	 */
+	public TabInstruction() {
+		super(NAME, "\t");
+	}
 
-[
-	'core': 'core',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	/** The name of the newline instruction: {@value}. */
+	public final static String NAME = "tab";
 }
