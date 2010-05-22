@@ -14,26 +14,9 @@
  * limitations under the License.
  */
 
-rootProject.name = 'aluminum'
+dependencies {
+	compile project(':aluminum-core')
 
-[
-	'core': 'core',
-
-	'el-expressions': 'expressions/el',
-
-	'servlet': 'integration/servlet',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	compile group: 'javassist', name: 'javassist', version: '3.10.0.GA'
+	compile group: 'javax.el', name: 'el-api', version: '2.2'
 }
