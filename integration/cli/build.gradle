@@ -14,27 +14,12 @@
  * limitations under the License.
  */
 
-rootProject.name = 'aluminum'
+dependencies {
+	compile project(':aluminum-core')
 
-[
-	'core': 'core',
+	compile group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '3.1'
 
-	'el-expressions': 'expressions/el',
-
-	'cli': 'integration/cli',
-	'servlet': 'integration/servlet',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.5.6'
+	compile group: 'ch.qos.logback', name: 'logback-core', version: '0.9.15'
+	compile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.15'
 }
