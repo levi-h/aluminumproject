@@ -210,7 +210,7 @@ class FunctionDelegateFactory {
 				delegateIndices = new HashMap<String, Integer>();
 
 				CtClass ctFunctions = ClassPool.getDefault().makeClass(
-					String.format("nl.levi_h.os.aluminum.expressions.el.Delegates%d", classIndex));
+					String.format("com.googlecode.aluminumproject.expressions.el.Delegates%d", classIndex));
 
 				int delegateIndex = 0;
 
