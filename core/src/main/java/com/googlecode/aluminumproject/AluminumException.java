@@ -39,7 +39,7 @@ public class AluminumException extends RuntimeException {
 	 * @param messageParts the parts of the exception message.
 	 */
 	public AluminumException(Throwable cause, Object... messageParts) {
-		super(StringUtilities.join(messageParts));
+		super(StringUtilities.join(messageParts), cause);
 	}
 
 	private final static long serialVersionUID = 20090308L;
