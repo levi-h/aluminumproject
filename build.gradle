@@ -15,6 +15,7 @@
  */
 
 allprojects {
+	group = 'com.googlecode.aluminumproject'
 	version = '0.5'
 }
 
