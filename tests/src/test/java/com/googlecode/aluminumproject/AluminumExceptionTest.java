@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject;
 
-rootProject.name = 'aluminum'
+import org.testng.annotations.Test;
 
-[
-	'core': 'core',
+@SuppressWarnings("all")
+@Test(groups = {"core", "fast"})
+public class AluminumExceptionTest {
+	public void messagePartsShouldBeJoined() {
+		boolean valid = false;
 
-	'el-expressions': 'expressions/el',
+		String message = new AluminumException("the template is ", valid ? "valid" : "invalid").getMessage();
+		assert message != null;
+		assert message.equals("the template is invalid");
+	}
 
-	'cli': 'integration/cli',
-	'servlet': 'integration/servlet',
+	public void causeShouldBeAvailable() {
+		Throwable cause = new Exception();
 
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml',
-
-	'tests': 'tests'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+		assert new AluminumException(cause, "test").getCause() == cause;
+	}
 }

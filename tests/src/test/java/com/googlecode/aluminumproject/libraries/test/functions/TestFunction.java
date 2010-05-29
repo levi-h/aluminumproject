@@ -13,30 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.libraries.test.functions;
 
-rootProject.name = 'aluminum'
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.libraries.functions.Function;
 
-[
-	'core': 'core',
+/**
+ * A function that can be used in tests.
+ *
+ * @author levi_h
+ */
+public class TestFunction implements Function {
+	/**
+	 * Creates a test function.
+	 */
+	public TestFunction() {}
 
-	'el-expressions': 'expressions/el',
-
-	'cli': 'integration/cli',
-	'servlet': 'integration/servlet',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml',
-
-	'tests': 'tests'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	public Object call(Context context) {
+		return null;
+	}
 }

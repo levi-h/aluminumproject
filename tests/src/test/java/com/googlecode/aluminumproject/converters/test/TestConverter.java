@@ -13,30 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.converters.test;
 
-rootProject.name = 'aluminum'
+import com.googlecode.aluminumproject.converters.SimpleConverter;
 
-[
-	'core': 'core',
+/**
+ * A converter that can be used in tests.
+ *
+ * @author levi_h
+ */
+public class TestConverter extends SimpleConverter<Float, CharSequence> {
+	/**
+	 * Creates a test converter.
+	 */
+	public TestConverter() {}
 
-	'el-expressions': 'expressions/el',
-
-	'cli': 'integration/cli',
-	'servlet': 'integration/servlet',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml',
-
-	'tests': 'tests'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	@Override
+	protected CharSequence convert(Float value) {
+		return value.toString();
+	}
 }

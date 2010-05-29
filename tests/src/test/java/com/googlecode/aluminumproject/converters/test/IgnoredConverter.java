@@ -13,30 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.converters.test;
 
-rootProject.name = 'aluminum'
+import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.converters.SimpleConverter;
 
-[
-	'core': 'core',
+/**
+ * A converter that will be ignored when adding registering all converters in a package.
+ *
+ * @author levi_h
+ */
+@Ignored
+public class IgnoredConverter extends SimpleConverter<String, String> {
+	/**
+	 * Creates an ignored converter.
+	 */
+	public IgnoredConverter() {}
 
-	'el-expressions': 'expressions/el',
-
-	'cli': 'integration/cli',
-	'servlet': 'integration/servlet',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml',
-
-	'tests': 'tests'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	@Override
+	protected String convert(String value) {
+		return new StringBuilder(value).reverse().toString();
+	}
 }

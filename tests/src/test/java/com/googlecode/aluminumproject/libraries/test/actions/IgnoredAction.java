@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.libraries.test.actions;
 
-rootProject.name = 'aluminum'
+import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
+import com.googlecode.aluminumproject.writers.Writer;
 
-[
-	'core': 'core',
+/**
+ * An action that will be ignored when adding all actions from a package.
+ *
+ * @author levi_h
+ */
+@Ignored
+public class IgnoredAction extends AbstractAction {
+	/**
+	 * Creates an ignored action.
+	 */
+	public IgnoredAction() {}
 
-	'el-expressions': 'expressions/el',
-
-	'cli': 'integration/cli',
-	'servlet': 'integration/servlet',
-
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
-
-	'aluscript-parser': 'parsers/aluscript',
-	'xml-parser': 'parsers/xml',
-	'xml-serialiser': 'serialisers/xml',
-
-	'tests': 'tests'
-].each {moduleName, moduleDir ->
-	def module = "${rootProject.name}-${moduleName}"
-
-	include module
-
-	project(":$module").projectDir = new File(rootDir, moduleDir)
+	public void execute(Context context, Writer writer) {}
 }
