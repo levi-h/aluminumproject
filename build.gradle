@@ -119,3 +119,7 @@ task createDistribution(type: Zip, dependsOn: [createApiDocs] + subprojects*.bui
 task clean(type: Clean) {
 	dir = rootProject.buildDir
 }
+
+task createWrapper(type: Wrapper) {
+	gradleVersion = '0.8'
+}
