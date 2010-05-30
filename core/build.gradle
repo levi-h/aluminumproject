@@ -15,5 +15,5 @@
  */
 
 dependencies {
-	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.5.6'
+	distribution group: 'org.slf4j', name: 'slf4j-api', version: '1.5.6'
 }

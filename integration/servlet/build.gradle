@@ -17,5 +17,7 @@
 dependencies {
 	compile project(':aluminum-core')
 
-	compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+	apiDocs group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 }
+
+apiDocUrls = ['http://java.sun.com/javaee/5/docs/api/']

@@ -1,0 +1,41 @@
+Thank you for downloading Aluminum, the powerful and flexible template engine.
+We hope you'll enjoy using it.
+
+----------------------
+About the distribution
+----------------------
+
+The aluminum distribution consists of the following directories:
+
+    /           contains the license file and the readme (this file).
+    bin/        contains the commands that are needed to run Aluminum from the
+                command line.
+    docs/       contains the API documentation.
+    lib/        contains the Aluminum JAR files and their dependencies.
+    src/        contains the Aluminum sources, which can be used by your
+                favourite IDE.
+    templates/  contains templates that are available when running Aluminum from
+                the command line.
+
+---------------
+Getting started
+---------------
+
+The best place to find information is the Aluminum WIKI, which can be found at
+http://code.google.com/p/aluminumproject/w/list.
+
+---------------
+Other resources
+---------------
+
+Bugs or feature requests can be added to the Aluminum issue tracker, which can
+be found at http://code.google.com/p/aluminumproject/issues/list.
+
+-------
+License
+-------
+
+Aluminum is licensed under the Apache License, Version 2.0. You can find the
+terms and conditions for use, reproduction, and distribution of Aluminum in the
+LICENSE file in the distribution or at
+http://www.apache.org/licenses/LICENSE-2.0.

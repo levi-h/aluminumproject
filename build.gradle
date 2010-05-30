@@ -26,6 +26,12 @@ subprojects {
 	sourceCompatibility = 1.6
 	targetCompatibility = 1.6
 
+	configurations {
+		distribution
+		apiDocs.extendsFrom distribution
+		compile.extendsFrom apiDocs
+	}
+
 	repositories {
 		mavenCentral()
 
@@ -33,8 +39,83 @@ subprojects {
 	}
 
 	if (name != 'aluminum-tests') {
+		task createSources(type: Zip, visible: false) {
+			destinationDir = project.distsDir
+
+			classifier = 'src'
+
+			sourceSets.main.java.srcDirs.each {srcDir ->
+				fileSet(dir: srcDir)
+			}
+		}
+
+		assemble.dependsOn << 'createSources'
+
 		['compileTestJava', 'processTestResources', 'testClasses', 'test'].each {taskName ->
 			tasks.findByName(taskName).enabled = false
 		}
 	}
+
+	rootProject.evaluationDependsOn name
+}
+
+task createApiDocs(type: Javadoc, visible: false)  {
+	destinationDir = new File(project.buildDir, 'docs/api')
+
+	source subprojects.collect {subproject ->
+		subproject.sourceSets.main.java
+	}
+	classpath = files(subprojects.collect {subproject ->
+		subproject.configurations.apiDocs.resolve()
+	})
+
+	options.links = ['http://java.sun.com/javase/6/docs/api/']
+
+	subprojects.each {subproject ->
+		if (subproject.hasProperty('apiDocUrls')) {
+			options.links += subproject.property('apiDocUrls')
+		}
+	}
+
+	optionsFile = file('build/javadoc-options') // see GRADLE-686
+}
+
+task createDistribution(type: Zip, dependsOn: [createApiDocs] + subprojects*.build) {
+	destinationDir = new File(rootProject.buildDir, 'distributions')
+
+	baseName = rootProject.name
+	version = rootProject.version
+
+	fileSet(dir: rootDir) {
+		include 'LICENSE'
+		include 'README'
+	}
+
+	fileSet(dir: buildDir).include('docs/**')
+
+	subprojects.each {subproject ->
+		if (subproject.jar.enabled) {
+			zipFileSet(prefix: 'src', dir: subproject.distsDir).include("*-src.zip")
+			zipFileSet(prefix: 'lib', dir: subproject.libsDir).include('*.jar')
+
+			subproject.configurations.distribution.resolve().each {library ->
+				zipFileSet(prefix: 'lib', dir: library.parentFile.path).include(library.name)
+			}
+
+			zipFileSet(prefix: 'lib', dir: subproject.projectDir) {
+				include '*.LICENSE'
+				include '*.NOTICE'
+			}
+
+			File distributionDir = file("${subproject.projectDir}/src/distribution")
+
+			if (distributionDir.exists()) {
+				fileSet(dir: distributionDir)
+			}
+		}
+	}
+}
+
+task clean(type: Clean) {
+	dir = rootProject.buildDir
 }

@@ -17,9 +17,14 @@
 dependencies {
 	compile project(':aluminum-core')
 
-	compile group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '3.1'
+	distribution group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '3.1'
+
+	distribution group: 'de.odysseus.juel', name: 'juel-api', version: '2.1.2'
+	distribution group: 'de.odysseus.juel', name: 'juel-impl', version: '2.1.2'
 
 	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.5.6'
-	compile group: 'ch.qos.logback', name: 'logback-core', version: '0.9.15'
-	compile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.15'
+	distribution group: 'ch.qos.logback', name: 'logback-core', version: '0.9.15'
+	distribution group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.15'
 }
+
+apiDocUrls = ['http://jopt-simple.sourceforge.net/apidocs/']
