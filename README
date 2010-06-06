@@ -28,9 +28,11 @@ http://code.google.com/p/aluminumproject/w/list.
 Other resources
 ---------------
 
-There are two mailing lists: aluminumproject-users@googlegroups.com, where you
-can ask questions, and aluminumproject-commits@googlegroups.com, a read-only
-list where source code commits will be sent to.
+There are three mailing lists: aluminumproject-users@googlegroups.com, where
+users can ask questions, aluminumproject-developers@googlegroups.com, where
+Aluminum committers can discuss the project, and
+aluminumproject-commits@googlegroups.com, a read-only list where source code
+commits will be sent to.
 
 Bugs or feature requests can be added to the Aluminum issue tracker, which can
 be found at http://code.google.com/p/aluminumproject/issues/list.
