@@ -15,9 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getTypeArgument;
+
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.ListWriter;
 import com.googlecode.aluminumproject.writers.StringWriter;
@@ -66,6 +69,30 @@ public abstract class AbstractAction implements Action {
 		}
 
 		return type.cast(action);
+	}
+
+	/**
+	 * Finds an action with a certain container type in the ancestor chain of this action.
+	 *
+	 * @param <T> the requested container type
+	 * @param type the type of the container object of the action to find
+	 * @return the first ancestor that contains objects with the given type or {@code null} if no such action can be
+	 *         found
+	 */
+	protected <T> ContainerAction<T> findAncestorContainingType(Class<T> type) {
+		Action action = getParent();
+		boolean found = false;
+
+		do {
+			if ((action instanceof ContainerAction) &&
+					type.isAssignableFrom(getTypeArgument(action.getClass(), ContainerAction.class, 0))) {
+				found = true;
+			} else {
+				action = action.getParent();
+			}
+		} while ((action != null) && !found);
+
+		return Utilities.typed(action);
 	}
 
 	@Ignored
