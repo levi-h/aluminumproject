@@ -42,7 +42,7 @@ import org.testng.annotations.Test;
 @Test(groups = {"core", "fast"})
 public class AbstractLibraryTest {
 	public void usingPackagesThatDoNotContainActionsShouldResultInEmptyListOfActionFactories() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(String.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(String.class));
 
 		List<ActionFactory> actionFactories = library.getActionFactories();
 		assert actionFactories != null;
@@ -51,7 +51,7 @@ public class AbstractLibraryTest {
 
 	@Test(dependsOnMethods = "usingPackagesThatDoNotContainActionsShouldResultInEmptyListOfActionFactories")
 	public void actionFactoriesShouldContainFactoriesForCommonActions() {
-		Library library = createLibrary(true, ReflectionUtilities.getPackageName(String.class));
+		Library library = createLibrary(true, false, ReflectionUtilities.getPackageName(String.class));
 
 		List<ActionFactory> actionFactories = library.getActionFactories();
 		assert actionFactories != null;
@@ -60,7 +60,7 @@ public class AbstractLibraryTest {
 	}
 
 	public void usingPackagesThatDoContainActionsShouldResultInFactoryPerAction() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(TestAction.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestAction.class));
 
 		List<ActionFactory> actionFactories = library.getActionFactories();
 		assert actionFactories != null;
@@ -70,7 +70,7 @@ public class AbstractLibraryTest {
 
 	@Test(dependsOnMethods = "usingPackagesThatDoContainActionsShouldResultInFactoryPerAction")
 	public void libraryShouldNotContainFactoriesForIgnoredActions() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(IgnoredAction.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(IgnoredAction.class));
 
 		assert getActionFactory(library.getActionFactories(), "ignored action") == null;
 	}
@@ -90,8 +90,21 @@ public class AbstractLibraryTest {
 		return actionFactory;
 	}
 
+	@Test(expectedExceptions = LibraryException.class)
+	public void obtainingDynamicActionFactoryWhenDynamicActionsAreNotSupportedShouldCauseException() {
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestAction.class));
+
+		library.getDynamicActionFactory("test");
+	}
+
+	public void dynamicActionFactoriesShouldBeObtainableWhenDynamicActionsAreSupported() {
+		Library library = createLibrary(false, true, ReflectionUtilities.getPackageName(TestAction.class));
+
+		assert library.getDynamicActionFactory("test") != null;
+	}
+
 	public void usingPackagesThatDoNotContainActionContributionsShouldResultInEmptyListOfActionContributionFactories() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(String.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(String.class));
 
 		List<ActionContributionFactory> actionContributionFactories = library.getActionContributionFactories();
 		assert actionContributionFactories != null;
@@ -99,7 +112,7 @@ public class AbstractLibraryTest {
 	}
 
 	public void usingPackagesThatDoContainActionContributionsShouldResultInFactoryPerActionContribution() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(AnnotatedActionContribution.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(AnnotatedActionContribution.class));
 
 		List<ActionContributionFactory> actionContributionFactories = library.getActionContributionFactories();
 		assert actionContributionFactories != null;
@@ -108,7 +121,7 @@ public class AbstractLibraryTest {
 
 	@Test(dependsOnMethods = "usingPackagesThatDoContainActionContributionsShouldResultInFactoryPerActionContribution")
 	public void libraryShouldNotContainFactoriesForIgnoredActionContributions() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(TestActionContribution.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestActionContribution.class));
 
 		List<ActionContributionFactory> actionContributionFactories = library.getActionContributionFactories();
 		assert getActionContributionFactory(actionContributionFactories, "test action contribution") == null;
@@ -131,7 +144,7 @@ public class AbstractLibraryTest {
 	}
 
 	public void usingPackagesThatDoNotContainFunctionsShouldResultInEmptyListOfFunctionFactories() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(String.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(String.class));
 
 		List<FunctionFactory> functionFactories = library.getFunctionFactories();
 		assert functionFactories != null;
@@ -139,7 +152,7 @@ public class AbstractLibraryTest {
 	}
 
 	public void usingPackagesThatDoContainFunctionsShouldResultInStaticMethodInvokingFunctionFactoryPerMethod() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(TestFunctions.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestFunctions.class));
 
 		List<FunctionFactory> functionFactories = library.getFunctionFactories();
 		assert functionFactories != null;
@@ -151,7 +164,7 @@ public class AbstractLibraryTest {
 	@Test(dependsOnMethods =
 		"usingPackagesThatDoContainFunctionsShouldResultInStaticMethodInvokingFunctionFactoryPerMethod")
 	public void libraryShouldNotContainFunctionFactoriesForIgnoredMethods() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(TestFunctions.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestFunctions.class));
 
 		assert getFunctionFactory(library.getFunctionFactories(), "ignored") == null;
 	}
@@ -159,7 +172,7 @@ public class AbstractLibraryTest {
 	@Test(dependsOnMethods =
 		"usingPackagesThatDoContainFunctionsShouldResultInStaticMethodInvokingFunctionFactoryPerMethod")
 	public void libraryShouldNotContainFunctionFactoriesForInaccessibleMethods() {
-		Library library = createLibrary(false, ReflectionUtilities.getPackageName(TestFunctions.class));
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestFunctions.class));
 
 		assert getFunctionFactory(library.getFunctionFactories(), "inaccessible") == null;
 	}
@@ -185,7 +198,7 @@ public class AbstractLibraryTest {
 		"usingPackagesThatDoNotContainFunctionsShouldResultInEmptyListOfFunctionFactories"
 	})
 	public void libraryElementsShouldBeInitialisedAndHaveTheirLibrariesInjected() {
-		DefaultLibrary library = new DefaultLibrary(false, ReflectionUtilities.getPackageName(String.class)) {
+		DefaultLibrary library = new DefaultLibrary(false, false, ReflectionUtilities.getPackageName(String.class)) {
 			@Override
 			public void initialise(
 					Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
@@ -222,10 +235,10 @@ public class AbstractLibraryTest {
 		assert ((TestFunctionFactory) functionFactory).getLibrary() == library;
 	}
 
-	private Library createLibrary(boolean addCommonElements, String... packageNames) {
+	private Library createLibrary(boolean addCommonElements, boolean dynamicActionsSupported, String... packageNames) {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 
-		Library library = new DefaultLibrary(addCommonElements, packageNames);
+		Library library = new DefaultLibrary(addCommonElements, dynamicActionsSupported, packageNames);
 		library.initialise(new TestConfiguration(parameters), parameters);
 
 		return library;
@@ -237,16 +250,30 @@ public class AbstractLibraryTest {
 
 		private LibraryInformation information;
 
-		public DefaultLibrary(boolean addCommonElements, String... packageNames) {
+		public DefaultLibrary(boolean addCommonElements, boolean dynamicActionsSupported, String... packageNames) {
 			super(packageNames);
 
 			this.addCommonElements = addCommonElements;
 
-			information = new LibraryInformation("http://aluminumproject.googlecode.com/default", "Default library");
+			information = new LibraryInformation(
+				"http://aluminumproject.googlecode.com/default", "Default library", dynamicActionsSupported);
 		}
 
 		public LibraryInformation getInformation() {
 			return information;
+		}
+
+		public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
+			ActionFactory dynamicActionFactory;
+
+			if (information.supportsDynamicActions()) {
+				dynamicActionFactory = new TestActionFactory();
+				initialiseLibraryElement(dynamicActionFactory);
+			} else {
+				dynamicActionFactory = super.getDynamicActionFactory(name);
+			}
+
+			return dynamicActionFactory;
 		}
 
 		@Override

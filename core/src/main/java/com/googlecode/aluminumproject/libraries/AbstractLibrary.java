@@ -51,7 +51,9 @@ import java.util.List;
  * An abstract {@link Library library} implementation that implements the action factories, action contribution
  * factories, and function factories parts of the library contract. All subclasses have to provide is {@link
  * LibraryInformation information about the library} and the names of the packages in which {@link Action actions},
- * {@link ActionContribution action contributions}, and {@link Function functions} can be found.
+ * {@link ActionContribution action contributions}, and {@link Function functions} can be found. Additionally,
+ * {@link #getDynamicActionFactory(String) the getDynamicActionFactory method} should be overridden if the library
+ * supports dynamic actions.
  * <p>
  * The library will create {@link DefaultActionFactory default action factories} for each action and {@link
  * DefaultActionContributionFactory default action contribution factories} for each action contribution. Neither actions
@@ -149,8 +151,7 @@ public abstract class AbstractLibrary implements Library {
 	 * @throws ConfigurationException when the action factory can't be initialised
 	 */
 	protected void addActionFactory(ActionFactory actionFactory) throws ConfigurationException {
-		actionFactory.initialise(configuration, parameters);
-		actionFactory.setLibrary(this);
+		initialiseLibraryElement(actionFactory);
 
 		actionFactories.add(actionFactory);
 	}
@@ -183,8 +184,7 @@ public abstract class AbstractLibrary implements Library {
 	 * @param actionContributionFactory the action contribution factory to add
 	 */
 	protected void addActionContributionFactory(ActionContributionFactory actionContributionFactory) {
-		actionContributionFactory.initialise(configuration, parameters);
-		actionContributionFactory.setLibrary(this);
+		initialiseLibraryElement(actionContributionFactory);
 
 		actionContributionFactories.add(actionContributionFactory);
 	}
@@ -228,14 +228,33 @@ public abstract class AbstractLibrary implements Library {
 	 * @throws ConfigurationException when the function factory can't be initialised
 	 */
 	protected void addFunctionFactory(FunctionFactory functionFactory) throws ConfigurationException {
-		functionFactory.initialise(configuration, parameters);
-		functionFactory.setLibrary(this);
+		initialiseLibraryElement(functionFactory);
 
 		functionFactories.add(functionFactory);
 	}
 
+	/**
+	 * Initialises a library element by providing it with both the configuration and this library.
+	 *
+	 * @param libraryElement the library element to initialise
+	 */
+	protected void initialiseLibraryElement(LibraryElement libraryElement) {
+		libraryElement.initialise(configuration, parameters);
+		libraryElement.setLibrary(this);
+	}
+
 	public List<ActionFactory> getActionFactories() {
 		return Collections.unmodifiableList(actionFactories);
+	}
+
+	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
+		LibraryInformation information = getInformation();
+
+		if (information.supportsDynamicActions()) {
+			throw new LibraryException("dynamic action factories can't be created by the abstract library");
+		} else {
+			throw new LibraryException("library '", information.getUrl(), "' does not support dynamic actions");
+		}
 	}
 
 	public List<ActionContributionFactory> getActionContributionFactories() {

@@ -48,6 +48,10 @@ public class IgnoredLibrary implements Library {
 		return null;
 	}
 
+	public ActionFactory getDynamicActionFactory(String name) {
+		return null;
+	}
+
 	public List<ActionContributionFactory> getActionContributionFactories() {
 		return null;
 	}

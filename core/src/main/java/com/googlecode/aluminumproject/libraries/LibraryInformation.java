@@ -20,6 +20,8 @@ package com.googlecode.aluminumproject.libraries;
  * <p>
  * An important piece of information is the library URL, which should be globally unique. The preferred way of making
  * sure that a library URL is unique is by choosing a host name that is owned by the library creator.
+ * <p>
+ * Another library information aspect is whether or not the library supports dynamic actions.
  *
  * @author levi_h
  */
@@ -27,15 +29,30 @@ public class LibraryInformation {
 	private String url;
 	private String displayName;
 
+	private boolean dynamicActionsSupported;
+
 	/**
-	 * Creates library information.
+	 * Creates information for a library that does not support dynamic actions.
 	 *
 	 * @param url the URL that uniquely identifies the library
 	 * @param displayName the name that should be used when referring to the library
 	 */
 	public LibraryInformation(String url, String displayName) {
+		this(url, displayName, false);
+	}
+
+	/**
+	 * Creates library information.
+	 *
+	 * @param url the URL that uniquely identifies the library
+	 * @param displayName the name that should be used when referring to the library
+	 * @param dynamicActionsSupported whether or not the library supports dynamic actions
+	 */
+	public LibraryInformation(String url, String displayName, boolean dynamicActionsSupported) {
 		this.url = url;
 		this.displayName = displayName;
+
+		this.dynamicActionsSupported = dynamicActionsSupported;
 	}
 
 	/**
@@ -54,5 +71,14 @@ public class LibraryInformation {
 	 */
 	public String getDisplayName() {
 		return displayName;
+	}
+
+	/**
+	 * Returns whether this library supports dynamic actions or not.
+	 *
+	 * @return {@code true} if dynamic actions are supported, {@code false} otherwise
+	 */
+	public boolean supportsDynamicActions() {
+		return dynamicActionsSupported;
 	}
 }

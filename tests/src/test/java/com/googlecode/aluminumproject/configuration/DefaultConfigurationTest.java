@@ -39,6 +39,7 @@ import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.expressions.test.IgnoredExpressionFactory;
 import com.googlecode.aluminumproject.expressions.test.TestExpressionFactory;
 import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
@@ -228,6 +229,10 @@ public class DefaultConfigurationTest {
 
 		public List<ActionFactory> getActionFactories() {
 			return Collections.emptyList();
+		}
+
+		public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
+			throw new LibraryException("the external library does not support dynamic actions");
 		}
 
 		public List<ActionContributionFactory> getActionContributionFactories() {

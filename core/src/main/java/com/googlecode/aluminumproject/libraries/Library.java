@@ -29,7 +29,8 @@ import java.util.List;
  * A library.
  * <p>
  * A library consists of a set of {@link Action actions}, {@link ActionContribution action contributions}, and {@link
- * Function functions}.
+ * Function functions}. Libraries may support dynamic actions (the names of which are not known until runtime); whether
+ * or not this is the case can be found by inspecting their {@link #getInformation() library information}.
  *
  * @author levi_h
  */
@@ -47,6 +48,16 @@ public interface Library extends ConfigurationElement {
 	 * @return a list with all registered action factories
 	 */
 	List<ActionFactory> getActionFactories();
+
+	/**
+	 * Tries to obtain an action factory for a dynamic action.
+	 *
+	 * @param name the name of the dynamic action
+	 * @return an action factory that creates dynamic actions with the given name
+	 * @throws LibraryException when this library does not support dynamic actions or when the action factory can't be
+	 *                          obtained
+	 */
+	ActionFactory getDynamicActionFactory(String name) throws LibraryException;
 
 	/**
 	 * Returns all action contribution factories.

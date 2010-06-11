@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
@@ -190,11 +191,12 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	}
 
 	/**
-	 * Finds an action factory for an action with a certain name.
+	 * Finds an action factory for an action with a certain name. If no action factory can be found for the given action
+	 * name, the library will be asked to provide a dynamic action factory.
 	 *
 	 * @param library the library to search in
 	 * @param name the name of the action to find an action factory for
-	 * @return the action factory for the action with the given name
+	 * @return the action factory for the action with the given name or a dynamic action factory
 	 * @throws TemplateException when no action factory for an action with the given name can be found in the library
 	 */
 	protected ActionFactory findActionFactory(Library library, String name) throws TemplateException {
@@ -211,11 +213,17 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		}
 
 		if (actionFactory == null) {
-			throw new TemplateException("can't find action factory for action with name '", name, "'",
-				" in library with URL '", library.getInformation().getUrl(), "'");
-		} else {
-			return actionFactory;
+			LibraryInformation libraryInformation = library.getInformation();
+
+			if (libraryInformation.supportsDynamicActions()) {
+				actionFactory = library.getDynamicActionFactory(name);
+			} else {
+				throw new TemplateException("can't find action factory for action with name '", name, "'",
+					" in library with URL '", libraryInformation.getUrl(), "' and dynamic actions are not supported");
+			}
 		}
+
+		return actionFactory;
 	}
 
 	/**
