@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
-import com.googlecode.aluminumproject.AluminumException;
+import com.googlecode.aluminumproject.libraries.LibraryException;
 
 /**
  * Thrown by {@link FunctionFactory function factories} when a function can't be created and by {@link Function
@@ -23,7 +23,7 @@ import com.googlecode.aluminumproject.AluminumException;
  *
  * @author levi_h
  */
-public class FunctionException extends AluminumException {
+public class FunctionException extends LibraryException {
 	/**
 	 * Creates a function exception.
 	 *

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2010 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.libraries.actions;
+package com.googlecode.aluminumproject.libraries;
 
-import com.googlecode.aluminumproject.libraries.LibraryException;
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
- * Thrown by {@link Action actions} when their execution fails.
+ * Thrown by {@link Library libraries} when they are used inappropriately; also serves as a superclass for exceptions
+ * that library elements can throw.
  *
  * @author levi_h
  */
-public class ActionException extends LibraryException {
+public class LibraryException extends AluminumException {
 	/**
-	 * Creates an action exception.
+	 * Creates a library exception.
 	 *
 	 * @param messageParts the parts that form the exception message
 	 */
-	public ActionException(Object... messageParts) {
+	public LibraryException(Object... messageParts) {
 		super(messageParts);
 	}
 
 	/**
-	 * Creates an action exception.
+	 * Creates a library exception.
 	 *
 	 * @param cause the cause of the exception
 	 * @param messageParts the parts that form the exception message
 	 */
-	public ActionException(Throwable cause, Object... messageParts) {
+	public LibraryException(Throwable cause, Object... messageParts) {
 		super(cause, messageParts);
 	}
 
-	private final static long serialVersionUID = 20090308L;
+	private final static long serialVersionUID = 20100611L;
 }
