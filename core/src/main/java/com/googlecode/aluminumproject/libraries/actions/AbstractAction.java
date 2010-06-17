@@ -83,14 +83,14 @@ public abstract class AbstractAction implements Action {
 		Action action = getParent();
 		boolean found = false;
 
-		do {
+		while ((action != null) && !found) {
 			if ((action instanceof ContainerAction) &&
 					type.isAssignableFrom(getTypeArgument(action.getClass(), ContainerAction.class, 0))) {
 				found = true;
 			} else {
 				action = action.getParent();
 			}
-		} while ((action != null) && !found);
+		}
 
 		return Utilities.typed(action);
 	}
