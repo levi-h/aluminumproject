@@ -15,11 +15,6 @@
  */
 package com.googlecode.aluminumproject.libraries.io;
 
-import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.converters.ConverterRegistry;
-import com.googlecode.aluminumproject.converters.io.ByteArrayToStringConverter;
-import com.googlecode.aluminumproject.converters.io.StringToFileConverter;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.EnvironmentUtilities;
@@ -45,15 +40,6 @@ public class IoLibrary extends AbstractLibrary {
 		String displayName = "I/O library";
 
 		information = new LibraryInformation(url, version, displayName);
-	}
-
-	@Override
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
-		super.initialise(configuration, parameters);
-
-		ConverterRegistry converterRegistry = configuration.getConverterRegistry();
-		converterRegistry.registerConverter(new ByteArrayToStringConverter());
-		converterRegistry.registerConverter(new StringToFileConverter());
 	}
 
 	public LibraryInformation getInformation() {

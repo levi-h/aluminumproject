@@ -41,7 +41,7 @@ import java.util.Set;
  * The default converter registry keeps a set of {@link Converter converters}, which subclasses are free to add to. Upon
  * initialisation, this set will be filled with all of the converters inside the packages that are listed (separated by
  * commas) in the configuration parameter {@value #CONVERTER_PACKAGES}, or, when no such parameter is added, with all of
- * the converters in the {@code com.googlecode.aluminumproject.converters.common} package.
+ * the converters in the {@code com.googlecode.aluminumproject.converters} package (and subpackages).
  * <p>
  * When a default converter registry is asked to {@link #getConverter(Class, Class) get} a converter, it will try to
  * find the most specific one. This means that when a converter for a string is requested and the registry contains
@@ -72,7 +72,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		converters = new HashSet<Converter<?>>();
 
 		String[] converterPackages =
-			parameters.getValues(CONVERTER_PACKAGES, "com.googlecode.aluminumproject.converters.common");
+			parameters.getValues(CONVERTER_PACKAGES, "com.googlecode.aluminumproject.converters");
 
 		for (String converterPackage: converterPackages) {
 			registerConverters(converterPackage);
