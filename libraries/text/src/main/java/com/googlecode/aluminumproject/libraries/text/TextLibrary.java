@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.text;
 
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+import com.googlecode.aluminumproject.utilities.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 /**
@@ -33,7 +34,12 @@ public class TextLibrary extends AbstractLibrary {
 	public TextLibrary() {
 		super(ReflectionUtilities.getPackageName(TextLibrary.class));
 
-		information = new LibraryInformation("http://aluminumproject.googlecode.com/text", "Text library");
+		String url = "http://aluminumproject.googlecode.com/text";
+		String version = EnvironmentUtilities.getVersion();
+
+		String displayName = "Text library";
+
+		information = new LibraryInformation(url, version, displayName);
 	}
 
 	public LibraryInformation getInformation() {

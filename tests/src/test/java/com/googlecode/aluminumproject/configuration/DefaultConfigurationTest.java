@@ -224,7 +224,7 @@ public class DefaultConfigurationTest {
 		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
 
 		public LibraryInformation getInformation() {
-			return new LibraryInformation("http://aluminumproject.googlecode.com/external", "External library");
+			return new LibraryInformation("http://aluminumproject.googlecode.com/external", "test", "External library");
 		}
 
 		public List<ActionFactory> getActionFactories() {

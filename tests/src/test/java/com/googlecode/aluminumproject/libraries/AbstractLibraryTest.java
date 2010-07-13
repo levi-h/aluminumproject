@@ -256,7 +256,7 @@ public class AbstractLibraryTest {
 			this.addCommonElements = addCommonElements;
 
 			information = new LibraryInformation(
-				"http://aluminumproject.googlecode.com/default", "Default library", dynamicActionsSupported);
+				"http://aluminumproject.googlecode.com/default", "test", "Default library", dynamicActionsSupported);
 		}
 
 		public LibraryInformation getInformation() {

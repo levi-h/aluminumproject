@@ -22,6 +22,7 @@ import com.googlecode.aluminumproject.converters.io.ByteArrayToStringConverter;
 import com.googlecode.aluminumproject.converters.io.StringToFileConverter;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+import com.googlecode.aluminumproject.utilities.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 /**
@@ -38,7 +39,12 @@ public class IoLibrary extends AbstractLibrary {
 	public IoLibrary() {
 		super(ReflectionUtilities.getPackageName(IoLibrary.class));
 
-		information = new LibraryInformation("http://aluminumproject.googlecode.com/io", "I/O library");
+		String url = "http://aluminumproject.googlecode.com/io";
+		String version = EnvironmentUtilities.getVersion();
+
+		String displayName = "I/O library";
+
+		information = new LibraryInformation(url, version, displayName);
 	}
 
 	@Override

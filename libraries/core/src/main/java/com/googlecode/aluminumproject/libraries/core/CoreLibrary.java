@@ -22,6 +22,7 @@ import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.core.actions.Convert;
 import com.googlecode.aluminumproject.libraries.core.actions.Include;
+import com.googlecode.aluminumproject.utilities.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 /**
@@ -38,7 +39,12 @@ public class CoreLibrary extends AbstractLibrary {
 	public CoreLibrary() {
 		super(ReflectionUtilities.getPackageName(CoreLibrary.class));
 
-		information = new LibraryInformation("http://aluminumproject.googlecode.com/core", "Core library");
+		String url = "http://aluminumproject.googlecode.com/core";
+		String version = EnvironmentUtilities.getVersion();
+
+		String displayName = "Core library";
+
+		information = new LibraryInformation(url, version, displayName);
 	}
 
 	@Override
