@@ -25,6 +25,7 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.test.TestLibrary;
 import com.googlecode.aluminumproject.templates.AbstractTemplateElement;
 import com.googlecode.aluminumproject.templates.Template;
@@ -54,7 +55,10 @@ public class FunctionMapperTest {
 		Context context = new DefaultContext();
 
 		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
-		libraryUrlAbbreviations.put("test", new TestLibrary().getInformation().getUrl());
+
+		LibraryInformation testLibraryInformation = new TestLibrary().getInformation();
+		libraryUrlAbbreviations.put("test", testLibraryInformation.getUrl());
+		libraryUrlAbbreviations.put("versionedTest", testLibraryInformation.getVersionedUrl());
 
 		TemplateContext templateContext = new TemplateContext();
 		templateContext.addTemplateElement(new AbstractTemplateElement(libraryUrlAbbreviations) {
@@ -77,6 +81,10 @@ public class FunctionMapperTest {
 
 	public void resolvingExistingFunctionShouldResultInDelegate() {
 		assert functionMapper.resolveFunction("test", "max") != null;
+	}
+
+	public void resolvingExistingFunctionWithVersionedAbbreviationShouldResultInDelegate() {
+		assert functionMapper.resolveFunction("versionedTest", "max") != null;
 	}
 
 	@Test(dependsOnMethods = "resolvingExistingFunctionShouldResultInDelegate")

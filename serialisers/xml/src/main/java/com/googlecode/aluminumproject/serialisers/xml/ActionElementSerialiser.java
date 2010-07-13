@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.serialisers.xml;
 
+import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
@@ -43,10 +44,10 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 		String actionName = actionElement.getFactory().getInformation().getName();
 		String translatedActionName = elementNameTranslator.translateActionName(actionName);
 
-		String actionLibraryUrl = actionElement.getFactory().getLibrary().getInformation().getUrl();
+		LibraryInformation actionLibraryInformation = actionElement.getFactory().getLibrary().getInformation();
 
 		writer.print("<");
-		writer.print(getQualifiedName(actionElement, translatedActionName, actionLibraryUrl));
+		writer.print(getQualifiedName(actionElement, translatedActionName, actionLibraryInformation));
 
 		for (Map.Entry<String, ActionParameter> parameter: actionElement.getParameters().entrySet()) {
 			writer.print(" ");
@@ -60,10 +61,10 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 			String contributionName = contributionFactory.getInformation().getName();
 			String translatedContributionName = elementNameTranslator.translateActionContributionName(contributionName);
 
-			String contributionLibraryUrl = contributionFactory.getLibrary().getInformation().getUrl();
+			LibraryInformation contributionLibraryInformation = contributionFactory.getLibrary().getInformation();
 
 			writer.print(" ");
-			writer.print(getQualifiedName(actionElement, translatedContributionName, contributionLibraryUrl));
+			writer.print(getQualifiedName(actionElement, translatedContributionName, contributionLibraryInformation));
 			writer.print("=\"");
 			writer.print(actionElement.getContributionFactories().get(contributionFactory).getText());
 			writer.print("\"");
@@ -104,15 +105,15 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 			String actionName = actionElement.getFactory().getInformation().getName();
 			String translatedActionName = elementNameTranslator.translateActionName(actionName);
 
-			String actionLibraryUrl = actionElement.getFactory().getLibrary().getInformation().getUrl();
+			LibraryInformation actionLibraryInformation = actionElement.getFactory().getLibrary().getInformation();
 
 			writer.print("</");
-			writer.print(getQualifiedName(actionElement, translatedActionName, actionLibraryUrl));
+			writer.print(getQualifiedName(actionElement, translatedActionName, actionLibraryInformation));
 			writer.print(">");
 		}
 	}
 
-	private String getQualifiedName(ActionElement actionElement, String name, String libraryUrl) {
+	private String getQualifiedName(ActionElement actionElement, String name, LibraryInformation libraryInformation) {
 		String libraryUrlAbbreviation = null;
 
 		Map<String, String> libraryUrlAbbreviations = actionElement.getLibraryUrlAbbreviations();
@@ -121,7 +122,10 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 		while ((libraryUrlAbbreviation == null) && it.hasNext()) {
 			String abbreviation = it.next();
 
-			if (libraryUrl.equals(libraryUrlAbbreviations.get(abbreviation))) {
+			String abbreviatedLibraryUrl = libraryUrlAbbreviations.get(abbreviation);
+
+			if (libraryInformation.getUrl().equals(abbreviatedLibraryUrl) ||
+					libraryInformation.getVersionedUrl().equals(abbreviatedLibraryUrl)) {
 				libraryUrlAbbreviation = abbreviation;
 			}
 		}

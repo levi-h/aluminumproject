@@ -59,6 +59,8 @@ public class FunctionArgument extends AbstractAction {
 	private CallFunction findCallFunction() throws ActionException {
 		CallFunction callFunction = null;
 
+		String libraryUrl = library.getInformation().getVersionedUrl();
+
 		Action action = this;
 
 		do {
@@ -67,7 +69,9 @@ public class FunctionArgument extends AbstractAction {
 			if (action instanceof CallFunction) {
 				callFunction = (CallFunction) action;
 
-				if (!callFunction.getLibrary().getInformation().getUrl().equals(library.getInformation().getUrl())) {
+				String callFunctionUrl = callFunction.getLibrary().getInformation().getVersionedUrl();
+
+				if (!callFunctionUrl.equals(libraryUrl)) {
 					callFunction = null;
 				}
 			}

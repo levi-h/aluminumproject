@@ -164,7 +164,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	}
 
 	/**
-	 * Finds a library with a certain URL.
+	 * Finds a library with a certain URL. The URL may contain a library version.
 	 *
 	 * @param libraryUrl the URL of the library to find
 	 * @return the library with the given URL
@@ -178,7 +178,9 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		while ((library == null) && libraries.hasNext()) {
 			library = libraries.next();
 
-			if (!library.getInformation().getUrl().equals(libraryUrl)) {
+			LibraryInformation information = library.getInformation();
+
+			if (!information.getUrl().equals(libraryUrl) && !information.getVersionedUrl().equals(libraryUrl)) {
 				library = null;
 			}
 		}

@@ -149,6 +149,19 @@ public class XmlSerialiserTest {
 	}
 
 	@Test(dependsOnMethods = "actionElementWithoutChildrenShouldResultInCombinedOpenAndCloseTag")
+	public void versionedLibraryUrlsShouldBeUsable() {
+		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
+		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test/test");
+
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
+			"http://aluminumproject.googlecode.com/test/test", "test", Collections.<String, ActionParameter>emptyMap(),
+			Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
+		templateBuilder.restoreCurrentTemplateElement();
+
+		assert getTemplateText().equals("<test:test xmlns:test=\"http://aluminumproject.googlecode.com/test/test\"/>");
+	}
+
+	@Test(dependsOnMethods = "actionElementWithoutChildrenShouldResultInCombinedOpenAndCloseTag")
 	public void parametersShouldResultInAttributes() {
 		Map<String, ActionParameter> parameters = new HashMap<String, ActionParameter>();
 		parameters.put("description", new ConstantActionParameter("test", configuration.getConverterRegistry()));

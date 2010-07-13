@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.functions.ConstantFunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.libraries.functions.FunctionArgument;
@@ -185,7 +186,6 @@ class FunctionDelegateFactory {
 		logger = Logger.get(FunctionDelegateFactory.class);
 	}
 
-
 	private static class DelegateRegistry {
 		private Configuration configuration;
 		private int classIndex;
@@ -215,19 +215,21 @@ class FunctionDelegateFactory {
 				int delegateIndex = 0;
 
 				for (Library library: configuration.getLibraries()) {
-					String libraryUrl = library.getInformation().getUrl();
+					LibraryInformation libraryInformation = library.getInformation();
 
-					for (FunctionFactory functionFactory: library.getFunctionFactories()) {
-						String key =
-							FunctionDelegateFactory.getKey(libraryUrl, functionFactory.getInformation().getName());
+					for (String url: Arrays.asList(libraryInformation.getUrl(), libraryInformation.getVersionedUrl())) {
+						for (FunctionFactory functionFactory: library.getFunctionFactories()) {
+							String key =
+								FunctionDelegateFactory.getKey(url, functionFactory.getInformation().getName());
 
-						functionFactories.put(key, functionFactory);
+							functionFactories.put(key, functionFactory);
 
-						String delegate = getDelegate(key, functionFactory, delegateIndex);
-						ctFunctions.addMethod(CtNewMethod.make(delegate, ctFunctions));
+							String delegate = getDelegate(key, functionFactory, delegateIndex);
+							ctFunctions.addMethod(CtNewMethod.make(delegate, ctFunctions));
 
-						delegateIndices.put(key, delegateIndex);
-						delegateIndex++;
+							delegateIndices.put(key, delegateIndex);
+							delegateIndex++;
+						}
 					}
 				}
 
