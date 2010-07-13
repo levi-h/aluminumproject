@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2010 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.googlecode.aluminumproject.utilities;
 
-dependencies {
-	distribution group: 'org.slf4j', name: 'slf4j-api', version: '1.5.6'
-}
+import org.testng.annotations.Test;
 
-processResources {
-	filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
+@SuppressWarnings("all")
+@Test(groups = {"utilities", "fast"})
+public class EnvironmentUtilitiesTest {
+	public void versionShouldBeAvailable() {
+		String version = EnvironmentUtilities.getVersion();
+		assert version != null;
+		assert version.equals("test");
+	}
 }
