@@ -76,6 +76,21 @@ public class DefaultConfigurationElementFactoryTest {
 		assert customisers.get(0) instanceof TestConfigurationElementCustomiser;
 	}
 
+	public void allConfigurationElementCustomisersInConfigurationElementPackageShouldBeAdded() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES,
+			ReflectionUtilities.getPackageName(TestConfigurationElementCustomiser.class));
+
+		DefaultConfigurationElementFactory configurationElementFactory = new DefaultConfigurationElementFactory();
+		configurationElementFactory.initialise(new TestConfiguration(parameters), parameters);
+
+		List<ConfigurationElementCustomiser> customisers =
+			configurationElementFactory.getConfigurationElementCustomisers();
+		assert customisers != null;
+		assert customisers.size() == 1;
+		assert customisers.get(0) instanceof TestConfigurationElementCustomiser;
+	}
+
 	@Test(dependsOnMethods = "allConfigurationElementCustomisersInPackageShouldBeAdded")
 	public void configurationElementFactoryShouldInitialiseConfigurationElementCustomisers() {
 		ConfigurationParameters parameters = new ConfigurationParameters();

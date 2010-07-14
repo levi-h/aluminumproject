@@ -43,8 +43,10 @@ import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A default configuration. It is created with a number of initialisation parameters, which determines which {@link
@@ -93,8 +95,13 @@ import java.util.Map;
  * configuration parameter is not specified, the package {@code com.googlecode.aluminumproject.expressions} will be
  * scanned.
  * <p>
- * Libraries, parsers, and expression factories are excluded from the configuration when they are annotated with {@link
- * Ignored &#64;Ignored}.
+ * It's possible to extend the lists of packages that are used to find libraries, parsers, serialisers, and expression
+ * factories in by supplying a configuration parameter with the name {@value #CONFIGURATION_ELEMENT_PACKAGES}. Its value
+ * is expected to be a comma-separated list of packages. Other classes that find configuration elements in one or more
+ * packages are encouraged to use this configuration parameter as well.
+ * <p>
+ * Configuration elements that are found through a package scan are excluded from the configuration when they are
+ * annotated with {@link Ignored &#64;Ignored}.
  *
  * @author levi_h
  */
@@ -217,7 +224,7 @@ public class DefaultConfiguration implements Configuration {
 	}
 
 	private void createLibraries() throws ConfigurationException {
-		String[] libraryPackages = parameters.getValues(LIBRARY_PACKAGES, getPackageName(Library.class));
+		String[] libraryPackages = getConfiguredPackages(LIBRARY_PACKAGES, getPackageName(Library.class));
 
 		logger.debug("libraries will be looked for in ", libraryPackages);
 
@@ -244,7 +251,7 @@ public class DefaultConfiguration implements Configuration {
 	}
 
 	private void createParsers() throws ConfigurationException {
-		String[] parserPackages = parameters.getValues(PARSER_PACKAGES, getPackageName(Parser.class));
+		String[] parserPackages = getConfiguredPackages(PARSER_PACKAGES, getPackageName(Parser.class));
 
 		logger.debug("parsers will be looked for in ", parserPackages);
 
@@ -278,7 +285,7 @@ public class DefaultConfiguration implements Configuration {
 	}
 
 	private void createSerialisers() throws ConfigurationException {
-		String[] serialiserPackages = parameters.getValues(SERIALISER_PACKAGES, getPackageName(Serialiser.class));
+		String[] serialiserPackages = getConfiguredPackages(SERIALISER_PACKAGES, getPackageName(Serialiser.class));
 
 		logger.debug("serialisers will be looked for in ", serialiserPackages);
 
@@ -328,7 +335,7 @@ public class DefaultConfiguration implements Configuration {
 
 	private void createExpressionFactories() throws ConfigurationException {
 		String[] expressionFactoryPackages =
-			parameters.getValues(EXPRESSION_FACTORY_PACKAGES, getPackageName(ExpressionFactory.class));
+			getConfiguredPackages(EXPRESSION_FACTORY_PACKAGES, getPackageName(ExpressionFactory.class));
 
 		List<Class<?>> expressionFactoryClasses;
 
@@ -351,6 +358,15 @@ public class DefaultConfiguration implements Configuration {
 			expressionFactories.add(
 				configurationElementFactory.instantiate(expressionFactoryClass.getName(), ExpressionFactory.class));
 		}
+	}
+
+	private String[] getConfiguredPackages(String parameterName, String... defaultPackages) {
+		Set<String> packages = new HashSet<String>();
+
+		Collections.addAll(packages, parameters.getValues(parameterName, defaultPackages));
+		Collections.addAll(packages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
+
+		return packages.toArray(new String[packages.size()]);
 	}
 
 	private void initialise() throws ConfigurationException {
@@ -467,4 +483,10 @@ public class DefaultConfiguration implements Configuration {
 	 * value.
 	 */
 	public final static String EXPRESSION_FACTORY_PACKAGES = "configuration.default.expression_factory.packages";
+
+	/**
+	 * The name of the configuration parameter that contains a comma-separated list of packages that might contain
+	 * configuration elements.
+	 */
+	public final static String CONFIGURATION_ELEMENT_PACKAGES = "configuration.default.configuration_element.packages";
 }

@@ -15,6 +15,9 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
+import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
+
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
@@ -41,7 +44,9 @@ import java.util.Set;
  * The default converter registry keeps a set of {@link Converter converters}, which subclasses are free to add to. Upon
  * initialisation, this set will be filled with all of the converters inside the packages that are listed (separated by
  * commas) in the configuration parameter {@value #CONVERTER_PACKAGES}, or, when no such parameter is added, with all of
- * the converters in the {@code com.googlecode.aluminumproject.converters} package (and subpackages).
+ * the converters in the {@code com.googlecode.aluminumproject.converters} package (and subpackages). The converter
+ * package list is extended by the packages that are contained in the configuration parameter named {@value
+ * com.googlecode.aluminumproject.configuration.DefaultConfiguration#CONFIGURATION_ELEMENT_PACKAGES}.
  * <p>
  * When a default converter registry is asked to {@link #getConverter(Class, Class) get} a converter, it will try to
  * find the most specific one. This means that when a converter for a string is requested and the registry contains
@@ -71,8 +76,11 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 
 		converters = new HashSet<Converter<?>>();
 
-		String[] converterPackages =
-			parameters.getValues(CONVERTER_PACKAGES, "com.googlecode.aluminumproject.converters");
+		Set<String> converterPackages = new HashSet<String>();
+
+		Collections.addAll(converterPackages,
+			parameters.getValues(CONVERTER_PACKAGES, getPackageName(Converter.class)));
+		Collections.addAll(converterPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
 
 		for (String converterPackage: converterPackages) {
 			registerConverters(converterPackage);

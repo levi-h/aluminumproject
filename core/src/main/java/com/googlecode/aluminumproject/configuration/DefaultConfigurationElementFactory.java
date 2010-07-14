@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.isAbstract;
 
 import com.googlecode.aluminumproject.Logger;
@@ -26,16 +27,20 @@ import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The default {@link ConfigurationElementFactory bean factory} implementation.
  * <p>
  * To allow for easy customisation of new objects, the default configuration element factory contains a list of {@link
- * ConfigurationElementCustomiser configuration element customisers}. This list is empty by default, but when the
- * {@value #CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES} parameter is supplied, all customisers in the given packages that
- * are not annotated with {@link Ignored &#64;Ignored} will be applied to a new object after it's been created.
+ * ConfigurationElementCustomiser configuration element customisers}. This list is empty by default, but when either the
+ * {@value #CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES} parameter or the {@value
+ * com.googlecode.aluminumproject.configuration.DefaultConfiguration#CONFIGURATION_ELEMENT_PACKAGES} parameter is
+ * supplied, all customisers in the given packages that are not annotated with {@link Ignored &#64;Ignored} will be
+ * applied to a new object after it's been created.
  *
  * @author levi_h
  */
@@ -55,9 +60,12 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
 		customisers = new LinkedList<ConfigurationElementCustomiser>();
 
-		String[] customiserPackages = parameters.getValues(CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES, (String[]) null);
+		Set<String> customiserPackages = new HashSet<String>();
 
-		if (customiserPackages == null) {
+		Collections.addAll(customiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES));
+		Collections.addAll(customiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
+
+		if (customiserPackages.isEmpty()) {
 			logger.debug("no configuration element customisers configured");
 		} else {
 			logger.debug("looking for configuration element customisers in ", customiserPackages);
@@ -70,7 +78,7 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 						return ConfigurationElementCustomiser.class.isAssignableFrom(type) && !isAbstract(type)
 							&& !type.isAnnotationPresent(Ignored.class);
 					}
-				}, customiserPackages));
+				}, customiserPackages.toArray(new String[customiserPackages.size()])));
 			} catch (UtilityException exception) {
 				throw new ConfigurationException(exception, "can't find configuration element customisers");
 			}

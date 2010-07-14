@@ -15,9 +15,12 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
 import static com.googlecode.aluminumproject.converters.DefaultConverterRegistry.CONVERTER_PACKAGES;
+import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
 import com.googlecode.aluminumproject.converters.common.ObjectToStringConverter;
 import com.googlecode.aluminumproject.converters.test.IgnoredConverter;
@@ -52,7 +55,18 @@ public class DefaultConverterRegistryTest {
 
 	public void converterPackagesShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(CONVERTER_PACKAGES, ReflectionUtilities.getPackageName(TestConverter.class));
+		parameters.addParameter(CONVERTER_PACKAGES, getPackageName(TestConverter.class));
+
+		converterRegistry = new DefaultConverterRegistry();
+		converterRegistry.initialise(new TestConfiguration(parameters), parameters);
+
+		Converter<? super Float> converter = converterRegistry.getConverter(Float.class, CharSequence.class);
+		assert converter instanceof TestConverter;
+	}
+
+	public void converterPackagesShouldBeExtendedByConfigurationElementPackages() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(TestConverter.class));
 
 		converterRegistry = new DefaultConverterRegistry();
 		converterRegistry.initialise(new TestConfiguration(parameters), parameters);
@@ -85,7 +99,7 @@ public class DefaultConverterRegistryTest {
 	}
 
 	public void converterShouldBeRegisteredWhenItsPackageIs() {
-		converterRegistry.registerConverters(ReflectionUtilities.getPackageName(TestConverter.class));
+		converterRegistry.registerConverters(getPackageName(TestConverter.class));
 
 		Converter<? super Float> converter = converterRegistry.getConverter(Float.class, CharSequence.class);
 		assert converter instanceof TestConverter;
@@ -96,7 +110,7 @@ public class DefaultConverterRegistryTest {
 		"converterShouldBeRegisteredWhenItsPackageIs"
 	})
 	public void ignoredConvertersShouldBeIgnoredWhenRegisteringPackages() {
-		converterRegistry.registerConverters(ReflectionUtilities.getPackageName(IgnoredConverter.class));
+		converterRegistry.registerConverters(getPackageName(IgnoredConverter.class));
 
 		assert converterRegistry.getConverter(String.class, String.class) instanceof ObjectToStringConverter;
 	}

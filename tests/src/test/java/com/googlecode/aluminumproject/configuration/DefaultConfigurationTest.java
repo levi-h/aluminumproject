@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.configuration;
 
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CACHE_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_FACTORY_CLASS;
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONVERTER_REGISTRY_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.EXPRESSION_FACTORY_PACKAGES;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.LIBRARY_PACKAGES;
@@ -25,6 +26,7 @@ import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_ELEMENT_FACTORY_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_FINDER_FACTORY_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_STORE_FINDER_FACTORY_CLASS;
+import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.cache.test.TestCache;
@@ -62,7 +64,6 @@ import com.googlecode.aluminumproject.serialisers.test.TestSerialiser;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.test.TestTemplateElementFactory;
-import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -269,9 +270,15 @@ public class DefaultConfigurationTest {
 	@Test(dependsOnMethods = "librariesShouldNotBeNull")
 	public void libraryPackagesShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(LIBRARY_PACKAGES, ReflectionUtilities.getPackageName(ExternalLibrary.class));
+		parameters.addParameter(LIBRARY_PACKAGES, getPackageName(ExternalLibrary.class));
 
 		assert findLibraryOfType(new DefaultConfiguration(parameters), ExternalLibrary.class) != null;
+	}
+
+	@Test(dependsOnMethods = "librariesShouldNotBeNull")
+	public void libraryPackagesShouldBeExtendedByConfigurationElementPackages() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalLibrary.class));
 	}
 
 	private static <T extends Library> T findLibraryOfType(Configuration configuration, Class<T> libraryType) {
@@ -329,7 +336,15 @@ public class DefaultConfigurationTest {
 	@Test(dependsOnMethods = "parsersShouldNotBeNull")
 	public void parserPackagesShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(PARSER_PACKAGES, ReflectionUtilities.getPackageName(ExternalParser.class));
+		parameters.addParameter(PARSER_PACKAGES, getPackageName(ExternalParser.class));
+
+		assert findParserOfType(new DefaultConfiguration(parameters), ExternalParser.class) != null;
+	}
+
+	@Test(dependsOnMethods = "parsersShouldNotBeNull")
+	public void parserPackagesShouldBeExtendedByConfigurationElementPackages() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalParser.class));
 
 		assert findParserOfType(new DefaultConfiguration(parameters), ExternalParser.class) != null;
 	}
@@ -337,7 +352,7 @@ public class DefaultConfigurationTest {
 	@Test(dependsOnMethods = "parserPackagesShouldBeConfigurable")
 	public void parserNamesShouldBeOverridable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(PARSER_PACKAGES, ReflectionUtilities.getPackageName(ExternalParser.class));
+		parameters.addParameter(PARSER_PACKAGES, getPackageName(ExternalParser.class));
 
 		Configuration configuration = new DefaultConfiguration(parameters);
 		Map<String, Parser> parsers = configuration.getParsers();
@@ -408,7 +423,15 @@ public class DefaultConfigurationTest {
 	@Test(dependsOnMethods = "serialisersShouldNotBeNull")
 	public void serialiserPackagesShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(SERIALISER_PACKAGES, ReflectionUtilities.getPackageName(ExternalSerialiser.class));
+		parameters.addParameter(SERIALISER_PACKAGES, getPackageName(ExternalSerialiser.class));
+
+		assert findSerialiserOfType(new DefaultConfiguration(parameters), ExternalSerialiser.class) != null;
+	}
+
+	@Test(dependsOnMethods = "serialisersShouldNotBeNull")
+	public void serialiserPackagesShouldBeExtendedByConfigurationElementPackages() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalSerialiser.class));
 
 		assert findSerialiserOfType(new DefaultConfiguration(parameters), ExternalSerialiser.class) != null;
 	}
@@ -416,7 +439,7 @@ public class DefaultConfigurationTest {
 	@Test(dependsOnMethods = "serialiserPackagesShouldBeConfigurable")
 	public void serialiserNamesShouldBeOverridable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(SERIALISER_PACKAGES, ReflectionUtilities.getPackageName(ExternalSerialiser.class));
+		parameters.addParameter(SERIALISER_PACKAGES, getPackageName(ExternalSerialiser.class));
 
 		Configuration configuration = new DefaultConfiguration(parameters);
 		Map<String, Serialiser> serialisers = configuration.getSerialisers();
@@ -491,8 +514,17 @@ public class DefaultConfigurationTest {
 	@Test(dependsOnMethods = "expressionFactoriesShouldNotBeNull")
 	public void expressionFactoryPackagesShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(EXPRESSION_FACTORY_PACKAGES,
-			ReflectionUtilities.getPackageName(ExternalExpressionFactory.class));
+		parameters.addParameter(EXPRESSION_FACTORY_PACKAGES, getPackageName(ExternalExpressionFactory.class));
+
+		ExpressionFactory expressionFactory =
+			findExpressionFactoryOfType(new DefaultConfiguration(parameters), ExternalExpressionFactory.class);
+		assert expressionFactory != null;
+	}
+
+	@Test(dependsOnMethods = "expressionFactoriesShouldNotBeNull")
+	public void expressionFactoryPackagesShouldBeExtendedByConfigurationElementPackages() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalExpressionFactory.class));
 
 		ExpressionFactory expressionFactory =
 			findExpressionFactoryOfType(new DefaultConfiguration(parameters), ExternalExpressionFactory.class);

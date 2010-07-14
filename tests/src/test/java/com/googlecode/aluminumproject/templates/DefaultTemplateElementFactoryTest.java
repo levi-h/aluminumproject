@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.templates;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.test.TestActionInterceptor;
@@ -32,6 +33,23 @@ public class DefaultTemplateElementFactoryTest {
 	public void configuredActionInterceptorsShouldBeAdded() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(DefaultTemplateElementFactory.ACTION_INTERCEPTOR_PACKAGES,
+			ReflectionUtilities.getPackageName(TestActionInterceptor.class));
+
+		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
+		templateElementFactory.initialise(new TestConfiguration(parameters), parameters);
+
+		List<ActionInterceptor> actionInterceptors = templateElementFactory.getActionInterceptors();
+		assert actionInterceptors != null;
+		assert actionInterceptors.size() == 1;
+
+		ActionInterceptor actionInterceptor = actionInterceptors.get(0);
+		assert actionInterceptor != null;
+		assert actionInterceptor instanceof TestActionInterceptor;
+	}
+
+	public void actionInterceptorsThatAreConfiguredAsConfigurationElementsShouldBeAdded() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES,
 			ReflectionUtilities.getPackageName(TestActionInterceptor.class));
 
 		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();

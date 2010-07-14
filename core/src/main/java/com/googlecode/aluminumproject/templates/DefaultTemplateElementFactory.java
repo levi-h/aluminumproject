@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
+
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
@@ -35,11 +37,13 @@ import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@link TemplateElementFactory template element factory} that creates default {@link TemplateElement template
@@ -48,8 +52,10 @@ import java.util.Map;
  * It's possible to configure a number of {@link ActionInterceptor action interceptors}. These will intercept all
  * actions (as opposed to action interceptors that are supplied by {@link ActionContribution action contributions},
  * which intercept a single action only). To add action interceptors, provide a configuration parameter named {@value
- * #ACTION_INTERCEPTOR_PACKAGES} that contains one or more package names. All non-abstract action interceptors in these
- * packages that are not annotated with {@link Ignored &#64;Ignored} will be created and used.
+ * #ACTION_INTERCEPTOR_PACKAGES} or {@value
+ * com.googlecode.aluminumproject.configuration.DefaultConfiguration#CONFIGURATION_ELEMENT_PACKAGES} that contains one
+ * or more package names. All non-abstract action interceptors in these packages that are not annotated with {@link
+ * Ignored &#64;Ignored} will be created and used.
  *
  * @author levi_h
  */
@@ -77,9 +83,12 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	private void createActionInterceptors(ConfigurationParameters parameters) throws ConfigurationException {
 		actionInterceptors = new LinkedList<ActionInterceptor>();
 
-		String[] actionInterceptorPackages = parameters.getValues(ACTION_INTERCEPTOR_PACKAGES);
+		Set<String> actionInterceptorPackages = new HashSet<String>();
 
-		if (actionInterceptorPackages.length > 0) {
+		Collections.addAll(actionInterceptorPackages, parameters.getValues(ACTION_INTERCEPTOR_PACKAGES));
+		Collections.addAll(actionInterceptorPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
+
+		if (!actionInterceptorPackages.isEmpty()) {
 			logger.debug("action interceptors will be looked for in ", actionInterceptorPackages);
 
 			List<Class<?>> actionInterceptorClasses;
@@ -90,7 +99,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 						return ActionInterceptor.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
 						&& !type.isAnnotationPresent(Ignored.class);
 					}
-				}, actionInterceptorPackages);
+				}, actionInterceptorPackages.toArray(new String[actionInterceptorPackages.size()]));
 			} catch (UtilityException exception) {
 				throw new ConfigurationException(exception, "can't find action interceptors");
 			}
