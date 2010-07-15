@@ -57,7 +57,7 @@ public class Directories {
 	}
 
 	/**
-	 * Creates a directory and returns it.
+	 * Creates a directory and returns it. Intermediate directories will be created when necessary.
 	 *
 	 * @param directory the directory in which to create the directory
 	 * @param name the name of the new directory
@@ -72,7 +72,7 @@ public class Directories {
 			String message = String.format("directory '%s' already exists", newDirectory.getAbsolutePath());
 
 			throw new IllegalArgumentException(message);
-		} else if (!newDirectory.mkdir()) {
+		} else if (!newDirectory.mkdirs()) {
 			throw new IOException(String.format("can't create directory '%s'", newDirectory.getAbsolutePath()));
 		}
 

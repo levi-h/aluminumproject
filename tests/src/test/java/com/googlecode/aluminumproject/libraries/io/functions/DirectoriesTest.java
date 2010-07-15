@@ -54,6 +54,22 @@ public class DirectoriesTest extends IoLibraryTest {
 		newDirectory.deleteOnExit();
 	}
 
+	@Test(dependsOnMethods = "nonexistentNewDirectoryShouldBeCreatable")
+	public void intermediateDirectoriesShouldBeCreatedWhenCreatingNewDirectory() throws IOException {
+		File directory = Directories.temporaryDirectory();
+
+		String intermediateDirectoryName = generateUniqueName(directory);
+
+		File newDirectory = Directories.newDirectory(directory, String.format("%s/new", intermediateDirectoryName));
+
+		File intermediateDirectory = new File(directory, intermediateDirectoryName);
+		assert intermediateDirectory.exists();
+		assert intermediateDirectory.isDirectory();
+
+		newDirectory.deleteOnExit();
+		intermediateDirectory.deleteOnExit();
+	}
+
 	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void creatingExistingDirectoryShouldCauseException() throws IOException {
 		File directory = createTemporaryDirectory();
