@@ -20,8 +20,8 @@ allprojects {
 }
 
 subprojects {
-	usePlugin 'java'
-	usePlugin 'eclipse'
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
 
 	sourceCompatibility = 1.6
 	targetCompatibility = 1.6
@@ -45,15 +45,13 @@ subprojects {
 			classifier = 'src'
 
 			sourceSets.main.java.srcDirs.each {srcDir ->
-				fileSet(dir: srcDir)
+				from srcDir
 			}
 		}
 
 		assemble.dependsOn << 'createSources'
 
-		['compileTestJava', 'processTestResources', 'testClasses', 'test'].each {taskName ->
-			tasks.findByName(taskName).enabled = false
-		}
+		test.enabled = false
 	}
 
 	rootProject.evaluationDependsOn name
@@ -76,8 +74,6 @@ task createApiDocs(type: Javadoc, visible: false)  {
 			options.links += subproject.property('apiDocUrls')
 		}
 	}
-
-	optionsFile = file('build/javadoc-options') // see GRADLE-686
 }
 
 task createDistribution(type: Zip, dependsOn: [createApiDocs] + subprojects*.build) {
@@ -86,23 +82,40 @@ task createDistribution(type: Zip, dependsOn: [createApiDocs] + subprojects*.bui
 	baseName = rootProject.name
 	version = rootProject.version
 
-	fileSet(dir: rootDir) {
+	from(rootDir) {
 		include 'LICENSE'
 		include 'README'
 	}
 
-	fileSet(dir: buildDir).include('docs/**')
+	from(buildDir) {
+		include 'docs/**'
+	}
+
+	Set libraries = [] as Set
 
 	subprojects.each {subproject ->
 		if (subproject.jar.enabled) {
-			zipFileSet(prefix: 'src', dir: subproject.distsDir).include("*-src.zip")
-			zipFileSet(prefix: 'lib', dir: subproject.libsDir).include('*.jar')
-
-			subproject.configurations.distribution.resolve().each {library ->
-				zipFileSet(prefix: 'lib', dir: library.parentFile.path).include(library.name)
+			from(subproject.distsDir) {
+				into 'src'
+				include '*-src.zip'
 			}
 
-			zipFileSet(prefix: 'lib', dir: subproject.projectDir) {
+			from(subproject.libsDir) {
+				into 'lib'
+				include '*.jar'
+			}
+
+			subproject.configurations.distribution.resolve().each {library ->
+				if (libraries.add(library.name)) {
+					from(library.parentFile.path) {
+						into 'lib'
+						include library.name
+					}
+				}
+			}
+
+			from(subproject.projectDir) {
+				into 'lib'
 				include '*.LICENSE'
 				include '*.NOTICE'
 			}
@@ -110,16 +123,18 @@ task createDistribution(type: Zip, dependsOn: [createApiDocs] + subprojects*.bui
 			File distributionDir = file("${subproject.projectDir}/src/distribution")
 
 			if (distributionDir.exists()) {
-				fileSet(dir: distributionDir)
+				from(distributionDir) {
+					include '**'
+				}
 			}
 		}
 	}
 }
 
-task clean(type: Clean) {
-	dir = rootProject.buildDir
+task clean(type: Delete) {
+	delete = rootProject.buildDir
 }
 
 task createWrapper(type: Wrapper) {
-	gradleVersion = '0.8'
+	gradleVersion = '0.9-preview-3'
 }
