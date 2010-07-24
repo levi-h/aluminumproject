@@ -26,11 +26,13 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
+import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
@@ -172,27 +174,8 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		return actionContributionFactories;
 	}
 
-	/**
-	 * Finds a library with a certain URL. The URL may contain a library version.
-	 *
-	 * @param libraryUrl the URL of the library to find
-	 * @return the library with the given URL
-	 * @throws TemplateException when no library with the given URL can be found
-	 */
-	protected Library findLibrary(String libraryUrl) throws TemplateException {
-		Library library = null;
-
-		Iterator<Library> libraries = configuration.getLibraries().iterator();
-
-		while ((library == null) && libraries.hasNext()) {
-			library = libraries.next();
-
-			LibraryInformation information = library.getInformation();
-
-			if (!information.getUrl().equals(libraryUrl) && !information.getVersionedUrl().equals(libraryUrl)) {
-				library = null;
-			}
-		}
+	private Library findLibrary(String libraryUrl) throws TemplateException {
+		Library library = ConfigurationUtilities.findLibrary(configuration, libraryUrl);
 
 		if (library == null) {
 			throw new TemplateException("can't find library with URL '", libraryUrl, "'");
@@ -227,7 +210,11 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 			LibraryInformation libraryInformation = library.getInformation();
 
 			if (libraryInformation.supportsDynamicActions()) {
-				actionFactory = library.getDynamicActionFactory(name);
+				try {
+					actionFactory = library.getDynamicActionFactory(name);
+				} catch (LibraryException exception) {
+					throw new TemplateException("can't get dynamic action factory for action '", name, "'");
+				}
 			} else {
 				throw new TemplateException("can't find action factory for action with name '", name, "'",
 					" in library with URL '", libraryInformation.getUrl(), "' and dynamic actions are not supported");
@@ -262,11 +249,23 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		}
 
 		if (actionContributionFactory == null) {
-			throw new TemplateException("can't find action contribution factory for action contribution" +
-				" with name '", name, "' in library with URL '", library.getInformation().getUrl(), "'");
-		} else {
-			return actionContributionFactory;
+			LibraryInformation libraryInformation = library.getInformation();
+
+			if (libraryInformation.supportsDynamicActionContributions()) {
+				try {
+					actionContributionFactory = library.getDynamicActionContributionFactory(name);
+				} catch (LibraryException exception) {
+					throw new TemplateException(exception, "can't get dynamic action contribution factory",
+						" for action contribution '", name, "'");
+				}
+			} else {
+				throw new TemplateException("can't find action contribution factory for action contribution",
+					" with name '", name, "' in library with URL '", library.getInformation().getUrl(), "'",
+					" and dynamic action contributions are not supported");
+			}
 		}
+
+		return actionContributionFactory;
 	}
 
 	/**

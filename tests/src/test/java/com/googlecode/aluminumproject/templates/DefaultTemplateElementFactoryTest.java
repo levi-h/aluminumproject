@@ -20,7 +20,6 @@ import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.test.TestActionInterceptor;
-import com.googlecode.aluminumproject.libraries.test.TestLibrary;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.util.List;
@@ -62,33 +61,5 @@ public class DefaultTemplateElementFactoryTest {
 		ActionInterceptor actionInterceptor = actionInterceptors.get(0);
 		assert actionInterceptor != null;
 		assert actionInterceptor instanceof TestActionInterceptor;
-	}
-
-	public void libraryShouldBeFindableByUrl() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(parameters);
-
-		TestLibrary testLibrary = new TestLibrary();
-		testLibrary.initialise(configuration, parameters);
-		configuration.addLibrary(testLibrary);
-
-		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(configuration, parameters);
-
-		assert templateElementFactory.findLibrary("http://aluminumproject.googlecode.com/test") == testLibrary;
-	}
-
-	public void libraryShouldBeFindableByVersionedUrl() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(parameters);
-
-		TestLibrary testLibrary = new TestLibrary();
-		testLibrary.initialise(configuration, parameters);
-		configuration.addLibrary(testLibrary);
-
-		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(configuration, parameters);
-
-		assert templateElementFactory.findLibrary("http://aluminumproject.googlecode.com/test/test") == testLibrary;
 	}
 }
