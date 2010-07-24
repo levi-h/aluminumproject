@@ -22,7 +22,7 @@ package com.googlecode.aluminumproject.libraries;
  * unique. The preferred way of making sure that a library URL is unique is by choosing a host name that is owned by the
  * library creator.
  * <p>
- * Another library information aspect is whether or not the library supports dynamic actions.
+ * Another library information aspect is whether or not the library supports dynamic library elements.
  *
  * @author levi_h
  */
@@ -33,16 +33,18 @@ public class LibraryInformation {
 	private String displayName;
 
 	private boolean dynamicActionsSupported;
+	private boolean dynamicActionContributionsSupported;
+	private boolean dynamicFunctionsSupported;
 
 	/**
-	 * Creates information for a library that does not support dynamic actions.
+	 * Creates information for a library that does not support dynamic library elements.
 	 *
 	 * @param url the URL that uniquely identifies the library
 	 * @param version the version of the library
 	 * @param displayName the name that should be used when referring to the library
 	 */
 	public LibraryInformation(String url, String version, String displayName) {
-		this(url, version, displayName, false);
+		this(url, version, displayName, false, false, false);
 	}
 
 	/**
@@ -52,14 +54,19 @@ public class LibraryInformation {
 	 * @param version the version of the library
 	 * @param displayName the name that should be used when referring to the library
 	 * @param dynamicActionsSupported whether or not the library supports dynamic actions
+	 * @param dynamicActionContributionsSupported whether or not the library supports dynamic action contributions
+	 * @param dynamicFunctionsSupported whether or not the library supports dynamic functions
 	 */
-	public LibraryInformation(String url, String version, String displayName, boolean dynamicActionsSupported) {
+	public LibraryInformation(String url, String version, String displayName, boolean dynamicActionsSupported,
+			boolean dynamicActionContributionsSupported, boolean dynamicFunctionsSupported) {
 		this.url = url;
 		this.version = version;
 
 		this.displayName = displayName;
 
 		this.dynamicActionsSupported = dynamicActionsSupported;
+		this.dynamicActionContributionsSupported = dynamicActionContributionsSupported;
+		this.dynamicFunctionsSupported = dynamicFunctionsSupported;
 	}
 
 	/**
@@ -107,5 +114,23 @@ public class LibraryInformation {
 	 */
 	public boolean supportsDynamicActions() {
 		return dynamicActionsSupported;
+	}
+
+	/**
+	 * Returns whether this library suppors dynamic action contributions or not.
+	 *
+	 * @return {@code true} if dynamic action contributions are supported, {@code false} otherwise
+	 */
+	public boolean supportsDynamicActionContributions() {
+		return dynamicActionContributionsSupported;
+	}
+
+	/**
+	 * Returns whether this library supports dynamic functions or not.
+	 *
+	 * @return {@code true} if dynamic functions are supported, {@code false} otherwise
+	 */
+	public boolean supportsDynamicFunctions() {
+		return dynamicFunctionsSupported;
 	}
 }

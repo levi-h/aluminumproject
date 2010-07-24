@@ -20,7 +20,9 @@ import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.libraries.test.actions.TestActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.test.functions.Add;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 /**
@@ -39,7 +41,11 @@ public class TestLibrary extends AbstractLibrary {
 	public TestLibrary() {
 		super(ReflectionUtilities.getPackageName(TestLibrary.class));
 
-		information = new LibraryInformation("http://aluminumproject.googlecode.com/test", "test", "Test library");
+		String url = "http://aluminumproject.googlecode.com/test";
+		String version = "test";
+		String displayName = "Test library";
+
+		information = new LibraryInformation(url, version, displayName, false, false, true);
 	}
 
 	@Override
@@ -63,5 +69,20 @@ public class TestLibrary extends AbstractLibrary {
 
 	public LibraryInformation getInformation() {
 		return information;
+	}
+
+	@Override
+	public FunctionFactory getDynamicFunctionFactory(String name) {
+		FunctionFactory dynamicFunctionFactory;
+
+		if (name.matches("add\\d+(and\\d+)+")) {
+			dynamicFunctionFactory = new Add.Factory(name);
+
+			initialiseLibraryElement(dynamicFunctionFactory);
+		} else {
+			dynamicFunctionFactory = super.getDynamicFunctionFactory(name);
+		}
+
+		return dynamicFunctionFactory;
 	}
 }

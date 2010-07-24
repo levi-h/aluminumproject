@@ -257,6 +257,28 @@ public abstract class AbstractLibrary implements Library {
 		}
 	}
 
+	public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
+		LibraryInformation information = getInformation();
+
+		if (information.supportsDynamicActionContributions()) {
+			throw new LibraryException(
+				"dynamic action contribution factories can't be created by the abstract library");
+		} else {
+			throw new LibraryException(
+				"library '", information.getUrl(), "' does not support dynamic action contributions");
+		}
+	}
+
+	public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
+		LibraryInformation information = getInformation();
+
+		if (information.supportsDynamicFunctions()) {
+			throw new LibraryException("dynamic function factories can't be created by the abstract library");
+		} else {
+			throw new LibraryException("library '", information.getUrl(), "' does not support dynamic functions");
+		}
+	}
+
 	public List<ActionContributionFactory> getActionContributionFactories() {
 		return Collections.unmodifiableList(actionContributionFactories);
 	}

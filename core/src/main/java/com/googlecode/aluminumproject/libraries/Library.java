@@ -67,9 +67,29 @@ public interface Library extends ConfigurationElement {
 	List<ActionContributionFactory> getActionContributionFactories();
 
 	/**
+	 * Tries to obtain an action contribution factory for a dynamic action contribution.
+	 *
+	 * @param name the name of the dynamic action contribution
+	 * @return an action contribution factory that creates dynamic action contributions with the given name
+	 * @throws LibraryException when this library does not support dynamic action contributions or when the action
+	 *                          contribution factory can't be obtained
+	 */
+	ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException;
+
+	/**
 	 * Returns all function factories.
 	 *
 	 * @return a list with all registered function factories
 	 */
 	List<FunctionFactory> getFunctionFactories();
+
+	/**
+	 * Tries to obtain a function factory for a dynamic function.
+	 *
+	 * @param name the name of the dynamic function
+	 * @return a function factory that creates dynamic functions with the given name
+	 * @throws LibraryException when this library does not support dynamic functions or when the function factory can't
+	 *                          be obtained
+	 */
+	FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException;
 }

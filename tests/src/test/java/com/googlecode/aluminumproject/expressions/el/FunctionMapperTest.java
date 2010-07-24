@@ -87,9 +87,26 @@ public class FunctionMapperTest {
 		assert functionMapper.resolveFunction("versionedTest", "max") != null;
 	}
 
-	@Test(dependsOnMethods = "resolvingExistingFunctionShouldResultInDelegate")
-	public void delegateShouldBeInvokable() throws IllegalAccessException, InvocationTargetException {
-		Object result = functionMapper.resolveFunction("test", "max").invoke(null, 5, 10);
+	public void resolvingDynamicFunctionShouldResultInDelegate() {
+		assert functionMapper.resolveFunction("test", "add1and2and3and4") != null;
+	}
+
+	public void resolvingDynamicFunctionWithVersionedAbbreviationShouldResultInDelegate() {
+		assert functionMapper.resolveFunction("versionedTest", "add1and2and3and4") != null;
+	}
+
+	@Test(dependsOnMethods = {
+		"resolvingExistingFunctionShouldResultInDelegate",
+		"resolvingDynamicFunctionShouldResultInDelegate"
+	})
+	public void delegateShouldBeInvocable() throws IllegalAccessException, InvocationTargetException {
+		Object result;
+
+		result = functionMapper.resolveFunction("test", "max").invoke(null, 5, 10);
+		assert result instanceof Integer;
+		assert ((Integer) result).intValue() == 10;
+
+		result = functionMapper.resolveFunction("test", "add1and2and3and4").invoke(null);
 		assert result instanceof Integer;
 		assert ((Integer) result).intValue() == 10;
 	}

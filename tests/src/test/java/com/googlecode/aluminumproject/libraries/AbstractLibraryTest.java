@@ -143,6 +143,19 @@ public class AbstractLibraryTest {
 		return actionContributionFactory;
 	}
 
+	@Test(expectedExceptions = LibraryException.class)
+	public void obtainingDynamicActionContributionFactoryWhenDynamicActionsAreNotSupportedShouldCauseException() {
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestAction.class));
+
+		library.getDynamicActionContributionFactory("test");
+	}
+
+	public void dynamicActionContributionFactoriesShouldBeObtainableWhenDynamicActionContributionsAreSupported() {
+		Library library = createLibrary(false, true, ReflectionUtilities.getPackageName(TestAction.class));
+
+		assert library.getDynamicActionContributionFactory("test") != null;
+	}
+
 	public void usingPackagesThatDoNotContainFunctionsShouldResultInEmptyListOfFunctionFactories() {
 		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(String.class));
 
@@ -192,6 +205,19 @@ public class AbstractLibraryTest {
 		return functionFactory;
 	}
 
+	@Test(expectedExceptions = LibraryException.class)
+	public void obtainingDynamicFunctionFactoryWhenDynamicFunctionsAreNotSupportedShouldCauseException() {
+		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestAction.class));
+
+		library.getDynamicFunctionFactory("test");
+	}
+
+	public void dynamicFunctionFactoriesShouldBeObtainableWhenDynamicFunctionsAreSupported() {
+		Library library = createLibrary(false, true, ReflectionUtilities.getPackageName(TestAction.class));
+
+		assert library.getDynamicFunctionFactory("test") != null;
+	}
+
 	@Test(dependsOnMethods = {
 		"usingPackagesThatDoNotContainActionsShouldResultInEmptyListOfActionFactories",
 		"usingPackagesThatDoNotContainActionContributionsShouldResultInEmptyListOfActionContributionFactories",
@@ -235,10 +261,10 @@ public class AbstractLibraryTest {
 		assert ((TestFunctionFactory) functionFactory).getLibrary() == library;
 	}
 
-	private Library createLibrary(boolean addCommonElements, boolean dynamicActionsSupported, String... packageNames) {
+	private Library createLibrary(boolean addCommonElements, boolean dynamicElementsSupported, String... packageNames) {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 
-		Library library = new DefaultLibrary(addCommonElements, dynamicActionsSupported, packageNames);
+		Library library = new DefaultLibrary(addCommonElements, dynamicElementsSupported, packageNames);
 		library.initialise(new TestConfiguration(parameters), parameters);
 
 		return library;
@@ -250,19 +276,24 @@ public class AbstractLibraryTest {
 
 		private LibraryInformation information;
 
-		public DefaultLibrary(boolean addCommonElements, boolean dynamicActionsSupported, String... packageNames) {
+		public DefaultLibrary(boolean addCommonElements, boolean dynamicElementsSupported, String... packageNames) {
 			super(packageNames);
 
 			this.addCommonElements = addCommonElements;
 
-			information = new LibraryInformation(
-				"http://aluminumproject.googlecode.com/default", "test", "Default library", dynamicActionsSupported);
+			String url = "http://aluminumproject.googlecode.com/default";
+			String version = "test";
+			String displayName = "Default library";
+
+			information = new LibraryInformation(url, version, displayName,
+				dynamicElementsSupported, dynamicElementsSupported, dynamicElementsSupported);
 		}
 
 		public LibraryInformation getInformation() {
 			return information;
 		}
 
+		@Override
 		public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
 			ActionFactory dynamicActionFactory;
 
@@ -274,6 +305,32 @@ public class AbstractLibraryTest {
 			}
 
 			return dynamicActionFactory;
+		}
+
+		public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
+			ActionContributionFactory dynamicActionContributionFactory;
+
+			if (information.supportsDynamicActionContributions()) {
+				dynamicActionContributionFactory = new TestActionContributionFactory();
+				initialiseLibraryElement(dynamicActionContributionFactory);
+			} else {
+				dynamicActionContributionFactory = super.getDynamicActionContributionFactory(name);
+			}
+
+			return dynamicActionContributionFactory;
+		}
+
+		public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
+			FunctionFactory dynamicFunctionFactory;
+
+			if (information.supportsDynamicFunctions()) {
+				dynamicFunctionFactory = new TestFunctionFactory();
+				initialiseLibraryElement(dynamicFunctionFactory);
+			} else {
+				dynamicFunctionFactory = super.getDynamicFunctionFactory(name);
+			}
+
+			return dynamicFunctionFactory;
 		}
 
 		@Override

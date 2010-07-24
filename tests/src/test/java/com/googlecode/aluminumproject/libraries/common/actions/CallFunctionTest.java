@@ -55,6 +55,18 @@ public class CallFunctionTest extends CommonLibraryTest {
 		assert ((Integer) result).intValue() == 10;
 	}
 
+	@Test(dependsOnMethods = "resultShouldBeStoredInContextVariable")
+	public void dynamicFunctionShouldBeCallable() {
+		Context context = new DefaultContext();
+
+		processTemplate("call-dynamic-function", context);
+
+		Object result = context.getVariable(Context.TEMPLATE_SCOPE, "sum");
+		assert result != null;
+		assert result instanceof Integer;
+		assert ((Integer) result).intValue() == 10;
+	}
+
 	@Test(expectedExceptions = TemplateException.class)
 	public void callingFunctionWithArgumentsThatDoNotMatchShouldCauseException() {
 		processTemplate("call-function-with-arguments-that-do-not-match", new DefaultContext());

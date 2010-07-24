@@ -20,12 +20,14 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.functions.ConstantFunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.libraries.functions.FunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.FunctionException;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
+import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 
 import java.lang.reflect.Method;
@@ -37,6 +39,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -67,8 +71,7 @@ class FunctionDelegateFactory {
 	 * @param configuration the configuration to add
 	 */
 	public static void addConfiguration(Configuration configuration) {
-		delegateRegistries.put(configuration,
-			new DelegateRegistry(configuration, nextClassIndex.getAndAdd(1)));
+		delegateRegistries.put(configuration, new DelegateRegistry(configuration, nextClassIndex.getAndIncrement()));
 	}
 
 	/**
@@ -82,38 +85,46 @@ class FunctionDelegateFactory {
 	 */
 	public static Method findDelegate(
 			Configuration configuration, String libraryUrl, String functionName, Context context) {
-		Method delegate;
+		Method delegate = null;
 
 		DelegateRegistry delegateRegistry = delegateRegistries.get(configuration);
 
 		if (delegateRegistry == null) {
 			logger.warn("configuration ", configuration, " was not added");
-
-			delegate = null;
 		} else {
 			try {
 				delegateRegistry.initialise();
 			} catch (CannotCompileException exception) {
 				logger.warn(exception, "can't create delegates");
-
-				delegate = null;
 			}
 
 			FunctionFactory functionFactory = delegateRegistry.getFunctionFactory(getKey(libraryUrl, functionName));
 
 			if (functionFactory == null) {
-				logger.warn("can't find function with library URL '", libraryUrl, "' and name '", functionName, "'");
+				Library library = ConfigurationUtilities.findLibrary(configuration, libraryUrl);
 
-				delegate = null;
-			} else {
+				if ((library != null) && library.getInformation().supportsDynamicFunctions()) {
+					try {
+						functionFactory = library.getDynamicFunctionFactory(functionName);
+					} catch (LibraryException exception) {
+						logger.warn("can't get dynamic function factory for function '", functionName, "'",
+							" in library with URL '", libraryUrl, "'");
+					}
+				} else {
+					logger.warn("can't find function with library URL '", libraryUrl, "' and name '", functionName, "'",
+						(library == null) ? "" : " and dynamic functions are not supported by the library");
+				}
+			}
+
+			if (functionFactory != null) {
 				try {
 					delegate = delegateRegistry.getDelegate(functionFactory, libraryUrl, functionName);
 
 					functionContexts.get().offer(new FunctionContext(configuration, functionFactory, context));
+				} catch (CannotCompileException exception) {
+					logger.warn(exception, "can't find dynamic delegate");
 				} catch (NoSuchMethodException exception) {
 					logger.warn(exception, "can't find delegate");
-
-					delegate = null;
 				}
 			}
 		}
@@ -197,6 +208,8 @@ class FunctionDelegateFactory {
 
 		private Class<?> delegates;
 
+		private ConcurrentMap<String, Class<?>> dynamicDelegates;
+
 		public DelegateRegistry(Configuration configuration, int classIndex) {
 			this.configuration = configuration;
 			this.classIndex = classIndex;
@@ -234,6 +247,8 @@ class FunctionDelegateFactory {
 				}
 
 				delegates = ctFunctions.toClass();
+
+				dynamicDelegates = new ConcurrentHashMap<String, Class<?>>();
 			}
 		}
 
@@ -266,13 +281,45 @@ class FunctionDelegateFactory {
 			return functionFactories.get(key);
 		}
 
-		public Method getDelegate(
-				FunctionFactory functionFactory, String libraryUrl, String functionName) throws NoSuchMethodException {
+		public Method getDelegate(FunctionFactory functionFactory, String libraryUrl, String functionName)
+				throws CannotCompileException, NoSuchMethodException {
+			Class<?> delegates;
+			int delegateIndex;
+
+			String key = getKey(libraryUrl, functionName);
+
+			if (delegateIndices.containsKey(key)) {
+				delegates = this.delegates;
+				delegateIndex = delegateIndices.get(key);
+			} else {
+				delegateIndex = 0;
+
+				if (!dynamicDelegates.containsKey(functionName)) {
+					synchronized (dynamicDelegates) {
+						if (!dynamicDelegates.containsKey(functionName)) {
+							String dynamicFunctionsClassNameFormat =
+								"com.googlecode.aluminumproject.expressions.el.Delegates%dDynamicFunctions%d";
+							CtClass ctDynamicFunctions = ClassPool.getDefault().makeClass(
+								String.format(dynamicFunctionsClassNameFormat, classIndex, dynamicDelegates.size()));
+
+							functionFactories.put(key, functionFactory);
+
+							String delegate = getDelegate(key, functionFactory, delegateIndex);
+							ctDynamicFunctions.addMethod(CtNewMethod.make(delegate, ctDynamicFunctions));
+
+							dynamicDelegates.put(functionName, ctDynamicFunctions.toClass());
+						}
+					}
+				}
+
+				delegates = dynamicDelegates.get(functionName);
+			}
+
 			int parameterCount = functionFactory.getInformation().getArgumentInformation().size();
 			Class<?>[] parameterClasses = new Class<?>[parameterCount];
 			Arrays.fill(parameterClasses, Object.class);
 
-			return delegates.getMethod("d" + delegateIndices.get(getKey(libraryUrl, functionName)), parameterClasses);
+			return delegates.getMethod(String.format("d%d", delegateIndex), parameterClasses);
 		}
 	}
 

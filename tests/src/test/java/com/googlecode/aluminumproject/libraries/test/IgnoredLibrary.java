@@ -56,7 +56,15 @@ public class IgnoredLibrary implements Library {
 		return null;
 	}
 
+	public ActionContributionFactory getDynamicActionContributionFactory(String name) {
+		return null;
+	}
+
 	public List<FunctionFactory> getFunctionFactories() {
+		return null;
+	}
+
+	public FunctionFactory getDynamicFunctionFactory(String name) {
 		return null;
 	}
 }

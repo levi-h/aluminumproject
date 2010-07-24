@@ -240,8 +240,16 @@ public class DefaultConfigurationTest {
 			return Collections.emptyList();
 		}
 
+		public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
+			throw new LibraryException("the external library does not support dynamic action contributions");
+		}
+
 		public List<FunctionFactory> getFunctionFactories() {
 			return Collections.emptyList();
+		}
+
+		public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
+			throw new LibraryException("the external library does not support dynamic functions");
 		}
 	}
 

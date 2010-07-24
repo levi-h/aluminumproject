@@ -18,6 +18,8 @@ package com.googlecode.aluminumproject.libraries.common.actions;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.LibraryException;
+import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.functions.Function;
@@ -107,22 +109,32 @@ public class CallFunction extends AbstractAction {
 	}
 
 	private Function createFunction(Context context) throws ActionException, FunctionException {
-		Function function = null;
+		FunctionFactory functionFactory = null;
 
 		Iterator<FunctionFactory> it = library.getFunctionFactories().iterator();
 
-		while ((it.hasNext()) && (function == null)) {
-			FunctionFactory functionFactory = it.next();
+		while ((it.hasNext()) && (functionFactory == null)) {
+			functionFactory = it.next();
 
-			if (functionFactory.getInformation().getName().equals(name)) {
-				function = functionFactory.create(arguments, context);
+			if (!functionFactory.getInformation().getName().equals(name)) {
+				functionFactory = null;
 			}
 		}
 
-		if (function == null) {
-			throw new ActionException("can't create function '", name, "'");
+		if (functionFactory == null) {
+			LibraryInformation libraryInformation = library.getInformation();
+
+			if (libraryInformation.supportsDynamicFunctions()) {
+				try {
+					functionFactory = library.getDynamicFunctionFactory(name);
+				} catch (LibraryException exception) {
+					throw new ActionException("can't get dynamic function factory for function '", name, "'");
+				}
+			} else {
+				throw new ActionException("can't find factory for function '", name, "'");
+			}
 		}
 
-		return function;
+		return functionFactory.create(arguments, context);
 	}
 }
