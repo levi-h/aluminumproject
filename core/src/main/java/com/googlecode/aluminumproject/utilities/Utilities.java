@@ -49,7 +49,7 @@ public class Utilities {
 	}
 
 	/**
-	 * Returns a value of, if it's {@code null}, a default value of the same type.
+	 * Returns a value or, if it's {@code null}, a default value of the same type.
 	 *
 	 * @param <T> the type of the values
 	 * @param value the value to use
