@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.libraries.test.functions;
 
-import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 import com.googlecode.aluminumproject.libraries.functions.Function;
@@ -73,8 +71,6 @@ public class Add implements Function {
 			information = new FunctionInformation(
 				name, Integer.TYPE, Collections.<FunctionArgumentInformation>emptyList());
 		}
-
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
 
 		public FunctionInformation getInformation() {
 			return information;

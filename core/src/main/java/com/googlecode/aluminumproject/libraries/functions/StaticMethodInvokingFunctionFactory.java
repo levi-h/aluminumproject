@@ -46,7 +46,10 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 		this.method = method;
 	}
 
+	@Override
 	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+		super.initialise(configuration, parameters);
+
 		information = new FunctionInformation(getFunctionName(), method.getReturnType(), getArgumentInformation());
 	}
 

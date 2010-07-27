@@ -16,6 +16,14 @@
 package com.googlecode.aluminumproject.libraries;
 
 import com.googlecode.aluminumproject.Logger;
+import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.utilities.finders.FieldFinder;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.List;
 
 /**
  * Reduces the effort it takes to implement subinterfaces of {@link LibraryElement the library element interface}.
@@ -23,6 +31,8 @@ import com.googlecode.aluminumproject.Logger;
  * @author levi_h
  */
 public abstract class AbstractLibraryElement implements LibraryElement {
+	private Configuration configuration;
+
 	private Library library;
 
 	/** The logger to use. */
@@ -35,11 +45,90 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 		logger = Logger.get(getClass());
 	}
 
+	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+		this.configuration = configuration;
+	}
+
+	/**
+	 * Returns the configuration that this library element was initialised with.
+	 *
+	 * @return the current configuration
+	 */
+	protected Configuration getConfiguration() {
+		return configuration;
+	}
+
 	public Library getLibrary() {
 		return library;
 	}
 
 	public void setLibrary(Library library) {
 		this.library = library;
+	}
+
+	/**
+	 * Injects all of an object's fields that are annotated with {@link Injected &#64;Injected}. The following field
+	 * types are supported:
+	 * <ul>
+	 * <li>The current {@link Configuration configuration};
+	 * <li>This library element's type.
+	 * </ul>
+	 * If an annotated field with a different type is encountered, this method will throw an exception.
+	 *
+	 * @param injectable the object whose fields should be injected
+	 * @throws LibraryException when the object's fields can't be injected
+	 */
+	protected void injectFields(Object injectable) throws LibraryException {
+		List<Field> fields = FieldFinder.find(new FieldFinder.FieldFilter() {
+			public boolean accepts(Field field) {
+				return !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(Injected.class);
+			}
+		}, injectable.getClass());
+
+		for (Field field: fields) {
+			Object valueToInject = getValueToInject(field);
+
+			logger.debug("injecting ", valueToInject, " into ", field, " of ", injectable);
+
+			if (!field.isAccessible()) {
+				try {
+					field.setAccessible(true);
+				} catch (SecurityException exception) {
+					throw new LibraryException("can't make field ",
+						field.getDeclaringClass().getSimpleName(), "#", field.getName(), " accessible");
+				}
+			}
+
+			try {
+				field.set(injectable, valueToInject);
+			} catch (IllegalArgumentException exception) {
+				throw new LibraryException(exception, "can't inject ", field);
+			} catch (IllegalAccessException exception) {
+				throw new LibraryException(exception, "may not inject ", field);
+			}
+		}
+	}
+
+	/**
+	 * Determines which value should be injected into a certain field. This diagnosis can be based on the field's type,
+	 * one of its annotations, or some other characteristic of the field.
+	 *
+	 * @param field the field that is declared to be {@link Injected injected}
+	 * @return the value that should be injected into the field (may be {@code null})
+	 * @throws LibraryException when no value can be found to inject
+	 */
+	protected Object getValueToInject(Field field) throws LibraryException {
+		Object valueToInject;
+
+		if (field.getType() == Configuration.class) {
+			valueToInject = configuration;
+		} else if (getClass().isAssignableFrom(field.getType())) {
+			valueToInject = this;
+		} else {
+			throw new LibraryException("can't determine value to inject into field '", field.getName(), "'",
+				" that is annotated with @", Injected.class.getSimpleName());
+		}
+
+		return valueToInject;
 	}
 }

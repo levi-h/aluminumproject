@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.common.actions;
 
+import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.Library;
@@ -22,6 +24,7 @@ import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
+import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.libraries.functions.FunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.FunctionException;
@@ -40,7 +43,6 @@ import java.util.List;
  * @author levi_h
  */
 public class CallFunction extends AbstractAction {
-	private Library library;
 	private String name;
 
 	private List<FunctionArgument> arguments;
@@ -48,21 +50,50 @@ public class CallFunction extends AbstractAction {
 	private String resultName;
 	private String resultScope;
 
+	private @Injected DefaultActionFactory factory;
+
 	/**
 	 * Creates a <em>call function</em> action.
-	 *
-	 * @param library the library that contains the function
-	 * @param name the name of the function
-	 * @param resultName the name of the variable in which the result will be stored
-	 * @param resultScope the scope of the result variable
 	 */
-	public CallFunction(Library library, String name, String resultName, String resultScope) {
-		this.library = library;
-		this.name = name;
-
+	public CallFunction() {
 		arguments = new LinkedList<FunctionArgument>();
+	}
 
+	/**
+	 * Sets the name of the function to call.
+	 *
+	 * @param name the function name to use
+	 */
+	@ActionParameterInformation(required = true)
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * Adds an argument to the invoked function.
+	 *
+	 * @param argument the argument to add
+	 */
+	protected void addArgument(FunctionArgument argument) {
+		arguments.add(argument);
+	}
+
+	/**
+	 * Sets the name of the variable that will contain the result of the function call.
+	 *
+	 * @param resultName the result variable's name
+	 */
+	@ActionParameterInformation(required = true)
+	public void setResultName(String resultName) {
 		this.resultName = resultName;
+	}
+
+	/**
+	 * Sets the (optional) scope of the variable that will contain the result of the function call.
+	 *
+	 * @param resultScope the result variable's scope
+	 */
+	public void setResultScope(String resultScope) {
 		this.resultScope = resultScope;
 	}
 
@@ -72,16 +103,7 @@ public class CallFunction extends AbstractAction {
 	 * @return the called function's library
 	 */
 	protected Library getLibrary() {
-		return library;
-	}
-
-	/**
-	 * Adds an argument to the invoked function.
-	 *
-	 * @param argument the argument to add
-	 */
-	public void addArgument(FunctionArgument argument) {
-		arguments.add(argument);
+		return factory.getLibrary();
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
@@ -109,9 +131,10 @@ public class CallFunction extends AbstractAction {
 	}
 
 	private Function createFunction(Context context) throws ActionException, FunctionException {
-		FunctionFactory functionFactory = null;
+		Library library = getLibrary();
 
 		Iterator<FunctionFactory> it = library.getFunctionFactories().iterator();
+		FunctionFactory functionFactory = null;
 
 		while ((it.hasNext()) && (functionFactory == null)) {
 			functionFactory = it.next();

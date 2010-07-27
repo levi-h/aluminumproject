@@ -16,12 +16,14 @@
 package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
+import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 import com.googlecode.aluminumproject.utilities.UtilityException;
@@ -61,14 +63,14 @@ import java.util.Map;
  * parameterisable interface}. Any parameters that are supplied to the action factory but whose names don't match any of
  * the found parameter names will be set as dynamic parameters.
  * <p>
- * Actions will be created using the configured {@link ConfigurationElementFactory configuration element factory}.
+ * Actions will be created using the configured {@link ConfigurationElementFactory configuration element factory}. After
+ * an action has been created, all of its fields that are annotated with {@link Injected &#64;Injected} will be fed with
+ * an appropriate value.
  *
  * @author levi_h
  */
 public class DefaultActionFactory extends AbstractLibraryElement implements ActionFactory {
 	private Class<? extends Action> actionClass;
-
-	private Configuration configuration;
 
 	private Map<String, Method> parameterSetters;
 
@@ -83,9 +85,10 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		this.actionClass = actionClass;
 	}
 
+	@Override
 	public void initialise(
 			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		this.configuration = configuration;
+		super.initialise(configuration, parameters);
 
 		parameterSetters = new HashMap<String, Method>();
 
@@ -180,7 +183,10 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		Action action;
 
 		try {
-			action = configuration.getConfigurationElementFactory().instantiate(actionClass.getName(), Action.class);
+			ConfigurationElementFactory configurationElementFactory =
+				getConfiguration().getConfigurationElementFactory();
+
+			action = configurationElementFactory.instantiate(actionClass.getName(), Action.class);
 		} catch (ConfigurationException exception) {
 			throw new ActionException(exception, "can't create action");
 		}
@@ -189,6 +195,14 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 
 		setParameters(action, new HashMap<String, ActionParameter>(parameters), context);
 		logger.debug("set all parameters");
+
+		try {
+			injectFields(action);
+		} catch (LibraryException exception) {
+			throw new ActionException(exception, "can't inject action fields");
+		}
+
+		logger.debug("injected fields");
 
 		return action;
 	}

@@ -15,11 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
+import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 
 /**
@@ -34,14 +36,13 @@ import com.googlecode.aluminumproject.utilities.StringUtilities;
  * {@code OnDays} would get the name <em>on days</em>).
  * <p>
  * The action contribution will be created by the {@link ConfigurationElementFactory configuration element factory}
- * in the configuration.
+ * in the configuration. After its creation, any of the action contribution's fields that are declared to be {@link
+ * Injected injected} are filled.
  *
  * @author levi_h
  */
 public class DefaultActionContributionFactory extends AbstractLibraryElement implements ActionContributionFactory {
 	private Class<? extends ActionContribution> actionContributionClass;
-
-	private Configuration configuration;
 
 	private ActionContributionInformation information;
 
@@ -54,8 +55,9 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 		this.actionContributionClass = actionContributionClass;
 	}
 
+	@Override
 	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
-		this.configuration = configuration;
+		super.initialise(configuration, parameters);
 
 		information = new ActionContributionInformation(getActionContributionName());
 	}
@@ -85,7 +87,8 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 		ActionContribution actionContribution;
 
 		try {
-			ConfigurationElementFactory configurationElementFactory = configuration.getConfigurationElementFactory();
+			ConfigurationElementFactory configurationElementFactory =
+				getConfiguration().getConfigurationElementFactory();
 
 			actionContribution =
 				configurationElementFactory.instantiate(actionContributionClass.getName(), ActionContribution.class);
@@ -94,6 +97,14 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 		}
 
 		logger.debug("created action contribution ", actionContribution);
+
+		try {
+			injectFields(actionContribution);
+		} catch (LibraryException exception) {
+			throw new ActionException(exception, "can't inject fields of action contribution");
+		}
+
+		logger.debug("injected fields");
 
 		return actionContribution;
 	}

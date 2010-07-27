@@ -15,19 +15,15 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.AbstractActionFactory;
-import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
-import com.googlecode.aluminumproject.libraries.actions.ActionInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.actions.ActionParameterInformation;
+import com.googlecode.aluminumproject.libraries.actions.DynamicallyParameterisable;
 import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.utilities.Utilities;
@@ -35,7 +31,6 @@ import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,30 +47,42 @@ import java.util.Map;
  *
  * @author levi_h
  */
-@Ignored
-public class Include extends AbstractAction {
-	private Configuration configuration;
-
+public class Include extends AbstractAction implements DynamicallyParameterisable {
 	private String name;
 	private String parser;
 
-	private Map<String, Object> variables;
+	private Map<String, ActionParameter> variables;
+
+	private @Injected Configuration configuration;
 
 	/**
 	 * Creates an <em>include</em> action.
-	 *
-	 * @param configuration the configuration used
-	 * @param name the name of the template to include
-	 * @param parser the name of the parser to use (may be {@code null})
-	 * @param variables the variables that should be available in the included template
 	 */
-	public Include(Configuration configuration, String name, String parser, Map<String, Object> variables) {
-		this.configuration = configuration;
+	public Include() {
+		variables = new HashMap<String, ActionParameter>();
+	}
 
+	/**
+	 * Sets the name of the template to include.
+	 *
+	 * @param name the template name to use
+	 */
+	@ActionParameterInformation(required = true)
+	public void setName(String name) {
 		this.name = name;
-		this.parser = parser;
+	}
 
-		this.variables = variables;
+	/**
+	 * Sets the name of the parser that will be used to parse the included template.
+	 *
+	 * @param parser the parser to use
+	 */
+	public void setParser(String parser) {
+		this.parser = parser;
+	}
+
+	public void setParameter(String name, ActionParameter parameter) {
+		variables.put(name, parameter);
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
@@ -92,9 +99,9 @@ public class Include extends AbstractAction {
 
 		getBody().invoke(subcontext, new NullWriter());
 
-		for (Map.Entry<String, Object> variable: variables.entrySet()) {
+		for (Map.Entry<String, ActionParameter> variable: variables.entrySet()) {
 			String variableName = variable.getKey();
-			Object variableValue = variable.getValue();
+			Object variableValue = variable.getValue().getValue(Object.class, context);
 
 			logger.debug("setting variable '", variableName, "' to ", variableValue);
 
@@ -107,61 +114,6 @@ public class Include extends AbstractAction {
 			new TemplateProcessor(configuration).processTemplate(name, parser, subcontext, writer);
 		} catch (TemplateException exception) {
 			throw new ActionException(exception, "can't include template '", name, "'");
-		}
-	}
-
-	/**
-	 * Creates <em>include</em> actions.
-	 *
-	 * @author levi_h
-	 */
-	public static class IncludeFactory extends AbstractActionFactory {
-		private Configuration configuration;
-
-		private ActionInformation information;
-
-		/**
-		 * Creates an include factory.
-		 */
-		public IncludeFactory() {}
-
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {
-			this.configuration = configuration;
-
-			information = new ActionInformation("include", Arrays.asList(
-				new ActionParameterInformation("name", String.class, true),
-				new ActionParameterInformation("parser", String.class, false)
-			), true);
-		}
-
-		public ActionInformation getInformation() {
-			return information;
-		}
-
-		public Action create(Map<String, ActionParameter> parameters, Context context) throws ActionException {
-			parameters = new HashMap<String, ActionParameter>(parameters);
-
-			checkParameters(parameters);
-
-			String name = removeParameter(parameters, context, "name", String.class);
-			String parser = removeParameter(parameters, context, "parser", String.class);
-
-			return new Include(configuration, name, parser, convertParameters(parameters, context));
-		}
-
-		private Map<String, Object> convertParameters(
-				Map<String, ActionParameter> parameters, Context context) throws ActionException {
-			Map<String, Object> convertedParameters = new HashMap<String, Object>();
-
-			for (Map.Entry<String, ActionParameter> parameter: parameters.entrySet()) {
-				try {
-					convertedParameters.put(parameter.getKey(), parameter.getValue().getValue(Object.class, context));
-				} catch (ConverterException exception) {
-					throw new ActionException(exception, "can't convert parameter '", parameter.getKey(), "'");
-				}
-			}
-
-			return convertedParameters;
 		}
 	}
 }

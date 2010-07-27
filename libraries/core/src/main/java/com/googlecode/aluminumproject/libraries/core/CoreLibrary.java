@@ -15,13 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.core;
 
-import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.libraries.core.actions.Convert;
-import com.googlecode.aluminumproject.libraries.core.actions.Include;
 import com.googlecode.aluminumproject.utilities.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
@@ -45,15 +40,6 @@ public class CoreLibrary extends AbstractLibrary {
 		String displayName = "Core library";
 
 		information = new LibraryInformation(url, version, displayName);
-	}
-
-	@Override
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		super.initialise(configuration, parameters);
-
-		addActionFactory(new Convert.ConvertFactory());
-		addActionFactory(new Include.IncludeFactory());
 	}
 
 	public LibraryInformation getInformation() {

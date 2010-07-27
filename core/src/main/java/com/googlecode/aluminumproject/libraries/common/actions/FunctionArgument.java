@@ -15,12 +15,15 @@
  */
 package com.googlecode.aluminumproject.libraries.common.actions;
 
+import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
+import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.ConstantFunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -31,34 +34,34 @@ import com.googlecode.aluminumproject.writers.Writer;
  * @author levi_h
  */
 public class FunctionArgument extends AbstractAction {
-	private Library library;
-
 	private Object value;
 
-	private ConverterRegistry converterRegistry;
+	private @Injected DefaultActionFactory factory;
+	private @Injected Configuration configuration;
 
 	/**
 	 * Creates a <i>function argument</i> action.
-	 *
-	 * @param library the library that contains the function
-	 * @param value the value of the function argument
-	 * @param converterRegistry the converter registry to convert the value to other types with
 	 */
-	public FunctionArgument(Library library, Object value, ConverterRegistry converterRegistry) {
-		this.library = library;
+	public FunctionArgument() {}
 
+	/**
+	 * Sets the value of the function argument.
+	 *
+	 * @param value the argument value to use
+	 */
+	@ActionParameterInformation(required = true)
+	public void setValue(Object value) {
 		this.value = value;
-
-		this.converterRegistry = converterRegistry;
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException {
-		findCallFunction().addArgument(new ConstantFunctionArgument(value, converterRegistry));
+		findCallFunction().addArgument(new ConstantFunctionArgument(value, configuration.getConverterRegistry()));
 	}
 
 	private CallFunction findCallFunction() throws ActionException {
 		CallFunction callFunction = null;
 
+		Library library = factory.getLibrary();
 		String libraryUrl = library.getInformation().getVersionedUrl();
 
 		Action action = this;
@@ -78,8 +81,8 @@ public class FunctionArgument extends AbstractAction {
 		} while ((action != null) && (callFunction == null));
 
 		if (callFunction == null) {
-			throw new ActionException("can't find call function action ",
-				"for library '", library.getInformation().getUrl(), "'");
+			throw new ActionException("can't find call function action",
+				" for library '", library.getInformation().getUrl(), "'");
 		} else {
 			return callFunction;
 		}
