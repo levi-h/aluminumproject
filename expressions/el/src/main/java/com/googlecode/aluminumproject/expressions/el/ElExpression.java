@@ -16,6 +16,8 @@
 package com.googlecode.aluminumproject.expressions.el;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.configuration.ConfigurationException;
+import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.expressions.Expression;
 import com.googlecode.aluminumproject.expressions.ExpressionException;
@@ -32,22 +34,28 @@ public class ElExpression implements Expression {
 	private ValueExpression expression;
 
 	private Configuration configuration;
+	private ConfigurationParameters parameters;
 
 	/**
 	 * Creates an EL expression.
 	 *
 	 * @param expression the underlying value expression
 	 * @param configuration the configuration that the expression factory was initialised with
+	 * @param parameters the configuration parameters used
 	 */
-	protected ElExpression(ValueExpression expression, Configuration configuration) {
+	protected ElExpression(ValueExpression expression,
+			Configuration configuration, ConfigurationParameters parameters) {
 		this.expression = expression;
 
 		this.configuration = configuration;
+		this.parameters = parameters;
 	}
 
 	public Object evaluate(Context context) throws ExpressionException {
 		try {
-			return expression.getValue(new ElContext(context, configuration));
+			return expression.getValue(new ElContext(context, configuration, parameters));
+		} catch (ConfigurationException exception) {
+			throw new ExpressionException(exception, "can't create EL context");
 		} catch (ELException exception) {
 			throw new ExpressionException(exception, "can't evaluate expression");
 		}
