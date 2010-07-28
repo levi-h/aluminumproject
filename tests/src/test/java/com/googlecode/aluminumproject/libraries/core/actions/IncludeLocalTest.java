@@ -25,13 +25,13 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-core", "slow"})
 public class IncludeLocalTest extends CoreLibraryTest {
 	public void localTemplateShouldBeIncludable() {
-		String output = processTemplate("include-local", new DefaultContext());
+		String output = processTemplate("include-local");
 		assert output != null;
 		assert output.equals("Hello, flowers!\nHello, trees!"): output;
 	}
 
 	@Test(expectedExceptions = TemplateException.class)
 	public void includingNonexistentTemplateShouldCauseException() {
-		processTemplate("include-local-without-available-template", new DefaultContext());
+		processTemplate("include-local-without-available-template");
 	}
 }

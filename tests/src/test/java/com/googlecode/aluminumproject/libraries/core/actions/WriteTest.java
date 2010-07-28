@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-core", "slow"})
 public class WriteTest extends CoreLibraryTest {
 	public void valueShouldBeWritten() {
-		String output = processTemplate("write", new DefaultContext());
+		String output = processTemplate("write");
 		assert output != null;
 		assert output.equals("dimensions");
 	}
@@ -48,6 +48,6 @@ public class WriteTest extends CoreLibraryTest {
 
 	@Test(expectedExceptions = TemplateException.class)
 	public void omittingValueShouldCauseException() {
-		processTemplate("write-without-value", new DefaultContext());
+		processTemplate("write-without-value");
 	}
 }

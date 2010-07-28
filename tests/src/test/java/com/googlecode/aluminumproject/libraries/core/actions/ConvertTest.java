@@ -56,6 +56,6 @@ public class ConvertTest extends CoreLibraryTest {
 
 	@Test(expectedExceptions = TemplateException.class)
 	public void tryingIllegalConversionShouldCauseException() {
-		processTemplate("convert-illegal", new DefaultContext());
+		processTemplate("convert-illegal");
 	}
 }

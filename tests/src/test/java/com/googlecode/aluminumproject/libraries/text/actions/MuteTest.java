@@ -25,20 +25,20 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-text", "slow"})
 public class MuteTest extends TextLibraryTest {
 	public void mutingTemplateShouldResultInEmptyOutput() {
-		String output = processTemplate("mute", new DefaultContext());
+		String output = processTemplate("mute");
 		assert output != null;
 		assert output.equals("");
 	}
 
 	public void muteShouldBeNestable() {
-		String output = processTemplate("mute-nested", new DefaultContext());
+		String output = processTemplate("mute-nested");
 		assert output != null;
 		assert output.equals("This won't be ignored.");
 	}
 
 	@Test(dependsOnMethods = "muteShouldBeNestable")
 	public void repeatingBehaviourShouldHaveNoEffect() {
-		String output = processTemplate("mute-repeated", new DefaultContext());
+		String output = processTemplate("mute-repeated");
 		assert output != null;
 		assert output.equals("");
 	}

@@ -25,30 +25,30 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-core", "slow"})
 public class BlockTest extends CoreLibraryTest {
 	public void blockShouldBeAvailableWithinSameTemplate() {
-		String output = processTemplate("block", new DefaultContext());
+		String output = processTemplate("block");
 		assert output != null;
 		assert output.equals("block");
 	}
 
 	public void blockShouldBeAvailableInIncludedTemplate() {
-		String output = processTemplate("block-include", new DefaultContext());
+		String output = processTemplate("block-include");
 		assert output != null;
 		assert output.equals("block");
 	}
 
 	public void blockShouldBeAvailableInLocallyIncludedTemplate() {
-		String output = processTemplate("block-include-local", new DefaultContext());
+		String output = processTemplate("block-include-local");
 		assert output != null;
 		assert output.equals("block");
 	}
 
 	@Test(expectedExceptions = TemplateException.class)
 	public void namingMultipleBlocksTheSameShouldCauseException() {
-		processTemplate("block-duplication", new DefaultContext());
+		processTemplate("block-duplication");
 	}
 
 	public void no_block_default() {
-		String output = processTemplate("block-contents", new DefaultContext());
+		String output = processTemplate("block-contents");
 		assert output != null;
 		assert output.equals("default");
 	}

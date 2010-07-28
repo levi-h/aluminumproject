@@ -24,19 +24,19 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-text", "slow"})
 public class WhitespaceToPreserveTest extends TextLibraryTest {
 	public void spacesShouldBePreserved() {
-		String output = processTemplate("preserve-spaces", new DefaultContext());
+		String output = processTemplate("preserve-spaces");
 		assert output != null;
 		assert output.equals("* * *");
 	}
 
 	public void tabsShouldBePreserved() {
-		String output = processTemplate("preserve-tabs", new DefaultContext());
+		String output = processTemplate("preserve-tabs");
 		assert output != null;
 		assert output.equals("*\n*\n*");
 	}
 
 	public void newlinesShouldBePreserved() {
-		String output = processTemplate("preserve-newlines", new DefaultContext());
+		String output = processTemplate("preserve-newlines");
 		assert output != null;
 		assert output.equals("\n\n\n");
 	}

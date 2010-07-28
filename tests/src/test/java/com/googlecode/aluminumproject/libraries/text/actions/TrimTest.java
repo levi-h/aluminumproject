@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-text", "slow"})
 public class TrimTest extends TextLibraryTest {
 	public void textShouldBeTrimmable() {
-		String output = processTemplate("trim", new DefaultContext());
+		String output = processTemplate("trim");
 		assert output != null;
 		assert output.equals("*");
 	}
@@ -43,13 +43,13 @@ public class TrimTest extends TextLibraryTest {
 	}
 
 	public void linesShouldBeTrimmable() {
-		String output = processTemplate("trim-lines", new DefaultContext());
+		String output = processTemplate("trim-lines");
 		assert output != null;
 		assert output.equals("\n*\n*\n");
 	}
 
 	public void trimModesShouldBeCombinable() {
-		String output = processTemplate("trim-combined", new DefaultContext());
+		String output = processTemplate("trim-combined");
 		assert output != null;
 		assert output.equals("*\n*");
 	}

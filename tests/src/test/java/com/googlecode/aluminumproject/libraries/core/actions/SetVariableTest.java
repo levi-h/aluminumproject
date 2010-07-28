@@ -99,6 +99,6 @@ public class SetVariableTest extends CoreLibraryTest {
 
 	@Test(expectedExceptions = TemplateException.class)
 	public void omittingValueShouldCauseException() {
-		processTemplate("set-variable-without-value", new DefaultContext());
+		processTemplate("set-variable-without-value");
 	}
 }
