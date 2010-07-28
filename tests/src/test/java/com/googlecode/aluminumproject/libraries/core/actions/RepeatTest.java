@@ -58,7 +58,7 @@ public class RepeatTest extends CoreLibraryTest {
 		Context context = new DefaultContext();
 		context.setVariable("count", 3);
 
-		processTemplateIgnoringOutput("repeat-with-stored-information", context);
+		processTemplate("repeat-with-stored-information", context);
 
 		Object variable = context.getVariable(Context.TEMPLATE_SCOPE, "loops");
 		assert variable instanceof List;

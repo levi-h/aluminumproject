@@ -90,7 +90,7 @@ public class EachTest extends CoreLibraryTest {
 		Context context = new DefaultContext();
 		context.setVariable("numbers", new int[] {1, 2, 3});
 
-		processTemplateIgnoringOutput("each-with-stored-information", context);
+		processTemplate("each-with-stored-information", context);
 
 		Object variable = context.getVariable(Context.TEMPLATE_SCOPE, "loops");
 		assert variable instanceof List;
