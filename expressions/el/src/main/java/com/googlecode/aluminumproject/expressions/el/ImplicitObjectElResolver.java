@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.expressions.el;
 
 import com.googlecode.aluminumproject.Logger;
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 
@@ -30,6 +31,7 @@ import javax.el.ELResolver;
  *
  * @author levi_h
  */
+@Ignored
 public class ImplicitObjectElResolver extends ELResolver {
 	private final Logger logger;
 
@@ -44,7 +46,7 @@ public class ImplicitObjectElResolver extends ELResolver {
 	public Object getValue(ELContext elContext, Object base, Object property) {
 		Object value = null;
 
-		if ((base == null) && (elContext instanceof ElContext) && (property instanceof String)) {
+		if (handles(elContext, base, property)) {
 			Context context = ((ElContext) elContext).getContext();
 			String name = (String) property;
 
@@ -72,7 +74,17 @@ public class ImplicitObjectElResolver extends ELResolver {
 
 	@Override
 	public boolean isReadOnly(ELContext context, Object base, Object property) {
-		return true;
+		boolean readOnly;
+
+		if (handles(context, base, property)) {
+			readOnly = true;
+
+			context.setPropertyResolved(true);
+		} else {
+			readOnly = false;
+		}
+
+		return readOnly;
 	}
 
 	@Override
@@ -83,5 +95,9 @@ public class ImplicitObjectElResolver extends ELResolver {
 	@Override
 	public Class<?> getCommonPropertyType(ELContext context, Object base) {
 		return null;
+	}
+
+	private boolean handles(ELContext elContext, Object base, Object property) {
+		return (elContext instanceof ElContext) && (base == null) && (property instanceof String);
 	}
 }
