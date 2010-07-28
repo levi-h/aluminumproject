@@ -23,7 +23,9 @@ package com.googlecode.aluminumproject.writers;
  *
  * @author levi_h
  */
-public class TextWriter extends AbstractDecorativeWriter {
+public class TextWriter extends AbstractWriter {
+	private Writer writer;
+
 	private StringBuilder buffer;
 	private boolean autoFlush;
 
@@ -43,7 +45,7 @@ public class TextWriter extends AbstractDecorativeWriter {
 	 * @param autoFlush whether or not objects are written to the underlying writer after each write operation
 	 */
 	public TextWriter(Writer writer, boolean autoFlush) {
-		super(writer);
+		this.writer = writer;
 
 		buffer = new StringBuilder();
 		this.autoFlush = autoFlush;
@@ -68,13 +70,20 @@ public class TextWriter extends AbstractDecorativeWriter {
 
 	@Override
 	public void flush() throws WriterException {
-		checkOpen();
+		super.flush();
 
 		if (buffer.length() > 0) {
-			getWriter().write(buffer.toString());
-			getWriter().flush();
+			writer.write(buffer.toString());
+			writer.flush();
 
 			clear();
 		}
+	}
+
+	@Override
+	public void close() throws WriterException {
+		super.close();
+
+		writer.close();
 	}
 }
