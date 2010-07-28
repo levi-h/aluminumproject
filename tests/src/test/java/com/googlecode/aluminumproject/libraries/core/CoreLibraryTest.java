@@ -20,6 +20,6 @@ import com.googlecode.aluminumproject.libraries.LibraryTest;
 @SuppressWarnings("all")
 public abstract class CoreLibraryTest extends LibraryTest {
 	public CoreLibraryTest() {
-		super("templates/xml/core");
+		super("templates/xml/core", "xml");
 	}
 }

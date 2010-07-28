@@ -69,6 +69,6 @@ public class CallFunctionTest extends CommonLibraryTest {
 
 	@Test(expectedExceptions = TemplateException.class)
 	public void callingFunctionWithArgumentsThatDoNotMatchShouldCauseException() {
-		processTemplate("call-function-with-arguments-that-do-not-match", new DefaultContext());
+		processTemplate("call-function-with-arguments-that-do-not-match");
 	}
 }

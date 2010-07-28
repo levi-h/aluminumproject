@@ -19,6 +19,8 @@ import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 import com.googlecode.aluminumproject.parsers.xml.XmlParser;
 import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
 import com.googlecode.aluminumproject.writers.NullWriter;
@@ -32,9 +34,11 @@ public abstract class LibraryTest {
 	private Aluminum engine;
 
 	private String templatePath;
+	private String parser;
 
-	protected LibraryTest(String templatePath) {
+	protected LibraryTest(String templatePath, String parser) {
 		this.templatePath = templatePath;
+		this.parser = parser;
 	}
 
 	@BeforeMethod
@@ -42,19 +46,20 @@ public abstract class LibraryTest {
 		ConfigurationParameters configurationParameters = new ConfigurationParameters();
 		configurationParameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, templatePath);
 		configurationParameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
+		configurationParameters.addParameter(AluScriptParser.TEMPLATE_EXTENSION, "alu");
 
 		engine = new Aluminum(new DefaultConfiguration(configurationParameters));
+	}
+
+	protected final String processTemplate(String name) {
+		return processTemplate(name, new DefaultContext());
 	}
 
 	protected final String processTemplate(String name, Context context) {
 		StringWriter stringWriter = new StringWriter();
 
-		engine.processTemplate(name, "xml", context, new TextWriter(stringWriter, true));
+		engine.processTemplate(name, parser, context, new TextWriter(stringWriter, true));
 
 		return stringWriter.getString();
-	}
-
-	protected final void processTemplateIgnoringOutput(String name, Context context) {
-		engine.processTemplate(name, "xml", context, new NullWriter());
 	}
 }

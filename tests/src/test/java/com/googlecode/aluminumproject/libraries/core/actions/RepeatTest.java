@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-core", "slow"})
 public class RepeatTest extends CoreLibraryTest {
 	public void bodyShouldBeRepeated() {
-		String output = processTemplate("repeat", new DefaultContext());
+		String output = processTemplate("repeat");
 		assert output != null;
 		assert output.equals("*****");
 	}

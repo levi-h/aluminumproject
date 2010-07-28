@@ -24,20 +24,20 @@ import org.testng.annotations.Test;
 @Test(groups = {"libraries", "libraries-core", "slow"})
 public class IncludeTest extends CoreLibraryTest {
 	public void outputOfIncludedTemplateShouldBecomeOutput() {
-		String output = processTemplate("include", new DefaultContext());
+		String output = processTemplate("include");
 		assert output != null;
 		assert output.equals("included");
 	}
 
 	public void omittingParserShouldFallBackToParserOfIncludingTemplate() {
-		String output = processTemplate("include-without-parser", new DefaultContext());
+		String output = processTemplate("include-without-parser");
 		assert output != null;
 		assert output.equals("included");
 	}
 
 	@Test(dependsOnMethods = "omittingParserShouldFallBackToParserOfIncludingTemplate")
 	public void parameterShouldBeAvailableInIncludedTemplate() {
-		String output = processTemplate("include-with-parameter", new DefaultContext());
+		String output = processTemplate("include-with-parameter");
 		assert output != null;
 		assert output.equals("included");
 	}

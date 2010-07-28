@@ -35,7 +35,7 @@ public class ScopeTest extends CoreLibraryTest {
 
 	@Test(dependsOnMethods = "variablesShouldNotBeAvailableOutsideScope", expectedExceptions = TemplateException.class)
 	public void accessingVariablesOutsideScopeShouldCauseException() {
-		processTemplate("scope-accessing-inaccessible-variable", new DefaultContext());
+		processTemplate("scope-accessing-inaccessible-variable");
 	}
 
 	public void parentScopesShouldBeAvailable() {
@@ -62,6 +62,6 @@ public class ScopeTest extends CoreLibraryTest {
 
 	@Test(dependsOnMethods = "namingScopeShouldBePossible", expectedExceptions = TemplateException.class)
 	public void addingDuplicateScopeShouldCauseException() {
-		processTemplate("scope-duplication", new DefaultContext());
+		processTemplate("scope-duplication");
 	}
 }
