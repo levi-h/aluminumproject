@@ -15,7 +15,10 @@
  */
 package com.googlecode.aluminumproject.converters.test;
 
+import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
+import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
 /**
  * A converter that can be used in tests.
@@ -23,10 +26,21 @@ import com.googlecode.aluminumproject.converters.ClassBasedConverter;
  * @author levi_h
  */
 public class TestConverter extends ClassBasedConverter<Float, CharSequence> {
+	private @Injected Configuration configuration;
+
 	/**
 	 * Creates a test converter.
 	 */
 	public TestConverter() {}
+
+	/**
+	 * Returns the current configuration, which is injected by a {@link ConverterRegistry converter registry}.
+	 *
+	 * @return the injected configuration
+	 */
+	public Configuration getConfiguration() {
+		return configuration;
+	}
 
 	@Override
 	protected CharSequence convert(Float value) {

@@ -86,6 +86,16 @@ public class DefaultConverterRegistryTest {
 		assert converter instanceof TestConverter;
 	}
 
+	@Test(dependsOnMethods = "registeredConverterShouldBeFindable")
+	public void registeredConverterShouldHaveConfigurationInjected() {
+		TestConverter converter = new TestConverter();
+		assert converter.getConfiguration() == null;
+
+		converterRegistry.registerConverter(converter);
+
+		assert converter.getConfiguration() != null;
+	}
+
 	@Test(dependsOnMethods = {
 		"converterShouldBeFoundForSubtypesOfSourceType",
 		"registeredConverterShouldBeFindable"
