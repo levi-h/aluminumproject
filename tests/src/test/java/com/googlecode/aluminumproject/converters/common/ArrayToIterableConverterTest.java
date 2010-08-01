@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.converters.common;
 
 import com.googlecode.aluminumproject.converters.Converter;
+import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.util.Iterator;
 
@@ -45,10 +46,10 @@ public class ArrayToIterableConverterTest {
 	}
 
 	public void arraysShouldBeConvertible() {
-		Iterable<?> iterable = converter.convert(new String[] {"a", "b"}, Iterable.class);
-		assert iterable != null;
+		Object iterable = converter.convert(new String[] {"a", "b"}, Iterable.class);
+		assert iterable instanceof Iterable;
 
-		Iterator<?> iterator = iterable.iterator();
+		Iterator<?> iterator = ((Iterable<?>) iterable).iterator();
 		assert iterator != null;
 
 		assert iterator.hasNext();
@@ -67,10 +68,10 @@ public class ArrayToIterableConverterTest {
 	}
 
 	public void primitiveArraysShouldBeConvertible() {
-		Iterable<?> iterable = converter.convert(new int[] {1, 0}, Iterable.class);
-		assert iterable != null;
+		Object convertedValue = converter.convert(new int[] {1, 0}, Iterable.class);
+		assert convertedValue instanceof Iterable;
 
-		Iterator<?> iterator = iterable.iterator();
+		Iterator<?> iterator = ((Iterable<?>) convertedValue).iterator();
 		assert iterator != null;
 
 		assert iterator.hasNext();
@@ -86,5 +87,10 @@ public class ArrayToIterableConverterTest {
 		assert ((Integer) secondElement).intValue() == 0;
 
 		assert !iterator.hasNext();
+	}
+
+	@Test(expectedExceptions = ConverterException.class)
+	public void tryingToConvertNonArrayShouldCauseException() {
+		converter.convert("1, 2, 3", Iterable.class);
 	}
 }

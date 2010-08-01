@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterException;
-import com.googlecode.aluminumproject.converters.SimpleConverter;
 
 import java.lang.reflect.Array;
 import java.util.Iterator;
@@ -26,7 +26,7 @@ import java.util.Iterator;
  *
  * @author levi_h
  */
-public class ArrayToIterableConverter extends SimpleConverter<Object, Iterable<?>> {
+public class ArrayToIterableConverter extends ClassBasedConverter<Object, Iterable<?>> {
 	/**
 	 * Creates an array to iterable converter.
 	 */
@@ -39,6 +39,10 @@ public class ArrayToIterableConverter extends SimpleConverter<Object, Iterable<?
 
 	@Override
 	protected Iterable<?> convert(Object array) throws ConverterException {
+		if ((array == null) || !array.getClass().isArray()) {
+			throw new ConverterException("can't convert ", array, ", since it is not an array");
+		}
+
 		return new ArrayIterable(array);
 	}
 

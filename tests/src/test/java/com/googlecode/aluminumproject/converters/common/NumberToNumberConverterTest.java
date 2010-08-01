@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.converters.common;
 
 import com.googlecode.aluminumproject.converters.Converter;
+import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -54,42 +55,49 @@ public class NumberToNumberConverterTest {
 	}
 
 	public void wideningConversionsShouldBeSupported() {
-		Byte convertedByte = converter.convert(3, Byte.class);
-		assert convertedByte != null;
-		assert convertedByte.equals(Byte.valueOf((byte) 3));
+		Object convertedValue;
 
-		Short convertedShort = converter.convert(21, Short.class);
-		assert convertedShort != null;
-		assert convertedShort.equals(Short.valueOf((short) 21));
+		convertedValue = converter.convert(3, Byte.class);
+		assert convertedValue instanceof Byte;
+		assert convertedValue.equals(Byte.valueOf((byte) 3));
 
-		Integer convertedInteger = converter.convert(987L, Integer.class);
-		assert convertedInteger != null;
-		assert convertedInteger.equals(Integer.valueOf(987));
+		convertedValue = converter.convert(21, Short.class);
+		assert convertedValue instanceof Short;
+		assert convertedValue.equals(Short.valueOf((short) 21));
 
-		Long convertedLong = converter.convert(10, Long.class);
-		assert convertedLong != null;
-		assert convertedLong.equals(Long.valueOf(10L));
+		convertedValue = converter.convert(987L, Integer.class);
+		assert convertedValue instanceof Integer;
+		assert convertedValue.equals(Integer.valueOf(987));
 
-		Float convertedFloat = converter.convert(0.8, Float.class);
-		assert convertedFloat != null;
-		assert convertedFloat.equals(Float.valueOf(0.8F));
+		convertedValue = converter.convert(10, Long.class);
+		assert convertedValue instanceof Long;
+		assert convertedValue.equals(Long.valueOf(10L));
 
-		Double convertedDouble = converter.convert(1.5F, Double.class);
-		assert convertedDouble != null;
-		assert convertedDouble.equals(Double.valueOf(1.5));
+		convertedValue = converter.convert(0.8, Float.class);
+		assert convertedValue instanceof Float;
+		assert convertedValue.equals(Float.valueOf(0.8F));
 
-		BigInteger convertedBigInteger = converter.convert(12345, BigInteger.class);
-		assert convertedBigInteger != null;
-		assert convertedBigInteger.equals(BigInteger.valueOf(12345L));
+		convertedValue = converter.convert(1.5F, Double.class);
+		assert convertedValue instanceof Double;
+		assert convertedValue.equals(Double.valueOf(1.5));
 
-		BigDecimal convertedBigDecimal = converter.convert(4.5F, BigDecimal.class);
-		assert convertedBigDecimal != null;
-		assert convertedBigDecimal.equals(BigDecimal.valueOf(4.5));
+		convertedValue = converter.convert(12345, BigInteger.class);
+		assert convertedValue instanceof BigInteger;
+		assert convertedValue.equals(BigInteger.valueOf(12345L));
+
+		convertedValue = converter.convert(4.5F, BigDecimal.class);
+		assert convertedValue instanceof BigDecimal;
+		assert convertedValue.equals(BigDecimal.valueOf(4.5));
 	}
 
 	public void narrowingConversionsShouldBeSupported() {
-		Byte convertedByte = converter.convert(128, Byte.class);
-		assert convertedByte != null;
-		assert convertedByte.equals(Byte.valueOf(Byte.MIN_VALUE));
+		Object convertedValue = converter.convert(128, Byte.class);
+		assert convertedValue instanceof Byte;
+		assert convertedValue.equals(Byte.valueOf(Byte.MIN_VALUE));
+	}
+
+	@Test(expectedExceptions = ConverterException.class)
+	public void tryingToConvertIntoUnsupportedTargetTypeShouldCauseException() {
+		converter.convert(10, String.class);
 	}
 }

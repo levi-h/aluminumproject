@@ -31,6 +31,7 @@ import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,7 +49,7 @@ import java.util.Set;
  * package list is extended by the packages that are contained in the configuration parameter named {@value
  * com.googlecode.aluminumproject.configuration.DefaultConfiguration#CONFIGURATION_ELEMENT_PACKAGES}.
  * <p>
- * When a default converter registry is asked to {@link #getConverter(Class, Class) get} a converter, it will try to
+ * When a default converter registry is asked to {@link #getConverter(Class, Type) get} a converter, it will try to
  * find the most specific one. This means that when a converter for a string is requested and the registry contains
  * converters for both strings and objects, the converter that converts strings will be returned, even though both would
  * be able to convert values of the requested type.
@@ -123,9 +124,10 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		converters.add(converter);
 	}
 
-	public <S> Converter<? super S> getConverter(
-			Class<S> sourceType, Class<?> targetType) throws ConverterException {
-		targetType = ReflectionUtilities.wrapPrimitiveType(targetType);
+	public <S> Converter<? super S> getConverter(Class<S> sourceType, Type targetType) throws ConverterException {
+		if (targetType instanceof Class) {
+			targetType = ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType);
+		}
 
 		List<Converter<? super S>> convertersForSourceType = new ArrayList<Converter<? super S>>();
 
@@ -143,7 +145,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 
 		if (convertersForSourceType.isEmpty()) {
 			throw new ConverterException("no converter found that can convert values ",
-				"from type ", sourceType.getName(), " to type ", targetType.getName());
+				"from type ", sourceType.getName(), " to ", targetType);
 		} else {
 			return Collections.min(convertersForSourceType, new ConverterComparator(sourceType));
 		}
@@ -184,16 +186,18 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		}
 	}
 
-	public <S, T> T convert(S value, Class<T> targetType) throws ConverterException {
-		T convertedValue;
+	public <S> Object convert(S value, Type targetType) throws ConverterException {
+		Object convertedValue;
 
 		if (value == null) {
 			convertedValue = null;
 		} else {
-			targetType = Utilities.typed(ReflectionUtilities.wrapPrimitiveType(targetType));
+			if (targetType instanceof Class) {
+				targetType = ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType);
+			}
 
-			if (targetType.isInstance(value)) {
-				convertedValue = targetType.cast(value);
+			if ((targetType instanceof Class) && ((Class<?>) targetType).isInstance(value)) {
+				convertedValue = value;
 			} else {
 				Class<S> sourceType = Utilities.typed(value.getClass());
 

@@ -52,15 +52,15 @@ public class ConstantActionParameterTest {
 	}
 
 	public void valueShouldBeRetrievableWithOriginalType() {
-		String value = parameter.getValue(String.class, context);
-		assert value != null;
+		Object value = parameter.getValue(String.class, context);
+		assert value instanceof String;
 		assert value.equals("128");
 	}
 
 	public void valueShouldBeRetrievableWithCompatibleType() {
-		Integer value = parameter.getValue(Integer.class, context);
-		assert value != null;
-		assert value.equals(Integer.valueOf(128));
+		Object value = parameter.getValue(Integer.class, context);
+		assert value instanceof Integer;
+		assert ((Integer) value).intValue() == 128;
 	}
 
 	@Test(expectedExceptions = ActionException.class)

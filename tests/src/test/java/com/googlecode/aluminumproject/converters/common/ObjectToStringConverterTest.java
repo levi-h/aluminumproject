@@ -31,12 +31,14 @@ public class ObjectToStringConverterTest {
 	}
 
 	public void objectsShouldBeConvertible() {
-		String booleanAsString = converter.convert(true, String.class);
-		assert booleanAsString != null;
-		assert booleanAsString.equals("true");
+		Object convertedValue;
 
-		String intAsString = converter.convert(3, String.class);
-		assert intAsString != null;
-		assert intAsString.equals("3");
+		convertedValue = converter.convert(true, String.class);
+		assert convertedValue instanceof String;
+		assert convertedValue.equals("true");
+
+		convertedValue = converter.convert(3, String.class);
+		assert convertedValue instanceof String;
+		assert convertedValue.equals("3");
 	}
 }

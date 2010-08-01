@@ -21,6 +21,8 @@ import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 
+import java.lang.reflect.Type;
+
 /**
  * An action parameter with a value that is based on the evaluation of an expression.
  * <p>
@@ -53,7 +55,7 @@ public class ExpressionActionParameter implements ActionParameter {
 		return text;
 	}
 
-	public <T> T getValue(Class<T> type, Context context) throws ActionException {
+	public Object getValue(Type type, Context context) throws ActionException {
 		try {
 			return converterRegistry.convert(expressionFactory.create(text, context).evaluate(context), type);
 		} catch (ExpressionException exception) {

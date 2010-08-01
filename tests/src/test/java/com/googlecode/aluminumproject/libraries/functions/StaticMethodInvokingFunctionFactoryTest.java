@@ -21,6 +21,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.test.functions.TestFunctions;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -117,28 +118,28 @@ public class StaticMethodInvokingFunctionFactoryTest {
 	@Test(expectedExceptions = FunctionException.class)
 	public void creatingFunctionWithTooManyArgumentsShouldCauseException() {
 		annotatedFunctionFactory.create(Arrays.asList(new FunctionArgument() {
-			public <T> T getValue(Class<T> type, Context context) {
-				return type.cast(1);
+			public Object getValue(Type type, Context context) {
+				return 1;
 			}
 		}, new FunctionArgument() {
-			public <T> T getValue(Class<T> type, Context context) {
-				return type.cast(2);
+			public Object getValue(Type type, Context context) {
+				return 2;
 			}
 		}, new FunctionArgument() {
-			public <T> T getValue(Class<T> type, Context context) {
-				return type.cast(3);
+			public Object getValue(Type type, Context context) {
+				return 3;
 			}
 		}), new DefaultContext());
 	}
 
 	public void usingCorrectNumberOfArgumentsShouldCreateFunction() {
 		List<FunctionArgument> functionArguments = Arrays.asList(new FunctionArgument() {
-			public <T> T getValue(Class<T> type, Context context) {
-				return type.cast(1);
+			public Object getValue(Type type, Context context) throws FunctionException {
+				return 1;
 			}
 		}, new FunctionArgument() {
-			public <T> T getValue(Class<T> type, Context context) {
-				return type.cast(2);
+			public Object getValue(Type type, Context context) throws FunctionException {
+				return 2;
 			}
 		});
 

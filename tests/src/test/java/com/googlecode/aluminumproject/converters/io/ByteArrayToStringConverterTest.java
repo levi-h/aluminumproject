@@ -31,14 +31,14 @@ public class ByteArrayToStringConverterTest {
 	}
 
 	public void emptyByteArrayShouldBeConvertedToEmptyString() {
-		String string = converter.convert(new byte[0], String.class);
-		assert string != null;
-		assert string.isEmpty();
+		Object convertedValue = converter.convert(new byte[0], String.class);
+		assert convertedValue instanceof String;
+		assert ((String) convertedValue).isEmpty();
 	}
 
 	public void byteArrayShouldBeConvertedToCorrespondingString() {
-		String string = converter.convert("text".getBytes(), String.class);
-		assert string != null;
-		assert string.equals("text");
+		Object convertedValue = converter.convert("text".getBytes(), String.class);
+		assert convertedValue instanceof String;
+		assert convertedValue.equals("text");
 	}
 }

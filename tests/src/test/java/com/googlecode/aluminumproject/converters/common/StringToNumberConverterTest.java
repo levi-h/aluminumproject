@@ -55,37 +55,39 @@ public class StringToNumberConverterTest {
 	}
 
 	public void validStringsShouldBeConvertible() {
-		Byte convertedByte = converter.convert("12", Byte.class);
-		assert convertedByte != null;
-		assert convertedByte.equals(Byte.valueOf((byte) 12));
+		Object convertedValue;
 
-		Short convertedShort = converter.convert("1234", Short.class);
-		assert convertedShort != null;
-		assert convertedShort.equals(Short.valueOf((short) 1234));
+		convertedValue = converter.convert("12", Byte.class);
+		assert convertedValue instanceof Byte;
+		assert convertedValue.equals(Byte.valueOf((byte) 12));
 
-		Integer convertedInteger = converter.convert("123456", Integer.class);
-		assert convertedInteger != null;
-		assert convertedInteger.equals(Integer.valueOf(123456));
+		convertedValue = converter.convert("1234", Short.class);
+		assert convertedValue instanceof Short;
+		assert convertedValue.equals(Short.valueOf((short) 1234));
 
-		Long convertedLong = converter.convert("12345678", Long.class);
-		assert convertedLong != null;
-		assert convertedLong.equals(Long.valueOf(12345678L));
+		convertedValue = converter.convert("123456", Integer.class);
+		assert convertedValue instanceof Integer;
+		assert convertedValue.equals(Integer.valueOf(123456));
 
-		Float convertedFloat = converter.convert("12.34", Float.class);
-		assert convertedFloat != null;
-		assert convertedFloat.equals(Float.valueOf(12.34F));
+		convertedValue = converter.convert("12345678", Long.class);
+		assert convertedValue instanceof Long;
+		assert convertedValue.equals(Long.valueOf(12345678L));
 
-		Double convertedDouble = converter.convert("1234.5678", Double.class);
-		assert convertedDouble != null;
-		assert convertedDouble.equals(Double.valueOf(1234.5678D));
+		convertedValue = converter.convert("12.34", Float.class);
+		assert convertedValue instanceof Float;
+		assert convertedValue.equals(Float.valueOf(12.34F));
 
-		BigInteger convertedBigInteger = converter.convert("1234567890", BigInteger.class);
-		assert convertedBigInteger != null;
-		assert convertedBigInteger.equals(BigInteger.valueOf(1234567890L));
+		convertedValue = converter.convert("1234.5678", Double.class);
+		assert convertedValue instanceof Double;
+		assert convertedValue.equals(Double.valueOf(1234.5678D));
 
-		BigDecimal convertedBigDecimal = converter.convert("12345.6789", BigDecimal.class);
-		assert convertedBigDecimal != null;
-		assert convertedBigDecimal.equals(BigDecimal.valueOf(12345.6789D));
+		convertedValue = converter.convert("1234567890", BigInteger.class);
+		assert convertedValue instanceof BigInteger;
+		assert convertedValue.equals(BigInteger.valueOf(1234567890L));
+
+		convertedValue = converter.convert("12345.6789", BigDecimal.class);
+		assert convertedValue instanceof BigDecimal;
+		assert convertedValue.equals(BigDecimal.valueOf(12345.6789D));
 	}
 
 	@Test(expectedExceptions = ConverterException.class)

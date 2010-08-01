@@ -15,14 +15,14 @@
  */
 package com.googlecode.aluminumproject.converters.test;
 
-import com.googlecode.aluminumproject.converters.SimpleConverter;
+import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
  * A converter that can be used in tests.
  *
  * @author levi_h
  */
-public class TestConverter extends SimpleConverter<Float, CharSequence> {
+public class TestConverter extends ClassBasedConverter<Float, CharSequence> {
 	/**
 	 * Creates a test converter.
 	 */

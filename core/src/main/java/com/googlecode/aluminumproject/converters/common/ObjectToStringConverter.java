@@ -15,14 +15,14 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.converters.SimpleConverter;
+import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
  * Converts {@link Object objects} to {@link String strings} by using the {@link Object#toString() toString method}.
  *
  * @author levi_h
  */
-public class ObjectToStringConverter extends SimpleConverter<Object, String> {
+public class ObjectToStringConverter extends ClassBasedConverter<Object, String> {
 	/**
 	 * Creates an object to string converter.
 	 */

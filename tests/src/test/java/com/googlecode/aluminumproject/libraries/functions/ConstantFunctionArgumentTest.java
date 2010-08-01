@@ -45,21 +45,21 @@ public class ConstantFunctionArgumentTest {
 	}
 
 	public void valueShouldBeRetrievableAsObject() {
-		Object valueAsObject = argument.getValue(Object.class, context);
-		assert valueAsObject != null;
-		assert valueAsObject.equals("32768");
+		Object value = argument.getValue(Object.class, context);
+		assert value != null;
+		assert value.equals("32768");
 	}
 
 	public void valueShouldBeRetrievableWithOriginalType() {
-		String valueAsString = argument.getValue(String.class, context);
-		assert valueAsString != null;
-		assert valueAsString.equals("32768");
+		Object value = argument.getValue(String.class, context);
+		assert value instanceof String;
+		assert value.equals("32768");
 	}
 
 	public void valueShouldBeRetrievableWithCompatibleType() {
-		Integer valueAsInteger = argument.getValue(Integer.class, context);
-		assert valueAsInteger != null;
-		assert valueAsInteger.intValue() == 32768;
+		Object value = argument.getValue(Integer.class, context);
+		assert value instanceof Integer;
+		assert ((Integer) value).intValue() == 32768;
 	}
 
 	@Test(expectedExceptions = FunctionException.class)
