@@ -19,11 +19,10 @@ import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.utilities.finders.FieldFinder;
+import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
+import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.List;
 
 /**
  * Reduces the effort it takes to implement subinterfaces of {@link LibraryElement the library element interface}.
@@ -79,33 +78,21 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 	 * @throws LibraryException when the object's fields can't be injected
 	 */
 	protected void injectFields(Object injectable) throws LibraryException {
-		List<Field> fields = FieldFinder.find(new FieldFinder.FieldFilter() {
-			public boolean accepts(Field field) {
-				return !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(Injected.class);
-			}
-		}, injectable.getClass());
-
-		for (Field field: fields) {
-			Object valueToInject = getValueToInject(field);
-
-			logger.debug("injecting ", valueToInject, " into ", field, " of ", injectable);
-
-			if (!field.isAccessible()) {
-				try {
-					field.setAccessible(true);
-				} catch (SecurityException exception) {
-					throw new LibraryException("can't make field ",
-						field.getDeclaringClass().getSimpleName(), "#", field.getName(), " accessible");
+		try {
+			ConfigurationUtilities.injectFields(injectable, new ConfigurationUtilities.InjectedValueProvider() {
+				public Object getValueToInject(Field field) throws UtilityException {
+					try {
+						return AbstractLibraryElement.this.getValueToInject(field);
+					} catch (LibraryException exception) {
+						throw new UtilityException(exception, "can't determine value to inject");
+					}
 				}
-			}
+			});
+		} catch (UtilityException exception) {
+			Throwable cause = exception.getCause();
 
-			try {
-				field.set(injectable, valueToInject);
-			} catch (IllegalArgumentException exception) {
-				throw new LibraryException(exception, "can't inject ", field);
-			} catch (IllegalAccessException exception) {
-				throw new LibraryException(exception, "may not inject ", field);
-			}
+			throw (cause instanceof LibraryException)
+				? (LibraryException) cause : new LibraryException(exception, "can't inject fields");
 		}
 	}
 

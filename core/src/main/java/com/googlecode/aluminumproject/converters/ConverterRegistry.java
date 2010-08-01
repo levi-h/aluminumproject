@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 
 import java.lang.reflect.Type;
@@ -26,11 +27,13 @@ import java.lang.reflect.Type;
  */
 public interface ConverterRegistry extends ConfigurationElement {
 	/**
-	 * Registers a converter.
+	 * Registers a converter and injects any of its fields that are annotated with {@link Injected &#64;Injected} with
+	 * appropriate values.
 	 *
 	 * @param converter the converter to register
+	 * @throws ConverterException when the converter's fields can't be injected
 	 */
-	void registerConverter(Converter<?> converter);
+	void registerConverter(Converter<?> converter) throws ConverterException;
 
 	/**
 	 * Finds a converter that can convert values from a certain source type to a particular target type.

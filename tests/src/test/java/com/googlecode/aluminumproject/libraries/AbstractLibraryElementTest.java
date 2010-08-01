@@ -20,8 +20,6 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
 
-import java.util.Locale;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -61,15 +59,6 @@ public class AbstractLibraryElementTest {
 
 	private static class InjectableWithInjectedLibraryElement {
 		private @Injected DefaultLibraryElement libraryElement;
-	}
-
-	@Test(expectedExceptions = LibraryException.class)
-	public void requestingInjectionOfUninjectableFieldsShouldCauseException() {
-		libraryElement.injectFields(new InjectableWithInjectedLocale());
-	}
-
-	private static class InjectableWithInjectedLocale {
-		private @Injected Locale locale;
 	}
 
 	private static class DefaultLibraryElement extends AbstractLibraryElement {}
