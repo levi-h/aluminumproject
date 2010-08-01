@@ -16,11 +16,12 @@
 package com.googlecode.aluminumproject.converters.common;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
-import com.googlecode.aluminumproject.converters.SimpleConverter;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -61,16 +62,16 @@ public class StringToNumberConverter implements Converter<String> {
 		return true;
 	}
 
-	public <T> boolean supportsTargetType(Class<T> targetType) {
+	public boolean supportsTargetType(Type targetType) {
 		return converters.containsKey(targetType);
 	}
 
-	public <T> T convert(String value, Class<T> targetType) throws ConverterException {
+	public Object convert(String value, Type targetType) throws ConverterException {
 		return converters.get(targetType).convert(value, targetType);
 	}
 
 	@Ignored
-	private static class StringToByteConverter extends SimpleConverter<String, Byte> {
+	private static class StringToByteConverter extends ClassBasedConverter<String, Byte> {
 		@Override
 		protected Byte convert(String value) throws ConverterException {
 			try {
@@ -82,7 +83,7 @@ public class StringToNumberConverter implements Converter<String> {
 	}
 
 	@Ignored
-	private static class StringToShortConverter extends SimpleConverter<String, Short> {
+	private static class StringToShortConverter extends ClassBasedConverter<String, Short> {
 		@Override
 		protected Short convert(String value) throws ConverterException {
 			try {
@@ -94,7 +95,7 @@ public class StringToNumberConverter implements Converter<String> {
 	}
 
 	@Ignored
-	private static class StringToIntegerConverter extends SimpleConverter<String, Integer> {
+	private static class StringToIntegerConverter extends ClassBasedConverter<String, Integer> {
 		@Override
 		protected Integer convert(String value) throws ConverterException {
 			try {
@@ -106,7 +107,7 @@ public class StringToNumberConverter implements Converter<String> {
 	}
 
 	@Ignored
-	private static class StringToLongConverter extends SimpleConverter<String, Long> {
+	private static class StringToLongConverter extends ClassBasedConverter<String, Long> {
 		@Override
 		protected Long convert(String value) throws ConverterException {
 			try {
@@ -118,7 +119,7 @@ public class StringToNumberConverter implements Converter<String> {
 	}
 
 	@Ignored
-	private static class StringToFloatConverter extends SimpleConverter<String, Float> {
+	private static class StringToFloatConverter extends ClassBasedConverter<String, Float> {
 		@Override
 		protected Float convert(String value) throws ConverterException {
 			try {
@@ -130,7 +131,7 @@ public class StringToNumberConverter implements Converter<String> {
 	}
 
 	@Ignored
-	private static class StringToDoubleConverter extends SimpleConverter<String, Double> {
+	private static class StringToDoubleConverter extends ClassBasedConverter<String, Double> {
 		@Override
 		protected Double convert(String value) throws ConverterException {
 			try {
@@ -142,7 +143,7 @@ public class StringToNumberConverter implements Converter<String> {
 	}
 
 	@Ignored
-	private static class StringToBigIntegerConverter extends SimpleConverter<String, BigInteger> {
+	private static class StringToBigIntegerConverter extends ClassBasedConverter<String, BigInteger> {
 		@Override
 		protected BigInteger convert(String value) throws ConverterException {
 			try {
@@ -154,7 +155,7 @@ public class StringToNumberConverter implements Converter<String> {
 	}
 
 	@Ignored
-	private static class StringToBigDecimalConverter extends SimpleConverter<String, BigDecimal> {
+	private static class StringToBigDecimalConverter extends ClassBasedConverter<String, BigDecimal> {
 		@Override
 		protected BigDecimal convert(String value) throws ConverterException {
 			try {

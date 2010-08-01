@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import java.lang.reflect.Type;
+
 /**
  * Able to convert values of a source type to one or more target types.
  * <p>
@@ -40,22 +42,20 @@ public interface Converter<S> {
 	/**
 	 * Checks whether this converter supports converting values into a certain target type.
 	 *
-	 * @param <T> the target type
 	 * @param targetType the target type to check
 	 * @return {@code true} if this converter is able to convert source values into the given target type, {@code false}
 	 *         otherwise
 	 */
-	<T> boolean supportsTargetType(Class<T> targetType);
+	boolean supportsTargetType(Type targetType);
 
 	/**
 	 * Converts a value of the source type into a supported target type.
 	 *
-	 * @param <T> the target type
 	 * @param value the value to convert
 	 * @param targetType the type to convert the value into
 	 * @return the converted value
 	 * @throws ConverterException when the given target type is not supported or when something goes wrong while
 	 *                            converting the value
 	 */
-	<T> T convert(S value, Class<T> targetType) throws ConverterException;
+	Object convert(S value, Type targetType) throws ConverterException;
 }

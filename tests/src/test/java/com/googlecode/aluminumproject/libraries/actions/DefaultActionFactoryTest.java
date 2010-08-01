@@ -198,7 +198,10 @@ public class DefaultActionFactoryTest {
 		assert dynamicParameters != null;
 		assert dynamicParameters.size() == 1;
 		assert dynamicParameters.containsKey("dynamic");
-		assert Boolean.parseBoolean(dynamicParameters.get("dynamic").getValue(String.class, context));
+
+		Object parameterValue = dynamicParameters.get("dynamic").getValue(String.class, context);
+		assert parameterValue instanceof String;
+		assert Boolean.parseBoolean((String) parameterValue);
 	}
 
 	@Test(dependsOnMethods = {

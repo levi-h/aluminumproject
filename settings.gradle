@@ -24,9 +24,9 @@ rootProject.name = 'aluminum'
 	'cli': 'integration/cli',
 	'servlet': 'integration/servlet',
 
-	'core-library': 'libraries/core',
-	'io-library': 'libraries/io',
-	'text-library': 'libraries/text',
+	'core-library': 'libraries/general/core',
+	'io-library': 'libraries/general/io',
+	'text-library': 'libraries/general/text',
 
 	'aluscript-parser': 'parsers/aluscript',
 	'xml-parser': 'parsers/xml',

@@ -54,6 +54,16 @@ public class StringToEnumConverterTest {
 		assert converter.convert("new", Thread.State.class) == Thread.State.NEW;
 	}
 
+	@Test(dependsOnMethods = "conversionShouldBeCaseInsensitive")
+	public void conversionShouldPreferExactMatches() {
+		assert converter.convert("A", Letter.class) == Letter.A;
+		assert converter.convert("b", Letter.class) == Letter.b;
+	}
+
+	private static enum Letter {
+		A, a, B, b;
+	}
+
 	@Test(expectedExceptions = ConverterException.class)
 	public void convertingNonexistingNameShouldCauseException() {
 		converter.convert("INTERFACE", ElementType.class);

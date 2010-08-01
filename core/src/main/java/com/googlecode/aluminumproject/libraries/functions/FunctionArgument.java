@@ -17,6 +17,8 @@ package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.context.Context;
 
+import java.lang.reflect.Type;
+
 /**
  * The argument of a {@link Function function}.
  *
@@ -26,11 +28,10 @@ public interface FunctionArgument {
 	/**
 	 * Returns the value of this argument.
 	 *
-	 * @param <T> the type in which the argument value should be returned
 	 * @param type the required type for the argument value
 	 * @param context the context in which the argument's function will run
 	 * @return the value of this argument with the given type
 	 * @throws FunctionException when the argument value can't be retrieved or converted to the desired type
 	 */
-	<T> T getValue(Class<T> type, Context context) throws FunctionException;
+	Object getValue(Type type, Context context) throws FunctionException;
 }

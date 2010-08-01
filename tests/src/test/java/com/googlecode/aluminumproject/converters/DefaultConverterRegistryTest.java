@@ -20,12 +20,10 @@ import static com.googlecode.aluminumproject.converters.DefaultConverterRegistry
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
 import com.googlecode.aluminumproject.converters.common.ObjectToStringConverter;
 import com.googlecode.aluminumproject.converters.test.IgnoredConverter;
 import com.googlecode.aluminumproject.converters.test.TestConverter;
-import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -125,8 +123,8 @@ public class DefaultConverterRegistryTest {
 
 	@Test(dependsOnMethods = "converterShouldBeFoundForSubtypesOfSourceType")
 	public void conversionShouldUseRegisteredConverters() {
-		String convertedValue = converterRegistry.convert(2.5D, String.class);
-		assert convertedValue != null;
+		Object convertedValue = converterRegistry.convert(2.5D, String.class);
+		assert convertedValue instanceof String;
 		assert convertedValue.equals("2.5");
 	}
 

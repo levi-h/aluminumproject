@@ -20,6 +20,8 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
+import java.lang.reflect.Type;
+
 /**
  * A converter registry that can be used in tests.
  *
@@ -48,11 +50,11 @@ public class TestConverterRegistry implements ConverterRegistry {
 
 	public void registerConverter(Converter<?> converter) {}
 
-	public <S> Converter<? super S> getConverter(Class<S> sourceType, Class<?> targetType) {
+	public <S> Converter<? super S> getConverter(Class<S> sourceType, Type targetType) {
 		return null;
 	}
 
-	public <S, T> T convert(S value, Class<T> targetType) {
+	public <S> Object convert(S value, Type targetType) {
 		return null;
 	}
 }

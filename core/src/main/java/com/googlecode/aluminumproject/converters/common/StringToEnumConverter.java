@@ -18,6 +18,8 @@ package com.googlecode.aluminumproject.converters.common;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
+import java.lang.reflect.Type;
+
 /**
  * Converts the name of an to {@link Enum enum} into an enum constant. All enum types are supported.
  *
@@ -33,18 +35,42 @@ public class StringToEnumConverter implements Converter<String> {
 		return true;
 	}
 
-	public <T> boolean supportsTargetType(Class<T> targetType) {
-		return targetType.isEnum();
+	public boolean supportsTargetType(Type targetType) {
+		return (targetType instanceof Class) && ((Class<?>) targetType).isEnum();
 	}
 
-	public <T> T convert(String value, Class<T> targetType) throws ConverterException {
-		try {
-			@SuppressWarnings("unchecked")
-			Enum<?> target = Enum.valueOf((Class<Enum>) targetType, value.toUpperCase());
-
-			return targetType.cast(target);
-		} catch (IllegalArgumentException exception) {
-			throw new ConverterException(exception, "can't convert '", value, "' to type ", targetType.getName());
+	public Object convert(String value, Type targetType) throws ConverterException {
+		if (!supportsTargetType(targetType)) {
+			throw new ConverterException("expected enum target type, not ", targetType);
 		}
+
+		Object match = null;
+		Object exactMatch = null;
+
+		@SuppressWarnings("unchecked")
+		Class<Enum<?>> targetClass = (Class<Enum<?>>) targetType;
+
+		for (Enum<?> enumConstant: targetClass.getEnumConstants()) {
+			String name = enumConstant.name();
+
+			if (name.equals(value)) {
+				exactMatch = enumConstant;
+			} else if ((match == null) && name.equalsIgnoreCase(value)) {
+				match = enumConstant;
+			}
+		}
+
+		Object convertedValue;
+
+		if (exactMatch != null) {
+			convertedValue = exactMatch;
+		} else if (match != null) {
+			convertedValue = match;
+		} else {
+			throw new ConverterException("enum ", targetClass.getName(), " does not contain a constant",
+				" named '", value, "'");
+		}
+
+		return convertedValue;
 	}
 }

@@ -17,6 +17,8 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.context.Context;
 
+import java.lang.reflect.Type;
+
 /**
  * A parameter of an {@link Action action}.
  *
@@ -33,11 +35,10 @@ public interface ActionParameter {
 	/**
 	 * Returns the value of this parameter.
 	 *
-	 * @param <T> the type in which the parameter value should be returned
 	 * @param type the required type for the parameter value
 	 * @param context the context in which the parameter's action is executed
 	 * @return the value of this parameter with the given type
 	 * @throws ActionException when the parameter value can't be retrieved or converted to the desired type
 	 */
-	<T> T getValue(Class<T> type, Context context) throws ActionException;
+	Object getValue(Type type, Context context) throws ActionException;
 }

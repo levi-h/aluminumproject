@@ -16,7 +16,7 @@
 package com.googlecode.aluminumproject.converters.test;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
-import com.googlecode.aluminumproject.converters.SimpleConverter;
+import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
  * A converter that will be ignored when adding registering all converters in a package.
@@ -24,7 +24,7 @@ import com.googlecode.aluminumproject.converters.SimpleConverter;
  * @author levi_h
  */
 @Ignored
-public class IgnoredConverter extends SimpleConverter<String, String> {
+public class IgnoredConverter extends ClassBasedConverter<String, String> {
 	/**
 	 * Creates an ignored converter.
 	 */

@@ -16,11 +16,12 @@
 package com.googlecode.aluminumproject.converters.common;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
-import com.googlecode.aluminumproject.converters.SimpleConverter;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -59,16 +60,20 @@ public class NumberToNumberConverter implements Converter<Number> {
 		return true;
 	}
 
-	public <T> boolean supportsTargetType(Class<T> targetType) {
+	public boolean supportsTargetType(Type targetType) {
 		return converters.containsKey(targetType);
 	}
 
-	public <T> T convert(Number value, Class<T> targetType) throws ConverterException {
+	public Object convert(Number value, Type targetType) throws ConverterException {
+		if (!supportsTargetType(targetType)) {
+			throw new ConverterException(targetType, " is not a supported target type");
+		}
+
 		return converters.get(targetType).convert(value, targetType);
 	}
 
 	@Ignored
-	private static class NumberToByteConverter extends SimpleConverter<Number, Byte> {
+	private static class NumberToByteConverter extends ClassBasedConverter<Number, Byte> {
 		@Override
 		protected Byte convert(Number value) {
 			return Byte.valueOf(value.byteValue());
@@ -76,7 +81,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	}
 
 	@Ignored
-	private static class NumberToShortConverter extends SimpleConverter<Number, Short> {
+	private static class NumberToShortConverter extends ClassBasedConverter<Number, Short> {
 		@Override
 		protected Short convert(Number value) {
 			return Short.valueOf(value.shortValue());
@@ -84,7 +89,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	}
 
 	@Ignored
-	private static class NumberToIntegerConverter extends SimpleConverter<Number, Integer> {
+	private static class NumberToIntegerConverter extends ClassBasedConverter<Number, Integer> {
 		@Override
 		protected Integer convert(Number value) {
 			return Integer.valueOf(value.intValue());
@@ -92,7 +97,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	}
 
 	@Ignored
-	private static class NumberToLongConverter extends SimpleConverter<Number, Long> {
+	private static class NumberToLongConverter extends ClassBasedConverter<Number, Long> {
 		@Override
 		protected Long convert(Number value) {
 			return Long.valueOf(value.longValue());
@@ -100,7 +105,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	}
 
 	@Ignored
-	private static class NumberToFloatConverter extends SimpleConverter<Number, Float> {
+	private static class NumberToFloatConverter extends ClassBasedConverter<Number, Float> {
 		@Override
 		protected Float convert(Number value) {
 			return Float.valueOf(value.floatValue());
@@ -108,7 +113,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	}
 
 	@Ignored
-	private static class NumberToDoubleConverter extends SimpleConverter<Number, Double> {
+	private static class NumberToDoubleConverter extends ClassBasedConverter<Number, Double> {
 		@Override
 		protected Double convert(Number value) {
 			return Double.valueOf(value.doubleValue());
@@ -116,7 +121,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	}
 
 	@Ignored
-	private static class NumberToBigIntegerConverter extends SimpleConverter<Number, BigInteger> {
+	private static class NumberToBigIntegerConverter extends ClassBasedConverter<Number, BigInteger> {
 		@Override
 		protected BigInteger convert(Number value) {
 			return BigInteger.valueOf(value.longValue());
@@ -124,7 +129,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	}
 
 	@Ignored
-	private static class NumberToBigDecimalConverter extends SimpleConverter<Number, BigDecimal> {
+	private static class NumberToBigDecimalConverter extends ClassBasedConverter<Number, BigDecimal> {
 		@Override
 		protected BigDecimal convert(Number value) {
 			return BigDecimal.valueOf(value.doubleValue());

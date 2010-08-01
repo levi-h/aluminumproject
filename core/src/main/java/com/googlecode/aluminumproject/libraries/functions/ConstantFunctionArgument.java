@@ -19,6 +19,8 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
+import java.lang.reflect.Type;
+
 /**
  * A function argument with a constant value.
  * <p>
@@ -43,7 +45,7 @@ public class ConstantFunctionArgument implements FunctionArgument {
 		this.converterRegistry = converterRegistry;
 	}
 
-	public <T> T getValue(Class<T> type, Context context) throws FunctionException {
+	public Object getValue(Type type, Context context) throws FunctionException {
 		try {
 			return converterRegistry.convert(value, type);
 		} catch (ConverterException exception) {

@@ -19,6 +19,8 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 
+import java.lang.reflect.Type;
+
 /**
  * An action parameter that can be used in tests.
  *
@@ -40,11 +42,11 @@ public class TestActionParameter implements ActionParameter {
 		return text;
 	}
 
-	public <T> T getValue(Class<T> type, Context context) throws ActionException {
+	public Object getValue(Type type, Context context) throws ActionException {
 		if (type == String.class) {
-			return type.cast(text);
+			return text;
 		} else {
-			throw new ActionException("'", text, "' is not of ", type);
+			throw new ActionException("'", text, "' is not of type ", type);
 		}
 	}
 }

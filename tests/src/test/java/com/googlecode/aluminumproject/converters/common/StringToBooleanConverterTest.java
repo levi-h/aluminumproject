@@ -31,20 +31,33 @@ public class StringToBooleanConverterTest {
 	}
 
 	public void literalTrueShouldResultInTrue() {
-		assert converter.convert("true", Boolean.TYPE);
+		Object convertedValue = converter.convert("true", Boolean.TYPE);
+		assert convertedValue instanceof Boolean;
+		assert ((Boolean) convertedValue).booleanValue();
 	}
 
 	public void literalFalseShouldResultInFalse() {
-		assert !converter.convert("false", Boolean.TYPE);
+		Object convertedValue = converter.convert("false", Boolean.TYPE);
+		assert convertedValue instanceof Boolean;
+		assert !((Boolean) convertedValue).booleanValue();
 	}
 
 	public void nonLiteralShouldResultInFalse() {
-		assert !converter.convert("yes", Boolean.TYPE);
+		Object convertedValue = converter.convert("yes", Boolean.TYPE);
+		assert convertedValue instanceof Boolean;
+		assert !((Boolean) convertedValue).booleanValue();
 	}
 
 	@Test(dependsOnMethods = {"literalTrueShouldResultInTrue", "literalFalseShouldResultInFalse"})
 	public void conversionShouldBeCaseInsensitive() {
-		assert converter.convert("TRUE", Boolean.TYPE);
-		assert !converter.convert("False", Boolean.TYPE);
+		Object convertedValue;
+
+		convertedValue = converter.convert("TRUE", Boolean.TYPE);
+		assert convertedValue instanceof Boolean;
+		assert ((Boolean) convertedValue).booleanValue();
+
+		convertedValue = converter.convert("False", Boolean.TYPE);
+		assert convertedValue instanceof Boolean;
+		assert !((Boolean) convertedValue).booleanValue();
 	}
 }

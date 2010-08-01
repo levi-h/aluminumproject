@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.converters.SimpleConverter;
+import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
  * Converts {@link String strings} into {@link Boolean booleans} by using the {@link Boolean#parseBoolean(String)
@@ -23,7 +23,7 @@ import com.googlecode.aluminumproject.converters.SimpleConverter;
  *
  * @author levi_h
  */
-public class StringToBooleanConverter extends SimpleConverter<String, Boolean> {
+public class StringToBooleanConverter extends ClassBasedConverter<String, Boolean> {
 	/**
 	 * Constructs a string to boolean converter.
 	 */

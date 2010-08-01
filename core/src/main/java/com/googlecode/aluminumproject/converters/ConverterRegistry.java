@@ -17,6 +17,8 @@ package com.googlecode.aluminumproject.converters;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 
+import java.lang.reflect.Type;
+
 /**
  * A registry for {@link Converter converters}.
  *
@@ -39,14 +41,13 @@ public interface ConverterRegistry extends ConfigurationElement {
 	 * @return a converter that can convert values from the given source type into the given target type
 	 * @throws ConverterException when no converter can be found for the given types
 	 */
-	<S> Converter<? super S> getConverter(Class<S> sourceType, Class<?> targetType) throws ConverterException;
+	<S> Converter<? super S> getConverter(Class<S> sourceType, Type targetType) throws ConverterException;
 
 	/**
 	 * Convenience method that converts a value using one of the registered converters. It is required to handle {@code
 	 * null} values.
 	 *
 	 * @param <S> the source type
-	 * @param <T> the target type
 	 * @param value the value to convert (may be {@code null})
 	 * @param targetType the type that the value should be converted into
 	 * @return the converted value
@@ -54,5 +55,5 @@ public interface ConverterRegistry extends ConfigurationElement {
 	 *                            converting the value
 	 *
 	 */
-	<S, T> T convert(S value, Class<T> targetType) throws ConverterException;
+	<S> Object convert(S value, Type targetType) throws ConverterException;
 }

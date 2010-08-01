@@ -34,9 +34,9 @@ public class StringToFileConverterTest {
 	}
 
 	public void existingPathShouldResultInExistingFile() {
-		File file = converter.convert(System.getProperty("user.home"), File.class);
-		assert file != null;
-		assert file.exists();
+		Object convertedValue = converter.convert(System.getProperty("user.home"), File.class);
+		assert convertedValue instanceof File;
+		assert ((File) convertedValue).exists();
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
