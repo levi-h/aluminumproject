@@ -17,61 +17,29 @@ package com.googlecode.aluminumproject.converters.common;
 
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterException;
+import com.googlecode.aluminumproject.utilities.GenericsUtilities;
+import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Converts {@link String strings} into {@link Type types}. The following types are supported:
- * <ul>
- * <li>{@link Class Classes} (using the {@link Thread#getContextClassLoader() context class loader}).
- * </ul>
+ * Converts {@link String strings} into {@link Type types} using a {@link GenericsUtilities#getType(String, String...)
+ * utility method} (with {@code java.lang} and {@code java.util} as default packages).
  *
  * @author levi_h
  */
 public class StringToTypeConverter extends ClassBasedConverter<String, Type> {
-	private Map<String, Class<?>> primitiveTypes;
-
 	/**
 	 * Creates a string to type converter.
 	 */
-	public StringToTypeConverter() {
-		primitiveTypes = new HashMap<String, Class<?>>();
-		primitiveTypes.put("boolean", Boolean.TYPE);
-		primitiveTypes.put("byte", Byte.TYPE);
-		primitiveTypes.put("char", Character.TYPE);
-		primitiveTypes.put("short", Short.TYPE);
-		primitiveTypes.put("int", Integer.TYPE);
-		primitiveTypes.put("long", Long.TYPE);
-		primitiveTypes.put("float", Float.TYPE);
-		primitiveTypes.put("double", Double.TYPE);
-	}
+	public StringToTypeConverter() {}
 
 	@Override
 	protected Type convert(String value) throws ConverterException {
-		Type convertedType = convertIntoClass(value);
-
-		if (convertedType == null) {
-			throw new ConverterException("can't convert '", value, "' into a type");
+		try {
+			return GenericsUtilities.getType(value, "java.lang", "java.util");
+		} catch (UtilityException exception) {
+			throw new ConverterException(exception, "can't convert '", value, "' into a type");
 		}
-
-		return convertedType;
-	}
-
-	private Class<?> convertIntoClass(String value) {
-		Class<?> convertedClass;
-
-		if (primitiveTypes.containsKey(value)) {
-			convertedClass = primitiveTypes.get(value);
-		} else {
-			try {
-				convertedClass = Class.forName(value, false, Thread.currentThread().getContextClassLoader());
-			} catch (ClassNotFoundException exception) {
-				convertedClass = null;
-			}
-		}
-
-		return convertedClass;
 	}
 }

@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.converters.common;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import org.testng.annotations.BeforeMethod;
@@ -34,7 +35,7 @@ public class StringToTypeConverterTest {
 	}
 
 	public void classNamesShouldBeConvertible() {
-		assert converter.convert("java.lang.String", Type.class) == String.class;
+		assert converter.convert("String", Type.class) == String.class;
 		assert converter.convert(getClass().getName(), Type.class) == getClass();
 	}
 
@@ -49,11 +50,16 @@ public class StringToTypeConverterTest {
 		assert converter.convert("double", Type.class) == Double.TYPE;
 	}
 
-	public void classNamesOfArraysShouldBeConvertible() {
-		assert converter.convert("[I", Type.class) == int[].class;
-		assert converter.convert("[[Z", Type.class) == boolean[][].class;
-		assert converter.convert("[Ljava.lang.String;", Type.class) == String[].class;
-		assert converter.convert("[[Ljava.lang.Object;", Type.class) == Object[][].class;
+	public void parameterisedClassNamesShouldBeConvertible() {
+		Object type = converter.convert("Iterable<String>", Type.class);
+		assert type instanceof ParameterizedType;
+
+		ParameterizedType parameterisedType = (ParameterizedType) type;
+		assert parameterisedType.getRawType() == Iterable.class;
+
+		Type[] actualTypeArguments = parameterisedType.getActualTypeArguments();
+		assert actualTypeArguments.length == 1;
+		assert actualTypeArguments[0] == String.class;
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
