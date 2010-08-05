@@ -20,8 +20,16 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Provides utility methods related to generics.
@@ -172,5 +180,178 @@ public class GenericsUtilities {
 		}
 
 		return typeClass;
+	}
+
+	/**
+	 * Finds or creates a {@link Type type}, based on its name. The following types are supported:
+	 * <ul>
+	 * <li>Primitive types ({@code int}, {@code boolean});
+	 * <li>{@link Class Classes} ({@code java.lang.Object});
+	 * <li>{@link ParameterizedType Parameterised types} ({@code java.util.List<java.lang.String>}, {@code
+	 *     java.util.Map<java.lang.String, java.lang.Integer>});
+	 * <li>{@link WildcardType Wildcard types} ({@code ?}, {@code ? super java.lang.Long}, {@code ? extends
+	 *     java.lang.Number}; but not {@code ? extends java.lang.Number & java.io.Serializable}).
+	 * </ul>
+	 * Class names are expected to be fully qualified, unless their packages are contained in the {@code
+	 * defaultPackages} parameter.
+	 *
+	 * @param name the name of the type to find or create
+	 * @param defaultPackages the packages for which class names don't have to be qualified
+	 * @return the type with the given name
+	 * @throws UtilityException when the type can't be found or created
+	 */
+	public static Type getType(String name, String... defaultPackages) throws UtilityException {
+		return getType(name, true, defaultPackages);
+	}
+
+	private static Type getType(
+			String name, boolean allowPrimitive, String... defaultPackages) throws UtilityException {
+		Type type;
+
+		if (name.startsWith("?")) {
+			type = createWildcardType(name, defaultPackages);
+		} else if (name.contains("<")) {
+			type = createParameterisedType(name, defaultPackages);
+		} else if (allowPrimitive && PRIMITIVE_TYPES.containsKey(name)) {
+			type = PRIMITIVE_TYPES.get(name);
+		} else {
+			type = getClass(name, defaultPackages);
+		}
+
+		return type;
+	}
+
+	private static WildcardType createWildcardType(String name, String... defaultPackages) throws UtilityException {
+		Matcher matcher = WILDCARD_TYPE_PATTERN.matcher(name);
+
+		if (matcher.matches()) {
+			Type boundingType;
+			boolean upperBound;
+
+			if (matcher.group(1) == null) {
+				boundingType = Object.class;
+				upperBound = true;
+			} else {
+				boundingType = getType(matcher.group(2), false, defaultPackages);
+				upperBound = matcher.group(1).equals("extends");
+			}
+
+			return new WildcardTypeImpl(boundingType, upperBound);
+		} else {
+			throw new UtilityException("can't create wildcard type with name '", name, "'");
+		}
+	}
+
+	private static class WildcardTypeImpl implements WildcardType {
+		private Type boundingType;
+		private boolean upperBound;
+
+		public WildcardTypeImpl(Type boundingType, boolean upperBound) {
+			this.boundingType = boundingType;
+			this.upperBound = upperBound;
+		}
+
+		public Type[] getLowerBounds() {
+			return upperBound ? new Type[0] : getBounds();
+		}
+
+		public Type[] getUpperBounds() {
+			return upperBound ? getBounds() : new Type[0];
+		}
+
+		private Type[] getBounds() {
+			return new Type[] {
+				boundingType
+			};
+		}
+	}
+
+	private static ParameterizedType createParameterisedType(
+			String name, String... defaultPackages) throws UtilityException {
+		Matcher matcher = PARAMETERISED_TYPE_PATTERN.matcher(name);
+
+		if (matcher.matches()) {
+			Type rawType = getType(matcher.group(1), false, defaultPackages);
+
+			String[] argumentNames = matcher.group(2).split(",\\s*");
+			List<Type> arguments = new ArrayList<Type>(argumentNames.length);
+
+			for (String argumentName: argumentNames) {
+				arguments.add(getType(argumentName, false, defaultPackages));
+			}
+
+			return new ParameterisedType(rawType, arguments);
+		} else {
+			throw new UtilityException("can't create parameterised type with name '", name, "'");
+		}
+	}
+
+	private static class ParameterisedType implements ParameterizedType {
+		private Type rawType;
+		private List<Type> arguments;
+
+		public ParameterisedType(Type rawType, List<Type> arguments) {
+			this.rawType = rawType;
+			this.arguments = arguments;
+		}
+
+		public Type getOwnerType() {
+			return null;
+		}
+
+		public Type getRawType() {
+			return rawType;
+		}
+
+		public Type[] getActualTypeArguments() {
+			return arguments.toArray(new Type[arguments.size()]);
+		}
+	}
+
+	private static Class<?> getClass(String className, String... defaultPackages) throws UtilityException {
+		Class<?> foundClass = null;
+
+		List<String> classNames = new LinkedList<String>();
+
+		if (className.contains(".")) {
+			classNames.add(className);
+		} else {
+			for (String defaultPackage: defaultPackages) {
+				classNames.add(String.format("%s.%s", defaultPackage, className));
+			}
+		}
+
+		Iterator<String> itClassNames = classNames.iterator();
+
+		while ((foundClass == null) && itClassNames.hasNext()) {
+			try {
+				foundClass = Class.forName(itClassNames.next(), false, Thread.currentThread().getContextClassLoader());
+			} catch (ClassNotFoundException exception) {}
+		}
+
+		if (foundClass == null) {
+			throw new UtilityException("can't find class with name '", className, "'");
+		} else {
+			return foundClass;
+		}
+	}
+
+	private final static Pattern WILDCARD_TYPE_PATTERN = Pattern.compile("\\?(?:\\s+(super|extends)\\s+(.+))?");
+	private final static Pattern PARAMETERISED_TYPE_PATTERN = Pattern.compile("(.+?)<(.+)>");
+
+	private final static Map<String, Class<?>> PRIMITIVE_TYPES;
+
+	static {
+		Map<String, Class<?>> primitiveTypes = new HashMap<String, Class<?>>();
+		primitiveTypes.put("boolean", Boolean.TYPE);
+		primitiveTypes.put("byte", Byte.TYPE);
+		primitiveTypes.put("char", Character.TYPE);
+		primitiveTypes.put("short", Short.TYPE);
+		primitiveTypes.put("int", Integer.TYPE);
+		primitiveTypes.put("long", Long.TYPE);
+		primitiveTypes.put("float", Float.TYPE);
+		primitiveTypes.put("double", Double.TYPE);
+
+		PRIMITIVE_TYPES = Collections.unmodifiableMap(primitiveTypes);
 	}
 }

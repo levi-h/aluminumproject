@@ -15,9 +15,14 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
+import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getType;
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getTypeArgument;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.List;
+import java.util.Map;
 
 import org.testng.annotations.Test;
 
@@ -87,5 +92,108 @@ public class GenericsUtilitiesTest {
 	@Test(expectedExceptions = UtilityException.class)
 	public void requestingAbstractTypeArgumentShouldCauseException() {
 		getTypeArgument(Interface.class, Interface.class, 0);
+	}
+
+	public void wildcardTypeWithoutBoundsShouldBeCreatable() {
+		Type type = getType("?");
+		assert type instanceof WildcardType;
+
+		WildcardType wildcardType = (WildcardType) type;
+
+		Type[] lowerBounds = wildcardType.getLowerBounds();
+		assert lowerBounds != null;
+		assert lowerBounds.length == 0;
+
+		Type[] upperBounds = wildcardType.getUpperBounds();
+		assert upperBounds != null;
+		assert upperBounds.length == 1;
+		assert upperBounds[0] == Object.class;
+	}
+
+	public void wildcardTypeWithUpperBoundShouldBeCreatable() {
+		Type type = getType("? extends java.lang.Number");
+		assert type instanceof WildcardType;
+
+		WildcardType wildcardType = (WildcardType) type;
+
+		Type[] lowerBounds = wildcardType.getLowerBounds();
+		assert lowerBounds != null;
+		assert lowerBounds.length == 0;
+
+		Type[] upperBounds = wildcardType.getUpperBounds();
+		assert upperBounds != null;
+		assert upperBounds.length == 1;
+		assert upperBounds[0] == Number.class;
+	}
+
+	public void wildcardTypeWithLowerBoundShouldBeCreatable() {
+		Type type = getType("? super java.lang.Long");
+		assert type instanceof WildcardType;
+
+		WildcardType wildcardType = (WildcardType) type;
+
+		Type[] lowerBounds = wildcardType.getLowerBounds();
+		assert lowerBounds != null;
+		assert lowerBounds.length == 1;
+		assert lowerBounds[0] == Long.class;
+
+		Type[] upperBounds = wildcardType.getUpperBounds();
+		assert upperBounds != null;
+		assert upperBounds.length == 0;
+	}
+
+	public void parameterisedTypeWithSingleParameterShouldBeCreatable() {
+		Type type = getType("java.util.List<java.lang.Integer>");
+		assert type instanceof ParameterizedType;
+
+		ParameterizedType parameterisedType = (ParameterizedType) type;
+		assert parameterisedType.getOwnerType() == null;
+		assert parameterisedType.getRawType() == List.class;
+
+		Type[] arguments = parameterisedType.getActualTypeArguments();
+		assert arguments != null;
+		assert arguments.length == 1;
+		assert arguments[0] == Integer.class;
+	}
+
+	public void parameterisedTypeWithMultipleParametersShouldBeCreatable() {
+		Type type = getType("Map<String, List<Long>>", "java.lang", "java.util");
+		assert type instanceof ParameterizedType;
+
+		ParameterizedType parameterisedType = (ParameterizedType) type;
+		assert parameterisedType.getOwnerType() == null;
+		assert parameterisedType.getRawType() == Map.class;
+
+		Type[] arguments = parameterisedType.getActualTypeArguments();
+		assert arguments != null;
+		assert arguments.length == 2;
+		assert arguments[0] == String.class;
+		assert arguments[1] instanceof ParameterizedType;
+
+		ParameterizedType subParameterisedType = (ParameterizedType) arguments[1];
+		assert subParameterisedType.getOwnerType() == null;
+		assert subParameterisedType.getRawType() == List.class;
+
+		Type[] subarguments = subParameterisedType.getActualTypeArguments();
+		assert subarguments != null;
+		assert subarguments.length == 1;
+		assert subarguments[0] == Long.class;
+	}
+
+	public void classShouldBeObtainableUsingFullyQualifiedName() {
+		assert getType("java.lang.String") == String.class;
+	}
+
+	public void classShouldBeObtainableUsingSimpleNameWhenDefaultPackagesAreSupplied() {
+		assert getType("String", "java.lang") == String.class;
+	}
+
+	public void primitiveTypeShouldBeObtainable() {
+		assert getType("boolean") == Boolean.TYPE;
+	}
+
+	@Test(expectedExceptions = UtilityException.class)
+	public void obtainingNonexistentTypeShouldCauseException() {
+		getType("java.util.Collection<int>");
 	}
 }
