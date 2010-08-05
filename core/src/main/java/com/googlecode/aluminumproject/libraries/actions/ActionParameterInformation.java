@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import java.lang.reflect.Type;
+
 /**
  * Provides information about the parameter of an {@link Action action}.
  *
@@ -22,7 +24,7 @@ package com.googlecode.aluminumproject.libraries.actions;
  */
 public class ActionParameterInformation {
 	private String name;
-	private Class<?> type;
+	private Type type;
 	private boolean required;
 
 	/**
@@ -32,7 +34,7 @@ public class ActionParameterInformation {
 	 * @param type the type of the parameter
 	 * @param required whether the parameter is required or not
 	 */
-	public ActionParameterInformation(String name, Class<?> type, boolean required) {
+	public ActionParameterInformation(String name, Type type, boolean required) {
 		this.name = name;
 		this.type = type;
 		this.required = required;
@@ -52,7 +54,7 @@ public class ActionParameterInformation {
 	 *
 	 * @return the parameter's type
 	 */
-	public Class<?> getType() {
+	public Type getType() {
 		return type;
 	}
 

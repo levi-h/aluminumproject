@@ -19,11 +19,11 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
-import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,8 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
 		super.initialise(configuration, parameters);
 
-		information = new FunctionInformation(getFunctionName(), method.getReturnType(), getArgumentInformation());
+		information =
+			new FunctionInformation(getFunctionName(), method.getGenericReturnType(), getArgumentInformation());
 	}
 
 	private String getFunctionName() {
@@ -74,7 +75,7 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 
 	private List<FunctionArgumentInformation> getArgumentInformation() {
 		Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-		Class<?>[] parameterTypes = method.getParameterTypes();
+		Type[] parameterTypes = method.getGenericParameterTypes();
 
 		List<FunctionArgumentInformation> argumentInformation =
 			new ArrayList<FunctionArgumentInformation>(parameterTypes.length);
@@ -103,11 +104,11 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 				}
 			}
 
-			Class<?> argumentType = parameterTypes[i];
+			Type argumentType = parameterTypes[i];
 
 			logger.debug("argument ", i, "; ",
 				(argumentName == null) ? "" : StringUtilities.join("name: '", argumentName, "', "),
-				"type: ", argumentType.getName());
+				"type: ", argumentType);
 
 			argumentInformation.add(new FunctionArgumentInformation(argumentName, argumentType));
 		}
@@ -133,8 +134,7 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 		Object[] parameters = new Object[argumentInformation.size()];
 
 		for (int i = 0; i < parameters.length; i++) {
-			parameters[i] = arguments.get(i).getValue(
-				ReflectionUtilities.wrapPrimitiveType(argumentInformation.get(i).getType()), context);
+			parameters[i] = arguments.get(i).getValue(argumentInformation.get(i).getType(), context);
 		}
 
 		return parameters;

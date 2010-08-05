@@ -26,6 +26,7 @@ import com.googlecode.aluminumproject.libraries.test.actions.ParameterAction;
 import com.googlecode.aluminumproject.libraries.test.actions.TestAction;
 import com.googlecode.aluminumproject.libraries.test.actions.TestActionParameter;
 
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -116,11 +117,11 @@ public class DefaultActionFactoryTest {
 
 	@Test(dependsOnMethods = {"unannotatedParameterShouldBeRecognised", "annotatedParameterShouldBeRecognised"})
 	public void parameterTypeShouldBecomePropertyTypeByDefault() {
-		Class<?> unannotatedParameterType =
+		Type unannotatedParameterType =
 			unannotatedActionFactory.getInformation().getParameterInformation().get(0).getType();
 		assert unannotatedParameterType == String.class;
 
-		Class<?> annotatedParameterType =
+		Type annotatedParameterType =
 			annotatedActionFactory.getInformation().getParameterInformation().get(0).getType();
 		assert annotatedParameterType == String.class;
 	}

@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.libraries.Library;
 
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import java.util.List;
  */
 public class FunctionInformation {
 	private String name;
-	private Class<?> resultType;
+	private Type resultType;
 
 	private List<FunctionArgumentInformation> argumentInformation;
 
@@ -38,8 +39,7 @@ public class FunctionInformation {
 	 * @param resultType the type of the function's results
 	 * @param argumentInformation information about the arguments of the function
 	 */
-	public FunctionInformation(String name, Class<?> resultType,
-			List<FunctionArgumentInformation> argumentInformation) {
+	public FunctionInformation(String name, Type resultType, List<FunctionArgumentInformation> argumentInformation) {
 		this.name = name;
 		this.resultType = resultType;
 
@@ -60,7 +60,7 @@ public class FunctionInformation {
 	 *
 	 * @return the function's result type
 	 */
-	public Class<?> getResultType() {
+	public Type getResultType() {
 		return resultType;
 	}
 

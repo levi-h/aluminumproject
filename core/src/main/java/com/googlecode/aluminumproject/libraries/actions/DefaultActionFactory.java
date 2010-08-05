@@ -32,6 +32,7 @@ import com.googlecode.aluminumproject.utilities.finders.MethodFinder.MethodFilte
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -141,7 +142,7 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 				parameterSetter.getAnnotation(parameterInformationClass);
 
 			String parameterName;
-			Class<?> parameterType;
+			Type parameterType;
 			boolean required;
 
 			if (annotatedParameterInformation == null) {
@@ -161,11 +162,11 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 			}
 
 			if (parameterType == Object.class) {
-				parameterType = parameterSetter.getParameterTypes()[0];
+				parameterType = parameterSetter.getGenericParameterTypes()[0];
 			}
 
 			logger.debug("found ", required ? "required" : "optional", " parameter;",
-				" name: '", parameterName, "', type: ", parameterType.getName());
+				" name: '", parameterName, "', type: ", parameterType);
 
 			this.parameterSetters.put(parameterName, parameterSetter);
 
