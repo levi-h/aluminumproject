@@ -15,10 +15,12 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.converters.ClassBasedConverter;
+import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Iterator;
 
 /**
@@ -26,24 +28,36 @@ import java.util.Iterator;
  *
  * @author levi_h
  */
-public class ArrayToIterableConverter extends ClassBasedConverter<Object, Iterable<?>> {
+public class ArrayToIterableConverter implements Converter<Object> {
 	/**
 	 * Creates an array to iterable converter.
 	 */
 	public ArrayToIterableConverter() {}
 
-	@Override
 	public boolean supportsSourceType(Class<? extends Object> sourceType) {
 		return sourceType.isArray();
 	}
 
-	@Override
-	protected Iterable<?> convert(Object array) throws ConverterException {
-		if ((array == null) || !array.getClass().isArray()) {
-			throw new ConverterException("can't convert ", array, ", since it is not an array");
+	public boolean supportsTargetType(Type targetType) {
+		Class<?> targetClass = null;
+
+		if (targetType instanceof Class) {
+			targetClass = (Class<?>) targetType;
+		} else if (targetType instanceof ParameterizedType) {
+			targetClass = (Class<?>) ((ParameterizedType) targetType).getRawType();
 		}
 
-		return new ArrayIterable(array);
+		return targetClass == Iterable.class;
+	}
+
+	public Object convert(Object value, Type targetType) throws ConverterException {
+		if (!value.getClass().isArray()) {
+			throw new ConverterException("can't convert ", value, ", since it is not an array");
+		} else if (!supportsTargetType(targetType)) {
+			throw new ConverterException("target type ", targetType, " is not supported");
+		}
+
+		return new ArrayIterable(value);
 	}
 
 	private static class ArrayIterable implements Iterable<Object> {

@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import java.lang.reflect.Type;
+
 /**
  * Provides information about a {@link FunctionArgument function argument}.
  *
@@ -22,7 +24,7 @@ package com.googlecode.aluminumproject.libraries.functions;
  */
 public class FunctionArgumentInformation {
 	private String name;
-	private Class<?> type;
+	private Type type;
 
 	/**
 	 * Creates function argument information.
@@ -30,7 +32,7 @@ public class FunctionArgumentInformation {
 	 * @param name the name of the argument (may be {@code null})
 	 * @param type the type of the argument
 	 */
-	public FunctionArgumentInformation(String name, Class<?> type) {
+	public FunctionArgumentInformation(String name, Type type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -50,7 +52,7 @@ public class FunctionArgumentInformation {
 	 *
 	 * @return the argument type
 	 */
-	public Class<?> getType() {
+	public Type getType() {
 		return type;
 	}
 }

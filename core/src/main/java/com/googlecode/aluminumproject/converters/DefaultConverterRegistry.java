@@ -33,6 +33,7 @@ import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -210,11 +211,17 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		if (value == null) {
 			convertedValue = null;
 		} else {
-			if (targetType instanceof Class) {
-				targetType = ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType);
+			Class<?> targetClass = null;
+
+			if (targetType instanceof ParameterizedType) {
+				targetClass = (Class<?>) ((ParameterizedType) targetType).getRawType();
+			} else if (targetType instanceof Class) {
+				targetClass = ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType);
+
+				targetType = targetClass;
 			}
 
-			if ((targetType instanceof Class) && ((Class<?>) targetType).isInstance(value)) {
+			if ((targetClass != null) && targetClass.isInstance(value)) {
 				convertedValue = value;
 			} else {
 				Class<S> sourceType = Utilities.typed(value.getClass());
