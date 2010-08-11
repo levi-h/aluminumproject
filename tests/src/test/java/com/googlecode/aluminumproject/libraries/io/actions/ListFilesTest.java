@@ -64,15 +64,4 @@ public class ListFilesTest extends IoLibraryTest {
 		assert fileList.contains(firstTemporaryFile);
 		assert !fileList.contains(secondTemporaryFile);
 	}
-
-	@Test(dependsOnMethods = "notSupplyingFilterShouldListAllFiles")
-	public void resultShouldBeStoredInRequestedScope() {
-		Context context = new DefaultContext();
-		context.addScope("results", true);
-		context.addScope("process", true);
-
-		processTemplate("list-files-with-scope", context);
-
-		assert context.getVariable("results", "files") instanceof List;
-	}
 }

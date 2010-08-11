@@ -14,7 +14,7 @@
   - limitations under the License.
  -->
 
-<test:call-function name="max" result-name="max" xmlns:test="http://aluminumproject.googlecode.com/test">
+<test:call-function name="max" c:variable-name="max" xmlns:c="http://aluminumproject.googlecode.com/core" xmlns:test="http://aluminumproject.googlecode.com/test">
 	<test:function-argument value="5"/>
 	<test:function-argument value="10"/>
 </test:call-function>

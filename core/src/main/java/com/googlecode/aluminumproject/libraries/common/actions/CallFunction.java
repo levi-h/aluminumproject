@@ -29,6 +29,7 @@ import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.libraries.functions.FunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.FunctionException;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
+import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
@@ -38,7 +39,8 @@ import java.util.List;
 
 /**
  * Calls a {@link Function function}. {@link FunctionArgument function arguments} can be added by nesting {@link
- * com.googlecode.aluminumproject.libraries.common.actions.FunctionArgument function argument actions}.
+ * com.googlecode.aluminumproject.libraries.common.actions.FunctionArgument function argument actions}. The result of
+ * the function will be written to the action's {@link Writer writer}.
  *
  * @author levi_h
  */
@@ -46,9 +48,6 @@ public class CallFunction extends AbstractAction {
 	private String name;
 
 	private List<FunctionArgument> arguments;
-
-	private String resultName;
-	private String resultScope;
 
 	private @Injected DefaultActionFactory factory;
 
@@ -79,25 +78,6 @@ public class CallFunction extends AbstractAction {
 	}
 
 	/**
-	 * Sets the name of the variable that will contain the result of the function call.
-	 *
-	 * @param resultName the result variable's name
-	 */
-	@ActionParameterInformation(required = true)
-	public void setResultName(String resultName) {
-		this.resultName = resultName;
-	}
-
-	/**
-	 * Sets the (optional) scope of the variable that will contain the result of the function call.
-	 *
-	 * @param resultScope the result variable's scope
-	 */
-	public void setResultScope(String resultScope) {
-		this.resultScope = resultScope;
-	}
-
-	/**
 	 * Returns the library that contains the function that will be called.
 	 *
 	 * @return the called function's library
@@ -107,26 +87,14 @@ public class CallFunction extends AbstractAction {
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
-		getBody().invoke(context, writer);
-
-		Object result;
+		getBody().invoke(context, new NullWriter());
 
 		try {
 			logger.debug("calling function");
 
-			result = createFunction(context).call(context);
+			writer.write(createFunction(context).call(context));
 		} catch (FunctionException exception) {
 			throw new ActionException(exception, "can't call function");
-		}
-
-		if (resultScope == null) {
-			logger.debug("storing function result in  variable '", resultName, "' in the innermost scope");
-
-			context.setVariable(resultName, result);
-		} else {
-			logger.debug("storing function result in variable '", resultName, "' in the '", resultScope, "' scope");
-
-			context.setVariable(resultScope, resultName, result);
 		}
 	}
 

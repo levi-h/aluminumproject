@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 @SuppressWarnings("all")
 @Test(groups = {"libraries", "libraries-core", "slow"})
 public class ConvertTest extends CoreLibraryTest {
-	public void convertedValueShouldBeStoredInVariable() {
+	public void convertedValueShouldBeWritten() {
 		Context context = new DefaultContext();
 		context.setVariable("value", "5");
 
@@ -36,22 +36,6 @@ public class ConvertTest extends CoreLibraryTest {
 		Object convertedValue = context.getVariable(Context.TEMPLATE_SCOPE, "converted-value");
 		assert convertedValue instanceof Integer;
 		assert ((Integer) convertedValue).intValue() == 5;
-	}
-
-	public void scopeShouldBeConfigurable() {
-		String scope = "new";
-
-		Context context = new DefaultContext();
-		context.addScope(scope, true);
-		context.setVariable("value", "true");
-
-		processTemplate("convert-with-scope", context);
-
-		assert context.getVariableNames(scope).contains("converted-value");
-
-		Object convertedValue = context.getVariable(scope, "converted-value");
-		assert convertedValue instanceof Boolean;
-		assert ((Boolean) convertedValue).booleanValue();
 	}
 
 	@Test(expectedExceptions = TemplateException.class)
