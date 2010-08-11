@@ -24,10 +24,20 @@ import com.googlecode.aluminumproject.cache.MemoryCache;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
+import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
 import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.context.test.TestContextEnricher;
+import com.googlecode.aluminumproject.converters.ConverterRegistry;
+import com.googlecode.aluminumproject.converters.test.TestConverterRegistry;
+import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.test.TestLibrary;
 import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
+import com.googlecode.aluminumproject.parsers.xml.XmlParser;
+import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
+import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
+import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 
@@ -110,5 +120,45 @@ public class TemplateProcessorTest {
 			new DefaultContext(), new TextWriter(stringWriter, true));
 
 		assert stringWriter.getString().equals("test");
+	}
+
+	public void contextEnrichersShouldBeInvoked() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates/xml");
+		parameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
+
+		TestConfiguration configuration = new TestConfiguration(parameters);
+
+		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
+		templateFinderFactory.initialise(configuration, parameters);
+		configuration.setTemplateFinderFactory(templateFinderFactory);
+
+		Parser parser = new XmlParser();
+		parser.initialise(configuration, parameters);
+		configuration.addParser("xml", parser);
+
+		TemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
+		templateElementFactory.initialise(configuration, parameters);
+		configuration.setTemplateElementFactory(templateElementFactory);
+
+		Library library = new TestLibrary();
+		library.initialise(configuration, parameters);
+		configuration.addLibrary(library);
+
+		ConverterRegistry converterRegistry = new TestConverterRegistry();
+		converterRegistry.initialise(configuration, parameters);
+		configuration.setConverterRegistry(converterRegistry);
+
+		TestContextEnricher contextEnricher = new TestContextEnricher();
+		contextEnricher.initialise(configuration, parameters);
+		configuration.addContextEnricher(contextEnricher);
+
+		assert !contextEnricher.isBeforeTemplateInvoked();
+		assert !contextEnricher.isAfterTemplateInvoked();
+
+		new TemplateProcessor(configuration).processTemplate("test", "xml", new DefaultContext(), new NullWriter());
+
+		assert contextEnricher.isBeforeTemplateInvoked();
+		assert contextEnricher.isAfterTemplateInvoked();
 	}
 }

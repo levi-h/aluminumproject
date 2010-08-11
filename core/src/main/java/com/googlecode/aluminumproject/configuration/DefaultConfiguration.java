@@ -23,6 +23,7 @@ import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.cache.Cache;
+import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
@@ -74,34 +75,48 @@ import java.util.Set;
  * exists, its value will be interpreted as the class name of the cache. If the parameter does not exist, no cache will
  * be used.
  * <p>
- * To find libraries, the configuration scans a number of packages. By default, a single package is used: {@code
- * com.googlecode.aluminumproject.libraries}. This list can be changed by supplying a configuration parameter named
- * {@value #LIBRARY_PACKAGES}. This configuration parameter should contain a comma-separated list of packages that
- * should be included when searching libraries.
- * <p>
- * Parsers and serialisers are found in a list of packages as well. The default packages that are being looked in are
- * {@code com.googlecode.aluminumproject.parsers} and {@code com.googlecode.aluminumproject.serialisers}, though
- * different sets of packages can be configured by using the {@value #PARSER_PACKAGES} and {@value #SERIALISER_PACKAGES}
- * parameters. The values should be a list of packages, separated by a comma, that should be scanned for parsers or
- * serialisers.
- * <p>
+ * All other configuration elements are found by scanning one ore more packages. For each configuration element type,
+ * there is a default package in which configuration elements will be looked for. These locations can be changed by
+ * supplying configuration parameters that contain comma-separated lists of package names, both individually (the exact
+ * configuration parameters can be found in the table below) and globally (using a configuration parameter named {@value
+ * #CONFIGURATION_ELEMENT_PACKAGES}). Configuration elements that are found through a package scan are excluded from the
+ * configuration when they are annotated with {@link Ignored &#64;Ignored}.
+ * <table border="0">
+ * <tr>
+ * <th align="left">Configuration elements</th>
+ * <th align="left">Default package</th>
+ * <th align="left">Configuration parameter</th>
+ * </tr>
+ * <tr>
+ * <td>Libraries</td>
+ * <td>{@code com.googlecode.aluminumproject.libraries}</td>
+ * <td>{@value #LIBRARY_PACKAGES}</td>
+ * </tr>
+ * <tr>
+ * <td>Parsers</td>
+ * <td>{@code com.googlecode.aluminumproject.parsers}</td>
+ * <td>{@value #PARSER_PACKAGES}</td>
+ * </tr>
+ * <tr>
+ * <td>Serialisers</td>
+ * <td>{@code com.googlecode.aluminumproject.serialisers}</td>
+ * <td>{@value #SERIALISER_PACKAGES}</td>
+ * </tr>
+ * <tr>
+ * <td>Context enrichers</td>
+ * <td>{@code com.googlecode.aluminumproject.context}</td>
+ * <td>{@value #CONTEXT_ENRICHER_PACKAGES}</td>
+ * </tr>
+ * <tr>
+ * <td>Expression factories</td>
+ * <td>{@code com.googlecode.aluminumproject.expressions}</td>
+ * <td>{@value #EXPRESSION_FACTORY_PACKAGES}</td>
+ * </tr>
+ * </table>
  * When a parser or serialiser is found, it is named after the last part of the package it's in: this means that a
  * parser named {@code com.googlecode.aluminumproject.parsers.simple.SimpleParser} or a serialiser named {@code
  * com.googlecode.aluminumproject.serialisers.simple.SimpleSerialiser} will be registered under the name {@code simple}.
  * This behaviour can be changed by annotating a parser or serialiser with {@link Named &#64;Named}.
- * <p>
- * Expression factories are found by looking into a list of packages. This list is taken from the configuration
- * parameter {@value #EXPRESSION_FACTORY_PACKAGES} (its value is expected to be a comma-separated package list). If the
- * configuration parameter is not specified, the package {@code com.googlecode.aluminumproject.expressions} will be
- * scanned.
- * <p>
- * It's possible to extend the lists of packages that are used to find libraries, parsers, serialisers, and expression
- * factories in by supplying a configuration parameter with the name {@value #CONFIGURATION_ELEMENT_PACKAGES}. Its value
- * is expected to be a comma-separated list of packages. Other classes that find configuration elements in one or more
- * packages are encouraged to use this configuration parameter as well.
- * <p>
- * Configuration elements that are found through a package scan are excluded from the configuration when they are
- * annotated with {@link Ignored &#64;Ignored}.
  *
  * @author levi_h
  */
@@ -117,6 +132,7 @@ public class DefaultConfiguration implements Configuration {
 	private List<Library> libraries;
 	private Map<String, Parser> parsers;
 	private Map<String, Serialiser> serialisers;
+	private List<ContextEnricher> contextEnrichers;
 	private List<ExpressionFactory> expressionFactories;
 
 	private final Logger logger;
@@ -152,6 +168,7 @@ public class DefaultConfiguration implements Configuration {
 		createLibraries();
 		createParsers();
 		createSerialisers();
+		createContextEnrichers();
 		createExpressionFactories();
 
 		initialise();
@@ -333,6 +350,33 @@ public class DefaultConfiguration implements Configuration {
 		return name;
 	}
 
+	private void createContextEnrichers() throws ConfigurationException {
+		String[] contextEnricherPackages =
+			getConfiguredPackages(CONTEXT_ENRICHER_PACKAGES, getPackageName(ContextEnricher.class));
+
+		List<Class<?>> contextEnricherClasses;
+
+		try {
+			contextEnricherClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+				public boolean accepts(Class<?> type) {
+					return ContextEnricher.class.isAssignableFrom(type) && !isAbstract(type)
+						&& !type.isAnnotationPresent(Ignored.class);
+				}
+			}, contextEnricherPackages));
+		} catch (UtilityException exception) {
+			throw new ConfigurationException(exception, "can't find context enrichers");
+		}
+
+		contextEnrichers = new ArrayList<ContextEnricher>();
+
+		for (Class<?> contextEnricherClass: contextEnricherClasses) {
+			logger.debug("adding context enricher of type ", contextEnricherClass.getName());
+
+			contextEnrichers.add(
+				configurationElementFactory.instantiate(contextEnricherClass.getName(), ContextEnricher.class));
+		}
+	}
+
 	private void createExpressionFactories() throws ConfigurationException {
 		String[] expressionFactoryPackages =
 			getConfiguredPackages(EXPRESSION_FACTORY_PACKAGES, getPackageName(ExpressionFactory.class));
@@ -391,6 +435,10 @@ public class DefaultConfiguration implements Configuration {
 			serialiser.initialise(this, parameters);
 		}
 
+		for (ContextEnricher contextEnricher: contextEnrichers) {
+			contextEnricher.initialise(this, parameters);
+		}
+
 		for (ExpressionFactory expressionFactory: expressionFactories) {
 			expressionFactory.initialise(this, parameters);
 		}
@@ -430,6 +478,10 @@ public class DefaultConfiguration implements Configuration {
 
 	public Map<String, Serialiser> getSerialisers() {
 		return Collections.unmodifiableMap(serialisers);
+	}
+
+	public List<ContextEnricher> getContextEnrichers() {
+		return Collections.unmodifiableList(contextEnrichers);
 	}
 
 	public List<ExpressionFactory> getExpressionFactories() {
@@ -478,6 +530,12 @@ public class DefaultConfiguration implements Configuration {
 	 */
 	public final static String SERIALISER_PACKAGES = "configuration.default.serialiser.packages";
 
+ 	/**
+	 * The name of the configuration parameter that contains a comma-separated list of packages in which context
+	 * enrichers may be expected.
+	 */
+	public final static String CONTEXT_ENRICHER_PACKAGES = "configuration.default.context_enricher.packages";
+
 	/**
 	 * The name of the configuration parameter that has a comma-separated list of expression factory packages as its
 	 * value.
@@ -486,7 +544,8 @@ public class DefaultConfiguration implements Configuration {
 
 	/**
 	 * The name of the configuration parameter that contains a comma-separated list of packages that might contain
-	 * configuration elements.
+	 * configuration elements. Classes other than the default configuration that perform package scans are encourage to
+	 * support this configuration parameter as well.
 	 */
 	public final static String CONFIGURATION_ELEMENT_PACKAGES = "configuration.default.configuration_element.packages";
 }
