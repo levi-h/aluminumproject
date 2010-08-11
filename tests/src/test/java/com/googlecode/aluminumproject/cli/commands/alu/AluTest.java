@@ -34,7 +34,7 @@ public class AluTest extends AbstractCommandTest {
 		workingDirectory = System.getProperty("user.dir");
 
 		System.setProperty("user.dir",
-			Thread.currentThread().getContextClassLoader().getResource("templates/xml/cli").getPath());
+			Thread.currentThread().getContextClassLoader().getResource("templates/aluscript/cli").getPath());
 	}
 
 	@AfterClass
@@ -48,34 +48,35 @@ public class AluTest extends AbstractCommandTest {
 	}
 
 	public void supplyingTemplateShouldHaveItProcessed() {
-		String[] output = executeCommand(alu, "-p", "xml", "hello.xml");
+		String[] output = executeCommand(alu, "-p", "aluscript", "hello.alu");
 		assert output[0].equals("Hello!");
 		assert output[1].equals("");
 	}
 
 	@Test(dependsOnMethods = "supplyingTemplateShouldHaveItProcessed")
-	public void xmlParserShouldBeDefaultParser() {
-		String[] output = executeCommand(alu, "hello.xml");
+	public void aluScriptParserShouldBeDefaultParser() {
+		String[] output = executeCommand(alu, "hello.alu");
 		assert output[0].equals("Hello!");
+		assert output[1].equals("");
+	}
+
+	@Test(dependsOnMethods = "supplyingTemplateShouldHaveItProcessed")
+	public void argumentsShouldBeAvailableInContextVariable() {
+		String[] output = executeCommand(alu, "hello-with-arguments.alu", "birds", "flowers");
+		assert output[0].equals("Hello, birds!\nHello, flowers!");
 		assert output[1].equals("");
 	}
 
 	public void notSupplyingTemplateShouldResultInHelpMessage() {
 		String[] output = executeCommand(alu);
-		assert output[0].contains("Usage: alu [options] [template file]");
-		assert output[1].equals("");
-	}
-
-	public void supplyingMoreThanOneTemplateShouldResultInHelpMessage() {
-		String[] output = executeCommand(alu, "templates/xml/cli/hello.xml", "templates/xml/cli/hello.xml");
-		assert output[0].contains("Usage: alu [options] [template file]");
+		assert output[0].contains("Usage: alu [options] [template file] [arguments]");
 		assert output[1].equals("");
 	}
 
 	public void supplyingNonexistentParserShouldResultInErrorMessage() {
-		String[] output = executeCommand(alu, "-p", "xlm", "templates/xml/cli/hello.xml");
+		String[] output = executeCommand(alu, "-p", "xlm", "hello.xml");
 		assert output[0].equals("");
-		assert output[1].equals("The template 'templates/xml/cli/hello.xml' can't be processed (unknown parser: xlm).");
+		assert output[1].equals("The template 'hello.xml' can't be processed (unknown parser: xlm).");
 		assert output[0].equals("");
 		assert output[0].equals("");
 	}

@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.cli.commands.alu;
 
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_FINDER_FACTORY_CLASS;
+import static com.googlecode.aluminumproject.context.Context.TEMPLATE_SCOPE;
 
 import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.AluminumException;
@@ -24,6 +25,7 @@ import com.googlecode.aluminumproject.cli.CommandException;
 import com.googlecode.aluminumproject.cli.OptionEffect;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.resources.FileSystemTemplateFinderFactory;
 import com.googlecode.aluminumproject.writers.OutputStreamWriter;
@@ -45,9 +47,10 @@ import joptsimple.OptionSpec;
  * The <em>alu</em> command accepts the following options:
  * <ul>
  * <li>The parser option ({@code -p} or {@code --parser}): which parser to use; the name of the parser is expected as an
- *     argument to the option and defaults to {@code "xml"}.
+ *     argument to the option and defaults to {@value #DEFAULT_PARSER_NAME}.
  * </ul>
- * The name of the template has to be given as a parameter to the command.
+ * The name of the template has to be given as a parameter to the command. A {@link List list} that contains the other
+ * arguments (if any) are made available as a context variable named {@value #ARGUMENTS_VARIABLE_NAME}.
  * <p>
  * The template engine will use a {@link DefaultConfiguration default configuration} with a single exception: the
  * template finder will be created by a {@link FileSystemTemplateFinderFactory file system template finder factory} that
@@ -63,7 +66,7 @@ public class Alu extends Command {
 	 * Creates an <em>alu</em> command.
 	 */
 	public Alu() {
-		parser = "xml";
+		parser = DEFAULT_PARSER_NAME;
 
 		addOptions();
 	}
@@ -88,7 +91,7 @@ public class Alu extends Command {
 
 		helpInformation.put("name", "alu - Aluminum");
 		helpInformation.put("description", "Processes a template.");
-		helpInformation.put("usage", "Usage: alu [options] [template file]");
+		helpInformation.put("usage", "Usage: alu [options] [template file] [arguments]");
 
 		return helpInformation;
 	}
@@ -96,7 +99,7 @@ public class Alu extends Command {
 	@Override
 	protected void execute(
 			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws CommandException {
-		if (arguments.size() == 1) {
+		if (arguments.size() >= 1) {
 			ConfigurationParameters parameters = new ConfigurationParameters();
 			parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, FileSystemTemplateFinderFactory.class.getName());
 
@@ -116,7 +119,10 @@ public class Alu extends Command {
 			Aluminum aluminum = new Aluminum(new DefaultConfiguration(parameters));
 
 			String template = arguments.get(0);
-			DefaultContext context = new DefaultContext();
+
+			Context context = new DefaultContext();
+			context.setVariable(TEMPLATE_SCOPE, ARGUMENTS_VARIABLE_NAME, arguments.subList(1, arguments.size()));
+
 			Writer writer = new TextWriter(new OutputStreamWriter(outputStream), true);
 
 			try {
@@ -130,6 +136,15 @@ public class Alu extends Command {
 			displayHelp(outputStream, errorStream);
 		}
 	}
+
+	/**
+	 * The name of the context variable that will contain any command line arguments after the first one (which is the
+	 * name of the template to process): {@value}.
+	 */
+	public final static String ARGUMENTS_VARIABLE_NAME = "arguments";
+
+	/** The name of the parser that will be used when none is specified: {@value}. */
+	public final static String DEFAULT_PARSER_NAME = "aluscript";
 
 	/**
 	 * Executes the <em>alu</em> command.
