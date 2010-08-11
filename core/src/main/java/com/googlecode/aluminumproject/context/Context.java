@@ -25,9 +25,12 @@ import java.util.Set;
  * required to support the <i>template</i> scope, though it's possible to add scopes. Scopes that are added can be
  * removed as well.
  * <p>
- * A context can have a number of implicit objects. Implicit objects are not scoped and can't be replaced. All contexts
- * should have an implicit object named {@value #ALUMINUM_IMPLICIT_OBJECT} that is a {@link Map Map&lt;String,
- * Object&gt;}. This implicit object shouldn't be used directly, but is meant for internal use only.
+ * A context can have a number of implicit objects, which are not scoped. Implicit objects can be {@link
+ * #addImplicitObject(String, Object) added} and {@link #removeImplicitObject(String) removed} freely, although their
+ * names should not start with {@value #RESERVED_IMPLICIT_OBJECT_NAME_PREFIX}. Subclasses can further restrict the names
+ * that may be used for implicit names. All contexts should have an implicit object named {@value
+ * #ALUMINUM_IMPLICIT_OBJECT} that is a {@link Map Map&lt;String, Object&gt;}. This implicit object shouldn't be used
+ * directly, but is meant for internal use only.
  * <p>
  * When a context supports it, it's possible to create one or more child contexts.
  *
@@ -148,6 +151,25 @@ public interface Context {
 	 */
 	Object getImplicitObject(String name) throws ContextException;
 
+ 	/**
+	 * Adds an implicit object.
+	 *
+	 * @param name the name of the implicit object
+	 * @param implicitObject the implicit object to add
+	 * @throws ContextException when there already is an implicit object with the given name or when the name is
+	 *                          reserved
+	 */
+	void addImplicitObject(String name, Object implicitObject) throws ContextException;
+
+	/**
+	 * Removes an implicit object with a certain name.
+	 *
+	 * @param name the name of the implicit object to remove
+	 * @return the removed implicit object
+	 * @throws ContextException when there's no implicit object with the given name
+	 */
+	Object removeImplicitObject(String name) throws ContextException;
+
 	/**
 	 * Creates a child context of this context.
 	 *
@@ -159,6 +181,9 @@ public interface Context {
 	/** The name of the default scope. */
 	String TEMPLATE_SCOPE = "template";
 
+	/** The prefix of names of implicit objects that are reserved for internal use: {@value}. */
+	String RESERVED_IMPLICIT_OBJECT_NAME_PREFIX = "aluminum";
+
 	/** The name of the implicit object that's used internally. */
-	String ALUMINUM_IMPLICIT_OBJECT = "aluminum";
+	String ALUMINUM_IMPLICIT_OBJECT = RESERVED_IMPLICIT_OBJECT_NAME_PREFIX + ".aluminum";
 }
