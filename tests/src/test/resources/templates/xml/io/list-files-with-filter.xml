@@ -14,4 +14,4 @@
   - limitations under the License.
  -->
 
-<io:list-files in="${io:temporaryDirectory()}" result-name="files" filter="${io:filesNamedLike(pattern)}" xmlns:io="http://aluminumproject.googlecode.com/io"/>
+<io:list-files in="${io:temporaryDirectory()}" filter="${io:filesNamedLike(pattern)}" c:variable-name="files" xmlns:c="http://aluminumproject.googlecode.com/core" xmlns:io="http://aluminumproject.googlecode.com/io"/>

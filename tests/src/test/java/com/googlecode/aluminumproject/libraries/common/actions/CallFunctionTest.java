@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 @SuppressWarnings("all")
 @Test(groups = {"libraries", "slow"})
 public class CallFunctionTest extends CommonLibraryTest {
-	public void resultShouldBeStoredInContextVariable() {
+	public void functionShouldBeCallable() {
 		Context context = new DefaultContext();
 
 		processTemplate("call-function", context);
@@ -38,24 +38,7 @@ public class CallFunctionTest extends CommonLibraryTest {
 		assert ((Integer) result).intValue() == 10;
 	}
 
-	public void scopeOfResultVariableShouldBeConfigurable() {
-		Context context = new DefaultContext();
-		context.setVariable("a", 5);
-		context.setVariable("b", 10);
-
-		context.addScope("results", true);
-
-		processTemplate("call-function-with-custom-result-scope", context);
-
-		assert context.getVariableNames("results").contains("max");
-
-		Object result = context.getVariable("results", "max");
-		assert result != null;
-		assert result instanceof Integer;
-		assert ((Integer) result).intValue() == 10;
-	}
-
-	@Test(dependsOnMethods = "resultShouldBeStoredInContextVariable")
+	@Test(dependsOnMethods = "functionShouldBeCallable")
 	public void dynamicFunctionShouldBeCallable() {
 		Context context = new DefaultContext();
 

@@ -29,15 +29,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Lists files and directories.
+ * Lists files and directories in a certain location, optionally matching a particular filter. The results will be
+ * written (as a {@link List list}) to the action's writer.
  *
  * @author levi_h
  */
 public class ListFiles extends AbstractAction {
 	private File location;
-
-	private String resultName;
-	private String resultScope;
 
 	private FileFilter filter;
 
@@ -61,42 +59,13 @@ public class ListFiles extends AbstractAction {
 		this.filter = filter;
 	}
 
-	/**
-	 * Sets the name of the result variable.
-	 *
-	 * @param resultName the name of the variable in which the found files should be stored
-	 */
-	@ActionParameterInformation(required = true)
-	public void setResultName(String resultName) {
-		this.resultName = resultName;
-	}
-
-	/**
-	 * Sets the scope of the result variable.
-	 *
-	 * @param resultScope the scope that should be used for the result variable
-	 */
-	public void setResultScope(String resultScope) {
-		this.resultScope = resultScope;
-	}
-
 	public void execute(Context context, Writer writer) throws ActionException, ContextException {
 		File[] files = location.listFiles(filter);
 
 		if (files == null) {
 			throw new ActionException("can't list files in ", location);
 		} else {
-			List<File> result = Arrays.asList(files);
-
-			if (resultScope == null) {
-				logger.debug("setting variable '", resultName, "' in innermost scope with result ", result);
-
-				context.setVariable(resultName, result);
-			} else {
-				logger.debug("setting variable '", resultName, "' in scope '", resultScope, "' with result ", result);
-
-				context.setVariable(resultScope, resultName, result);
-			}
+			writer.write(Arrays.asList(files));
 		}
 	}
 }

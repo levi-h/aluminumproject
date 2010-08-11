@@ -14,4 +14,4 @@
   - limitations under the License.
  -->
 
-<test:call-function name="add4and6" result-name="sum" xmlns:test="http://aluminumproject.googlecode.com/test"/>
+<test:call-function name="add4and6" c:variable-name="sum" xmlns:c="http://aluminumproject.googlecode.com/core" xmlns:test="http://aluminumproject.googlecode.com/test"/>

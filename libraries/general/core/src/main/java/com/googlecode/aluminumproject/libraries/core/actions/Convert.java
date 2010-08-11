@@ -28,16 +28,13 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.lang.reflect.Type;
 
 /**
- * Converts a value and saves the converted value in a variable.
+ * Converts a value and writes it away.
  *
  * @author levi_h
  */
 public class Convert extends AbstractAction {
 	private Object value;
 	private Type type;
-
-	private String resultName;
-	private String resultScope;
 
 	private @Injected Configuration configuration;
 
@@ -66,46 +63,13 @@ public class Convert extends AbstractAction {
 		this.type = type;
 	}
 
-	/**
-	 * Sets the name of the variable that will contain the converted value.
-	 *
-	 * @param resultName the name of the result variable
-	 */
-	@ActionParameterInformation(required = true)
-	public void setResultName(String resultName) {
-		this.resultName = resultName;
-	}
-
-	/**
-	 * Sets the (optional) scope of the variable that will contain the converted value.
-	 *
-	 * @param resultScope the scope of the result variable
-	 */
-	public void setResultScope(String resultScope) {
-		this.resultScope = resultScope;
-	}
-
 	public void execute(Context context, Writer writer) throws ActionException, ContextException {
-		Object convertedValue;
-
 		try {
 			logger.debug("trying to convert ", value, " into ", type);
 
-			convertedValue = configuration.getConverterRegistry().convert(value, type);
+			writer.write(configuration.getConverterRegistry().convert(value, type));
 		} catch (ConverterException exception) {
 			throw new ActionException(exception, "can't convert value");
-		}
-
-		if (resultScope == null) {
-			logger.debug("setting variable '", resultName, "' in innermost scope ",
-				"with converted value ", convertedValue);
-
-			context.setVariable(resultName, convertedValue);
-		} else {
-			logger.debug("setting variable '", resultName, "' in scope '", resultScope, "' ",
-				"with converted value ", convertedValue);
-
-			context.setVariable(resultScope, resultName, convertedValue);
 		}
 	}
 }
