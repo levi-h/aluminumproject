@@ -14,4 +14,4 @@
   - limitations under the License.
  -->
 
-<TEST:TEST xmlns:TEST="http://aluminumproject.googlecode.com/test"/>
+<TEST:TEST DESC="test" xmlns:TEST="http://aluminumproject.googlecode.com/test"/>
