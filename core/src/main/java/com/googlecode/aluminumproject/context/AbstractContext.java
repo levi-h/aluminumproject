@@ -33,11 +33,9 @@ import java.util.Set;
  * provide when constructing an abstract context. The scopes are prioritised, which can be seen when {@link
  * #findVariable(String) finding a variable}: the value in the scope that has the highest precedence will be used.
  * <p>
- * It's possible to {@link #addImplicitObject(String, Object) add} and {@link #removeImplicitObject(String) remove}
- * implicit objects. By default, all scoped variables are made available as implicit objects using {@link ScopeMap scope
- * maps}; the names that will be used are obtained by suffixing the scope names with {@value
- * #IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX}. As a consequence, no other implicit objects can have a name that ends with that
- * suffix.
+ * All scoped variables are made available as implicit objects using {@link ScopeMap scope maps}; the names that will be
+ * used are obtained by suffixing the scope names with {@value #IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX}. As a consequence, no
+ * other implicit objects can have a name that ends with that suffix.
  * <p>
  * Subcontexts are supported, but {@link #createSubcontext() the createSubcontext method} throws an exception, since it
  * doesn't know which context class to instantiate. Subclasses that want to support subcontexts have to override this
@@ -251,15 +249,7 @@ public abstract class AbstractContext implements Context {
 		}
 	}
 
-	/**
-	 * Adds an implicit object.
-	 *
-	 * @param name the name of the implicit object
-	 * @param implicitObject the implicit object to add
-	 * @throws ContextException when there already is an implicit object with the given name or when the name ends with
-	 *                          {@value #IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX}
-	 */
-	protected void addImplicitObject(String name, Object implicitObject) throws ContextException {
+	public void addImplicitObject(String name, Object implicitObject) throws ContextException {
 		if (name.endsWith(IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX)) {
 			throw new ContextException("the name of an implicit object ",
 				"can't end with '", IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX, "'");
@@ -270,14 +260,7 @@ public abstract class AbstractContext implements Context {
 		implicitObjects.put(name, implicitObject);
 	}
 
-	/**
-	 * Removes an implicit object with a certain name.
-	 *
-	 * @param name the name of the implicit object to remove
-	 * @return the removed implicit object
-	 * @throws ContextException when there's no implicit object with the given name
-	 */
-	protected Object removeImplicitObject(String name) throws ContextException {
+	public Object removeImplicitObject(String name) throws ContextException {
 		if (implicitObjects.containsKey(name)) {
 			return implicitObjects.remove(name);
 		} else {
