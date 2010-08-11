@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.configuration;
 
 import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.cache.Cache;
+import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.Library;
@@ -94,6 +95,13 @@ public interface Configuration {
 	 * @return a map with all of the configured serialisers, with their names as keys
 	 */
 	Map<String, Serialiser> getSerialisers();
+
+ 	/**
+	 * Returns all context enrichers.
+	 *
+	 * @return a list with all of the configured context enrichers
+	 */
+	List<ContextEnricher> getContextEnrichers();
 
 	/**
 	 * Returns all expression factories that will be used to recognise and create expressions.

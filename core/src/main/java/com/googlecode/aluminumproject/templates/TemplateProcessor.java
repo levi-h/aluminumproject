@@ -20,6 +20,8 @@ import com.googlecode.aluminumproject.cache.Cache;
 import com.googlecode.aluminumproject.cache.CacheException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.ContextEnricher;
+import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -35,6 +37,8 @@ import java.util.Map;
  * <li>The name of the template (under key {@value #TEMPLATE_NAME});
  * <li>The name of the parser that was used for the template (with the key {@value #TEMPLATE_PARSER}).
  * </ul>
+ * All configured {@link ContextEnricher context enrichers} are given the opportunity to change the context before and
+ * after the template is processed.
  *
  * @author levi_h
  */
@@ -80,7 +84,23 @@ public class TemplateProcessor {
 		templateInformation.put(TEMPLATE_NAME, name);
 		templateInformation.put(TEMPLATE_PARSER, parser);
 
+		try {
+			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
+				contextEnricher.beforeTemplate(context);
+			}
+		} catch (ContextException exception) {
+			throw new TemplateException(exception, "can't enrich context");
+		}
+
 		template.processChildren(new TemplateContext(), context, writer);
+
+		try {
+			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
+				contextEnricher.afterTemplate(context);
+			}
+		} catch (ContextException exception) {
+			throw new TemplateException(exception, "can't enrich context");
+		}
 
 		templateInformation.remove(TEMPLATE_NAME);
 		templateInformation.remove(TEMPLATE_PARSER);

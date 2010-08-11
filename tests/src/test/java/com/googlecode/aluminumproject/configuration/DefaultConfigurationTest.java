@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.configuration;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CACHE_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_FACTORY_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONTEXT_ENRICHER_PACKAGES;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONVERTER_REGISTRY_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.EXPRESSION_FACTORY_PACKAGES;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.LIBRARY_PACKAGES;
@@ -32,6 +33,9 @@ import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.cache.test.TestCache;
 import com.googlecode.aluminumproject.configuration.test.TestConfigurationElementFactory;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.ContextEnricher;
+import com.googlecode.aluminumproject.context.test.IgnoredContextEnricher;
+import com.googlecode.aluminumproject.context.test.TestContextEnricher;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.converters.test.TestConverterRegistry;
 import com.googlecode.aluminumproject.expressions.Expression;
@@ -64,6 +68,7 @@ import com.googlecode.aluminumproject.serialisers.test.TestSerialiser;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.test.TestTemplateElementFactory;
+import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -477,6 +482,76 @@ public class DefaultConfigurationTest {
 		}
 
 		return serialiserOfRequestedType;
+	}
+
+	public void contextEnrichersShouldNotBeNull() {
+		assert new DefaultConfiguration().getContextEnrichers() != null;
+	}
+
+	public static class ExternalContextEnricher implements ContextEnricher {
+		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+
+		public void beforeTemplate(Context context) {}
+
+		public void afterTemplate(Context context) {}
+	}
+
+	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
+	public void contextEnrichersOutsideContextEnricherPackagesShouldNotBeFound() {
+		assert findContextEnricherOfType(new DefaultConfiguration(), ExternalContextEnricher.class) == null;
+	}
+
+	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
+	public void ignoredContextEnrichersShouldNotBeFound() {
+		assert findContextEnricherOfType(new DefaultConfiguration(), IgnoredContextEnricher.class) == null;
+	}
+
+	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
+	public void contextEnrichersInsideContextEnricherPackagesShouldBeFound() {
+		assert findContextEnricherOfType(new DefaultConfiguration(), TestContextEnricher.class) != null;
+	}
+
+	@Test(dependsOnMethods = "contextEnrichersInsideContextEnricherPackagesShouldBeFound")
+	public void configurationShouldInitialiseContextEnrichers() {
+		Configuration configuration = new DefaultConfiguration();
+
+		TestContextEnricher contextEnricher = findContextEnricherOfType(configuration, TestContextEnricher.class);
+		assert contextEnricher.getConfiguration() == configuration;
+	}
+
+	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
+	public void contextEnricherPackagesShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONTEXT_ENRICHER_PACKAGES,
+			ReflectionUtilities.getPackageName(ExternalContextEnricher.class));
+
+		assert findContextEnricherOfType(new DefaultConfiguration(parameters), ExternalContextEnricher.class) != null;
+	}
+
+	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
+	public void contextEnricherPackagesShouldBeExtendedByConfigurationElementPackages() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES,
+			ReflectionUtilities.getPackageName(ExternalContextEnricher.class));
+
+		assert findContextEnricherOfType(new DefaultConfiguration(parameters), ExternalContextEnricher.class) != null;
+	}
+
+	private static <T extends ContextEnricher> T findContextEnricherOfType(
+		Configuration configuration, Class<T> contextEnricherType) {
+		Iterator<ContextEnricher> contextEnrichers = configuration.getContextEnrichers().iterator();
+		T contextEnricherOfRequestedType = null;
+
+		while (contextEnrichers.hasNext() && (contextEnricherOfRequestedType == null)) {
+			ContextEnricher contextEnricher = contextEnrichers.next();
+			assert contextEnricher != null;
+
+			if (contextEnricherType.isAssignableFrom(contextEnricher.getClass())) {
+				contextEnricherOfRequestedType = contextEnricherType.cast(contextEnricher);
+			}
+		}
+
+		return contextEnricherOfRequestedType;
 	}
 
 	public void expressionFactoriesShouldNotBeNull() {

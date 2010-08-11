@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfigurationElementFactory;
+import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.Library;
@@ -52,6 +53,7 @@ public class TestConfiguration implements Configuration {
 	private List<Library> libraries;
 	private Map<String, Parser> parsers;
 	private Map<String, Serialiser> serialisers;
+	private List<ContextEnricher> contextEnrichers;
 	private List<ExpressionFactory> expressionFactories;
 
 	/**
@@ -66,6 +68,7 @@ public class TestConfiguration implements Configuration {
 		libraries = new ArrayList<Library>();
 		parsers = new HashMap<String, Parser>();
 		serialisers = new HashMap<String, Serialiser>();
+		contextEnrichers = new ArrayList<ContextEnricher>();
 		expressionFactories = new ArrayList<ExpressionFactory>();
 	}
 
@@ -179,6 +182,19 @@ public class TestConfiguration implements Configuration {
 		serialisers.put(name, serialiser);
 	}
 
+	public List<ContextEnricher> getContextEnrichers() {
+		return Collections.unmodifiableList(contextEnrichers);
+	}
+
+	/**
+	 * Adds a context enricher to the list of context enrichers.
+	 *
+	 * @param contextEnricher the context enricher to add
+	 */
+	public void addContextEnricher(ContextEnricher contextEnricher) {
+		contextEnrichers.add(contextEnricher);
+	}
+
 	public List<ExpressionFactory> getExpressionFactories() {
 		return Collections.unmodifiableList(expressionFactories);
 	}
@@ -186,7 +202,7 @@ public class TestConfiguration implements Configuration {
 	/**
 	 * Adds an expression factory to the list of expression factories.
 	 *
-	 * @param expressionFactory the expression factory to use
+	 * @param expressionFactory the expression factory to add
 	 */
 	public void addExpressionFactory(ExpressionFactory expressionFactory) {
 		expressionFactories.add(expressionFactory);
