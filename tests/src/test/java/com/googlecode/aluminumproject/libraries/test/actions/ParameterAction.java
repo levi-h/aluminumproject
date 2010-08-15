@@ -37,7 +37,7 @@ public class ParameterAction extends AbstractAction {
 	 *
 	 * @param descriptionParameter the parameter containing the description to use
 	 */
-	@ActionParameterInformation(type = String.class)
+	@ActionParameterInformation(type = "String")
 	public void setDescriptionParameter(ActionParameter descriptionParameter) {}
 
 	public void execute(Context context, Writer writer) {}

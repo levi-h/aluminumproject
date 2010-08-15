@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 import com.googlecode.aluminumproject.libraries.LibraryException;
+import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 import com.googlecode.aluminumproject.utilities.UtilityException;
@@ -142,16 +143,17 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 				parameterSetter.getAnnotation(parameterInformationClass);
 
 			String parameterName;
+			String parameterTypeName;
 			Type parameterType;
 			boolean required;
 
 			if (annotatedParameterInformation == null) {
 				parameterName = "";
-				parameterType = Object.class;
+				parameterTypeName = "";
 				required = false;
 			} else {
 				parameterName = annotatedParameterInformation.name();
-				parameterType = annotatedParameterInformation.type();
+				parameterTypeName = annotatedParameterInformation.type();
 				required = annotatedParameterInformation.required();
 			}
 
@@ -161,8 +163,14 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 				parameterName = StringUtilities.humanise(propertyName).toLowerCase();
 			}
 
-			if (parameterType == Object.class) {
+			if (parameterTypeName.equals("")) {
 				parameterType = parameterSetter.getGenericParameterTypes()[0];
+			} else {
+				try {
+					parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
+				} catch (UtilityException exception) {
+					throw new ConfigurationException(exception, "can't get type of parameter '", parameterName, "'");
+				}
 			}
 
 			logger.debug("found ", required ? "required" : "optional", " parameter;",

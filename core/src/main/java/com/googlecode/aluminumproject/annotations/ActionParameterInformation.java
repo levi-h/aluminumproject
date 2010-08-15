@@ -18,11 +18,13 @@ package com.googlecode.aluminumproject.annotations;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
+import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Type;
 
 /**
  * Contains information about the parameter of an {@link Action action}. When put on a setter, {@link
@@ -43,8 +45,12 @@ public @interface ActionParameterInformation {
 	 * The type of the parameter. If not given, the property type will be used as parameter type (most of the time, this
 	 * will be what is needed anyway - this attribute is especially useful for parameters of the type {@link
 	 * ActionParameter}).
+	 * <p>
+	 * Note that the type of this attribute is {@code String}, since {@link Type types} are not permitted. The attribute
+	 * value will be converted to a type by {@link GenericsUtilities#getType(String, String...) the getType utility
+	 * method} (with {@code java.lang} and {@code java.util} as default packages).
 	 */
-	Class<?> type() default Object.class;
+	String type() default "";
 
 	/**
 	 * Whether the parameter is required or not. Parameters are optional by default.
