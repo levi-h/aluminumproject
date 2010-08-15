@@ -54,7 +54,7 @@ public class Variable {
 	 *
 	 * @author levi_h
 	 */
-	@ActionContributionInformation(name = "variable name")
+	@ActionContributionInformation(name = "variable name", parameterType = "String")
 	public static class Name implements ActionContribution {
 		/**
 		 * Creates a <em>variable name</em> action contribution.
@@ -156,7 +156,7 @@ public class Variable {
 	 *
 	 * @author levi_h
 	 */
-	@ActionContributionInformation(name = "variable scope")
+	@ActionContributionInformation(name = "variable scope", parameterType = "String")
 	public static class Scope implements ActionContribution {
 		/**
 		 * Creates a <em>variable scope</em> action contribution.

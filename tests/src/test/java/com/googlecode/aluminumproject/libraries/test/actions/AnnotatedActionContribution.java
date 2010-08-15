@@ -28,7 +28,7 @@ import com.googlecode.aluminumproject.writers.Writer;
  *
  * @author levi_h
  */
-@ActionContributionInformation(name = "annotated test")
+@ActionContributionInformation(name = "annotated test", parameterType = "String")
 public class AnnotatedActionContribution implements ActionContribution {
 	/**
 	 * Creates an annotated action contribution.

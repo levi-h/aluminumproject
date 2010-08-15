@@ -22,7 +22,11 @@ import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 import com.googlecode.aluminumproject.libraries.LibraryException;
+import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
+import com.googlecode.aluminumproject.utilities.UtilityException;
+
+import java.lang.reflect.Type;
 
 /**
  * An {@link ActionContributionFactory action contribution factory} that's based on a {@link ActionContribution action
@@ -34,6 +38,9 @@ import com.googlecode.aluminumproject.utilities.StringUtilities;
  * the value of the {@code name} attribute. For unannotated action contribution classes, the lower cased {@link
  * StringUtilities#humanise(String) humanised} class name will become the name (this means the the action contribution
  * {@code OnDays} would get the name <em>on days</em>).
+ * <p>
+ * Similarly, the parameter type of annotated action contributions will be inferred from the {@code parameterType}
+ * attribute. When an action contribution is not annotated, {@link Object} will be used as its parameter type.
  * <p>
  * The action contribution will be created by the {@link ConfigurationElementFactory configuration element factory}
  * in the configuration. After its creation, any of the action contribution's fields that are declared to be {@link
@@ -56,27 +63,40 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 	}
 
 	@Override
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(
+			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
 		super.initialise(configuration, parameters);
 
-		information = new ActionContributionInformation(getActionContributionName());
-	}
-
-	private String getActionContributionName() {
-		String name;
+		String name = "";
+		Type parameterType;
 
 		Class<com.googlecode.aluminumproject.annotations.ActionContributionInformation> informationClass =
 			com.googlecode.aluminumproject.annotations.ActionContributionInformation.class;
 
 		if (actionContributionClass.isAnnotationPresent(informationClass)) {
-			name = actionContributionClass.getAnnotation(informationClass).name();
+			com.googlecode.aluminumproject.annotations.ActionContributionInformation information =
+				actionContributionClass.getAnnotation(informationClass);
+
+			name = information.name();
+
+			try {
+				parameterType = GenericsUtilities.getType(information.parameterType(), "java.lang", "java.util");
+			} catch (UtilityException exception) {
+				throw new ConfigurationException(exception,
+					"can't get parameter type for action contribution class ", actionContributionClass.getName());
+			}
 		} else {
+			parameterType = Object.class;
+		}
+
+		if (name.equals("")) {
 			name = StringUtilities.humanise(actionContributionClass.getSimpleName()).toLowerCase();
 		}
 
-		logger.debug("using name '", name, "' for action contribution class ", actionContributionClass.getName());
+		logger.debug("using name '", name, "' and parameter type ", parameterType,
+			" for action contribution class ", actionContributionClass.getName());
 
-		return name;
+		information = new ActionContributionInformation(name, parameterType);
 	}
 
 	public ActionContributionInformation getInformation() {

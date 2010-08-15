@@ -17,11 +17,13 @@ package com.googlecode.aluminumproject.annotations;
 
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionFactory;
+import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Type;
 
 /**
  * Contains information about an {@link ActionContribution action contribution}. It will be used by the {@link
@@ -37,5 +39,14 @@ public @interface ActionContributionInformation {
 	/**
 	 * The name of the action contribution.
 	 */
-	String name();
+	String name() default "";
+
+	/**
+	 * The type of the action contribution's parameter.
+	 * <p>
+	 * Note that the type of this attribute is {@code String}, since {@link Type types} are not permitted. The attribute
+	 * value will be converted to a type by {@link GenericsUtilities#getType(String, String...) the getType utility
+	 * method} (with {@code java.lang} and {@code java.util} as default packages).
+	 */
+	String parameterType() default "Object";
 }

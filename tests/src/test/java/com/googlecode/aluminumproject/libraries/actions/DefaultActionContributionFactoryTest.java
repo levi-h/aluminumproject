@@ -53,6 +53,14 @@ public class DefaultActionContributionFactoryTest {
 		assert name.equals("annotated test");
 	}
 
+	public void unannotatedActionContributionShouldResultInObjectAsParameterType() {
+		assert unannotatedActionContributionFactory.getInformation().getParameterType() == Object.class;
+	}
+
+	public void annotatedActionContributionShouldResultInAnnotationAttributeAsParameterType() {
+		assert annotatedActionContributionFactory.getInformation().getParameterType() == String.class;
+	}
+
 	public void actionContributionShouldBeCreatable() {
 		assert unannotatedActionContributionFactory.create() instanceof TestActionContribution;
 		assert annotatedActionContributionFactory.create() instanceof AnnotatedActionContribution;

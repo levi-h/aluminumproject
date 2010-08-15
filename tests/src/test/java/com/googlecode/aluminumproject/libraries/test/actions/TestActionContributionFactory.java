@@ -38,7 +38,7 @@ public class TestActionContributionFactory implements ActionContributionFactory 
 	 * Creates a test action contribution factory.
 	 */
 	public TestActionContributionFactory() {
-		information = new ActionContributionInformation("test");
+		information = new ActionContributionInformation("test", Object.class);
 	}
 
 	public void initialise(Configuration configuration, ConfigurationParameters parameters) {

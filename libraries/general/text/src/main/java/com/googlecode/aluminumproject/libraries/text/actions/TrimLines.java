@@ -15,11 +15,14 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
+import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+
 /**
  * Trims each line of the body text of the action that it contributes to.
  *
  * @author levi_h
  */
+@ActionContributionInformation(parameterType = "com.googlecode.aluminumproject.writers.TrimWriter$TrimType")
 public class TrimLines extends AbstractTrim {
 	/**
 	 * Creates a <em>trim lines</em> action contribution.
