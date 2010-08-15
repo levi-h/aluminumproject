@@ -17,6 +17,8 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.libraries.Library;
 
+import java.lang.reflect.Type;
+
 /**
  * Provides information about an {@link ActionContribution action contribution}.
  *
@@ -25,13 +27,18 @@ import com.googlecode.aluminumproject.libraries.Library;
 public class ActionContributionInformation {
 	private String name;
 
+	private Type parameterType;
+
 	/**
 	 * Creates action contribution information.
 	 *
 	 * @param name the name of the action contribution
+	 * @param parameterType the type of the action contribution's parameter
 	 */
-	public ActionContributionInformation(String name) {
+	public ActionContributionInformation(String name, Type parameterType) {
 		this.name = name;
+
+		this.parameterType = parameterType;
 	}
 
 	/**
@@ -41,5 +48,14 @@ public class ActionContributionInformation {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Returns the type that the action contribution expects its parameter to have.
+	 *
+	 * @return the action contribution's parameter type
+	 */
+	public Type getParameterType() {
+		return parameterType;
 	}
 }

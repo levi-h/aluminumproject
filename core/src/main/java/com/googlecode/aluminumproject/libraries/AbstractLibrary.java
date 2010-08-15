@@ -166,7 +166,7 @@ public abstract class AbstractLibrary implements Library {
 				}
 			}, packageNames));
 		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find action contributions");
+			throw new ConfigurationException(exception, "can't find action contribution classes");
 		}
 
 		for (Class<? extends ActionContribution> actionContributionClass: actionContributionClasses) {

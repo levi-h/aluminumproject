@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
+import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
@@ -41,6 +42,7 @@ import java.util.Set;
  *
  * @author levi_h
  */
+@ActionContributionInformation(parameterType = "boolean")
 public class Mute implements ActionContribution {
 	/**
 	 * Creates a <em>mute</em> action contribution.
