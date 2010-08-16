@@ -54,7 +54,8 @@ public class TestTemplateElementFactory implements TemplateElementFactory {
 		return configuration;
 	}
 
-	public ActionElement createActionElement(String libraryUrl, String name, Map<String, ActionParameter> parameters,
+	public ActionElement createActionElement(
+			String libraryUrlAbbreviation, String name, Map<String, ActionParameter> parameters,
 			List<ActionContributionDescriptor> contributionDescriptors, Map<String, String> libraryUrlAbbreviations) {
 		return new TestActionElement();
 	}

@@ -137,9 +137,15 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		return actionInterceptors;
 	}
 
-	public ActionElement createActionElement(String libraryUrl, String name,
+	public ActionElement createActionElement(String libraryUrlAbbreviation, String name,
 			Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributions,
 			Map<String, String> libraryUrlAbbreviations) throws TemplateException {
+		if (!libraryUrlAbbreviations.containsKey(libraryUrlAbbreviation)) {
+			throw new TemplateException("unknown library URL abbreviation: '", libraryUrlAbbreviation, "'");
+		}
+
+		String libraryUrl = libraryUrlAbbreviations.get(libraryUrlAbbreviation);
+
 		logger.debug("creating action element, library URL: '", libraryUrl, "', name: '", name, "', ",
 			"parameters: ", parameters, ", contributions: ", contributions);
 
@@ -150,7 +156,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		logger.debug("found action factory for action with name '", name, "': ", actionFactory);
 
 		Map<ActionContributionFactory, ActionParameter> actionContributionFactories =
-			createActionContributionFactories(contributions);
+			createActionContributionFactories(contributions, libraryUrlAbbreviations);
 		logger.debug("created action contributions factories ",
 			"for action with name '", name, "': ", actionContributionFactories);
 
@@ -159,12 +165,19 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	}
 
 	private Map<ActionContributionFactory, ActionParameter> createActionContributionFactories(
-			List<ActionContributionDescriptor> descriptors) throws TemplateException {
+			List<ActionContributionDescriptor> descriptors,
+			Map<String, String> libraryUrlAbbreviations) throws TemplateException {
 		Map<ActionContributionFactory, ActionParameter> actionContributionFactories =
 			new LinkedHashMap<ActionContributionFactory, ActionParameter>();
 
 		for (ActionContributionDescriptor descriptor: descriptors) {
-			Library library = findLibrary(descriptor.getLibraryUrl());
+			String libraryUrlAbbreviation = descriptor.getLibraryUrlAbbreviation();
+
+			if (!libraryUrlAbbreviations.containsKey(libraryUrlAbbreviation)) {
+				throw new TemplateException("unknown library URL abbreviation: '", libraryUrlAbbreviation, "'");
+			}
+
+			Library library = findLibrary(libraryUrlAbbreviations.get(libraryUrlAbbreviation));
 			ActionContributionFactory actionContributionFactory =
 				findActionContributionFactory(library, descriptor.getName());
 
