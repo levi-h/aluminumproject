@@ -135,7 +135,8 @@ public class TemplateHandler extends DefaultHandler {
 			logger.debug("parameters for action '", actionName, "': ", parameters);
 			logger.debug("contributions for action '", actionName, "': ", contributions);
 
-			TemplateElement actionElement = createActionElement(uri, actionName, parameters, contributions);
+			TemplateElement actionElement = createActionElement(qName.contains(":") ? qName.split(":")[0] : "",
+				actionName, parameters, contributions);
 			logger.debug("created action element ", actionElement);
 
 			templateBuilder.addTemplateElement(actionElement);
@@ -149,16 +150,20 @@ public class TemplateHandler extends DefaultHandler {
 			String localName = attributes.getLocalName(i);
 			ActionParameter parameter = ParserUtilities.createParameter(attributes.getValue(i), configuration);
 
-			String uri = attributes.getURI(i);
+			String prefix = getPrefix(attributes.getQName(i));
 
-			if (uri.equals("")) {
+			if (prefix.equals("")) {
 				parameters.put(templateNameTranslator.translateActionParameterName(localName), parameter);
 			} else {
 				String actionContributionName = templateNameTranslator.translateActionContributionName(localName);
 
-				contributions.add(new ActionContributionDescriptor(uri, actionContributionName, parameter));
+				contributions.add(new ActionContributionDescriptor(prefix, actionContributionName, parameter));
 			}
 		}
+	}
+
+	private String getPrefix(String qName) {
+		return qName.contains(":") ? qName.split(":")[0] : "";
 	}
 
 	@Override
@@ -218,11 +223,11 @@ public class TemplateHandler extends DefaultHandler {
 		}
 	}
 
-	private TemplateElement createActionElement(String uri, String localName, Map<String, ActionParameter> parameters,
+	private TemplateElement createActionElement(String library, String name, Map<String, ActionParameter> parameters,
 			List<ActionContributionDescriptor> contributions) throws SAXException {
 		try {
 			return configuration.getTemplateElementFactory().createActionElement(
-				uri, localName, parameters, contributions, getLibraryUrlAbbreviations());
+				library, name, parameters, contributions, getLibraryUrlAbbreviations());
 		} catch (TemplateException exception) {
 			throw new SAXException("can't create action element", exception);
 		}

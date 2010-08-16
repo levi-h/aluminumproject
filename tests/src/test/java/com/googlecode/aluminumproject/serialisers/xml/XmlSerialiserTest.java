@@ -102,9 +102,9 @@ public class XmlSerialiserTest {
 		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
 		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test");
 
-		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test", "test", Collections.<String, ActionParameter>emptyMap(),
-			Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement("test", "test",
+			Collections.<String, ActionParameter>emptyMap(), Collections.<ActionContributionDescriptor>emptyList(),
+			libraryUrlAbbreviations));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<test:test xmlns:test=\"http://aluminumproject.googlecode.com/test\"/>");
@@ -115,9 +115,9 @@ public class XmlSerialiserTest {
 		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
 		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test");
 
-		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test", "test", Collections.<String, ActionParameter>emptyMap(),
-			Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement("test", "test",
+			Collections.<String, ActionParameter>emptyMap(), Collections.<ActionContributionDescriptor>emptyList(),
+			libraryUrlAbbreviations));
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createTextElement(
 			"text", Collections.<String, String>emptyMap()));
 		templateBuilder.restoreCurrentTemplateElement();
@@ -135,12 +135,12 @@ public class XmlSerialiserTest {
 		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
 		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test");
 
-		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test", "test", Collections.<String, ActionParameter>emptyMap(),
-			Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
-		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test", "test", Collections.<String, ActionParameter>emptyMap(),
-			Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement("test", "test",
+			Collections.<String, ActionParameter>emptyMap(), Collections.<ActionContributionDescriptor>emptyList(),
+			libraryUrlAbbreviations));
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement("test", "test",
+			Collections.<String, ActionParameter>emptyMap(), Collections.<ActionContributionDescriptor>emptyList(),
+			libraryUrlAbbreviations));
 		templateBuilder.restoreCurrentTemplateElement();
 		templateBuilder.restoreCurrentTemplateElement();
 
@@ -153,9 +153,9 @@ public class XmlSerialiserTest {
 		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
 		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test/test");
 
-		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test/test", "test", Collections.<String, ActionParameter>emptyMap(),
-			Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement("test", "test",
+			Collections.<String, ActionParameter>emptyMap(), Collections.<ActionContributionDescriptor>emptyList(),
+			libraryUrlAbbreviations));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<test:test xmlns:test=\"http://aluminumproject.googlecode.com/test/test\"/>");
@@ -169,9 +169,8 @@ public class XmlSerialiserTest {
 		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
 		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test");
 
-		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test", "test", parameters,
-			Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement("test", "test",
+			parameters, Collections.<ActionContributionDescriptor>emptyList(), libraryUrlAbbreviations));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals(
@@ -180,16 +179,15 @@ public class XmlSerialiserTest {
 
 	public void contributionsShouldResultInAttributes() {
 		List<ActionContributionDescriptor> contributions = new LinkedList<ActionContributionDescriptor>();
-		contributions.add(new ActionContributionDescriptor("http://aluminumproject.googlecode.com/core", "if",
+		contributions.add(new ActionContributionDescriptor("c", "if",
 			new ExpressionActionParameter(expressionFactory, "[proceed]", configuration.getConverterRegistry())));
 
 		Map<String, String> libraryUrlAbbreviations = new LinkedHashMap<String, String>();
 		libraryUrlAbbreviations.put("c", "http://aluminumproject.googlecode.com/core");
 		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test");
 
-		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test", "test", Collections.<String, ActionParameter>emptyMap(),
-			contributions, libraryUrlAbbreviations));
+		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement("test", "test",
+			Collections.<String, ActionParameter>emptyMap(), contributions, libraryUrlAbbreviations));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<test:test c:if=\"[proceed]\" " +
@@ -225,7 +223,7 @@ public class XmlSerialiserTest {
 		parameters.put("description", new ConstantActionParameter("test", configuration.getConverterRegistry()));
 
 		List<ActionContributionDescriptor> contributions = new LinkedList<ActionContributionDescriptor>();
-		contributions.add(new ActionContributionDescriptor("http://aluminumproject.googlecode.com/core", "if",
+		contributions.add(new ActionContributionDescriptor("C", "if",
 			new ExpressionActionParameter(expressionFactory, "[proceed]", configuration.getConverterRegistry())));
 
 		Map<String, String> libraryUrlAbbreviations = new LinkedHashMap<String, String>();
@@ -233,7 +231,7 @@ public class XmlSerialiserTest {
 		libraryUrlAbbreviations.put("TEST", "http://aluminumproject.googlecode.com/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			"http://aluminumproject.googlecode.com/test", "test", parameters, contributions, libraryUrlAbbreviations));
+			"TEST", "test", parameters, contributions, libraryUrlAbbreviations));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<TEST:TEST DESCRIPTION=\"test\" C:IF=\"[proceed]\"" +
