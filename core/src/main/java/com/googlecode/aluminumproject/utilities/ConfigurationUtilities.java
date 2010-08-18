@@ -15,18 +15,11 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
-import com.googlecode.aluminumproject.Logger;
-import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.utilities.finders.FieldFinder;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Contains utility methods that help when working with {@link Configuration configurations} and {@link
@@ -63,60 +56,4 @@ public class ConfigurationUtilities {
 
 		return library;
 	}
-
-	/**
-	 * Injects suitable values into all of an object's fields that are annotated with {@link Injected &#64;Injected}.
-	 *
-	 * @param injectable the object whose fields should be injected
-	 * @param valueProvider the object that determines which values should be injected into each field
-	 * @throws UtilityException when the fields can't be injected
-	 */
-	public static void injectFields(Object injectable, InjectedValueProvider valueProvider) throws UtilityException {
-		List<Field> fields = FieldFinder.find(new FieldFinder.FieldFilter() {
-			public boolean accepts(Field field) {
-				return !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(Injected.class);
-			}
-		}, injectable.getClass());
-
-		for (Field field: fields) {
-			Object valueToInject = valueProvider.getValueToInject(field);
-
-			logger.debug("injecting ", valueToInject, " into ", field, " of ", injectable);
-
-			if (!field.isAccessible()) {
-				try {
-					field.setAccessible(true);
-				} catch (SecurityException exception) {
-					throw new UtilityException("can't make field ",
-						field.getDeclaringClass().getSimpleName(), "#", field.getName(), " accessible");
-				}
-			}
-
-			try {
-				field.set(injectable, valueToInject);
-			} catch (IllegalArgumentException exception) {
-				throw new UtilityException(exception, "can't inject ", field);
-			} catch (IllegalAccessException exception) {
-				throw new UtilityException(exception, "may not inject ", field);
-			}
-		}
-	}
-
-	/**
-	 * Provides values for {@link #injectFields(Object, InjectedValueProvider) injected} fields.
-	 *
-	 * @author levi_h
-	 */
-	public static interface InjectedValueProvider {
-		/**
-		 * Determines which value should be injected into a certain field.
-		 *
-		 * @param field the injected field
-		 * @return the value that should be injected into the field (may be {@code null})
-		 * @throws UtilityException when no suitable value to inject can be found
-		 */
-		Object getValueToInject(Field field) throws UtilityException;
-	}
-
-	private final static Logger logger = Logger.get(ConfigurationUtilities.class);
 }
