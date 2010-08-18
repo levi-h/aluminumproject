@@ -24,15 +24,14 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
+import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -62,6 +61,8 @@ import java.util.Set;
 public class DefaultConverterRegistry implements ConverterRegistry {
 	private Configuration configuration;
 
+	private Injector injector;
+
 	private Set<Converter<?>> converters;
 
 	/** The logger to use. */
@@ -79,6 +80,9 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		this.configuration = configuration;
 
 		converters = new HashSet<Converter<?>>();
+
+		injector = new Injector();
+		injector.addValueProvider(new Injector.ClassBasedValueProvider(configuration));
 
 		Set<String> converterPackages = new HashSet<String>();
 
@@ -123,15 +127,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 
 	public void registerConverter(Converter<?> converter) throws ConverterException {
 		try {
-			ConfigurationUtilities.injectFields(converter, new ConfigurationUtilities.InjectedValueProvider() {
-				public Object getValueToInject(Field field) throws UtilityException {
-					if (field.getType() != Configuration.class) {
-						throw new UtilityException("only the current configuration can be injected into converters");
-					}
-
-					return configuration;
-				}
-			});
+			injector.inject(converter);
 
 			logger.debug("injected fields of converter");
 		} catch (UtilityException exception) {

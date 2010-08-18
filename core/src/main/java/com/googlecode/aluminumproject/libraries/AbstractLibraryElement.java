@@ -19,10 +19,7 @@ import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
-
-import java.lang.reflect.Field;
+import com.googlecode.aluminumproject.utilities.Injector;
 
 /**
  * Reduces the effort it takes to implement subinterfaces of {@link LibraryElement the library element interface}.
@@ -31,6 +28,8 @@ import java.lang.reflect.Field;
  */
 public abstract class AbstractLibraryElement implements LibraryElement {
 	private Configuration configuration;
+
+	private Injector injector;
 
 	private Library library;
 
@@ -46,7 +45,20 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 
 	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
 		this.configuration = configuration;
+
+		injector = new Injector();
+		injector.addValueProvider(new Injector.ClassBasedValueProvider(configuration));
+		injector.addValueProvider(new Injector.ClassBasedValueProvider(this));
+		addValueProviders(injector);
 	}
+
+	/**
+	 * Adds value providers to the injector that is used by the {@link #injectFields(Object) injectFields method}. The
+	 * method does nothing by default; subclasses are encouraged to override it if they have value providers to add.
+	 *
+	 * @param injector the injector to add value providers to
+	 */
+	protected void addValueProviders(Injector injector) {}
 
 	/**
 	 * Returns the configuration that this library element was initialised with.
@@ -72,50 +84,13 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 	 * <li>The current {@link Configuration configuration};
 	 * <li>This library element's type.
 	 * </ul>
-	 * If an annotated field with a different type is encountered, this method will throw an exception.
+	 * Subclasses may extend the list of supported types by overriding the {@link #addValueProviders(Injector)
+	 * addValueProviders method}.
 	 *
 	 * @param injectable the object whose fields should be injected
 	 * @throws LibraryException when the object's fields can't be injected
 	 */
 	protected void injectFields(Object injectable) throws LibraryException {
-		try {
-			ConfigurationUtilities.injectFields(injectable, new ConfigurationUtilities.InjectedValueProvider() {
-				public Object getValueToInject(Field field) throws UtilityException {
-					try {
-						return AbstractLibraryElement.this.getValueToInject(field);
-					} catch (LibraryException exception) {
-						throw new UtilityException(exception, "can't determine value to inject");
-					}
-				}
-			});
-		} catch (UtilityException exception) {
-			Throwable cause = exception.getCause();
-
-			throw (cause instanceof LibraryException)
-				? (LibraryException) cause : new LibraryException(exception, "can't inject fields");
-		}
-	}
-
-	/**
-	 * Determines which value should be injected into a certain field. This diagnosis can be based on the field's type,
-	 * one of its annotations, or some other characteristic of the field.
-	 *
-	 * @param field the field that is declared to be {@link Injected injected}
-	 * @return the value that should be injected into the field (may be {@code null})
-	 * @throws LibraryException when no value can be found to inject
-	 */
-	protected Object getValueToInject(Field field) throws LibraryException {
-		Object valueToInject;
-
-		if (field.getType() == Configuration.class) {
-			valueToInject = configuration;
-		} else if (getClass().isAssignableFrom(field.getType())) {
-			valueToInject = this;
-		} else {
-			throw new LibraryException("can't determine value to inject into field '", field.getName(), "'",
-				" that is annotated with @", Injected.class.getSimpleName());
-		}
-
-		return valueToInject;
+		injector.inject(injectable);
 	}
 }
