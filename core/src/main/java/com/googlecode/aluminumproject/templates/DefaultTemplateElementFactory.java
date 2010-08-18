@@ -137,17 +137,20 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		return actionInterceptors;
 	}
 
-	public ActionElement createActionElement(String libraryUrlAbbreviation, String name,
-			Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributions,
+	public ActionElement createActionElement(ActionDescriptor actionDescriptor,
+			Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributionDescriptors,
 			Map<String, String> libraryUrlAbbreviations) throws TemplateException {
+		String libraryUrlAbbreviation = actionDescriptor.getLibraryUrlAbbreviation();
+
 		if (!libraryUrlAbbreviations.containsKey(libraryUrlAbbreviation)) {
 			throw new TemplateException("unknown library URL abbreviation: '", libraryUrlAbbreviation, "'");
 		}
 
 		String libraryUrl = libraryUrlAbbreviations.get(libraryUrlAbbreviation);
+		String name = actionDescriptor.getName();
 
 		logger.debug("creating action element, library URL: '", libraryUrl, "', name: '", name, "', ",
-			"parameters: ", parameters, ", contributions: ", contributions);
+			"parameters: ", parameters, ", contributions: ", contributionDescriptors);
 
 		Library library = findLibrary(libraryUrl);
 		logger.debug("found library for URL '", libraryUrl, "': ", library);
@@ -156,7 +159,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		logger.debug("found action factory for action with name '", name, "': ", actionFactory);
 
 		Map<ActionContributionFactory, ActionParameter> actionContributionFactories =
-			createActionContributionFactories(contributions, libraryUrlAbbreviations);
+			createActionContributionFactories(contributionDescriptors, libraryUrlAbbreviations);
 		logger.debug("created action contributions factories ",
 			"for action with name '", name, "': ", actionContributionFactories);
 
@@ -165,12 +168,12 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	}
 
 	private Map<ActionContributionFactory, ActionParameter> createActionContributionFactories(
-			List<ActionContributionDescriptor> descriptors,
+			List<ActionContributionDescriptor> contributionDescriptors,
 			Map<String, String> libraryUrlAbbreviations) throws TemplateException {
 		Map<ActionContributionFactory, ActionParameter> actionContributionFactories =
 			new LinkedHashMap<ActionContributionFactory, ActionParameter>();
 
-		for (ActionContributionDescriptor descriptor: descriptors) {
+		for (ActionContributionDescriptor descriptor: contributionDescriptors) {
 			String libraryUrlAbbreviation = descriptor.getLibraryUrlAbbreviation();
 
 			if (!libraryUrlAbbreviations.containsKey(libraryUrlAbbreviation)) {

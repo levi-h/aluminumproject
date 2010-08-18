@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
@@ -66,10 +67,11 @@ public class ActionInstruction extends AbstractInstruction {
 		TemplateElement actionElement;
 
 		try {
-			String translatedName = context.getSettings().getTemplateNameTranslator().translateActionName(name);
+			ActionDescriptor actionDescriptor = new ActionDescriptor(namePrefix,
+				context.getSettings().getTemplateNameTranslator().translateActionName(name));
 
 			actionElement = templateElementFactory.createActionElement(
-				namePrefix, translatedName, actionParameters, contributionDescriptors, libraryUrlAbbreviations);
+				actionDescriptor, actionParameters, contributionDescriptors, libraryUrlAbbreviations);
 		} catch (TemplateException exception) {
 			throw new AluScriptException(exception, "can't create action element for action ", namePrefix, ".", name);
 		}
