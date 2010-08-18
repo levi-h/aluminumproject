@@ -57,7 +57,7 @@ public class TestTemplateElementFactory implements TemplateElementFactory {
 
 	public ActionElement createActionElement(ActionDescriptor actionDescriptor, Map<String, ActionParameter> parameters,
 			List<ActionContributionDescriptor> contributionDescriptors, Map<String, String> libraryUrlAbbreviations) {
-		return new TestActionElement();
+		return new TestActionElement(actionDescriptor);
 	}
 
 	public TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations) {

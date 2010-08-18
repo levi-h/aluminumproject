@@ -15,17 +15,16 @@
  */
 package com.googlecode.aluminumproject.serialisers.xml;
 
-import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
+import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -41,13 +40,11 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 
 	public void writeBeforeChildren(Template template,
 			ActionElement actionElement, ElementNameTranslator elementNameTranslator, PrintWriter writer) {
-		String actionName = actionElement.getFactory().getInformation().getName();
-		String translatedActionName = elementNameTranslator.translateActionName(actionName);
-
-		LibraryInformation actionLibraryInformation = actionElement.getFactory().getLibrary().getInformation();
+		ActionDescriptor actionDescriptor = actionElement.getDescriptor();
 
 		writer.print("<");
-		writer.print(getQualifiedName(actionElement, translatedActionName, actionLibraryInformation));
+		writer.print(getQualifiedName(actionDescriptor.getLibraryUrlAbbreviation(),
+			elementNameTranslator.translateActionName(actionDescriptor.getName())));
 
 		for (Map.Entry<String, ActionParameter> parameter: actionElement.getParameters().entrySet()) {
 			writer.print(" ");
@@ -57,16 +54,12 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 			writer.print("\"");
 		}
 
-		for (ActionContributionFactory contributionFactory: actionElement.getContributionFactories().keySet()) {
-			String contributionName = contributionFactory.getInformation().getName();
-			String translatedContributionName = elementNameTranslator.translateActionContributionName(contributionName);
-
-			LibraryInformation contributionLibraryInformation = contributionFactory.getLibrary().getInformation();
-
+		for (ActionContributionDescriptor contributionDescriptor: actionElement.getContributionDescriptors()) {
 			writer.print(" ");
-			writer.print(getQualifiedName(actionElement, translatedContributionName, contributionLibraryInformation));
+			writer.print(getQualifiedName(contributionDescriptor.getLibraryUrlAbbreviation(),
+				elementNameTranslator.translateActionContributionName(contributionDescriptor.getName())));
 			writer.print("=\"");
-			writer.print(actionElement.getContributionFactories().get(contributionFactory).getText());
+			writer.print(contributionDescriptor.getParameter().getText());
 			writer.print("\"");
 		}
 
@@ -102,35 +95,16 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 	public void writeAfterChildren(Template template,
 			ActionElement actionElement, ElementNameTranslator elementNameTranslator, PrintWriter writer) {
 		if (!template.getChildren(actionElement).isEmpty()) {
-			String actionName = actionElement.getFactory().getInformation().getName();
-			String translatedActionName = elementNameTranslator.translateActionName(actionName);
-
-			LibraryInformation actionLibraryInformation = actionElement.getFactory().getLibrary().getInformation();
+			ActionDescriptor actionDescriptor = actionElement.getDescriptor();
 
 			writer.print("</");
-			writer.print(getQualifiedName(actionElement, translatedActionName, actionLibraryInformation));
+			writer.print(getQualifiedName(actionDescriptor.getLibraryUrlAbbreviation(),
+				elementNameTranslator.translateActionName(actionDescriptor.getName())));
 			writer.print(">");
 		}
 	}
 
-	private String getQualifiedName(ActionElement actionElement, String name, LibraryInformation libraryInformation) {
-		String libraryUrlAbbreviation = null;
-
-		Map<String, String> libraryUrlAbbreviations = actionElement.getLibraryUrlAbbreviations();
-		Iterator<String> it = libraryUrlAbbreviations.keySet().iterator();
-
-		while ((libraryUrlAbbreviation == null) && it.hasNext()) {
-			String abbreviation = it.next();
-
-			String abbreviatedLibraryUrl = libraryUrlAbbreviations.get(abbreviation);
-
-			if (libraryInformation.getUrl().equals(abbreviatedLibraryUrl) ||
-					libraryInformation.getVersionedUrl().equals(abbreviatedLibraryUrl)) {
-				libraryUrlAbbreviation = abbreviation;
-			}
-		}
-
-		return ((libraryUrlAbbreviation == null) || libraryUrlAbbreviation.equals(""))
-			? name : String.format("%s:%s", libraryUrlAbbreviation, name);
+	private String getQualifiedName(String libraryUrlAbbreviation, String name) {
+		return (libraryUrlAbbreviation == null) ? name : String.format("%s:%s", libraryUrlAbbreviation, name);
 	}
 }

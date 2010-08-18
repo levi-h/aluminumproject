@@ -33,6 +33,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,9 +46,10 @@ import java.util.Set;
 public class DefaultActionElement extends AbstractTemplateElement implements ActionElement {
 	private Configuration configuration;
 
+	private ActionDescriptor actionDescriptor;
 	private ActionFactory actionFactory;
 	private Map<String, ActionParameter> parameters;
-	private Map<ActionContributionFactory, ActionParameter> actionContributionFactories;
+	private Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionFactories;
 
 	private List<ActionInterceptor> actionInterceptors;
 
@@ -55,6 +57,7 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	 * Creates a default action element.
 	 *
 	 * @param configuration the current configuration
+	 * @param actionDescriptor the descriptor of the action
 	 * @param actionFactory the factory that will create the action to execute
 	 * @param parameters the parameters for the action
 	 * @param actionContributionFactories the factories that will create the contributions for the action
@@ -62,13 +65,14 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	 * @param libraryUrlAbbreviations the action element's library URL abbreviations
 	 */
 	public DefaultActionElement(Configuration configuration,
-			ActionFactory actionFactory, Map<String, ActionParameter> parameters,
-			Map<ActionContributionFactory, ActionParameter> actionContributionFactories,
+			ActionDescriptor actionDescriptor, ActionFactory actionFactory, Map<String, ActionParameter> parameters,
+			Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionFactories,
 			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations) {
 		super(libraryUrlAbbreviations);
 
 		this.configuration = configuration;
 
+		this.actionDescriptor = actionDescriptor;
 		this.actionFactory = actionFactory;
 		this.parameters = parameters;
 		this.actionContributionFactories = actionContributionFactories;
@@ -76,16 +80,16 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		this.actionInterceptors = actionInterceptors;
 	}
 
-	public ActionFactory getFactory() {
-		return actionFactory;
+	public ActionDescriptor getDescriptor() {
+		return actionDescriptor;
 	}
 
 	public Map<String, ActionParameter> getParameters() {
 		return Collections.unmodifiableMap(parameters);
 	}
 
-	public Map<ActionContributionFactory, ActionParameter> getContributionFactories() {
-		return Collections.unmodifiableMap(actionContributionFactories);
+	public List<ActionContributionDescriptor> getContributionDescriptors() {
+		return new LinkedList<ActionContributionDescriptor>(actionContributionFactories.values());
 	}
 
 	public void process(Template template, TemplateContext templateContext, Context context, Writer writer)
@@ -97,9 +101,9 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		}
 
 		for (ActionContributionFactory actionContributionFactory: actionContributionFactories.keySet()) {
-			ActionParameter parameter = actionContributionFactories.get(actionContributionFactory);
+			ActionContributionDescriptor descriptor = actionContributionFactories.get(actionContributionFactory);
 
-			actionContext.addActionContribution(actionContributionFactory, parameter);
+			actionContext.addActionContribution(actionContributionFactory, descriptor.getParameter());
 		}
 
 		actionContext.addInterceptor(new ContributionInterceptor());

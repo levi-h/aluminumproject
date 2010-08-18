@@ -46,7 +46,7 @@ public class ActionContributionDescriptor {
 	 *
 	 * @return the URL abbreviation of the action contribution's library
 	 */
-	String getLibraryUrlAbbreviation() {
+	public String getLibraryUrlAbbreviation() {
 		return libraryUrlAbbreviation;
 	}
 
@@ -55,7 +55,7 @@ public class ActionContributionDescriptor {
 	 *
 	 * @return the action contribution's name
 	 */
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
