@@ -16,16 +16,16 @@
 package com.googlecode.aluminumproject.templates.test;
 
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.test.actions.TestActionFactory;
+import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateContext;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,29 +34,38 @@ import java.util.Map;
  * @author levi_h
  */
 public class TestActionElement implements ActionElement {
-	private ActionFactory factory;
+	private ActionDescriptor descriptor;
+
+	/**
+	 * Creates a test action element with a default descriptor.
+	 */
+	public TestActionElement() {
+		this(new ActionDescriptor("test", "test"));
+	}
 
 	/**
 	 * Creates a test action element.
+	 *
+	 * @param descriptor a descriptor of the action
 	 */
-	public TestActionElement() {
-		factory = new TestActionFactory();
+	public TestActionElement(ActionDescriptor descriptor) {
+		this.descriptor = descriptor;
 	}
 
 	public Map<String, String> getLibraryUrlAbbreviations() {
 		return Collections.emptyMap();
 	}
 
-	public ActionFactory getFactory() {
-		return factory;
+	public ActionDescriptor getDescriptor() {
+		return descriptor;
 	}
 
 	public Map<String, ActionParameter> getParameters() {
 		return Collections.emptyMap();
 	}
 
-	public Map<ActionContributionFactory, ActionParameter> getContributionFactories() {
-		return Collections.emptyMap();
+	public List<ActionContributionDescriptor> getContributionDescriptors() {
+		return Collections.emptyList();
 	}
 
 	public void process(Template template, TemplateContext templateContext, Context context, Writer writer) {}
