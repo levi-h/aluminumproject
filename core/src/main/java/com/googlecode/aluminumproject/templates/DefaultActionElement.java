@@ -29,6 +29,8 @@ import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionOptions;
+import com.googlecode.aluminumproject.utilities.Injector;
+import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
@@ -106,8 +108,8 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 			actionContext.addActionContribution(actionContributionFactory, descriptor.getParameter());
 		}
 
-		actionContext.addInterceptor(new ContributionInterceptor());
-		actionContext.addInterceptor(new CreationInterceptor(template, templateContext));
+		actionContext.addInterceptor(new ContributionInterceptor(actionContributionFactories));
+		actionContext.addInterceptor(new CreationInterceptor(actionDescriptor, template, templateContext));
 		actionContext.addInterceptor(new ExecutionInterceptor(templateContext));
 
 		for (ActionInterceptor actionInterceptor: actionInterceptors) {
@@ -126,9 +128,14 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	}
 
 	private static class ContributionInterceptor implements ActionInterceptor {
+		private Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionDescriptors;
+
 		private final Logger logger;
 
-		public ContributionInterceptor() {
+		public ContributionInterceptor(
+				Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionDescriptors) {
+			this.actionContributionDescriptors = actionContributionDescriptors;
+
 			logger = Logger.get(getClass());
 		}
 
@@ -151,7 +158,18 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 					throw new InterceptionException(exception, "can't create action contribution");
 				}
 
-				if (actionContribution.canBeMadeTo(actionContext.getActionFactory())) {
+				ActionFactory actionFactory = actionContext.getActionFactory();
+
+				if (actionContribution.canBeMadeTo(actionFactory)) {
+					try {
+						Injector injector = new Injector();
+						injector.addValueProvider(new Injector.ClassBasedValueProvider(
+							actionContributionDescriptors.get(actionContributionFactory)));
+						injector.inject(actionContribution);
+					} catch (UtilityException exception) {
+						throw new InterceptionException(exception, "can't inject action contribution");
+					}
+
 					ActionParameter parameter = actionContributionFactories.get(actionContributionFactory);
 
 					logger.debug("making action contribution ", actionContribution, " with parameter ", parameter);
@@ -166,7 +184,7 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 					}
 				} else {
 					throw new InterceptionException("action contribution ", actionContribution, " can't be made to",
-						" action '", actionContext.getActionFactory().getInformation().getName(), "'");
+						" action '", actionFactory.getInformation().getName(), "'");
 				}
 			}
 
@@ -177,12 +195,17 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	}
 
 	private static class CreationInterceptor implements ActionInterceptor {
+		private ActionDescriptor actionDescriptor;
+
 		private Template template;
 		private TemplateContext templateContext;
 
 		private final Logger logger;
 
-		public CreationInterceptor(Template template, TemplateContext templateContext) {
+		public CreationInterceptor(ActionDescriptor actionDescriptor,
+				Template template, TemplateContext templateContext) {
+			this.actionDescriptor = actionDescriptor;
+
 			this.template = template;
 			this.templateContext = templateContext;
 
@@ -205,6 +228,14 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 					action = actionFactory.create(actionContext.getParameters(), actionContext.getContext());
 				} catch (ActionException exception) {
 					throw new InterceptionException(exception, "can't create action");
+				}
+
+				try {
+					Injector injector = new Injector();
+					injector.addValueProvider(new Injector.ClassBasedValueProvider(actionDescriptor));
+					injector.inject(action);
+				} catch (UtilityException exception) {
+					throw new InterceptionException(exception, "can't inject action");
 				}
 
 				action.setParent(templateContext.getCurrentAction());
