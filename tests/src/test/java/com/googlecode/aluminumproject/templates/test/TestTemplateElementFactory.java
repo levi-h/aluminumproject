@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.ExpressionElement;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
@@ -54,8 +55,7 @@ public class TestTemplateElementFactory implements TemplateElementFactory {
 		return configuration;
 	}
 
-	public ActionElement createActionElement(
-			String libraryUrlAbbreviation, String name, Map<String, ActionParameter> parameters,
+	public ActionElement createActionElement(ActionDescriptor actionDescriptor, Map<String, ActionParameter> parameters,
 			List<ActionContributionDescriptor> contributionDescriptors, Map<String, String> libraryUrlAbbreviations) {
 		return new TestActionElement();
 	}
