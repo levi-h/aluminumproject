@@ -188,6 +188,15 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		return information;
 	}
 
+	/**
+	 * Returns the action class that will be instantiated.
+	 *
+	 * @return this default action factory's action class
+	 */
+	public Class<? extends Action> getActionClass() {
+		return actionClass;
+	}
+
 	public Action create(Map<String, ActionParameter> parameters, Context context) throws ActionException {
 		Action action;
 
