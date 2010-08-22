@@ -52,6 +52,16 @@ public class SplitterTest {
 		assert tokens.get(3).equals(new Token("d", "", null));
 	}
 
+	@Test(dependsOnMethods = "splittingWithMultipleSeparatorPatternsShouldSeparateTokens")
+	public void contiguousSeparatorsShouldResultInEmptyTokens() {
+		List<Token> tokens = split(new Splitter(Arrays.asList("\\(", ": ?", "\\)")), "(a: )");
+		assert tokens.size() == 4: tokens.size();
+		assert tokens.get(0).equals(new Token("", "(", "\\("));
+		assert tokens.get(1).equals(new Token("a", ": ", ": ?"));
+		assert tokens.get(2).equals(new Token("", ")", "\\)"));
+		assert tokens.get(3).equals(new Token("", "", null));
+	}
+
 	public void longestSeparatorShouldWinWhenMultipleSeparatorPatternsMatch() {
 		List<Token> tokens = split(new Splitter(Arrays.asList(" ", "  ")), "a  b");
 		assert tokens.size() == 2;

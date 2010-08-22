@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -105,15 +106,18 @@ public class Splitter {
 		StringBuilder textBuffer = new StringBuilder();
 		StringBuilder matchTextBuffer = new StringBuilder();
 
+		fillBuffers(text, textBuffer, matchTextBuffer);
+
+		processTokens(textBuffer, findMatches(matchTextBuffer), tokenProcessor);
+	}
+
+	private void fillBuffers(
+			String text, StringBuilder textBuffer, StringBuilder matchTextBuffer) throws UtilityException {
 		boolean escaping = false;
 
 		QuotationCharacters quotationCharacters = null;
 
-		List<Match> previousMatches = null;
-
-		for (int i = 1; i <= text.length(); i++) {
-			char character = text.charAt(i - 1);
-
+		for (char character: text.toCharArray()) {
 			if (escaping) {
 				textBuffer.append(character);
 				matchTextBuffer.append('\0');
@@ -121,49 +125,23 @@ public class Splitter {
 				escaping = false;
 			} else if (character == escapeCharacter) {
 				escaping = true;
-			} else {
-				if (quotationCharacters == null) {
-					quotationCharacters = findQuotationCharacters(character);
+			} else if (quotationCharacters == null) {
+				quotationCharacters = findQuotationCharacters(character);
 
-					if ((quotationCharacters == null) || quotationCharacters.keep) {
-						textBuffer.append(character);
-						matchTextBuffer.append((quotationCharacters == null) ? character : '\0');
-					}
-				} else if (character == quotationCharacters.closingCharacter) {
-					if (quotationCharacters.keep) {
-						textBuffer.append(character);
-						matchTextBuffer.append('\0');
-					}
-
-					quotationCharacters = null;
-				} else {
+				if ((quotationCharacters == null) || quotationCharacters.keep) {
+					textBuffer.append(character);
+					matchTextBuffer.append((quotationCharacters == null) ? character : '\0');
+				}
+			} else if (character == quotationCharacters.closingCharacter) {
+				if (quotationCharacters.keep) {
 					textBuffer.append(character);
 					matchTextBuffer.append('\0');
 				}
-			}
 
-			if (!escaping && (quotationCharacters == null)) {
-				List<Match> matches = findMatches(textBuffer, matchTextBuffer);
-
-				Match match = null;
-
-				if (matches.isEmpty() && (previousMatches != null) && !previousMatches.isEmpty()) {
-					match = findLongestMatch(previousMatches);
-
-					textBuffer.delete(0, match.token.length() + match.separator.length());
-					matchTextBuffer.delete(0, match.token.length() + match.separator.length());
-				} else if (!matches.isEmpty() && (i == text.length())) {
-					match = findLongestMatch(matches);
-
-					textBuffer.delete(0, textBuffer.length());
-					matchTextBuffer.delete(0, matchTextBuffer.length());
-				}
-
-				if (match != null) {
-					tokenProcessor.process(match.token, match.separator, match.separatorPattern);
-				}
-
-				previousMatches = matches;
+				quotationCharacters = null;
+			} else {
+				textBuffer.append(character);
+				matchTextBuffer.append('\0');
 			}
 		}
 
@@ -171,8 +149,6 @@ public class Splitter {
 			throw new UtilityException("escape character ", escapeCharacter, " does not escape anything");
 		} else if (quotationCharacters != null) {
 			throw new UtilityException("quotation character ", quotationCharacters.openingCharacter, " is not closed");
-		} else {
-			tokenProcessor.process(textBuffer.toString(), "", null);
 		}
 	}
 
@@ -192,54 +168,80 @@ public class Splitter {
 		return quotationCharacters;
 	}
 
-	private List<Match> findMatches(CharSequence text, CharSequence matchText) {
+	private List<Match> findMatches(StringBuilder buffer) {
 		List<Match> matches = new LinkedList<Match>();
 
 		for (Pattern separatorPattern: separatorPatterns) {
+			Matcher matcher = separatorPattern.matcher(buffer);
 			int i = 0;
-			Match match = null;
 
-			while ((i < matchText.length()) && (match == null)) {
-				CharSequence separator = matchText.subSequence(i, matchText.length());
+			while ((i < buffer.length()) && matcher.find(i)) {
+				matches.add(new Match(matcher.start(), matcher.end(), separatorPattern.pattern()));
 
-				if (separatorPattern.matcher(separator).matches()) {
-					String token = text.subSequence(0, i).toString();
-
-					match = new Match(token, separator.toString(), separatorPattern.pattern());
-				}
-
-				i++;
-			}
-
-			if (match != null) {
-				matches.add(match);
+				i = matcher.end();
 			}
 		}
 
 		return matches;
 	}
 
-	private Match findLongestMatch(List<Match> matches) {
-		Match longestMatch = null;
+	private void processTokens(StringBuilder buffer, List<Match> matches, TokenProcessor tokenProcessor) {
+		Match match;
+		int offset = 0;
 
-		for (Match match: matches) {
-			if ((longestMatch == null) || (match.separator.length() > longestMatch.separator.length())) {
-				longestMatch = match;
+		do {
+			match = findMatch(matches, offset);
+
+			String token;
+			String separator;
+			String separatorPattern;
+
+			if (match == null) {
+				token = buffer.substring(offset, buffer.length());
+				separator = "";
+				separatorPattern = null;
+			} else {
+				token = buffer.substring(offset, match.startIndex);
+				separator = buffer.substring(match.startIndex, match.endIndex);
+				separatorPattern = match.separatorPattern;
+
+				offset = match.endIndex;
+			}
+
+			tokenProcessor.process(token, separator, separatorPattern);
+		} while (match != null);
+	}
+
+	private Match findMatch(List<Match> matches, int offset) {
+		Match match = null;
+
+		for (Match possibleMatch: matches) {
+			if ((possibleMatch.startIndex >= offset) &&
+					((match == null) || possibleMatch.isSoonerThan(match) || possibleMatch.isLongerThan(match))) {
+				match = possibleMatch;
 			}
 		}
 
-		return longestMatch;
+		return match;
 	}
 
 	private static class Match {
-		private final String token;
-		private final String separator;
+		private final int startIndex;
+		private final int endIndex;
 		private final String separatorPattern;
 
-		public Match(String token, String separator, String separatorPattern) {
-			this.token = token;
-			this.separator = separator;
+		public Match(int startIndex, int endIndex, String separatorPattern) {
+			this.startIndex = startIndex;
+			this.endIndex = endIndex;
 			this.separatorPattern = separatorPattern;
+		}
+
+		public boolean isSoonerThan(Match match) {
+			return startIndex < match.startIndex;
+		}
+
+		public boolean isLongerThan(Match match) {
+			return (startIndex == match.startIndex) && (endIndex > match.endIndex);
 		}
 	}
 
