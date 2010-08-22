@@ -1,0 +1,140 @@
+/*
+ * Copyright 2009-2010 Levi Hoogenberg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+allprojects {
+	group = 'com.googlecode.aluminumproject'
+	version = '0.6'
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+
+	configurations {
+		distribution
+		apiDocs.extendsFrom distribution
+		compile.extendsFrom apiDocs
+	}
+
+	repositories {
+		mavenCentral()
+
+		mavenRepo(urls: 'http://repository.jboss.org/maven2/')
+	}
+
+	if (name != 'aluminum-tests') {
+		task createSources(type: Zip, visible: false) {
+			destinationDir = project.distsDir
+
+			classifier = 'src'
+
+			sourceSets.main.java.srcDirs.each {srcDir ->
+				from srcDir
+			}
+		}
+
+		assemble.dependsOn << 'createSources'
+
+		test.enabled = false
+	}
+
+	rootProject.evaluationDependsOn name
+}
+
+task createApiDocs(type: Javadoc, visible: false)  {
+	destinationDir = new File(project.buildDir, 'docs/api')
+
+	source subprojects.collect {subproject ->
+		subproject.sourceSets.main.java
+	}
+	classpath = files(subprojects.collect {subproject ->
+		subproject.configurations.apiDocs.resolve()
+	})
+
+	options.links = ['http://java.sun.com/javase/6/docs/api/']
+
+	subprojects.each {subproject ->
+		if (subproject.hasProperty('apiDocUrls')) {
+			options.links += subproject.property('apiDocUrls')
+		}
+	}
+}
+
+task createDistribution(type: Zip, dependsOn: [createApiDocs] + subprojects*.build) {
+	destinationDir = new File(rootProject.buildDir, 'distributions')
+
+	baseName = rootProject.name
+	version = rootProject.version
+
+	from(rootDir) {
+		include 'LICENSE'
+		include 'README'
+	}
+
+	from(buildDir) {
+		include 'docs/**'
+	}
+
+	Set libraries = [] as Set
+
+	subprojects.each {subproject ->
+		if (subproject.jar.enabled) {
+			from(subproject.distsDir) {
+				into 'src'
+				include '*-src.zip'
+			}
+
+			from(subproject.libsDir) {
+				into 'lib'
+				include '*.jar'
+			}
+
+			subproject.configurations.distribution.resolve().each {library ->
+				if (libraries.add(library.name)) {
+					from(library.parentFile.path) {
+						into 'lib'
+						include library.name
+					}
+				}
+			}
+
+			from(subproject.projectDir) {
+				into 'lib'
+				include '*.LICENSE'
+				include '*.NOTICE'
+			}
+
+			File distributionDir = file("${subproject.projectDir}/src/distribution")
+
+			if (distributionDir.exists()) {
+				from(distributionDir) {
+					include '**'
+				}
+			}
+		}
+	}
+}
+
+task clean(type: Delete) {
+	delete = rootProject.buildDir
+}
+
+task createWrapper(type: Wrapper) {
+	gradleVersion = '0.9-preview-3'
+}
