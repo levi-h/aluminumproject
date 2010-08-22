@@ -19,6 +19,7 @@ import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.utilities.Injector;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -39,9 +40,9 @@ public class AbstractLibraryElementTest {
 
 	public void injectingFieldsShouldIncludeConfiguration() {
 		InjectableWithInjectedConfiguration injectable = new InjectableWithInjectedConfiguration();
-		assert injectable.configuration == null;
 
 		libraryElement.injectFields(injectable);
+
 		assert injectable.configuration != null;
 	}
 
@@ -51,15 +52,33 @@ public class AbstractLibraryElementTest {
 
 	public void injectingFieldsShouldIncludeLibraryElement() {
 		InjectableWithInjectedLibraryElement injectable = new InjectableWithInjectedLibraryElement();
-		assert injectable.libraryElement == null;
 
 		libraryElement.injectFields(injectable);
-		assert injectable.libraryElement != null;
+
+		assert injectable.libraryElement == libraryElement;
 	}
 
 	private static class InjectableWithInjectedLibraryElement {
-		private @Injected DefaultLibraryElement libraryElement;
+		private @Injected LibraryElement libraryElement;
 	}
 
-	private static class DefaultLibraryElement extends AbstractLibraryElement {}
+	public void injectingFieldsShouldIncludeCustomValue() {
+		InjectableWithBoolean injectable = new InjectableWithBoolean();
+
+		libraryElement.injectFields(injectable);
+
+		assert injectable.injected != null;
+		assert injectable.injected.booleanValue();
+	}
+
+	private static class InjectableWithBoolean {
+		private @Injected Boolean injected;
+	}
+
+	private static class DefaultLibraryElement extends AbstractLibraryElement {
+		@Override
+		protected void addValueProviders(Injector injector) {
+			injector.addValueProvider(new Injector.ClassBasedValueProvider(true));
+		}
+	}
 }

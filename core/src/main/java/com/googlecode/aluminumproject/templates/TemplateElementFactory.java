@@ -32,15 +32,14 @@ public interface TemplateElementFactory extends ConfigurationElement {
 	/**
 	 * Creates an action element.
 	 *
-	 * @param libraryUrl the URL of the library that contains the action
-	 * @param name the name of the action
+	 * @param actionDescriptor the action descriptor
 	 * @param parameters the action parameters
 	 * @param contributionDescriptors the action contribution descriptors
 	 * @param libraryUrlAbbreviations the action element's library URL abbreviations
 	 * @return the new action element
 	 * @throws TemplateException when the action element can't be created
 	 */
-	ActionElement createActionElement(String libraryUrl, String name,
+	ActionElement createActionElement(ActionDescriptor actionDescriptor,
 		Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributionDescriptors,
 		Map<String, String> libraryUrlAbbreviations) throws TemplateException;
 

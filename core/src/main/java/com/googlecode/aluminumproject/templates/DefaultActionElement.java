@@ -29,10 +29,13 @@ import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionOptions;
+import com.googlecode.aluminumproject.utilities.Injector;
+import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,9 +48,10 @@ import java.util.Set;
 public class DefaultActionElement extends AbstractTemplateElement implements ActionElement {
 	private Configuration configuration;
 
+	private ActionDescriptor actionDescriptor;
 	private ActionFactory actionFactory;
 	private Map<String, ActionParameter> parameters;
-	private Map<ActionContributionFactory, ActionParameter> actionContributionFactories;
+	private Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionFactories;
 
 	private List<ActionInterceptor> actionInterceptors;
 
@@ -55,6 +59,7 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	 * Creates a default action element.
 	 *
 	 * @param configuration the current configuration
+	 * @param actionDescriptor the descriptor of the action
 	 * @param actionFactory the factory that will create the action to execute
 	 * @param parameters the parameters for the action
 	 * @param actionContributionFactories the factories that will create the contributions for the action
@@ -62,13 +67,14 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	 * @param libraryUrlAbbreviations the action element's library URL abbreviations
 	 */
 	public DefaultActionElement(Configuration configuration,
-			ActionFactory actionFactory, Map<String, ActionParameter> parameters,
-			Map<ActionContributionFactory, ActionParameter> actionContributionFactories,
+			ActionDescriptor actionDescriptor, ActionFactory actionFactory, Map<String, ActionParameter> parameters,
+			Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionFactories,
 			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations) {
 		super(libraryUrlAbbreviations);
 
 		this.configuration = configuration;
 
+		this.actionDescriptor = actionDescriptor;
 		this.actionFactory = actionFactory;
 		this.parameters = parameters;
 		this.actionContributionFactories = actionContributionFactories;
@@ -76,16 +82,16 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		this.actionInterceptors = actionInterceptors;
 	}
 
-	public ActionFactory getFactory() {
-		return actionFactory;
+	public ActionDescriptor getDescriptor() {
+		return actionDescriptor;
 	}
 
 	public Map<String, ActionParameter> getParameters() {
 		return Collections.unmodifiableMap(parameters);
 	}
 
-	public Map<ActionContributionFactory, ActionParameter> getContributionFactories() {
-		return Collections.unmodifiableMap(actionContributionFactories);
+	public List<ActionContributionDescriptor> getContributionDescriptors() {
+		return new LinkedList<ActionContributionDescriptor>(actionContributionFactories.values());
 	}
 
 	public void process(Template template, TemplateContext templateContext, Context context, Writer writer)
@@ -97,13 +103,13 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		}
 
 		for (ActionContributionFactory actionContributionFactory: actionContributionFactories.keySet()) {
-			ActionParameter parameter = actionContributionFactories.get(actionContributionFactory);
+			ActionContributionDescriptor descriptor = actionContributionFactories.get(actionContributionFactory);
 
-			actionContext.addActionContribution(actionContributionFactory, parameter);
+			actionContext.addActionContribution(actionContributionFactory, descriptor.getParameter());
 		}
 
-		actionContext.addInterceptor(new ContributionInterceptor());
-		actionContext.addInterceptor(new CreationInterceptor(template, templateContext));
+		actionContext.addInterceptor(new ContributionInterceptor(actionContributionFactories));
+		actionContext.addInterceptor(new CreationInterceptor(actionDescriptor, template, templateContext));
 		actionContext.addInterceptor(new ExecutionInterceptor(templateContext));
 
 		for (ActionInterceptor actionInterceptor: actionInterceptors) {
@@ -122,9 +128,14 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	}
 
 	private static class ContributionInterceptor implements ActionInterceptor {
+		private Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionDescriptors;
+
 		private final Logger logger;
 
-		public ContributionInterceptor() {
+		public ContributionInterceptor(
+				Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionDescriptors) {
+			this.actionContributionDescriptors = actionContributionDescriptors;
+
 			logger = Logger.get(getClass());
 		}
 
@@ -147,7 +158,18 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 					throw new InterceptionException(exception, "can't create action contribution");
 				}
 
-				if (actionContribution.canBeMadeTo(actionContext.getActionFactory())) {
+				ActionFactory actionFactory = actionContext.getActionFactory();
+
+				if (actionContribution.canBeMadeTo(actionFactory)) {
+					try {
+						Injector injector = new Injector();
+						injector.addValueProvider(new Injector.ClassBasedValueProvider(
+							actionContributionDescriptors.get(actionContributionFactory)));
+						injector.inject(actionContribution);
+					} catch (UtilityException exception) {
+						throw new InterceptionException(exception, "can't inject action contribution");
+					}
+
 					ActionParameter parameter = actionContributionFactories.get(actionContributionFactory);
 
 					logger.debug("making action contribution ", actionContribution, " with parameter ", parameter);
@@ -162,7 +184,7 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 					}
 				} else {
 					throw new InterceptionException("action contribution ", actionContribution, " can't be made to",
-						" action '", actionContext.getActionFactory().getInformation().getName(), "'");
+						" action '", actionFactory.getInformation().getName(), "'");
 				}
 			}
 
@@ -173,12 +195,17 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	}
 
 	private static class CreationInterceptor implements ActionInterceptor {
+		private ActionDescriptor actionDescriptor;
+
 		private Template template;
 		private TemplateContext templateContext;
 
 		private final Logger logger;
 
-		public CreationInterceptor(Template template, TemplateContext templateContext) {
+		public CreationInterceptor(ActionDescriptor actionDescriptor,
+				Template template, TemplateContext templateContext) {
+			this.actionDescriptor = actionDescriptor;
+
 			this.template = template;
 			this.templateContext = templateContext;
 
@@ -201,6 +228,14 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 					action = actionFactory.create(actionContext.getParameters(), actionContext.getContext());
 				} catch (ActionException exception) {
 					throw new InterceptionException(exception, "can't create action");
+				}
+
+				try {
+					Injector injector = new Injector();
+					injector.addValueProvider(new Injector.ClassBasedValueProvider(actionDescriptor));
+					injector.inject(action);
+				} catch (UtilityException exception) {
+					throw new InterceptionException(exception, "can't inject action");
 				}
 
 				action.setParent(templateContext.getCurrentAction());

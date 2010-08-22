@@ -25,6 +25,7 @@ import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.test.TestInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.LineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.test.TestAluScriptContext;
+import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 
@@ -93,12 +94,23 @@ public class InstructionLineParserTest {
 	public void parsingActionLineWithParameterThatContainsDotShouldAddContributionToActionElement() {
 		lineParser.parseLine("@test.test(test.test: [test])", context);
 
-		Map<ActionContributionFactory, ActionParameter> contributionFactories =
-			((ActionElement) context.getTemplateElements().get(0)).getContributionFactories();
-		assert contributionFactories != null;
-		assert contributionFactories.size() == 1;
-		assert contributionFactories.keySet().iterator().next() instanceof TestActionContributionFactory;
-		assert contributionFactories.values().iterator().next() instanceof ExpressionActionParameter;
+		List<ActionContributionDescriptor> contributionDescriptors =
+			((ActionElement) context.getTemplateElements().get(0)).getContributionDescriptors();
+		assert contributionDescriptors != null;
+		assert contributionDescriptors.size() == 1;
+
+		ActionContributionDescriptor contributionDescriptor = contributionDescriptors.get(0);
+		assert contributionDescriptor != null;
+
+		String contributionLibraryUrlAbbreviation = contributionDescriptor.getLibraryUrlAbbreviation();
+		assert contributionLibraryUrlAbbreviation != null;
+		assert contributionLibraryUrlAbbreviation.equals("test");
+
+		String contributionName = contributionDescriptor.getName();
+		assert contributionName != null;
+		assert contributionName.equals("test");
+
+		assert contributionDescriptor.getParameter() instanceof ExpressionActionParameter;
 	}
 
 	@Test(expectedExceptions = AluScriptException.class)

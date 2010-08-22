@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
@@ -58,20 +59,19 @@ public class ActionInstruction extends AbstractInstruction {
 
 		Map<String, String> libraryUrlAbbreviations = context.getLibraryUrlAbbreviations();
 
-		String libraryUrl = getLibraryUrl(namePrefix, libraryUrlAbbreviations);
-
 		Map<String, ActionParameter> actionParameters = new LinkedHashMap<String, ActionParameter>();
 		List<ActionContributionDescriptor> contributionDescriptors = new LinkedList<ActionContributionDescriptor>();
 
-		splitParameters(parameters, actionParameters, contributionDescriptors, context, libraryUrlAbbreviations);
+		splitParameters(parameters, actionParameters, contributionDescriptors, context);
 
 		TemplateElement actionElement;
 
 		try {
-			String translatedName = context.getSettings().getTemplateNameTranslator().translateActionName(name);
+			ActionDescriptor actionDescriptor = new ActionDescriptor(namePrefix,
+				context.getSettings().getTemplateNameTranslator().translateActionName(name));
 
 			actionElement = templateElementFactory.createActionElement(
-				libraryUrl, translatedName, actionParameters, contributionDescriptors, libraryUrlAbbreviations);
+				actionDescriptor, actionParameters, contributionDescriptors, libraryUrlAbbreviations);
 		} catch (TemplateException exception) {
 			throw new AluScriptException(exception, "can't create action element for action ", namePrefix, ".", name);
 		}
@@ -79,18 +79,9 @@ public class ActionInstruction extends AbstractInstruction {
 		context.addTemplateElement(actionElement);
 	}
 
-	private String getLibraryUrl(String abbreviation, Map<String, String> libraryUrlAbbreviations) {
-		if (!libraryUrlAbbreviations.containsKey(abbreviation)) {
-			throw new AluScriptException("can't find library URL with abbreviation '", abbreviation, "' ",
-				"(available library URL abbreviations: ", libraryUrlAbbreviations, ")");
-		}
-
-		return libraryUrlAbbreviations.get(abbreviation);
-	}
-
 	private void splitParameters(Map<String, String> parameters,
 			Map<String, ActionParameter> actionParameters, List<ActionContributionDescriptor> contributionDescriptors,
-			AluScriptContext context, Map<String, String> libraryUrlAbbreviations) throws AluScriptException {
+			AluScriptContext context) throws AluScriptException {
 		TemplateNameTranslator templateNameTranslator = context.getSettings().getTemplateNameTranslator();
 
 		for (String name: parameters.keySet()) {
@@ -100,12 +91,10 @@ public class ActionInstruction extends AbstractInstruction {
 			if (name.contains(".")) {
 				String[] nameAndPrefix = name.split("\\.");
 
-				String libraryUrl = getLibraryUrl(nameAndPrefix[0], libraryUrlAbbreviations);
-
 				String translatedName = templateNameTranslator.translateActionContributionName(nameAndPrefix[1]);
 
 				contributionDescriptors.add(
-					new ActionContributionDescriptor(libraryUrl, translatedName, actionParameter));
+					new ActionContributionDescriptor(nameAndPrefix[0], translatedName, actionParameter));
 			} else {
 				actionParameters.put(templateNameTranslator.translateActionParameterName(name), actionParameter);
 			}
