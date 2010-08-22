@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.test.TestInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.test.TestAluScriptContext;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,14 +69,14 @@ public class AluScriptContextTest {
 		"initialNestingLevelShouldBeZero"
 	})
 	public void addingActionElementShouldIncrementNestingLevel() {
-		String libraryUrl = "http://aluminumproject.googlecode.com/test";
+		ActionDescriptor actionDescriptor = new ActionDescriptor("test", "test");
 		Map<String, ActionParameter> parameters = Collections.<String, ActionParameter>emptyMap();
 		List<ActionContributionDescriptor> contributionDescriptors =
 			Collections.<ActionContributionDescriptor>emptyList();
 
-		context.addLibraryUrlAbbreviation("test", libraryUrl);
+		context.addLibraryUrlAbbreviation("test", "http://aluminumproject.googlecode.com/test");
 		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createActionElement(
-			libraryUrl, "test", parameters, contributionDescriptors, context.getLibraryUrlAbbreviations()));
+			actionDescriptor, parameters, contributionDescriptors, context.getLibraryUrlAbbreviations()));
 
 		assert context.getLevel() == 1;
 	}

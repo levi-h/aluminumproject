@@ -16,10 +16,9 @@
 package com.googlecode.aluminumproject.templates;
 
 import com.googlecode.aluminumproject.libraries.actions.Action;
-import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,11 +28,11 @@ import java.util.Map;
  */
 public interface ActionElement extends TemplateElement {
 	/**
-	 * Returns the factory that will create the action.
+	 * Returns a descriptor of the action.
 	 *
-	 * @return the factory of this action element
+	 * @return the action descriptor of this action element
 	 */
-	ActionFactory getFactory();
+	ActionDescriptor getDescriptor();
 
 	/**
 	 * Returns the parameters that will be applied to the action.
@@ -43,9 +42,9 @@ public interface ActionElement extends TemplateElement {
 	Map<String, ActionParameter> getParameters();
 
 	/**
-	 * Returns the factories of the contributions that will be made to the action.
+	 * Returns the descriptors of the contributions that will be made to the action.
 	 *
-	 * @return the contribution factories of this action element
+	 * @return the contribution descriptors of this action element
 	 */
-	Map<ActionContributionFactory, ActionParameter> getContributionFactories();
+	List<ActionContributionDescriptor> getContributionDescriptors();
 }

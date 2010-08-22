@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.utilities;
 
 import static com.googlecode.aluminumproject.utilities.ConfigurationUtilities.findLibrary;
-import static com.googlecode.aluminumproject.utilities.ConfigurationUtilities.injectFields;
 
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
@@ -57,39 +56,5 @@ public class ConfigurationUtilitiesTest {
 
 	public void tryingToFindUnknownLibraryShouldResultInNull() {
 		assert findLibrary(configuration, "http://aluminumproject.googlecode.com/nonexistent") == null;
-	}
-
-	public void providedValueShouldBeInjected() {
-		Injectable injectable = new Injectable();
-		assert injectable.value == null;
-
-		injectFields(injectable, new InjectedStringProvider());
-
-		assert injectable.value != null;
-		assert injectable.value.equals("injected");
-	}
-
-	public static class Injectable {
-		private @Injected String value;
-	}
-
-	@Test(expectedExceptions = UtilityException.class)
-	public void injectingObjectWithUninjectableFieldShouldCauseException() {
-		injectFields(new Uninjectable(), new InjectedStringProvider());
-	}
-
-	public static class Uninjectable {
-		private @Injected Locale value;
-	}
-
-	private static class InjectedStringProvider implements ConfigurationUtilities.InjectedValueProvider {
-		public Object getValueToInject(Field field) throws UtilityException {
-			if (field.getType() == String.class) {
-				return "injected";
-			} else {
-				throw new UtilityException("can't provide value",
-					" for unsupported field type ", field.getType().getSimpleName());
-			}
-		}
 	}
 }

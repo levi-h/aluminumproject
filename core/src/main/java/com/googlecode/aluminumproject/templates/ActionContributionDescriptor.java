@@ -24,30 +24,30 @@ import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
  * @author levi_h
  */
 public class ActionContributionDescriptor {
-	private String libraryUrl;
+	private String libraryUrlAbbreviation;
 	private String name;
 	private ActionParameter parameter;
 
 	/**
 	 * Creates an action contribution descriptor.
 	 *
-	 * @param libraryUrl the URL of the action contribution's library
+	 * @param libraryUrlAbbreviation the URL abbreviation of the action contribution's library
 	 * @param name the name of the action contribution
 	 * @param parameter the parameter of the action contribution
 	 */
-	public ActionContributionDescriptor(String libraryUrl, String name, ActionParameter parameter) {
-		this.libraryUrl = libraryUrl;
+	public ActionContributionDescriptor(String libraryUrlAbbreviation, String name, ActionParameter parameter) {
+		this.libraryUrlAbbreviation = libraryUrlAbbreviation;
 		this.name = name;
 		this.parameter = parameter;
 	}
 
 	/**
-	 * Returns the library URL of the action contribution.
+	 * Returns the library URL abbreviation of the action contribution.
 	 *
-	 * @return the URL of the action contribution's library
+	 * @return the URL abbreviation of the action contribution's library
 	 */
-	String getLibraryUrl() {
-		return libraryUrl;
+	public String getLibraryUrlAbbreviation() {
+		return libraryUrlAbbreviation;
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class ActionContributionDescriptor {
 	 *
 	 * @return the action contribution's name
 	 */
-	String getName() {
+	public String getName() {
 		return name;
 	}
 

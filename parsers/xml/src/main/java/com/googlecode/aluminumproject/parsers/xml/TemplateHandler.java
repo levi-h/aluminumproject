@@ -22,6 +22,7 @@ import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateBuilder;
 import com.googlecode.aluminumproject.templates.TemplateElement;
@@ -125,8 +126,10 @@ public class TemplateHandler extends DefaultHandler {
 		} else {
 			logger.debug("starting parsing element '", qName, "'");
 
+			String library = qName.contains(":") ? qName.split(":")[0] : "";
 			String actionName = templateNameTranslator.translateActionName(localName);
 
+			ActionDescriptor action = new ActionDescriptor(library, actionName);
 			Map<String, ActionParameter> parameters = new HashMap<String, ActionParameter>();
 			List<ActionContributionDescriptor> contributions = new LinkedList<ActionContributionDescriptor>();
 
@@ -135,7 +138,7 @@ public class TemplateHandler extends DefaultHandler {
 			logger.debug("parameters for action '", actionName, "': ", parameters);
 			logger.debug("contributions for action '", actionName, "': ", contributions);
 
-			TemplateElement actionElement = createActionElement(uri, actionName, parameters, contributions);
+			TemplateElement actionElement = createActionElement(action, parameters, contributions);
 			logger.debug("created action element ", actionElement);
 
 			templateBuilder.addTemplateElement(actionElement);
@@ -149,16 +152,20 @@ public class TemplateHandler extends DefaultHandler {
 			String localName = attributes.getLocalName(i);
 			ActionParameter parameter = ParserUtilities.createParameter(attributes.getValue(i), configuration);
 
-			String uri = attributes.getURI(i);
+			String prefix = getPrefix(attributes.getQName(i));
 
-			if (uri.equals("")) {
+			if (prefix.equals("")) {
 				parameters.put(templateNameTranslator.translateActionParameterName(localName), parameter);
 			} else {
 				String actionContributionName = templateNameTranslator.translateActionContributionName(localName);
 
-				contributions.add(new ActionContributionDescriptor(uri, actionContributionName, parameter));
+				contributions.add(new ActionContributionDescriptor(prefix, actionContributionName, parameter));
 			}
 		}
+	}
+
+	private String getPrefix(String qName) {
+		return qName.contains(":") ? qName.split(":")[0] : "";
 	}
 
 	@Override
@@ -218,11 +225,11 @@ public class TemplateHandler extends DefaultHandler {
 		}
 	}
 
-	private TemplateElement createActionElement(String uri, String localName, Map<String, ActionParameter> parameters,
+	private TemplateElement createActionElement(ActionDescriptor action, Map<String, ActionParameter> parameters,
 			List<ActionContributionDescriptor> contributions) throws SAXException {
 		try {
 			return configuration.getTemplateElementFactory().createActionElement(
-				uri, localName, parameters, contributions, getLibraryUrlAbbreviations());
+				action, parameters, contributions, getLibraryUrlAbbreviations());
 		} catch (TemplateException exception) {
 			throw new SAXException("can't create action element", exception);
 		}
