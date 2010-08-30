@@ -23,7 +23,6 @@ import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 import com.googlecode.aluminumproject.parsers.xml.XmlParser;
 import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
-import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 
@@ -48,8 +47,12 @@ public abstract class LibraryTest {
 		configurationParameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
 		configurationParameters.addParameter(AluScriptParser.TEMPLATE_EXTENSION, "alu");
 
+		addConfigurationParameters(configurationParameters);
+
 		engine = new Aluminum(new DefaultConfiguration(configurationParameters));
 	}
+
+	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {}
 
 	protected final String processTemplate(String name) {
 		return processTemplate(name, new DefaultContext());
