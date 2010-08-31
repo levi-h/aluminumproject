@@ -12,8 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-@library (xml: http://aluminumproject.googlecode.com/xml)
+@library(xml: 'http://aluminumproject.googlecode.com/xml')
 
-@xml.element (name: 'document')
-	@xml.attribute (name: 'name', value: 'Sales report')
-	@xml.attribute (name: 'date', value: 'November 12')
+@xml.document
+	@xml.page
+		Page 1 of 2
+
+	@xml.page
+		Page 2 of 2

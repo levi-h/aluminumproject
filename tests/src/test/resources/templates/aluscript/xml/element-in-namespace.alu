@@ -14,4 +14,4 @@
 
 @library (d: http://aluminumproject.googlecode.com/xml)
 
-@d.document (d.namespace: 'http://documents.example.com/')
+@d.element (name: 'document', d.namespace: 'http://documents.example.com/')
