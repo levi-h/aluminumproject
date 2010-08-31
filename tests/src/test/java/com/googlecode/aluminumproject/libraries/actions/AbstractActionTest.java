@@ -19,7 +19,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.writers.AbstractDecorativeWriter;
-import com.googlecode.aluminumproject.writers.StringWriter;
+import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
@@ -129,7 +129,7 @@ public class AbstractActionTest {
 
 	@Test(dependsOnMethods = "bodyShouldBeObtainable")
 	public void bodyListShouldBeObtainable() {
-		List<?> bodyList = parent.getBodyList(new DefaultContext(), new StringWriter());
+		List<?> bodyList = parent.getBodyList(new DefaultContext(), new NullWriter());
 		assert bodyList != null;
 		assert bodyList.size() == 1;
 		assert bodyList.contains("I'm the action itself!");
@@ -137,7 +137,7 @@ public class AbstractActionTest {
 
 	@Test(dependsOnMethods = "bodyListShouldBeObtainable")
 	public void obtainingBodyListShouldRespectDecorativeWriters() {
-		List<?> bodyList = parent.getBodyList(new DefaultContext(), new AbstractDecorativeWriter(new StringWriter()) {
+		List<?> bodyList = parent.getBodyList(new DefaultContext(), new AbstractDecorativeWriter(new NullWriter()) {
 			public void write(Object object) throws WriterException {
 				checkOpen();
 
@@ -150,15 +150,57 @@ public class AbstractActionTest {
 	}
 
 	@Test(dependsOnMethods = "bodyShouldBeObtainable")
+	public void bodyObjectShouldBeObtainable() {
+		String bodyObject = parent.getBodyObject(String.class, new DefaultContext(), new NullWriter());
+		assert bodyObject != null;
+		assert bodyObject.equals("I'm the action itself!");
+	}
+
+	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = ActionException.class)
+	public void obtainingBodyObjectWithWrongTypeShouldCauseException() {
+		parent.getBodyObject(Integer.class, new DefaultContext(), new NullWriter());
+	}
+
+	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = ActionException.class)
+	public void obtainingBodyObjectFromActionWhoseBodyDoesNotWriteAnythingShouldCauseException() {
+		action.setBody(new ActionBody() {
+			public void invoke(Context context, Writer writer) {}
+
+			public ActionBody copy() {
+				return this;
+			}
+		});
+
+		action.getBodyObject(Object.class, new DefaultContext(), new NullWriter());
+	}
+
+	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = ActionException.class)
+	public void obtainingBodyObjectFromActionWhoseBodyWritesMultipleObjectsShouldCauseException() {
+		action.setBody(new ActionBody() {
+			public void invoke(Context context, Writer writer) {
+				for (int i = 1; i <= 5; i++) {
+					writer.write(i);
+				}
+			}
+
+			public ActionBody copy() {
+				return this;
+			}
+		});
+
+		action.getBodyObject(Integer.class, new DefaultContext(), new NullWriter());
+	}
+
+	@Test(dependsOnMethods = "bodyShouldBeObtainable")
 	public void bodyTextShouldBeObtainable() {
-		String bodyText = parent.getBodyText(new DefaultContext(), new StringWriter());
+		String bodyText = parent.getBodyText(new DefaultContext(), new NullWriter());
 		assert bodyText != null;
 		assert bodyText.equals("I'm the action itself!");
 	}
 
 	@Test(dependsOnMethods = "bodyTextShouldBeObtainable")
 	public void obtainingBodyTextShouldRespectDecorativeWriters() {
-		String bodyText = parent.getBodyText(new DefaultContext(), new AbstractDecorativeWriter(new StringWriter()) {
+		String bodyText = parent.getBodyText(new DefaultContext(), new AbstractDecorativeWriter(new NullWriter()) {
 			public void write(Object object) throws WriterException {
 				checkOpen();
 

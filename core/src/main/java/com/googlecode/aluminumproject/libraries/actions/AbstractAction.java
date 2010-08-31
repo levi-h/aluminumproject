@@ -127,6 +127,39 @@ public abstract class AbstractAction implements Action {
 	}
 
 	/**
+	 * Invokes the body of this action, capturing its output, which is expected to be a single object of a certain type.
+	 * If the body contains no objects, more than one object, or an object of an unexpected type, this method will throw
+	 * an exception.
+	 *
+	 * @param <T> the type of the body object
+	 * @param type the expected body object type
+	 * @param context the context to execute the body in
+	 * @param writer the writer that would normally have been used to invoke the action body with
+	 * @return the object that was written by the body
+	 * @throws ActionException when the body can't be invoked or when it does not write exactly one object of the
+	 *                         expected type
+	 * @throws WriterException when the body can't write its output
+	 */
+	protected <T> T getBodyObject(
+			Class<T> type, Context context, Writer writer) throws ActionException, WriterException {
+		List<?> bodyList = getBodyList(context, writer);
+
+		if (bodyList.isEmpty()) {
+			throw new ActionException("no body objects were written, expected one of type ", type.getName());
+		} else if (bodyList.size() > 1) {
+			throw new ActionException("multiple objects were written, expected a single one of type ", type.getName());
+		} else {
+			Object bodyObject = bodyList.get(0);
+
+			if (type.isInstance(bodyObject)) {
+				return type.cast(bodyObject);
+			} else {
+				throw new ActionException("body object ", bodyObject, " does not have expected type ", type.getName());
+			}
+		}
+	}
+
+	/**
 	 * Invokes the body of this action, capturing its output as text.
 	 *
 	 * @param context the context to execute the body in
