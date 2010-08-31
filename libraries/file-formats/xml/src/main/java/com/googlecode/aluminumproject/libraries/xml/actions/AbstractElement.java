@@ -19,7 +19,6 @@ import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -35,7 +34,9 @@ import java.util.Map;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Node;
 import nu.xom.Serializer;
+import nu.xom.Text;
 
 /**
  * Abstract superclass of actions that produce an XML element.
@@ -53,7 +54,7 @@ abstract class AbstractElement extends AbstractAction {
 
 	private Map<String, Map<String, String>> attributes;
 
-	private List<Element> children;
+	private List<Node> children;
 
 	/**
 	 * Creates an abstract element action.
@@ -61,7 +62,7 @@ abstract class AbstractElement extends AbstractAction {
 	protected AbstractElement() {
 		namespaces = new LinkedHashMap<String, String>();
 
-		children = new LinkedList<Element>();
+		children = new LinkedList<Node>();
 
 		attributes = new LinkedHashMap<String, Map<String, String>>();
 	}
@@ -80,6 +81,15 @@ abstract class AbstractElement extends AbstractAction {
 	 */
 	protected void addChild(Element child) {
 		children.add(child);
+	}
+
+	/**
+	 * Adds a text element to the element.
+	 *
+	 * @param text the text to add
+	 */
+	protected void addText(String text) {
+		children.add(new Text(text));
 	}
 
 	/**
@@ -111,7 +121,7 @@ abstract class AbstractElement extends AbstractAction {
 		if (namespaces.containsKey(prefix)) {
 			namespaceUrl = namespaces.get(prefix);
 		} else {
-			AbstractElement parent = findParentElement();
+			AbstractElement parent = findAncestorOfType(AbstractElement.class);
 
 			namespaceUrl = (parent == null) ? null : parent.findNamespaceUrl(prefix);
 		}
@@ -137,13 +147,14 @@ abstract class AbstractElement extends AbstractAction {
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		Element element = createElement();
 		addNamespaceDeclarations(element);
-		addAttributes(element);
 
-		getBody().invoke(context, writer);
+		getBody().invoke(context, new TextWriter(this));
+
+		addAttributes(element);
 
 		addChildren(element);
 
-		AbstractElement parent = findParentElement();
+		AbstractElement parent = findAncestorOfType(AbstractElement.class);
 
 		if (parent == null) {
 			writeDocument(new Document(element), writer);
@@ -202,7 +213,7 @@ abstract class AbstractElement extends AbstractAction {
 	}
 
 	private void addChildren(Element element) {
-		for (Element child: children) {
+		for (Node child: children) {
 			element.appendChild(child);
 		}
 	}
@@ -221,25 +232,5 @@ abstract class AbstractElement extends AbstractAction {
 		}
 
 		writer.write(new String(out.toByteArray()).trim());
-	}
-
-	/**
-	 * Finds an abstract element action in this action's ancestor chain with the same namespace prefix as this element.
-	 *
-	 * @return this element's parent element in the same namespace or {@code null} if it does not have one
-	 */
-	protected AbstractElement findParentElement() {
-		Action action = getParent();
-
-		while ((action != null) &&
-				!((action instanceof AbstractElement) && hasSameNamespace((AbstractElement) action))) {
-			action = action.getParent();
-		}
-
-		return (action == null) ? null : (DynamicElement) action;
-	}
-
-	private boolean hasSameNamespace(AbstractElement action) {
-		return action.descriptor.getLibraryUrlAbbreviation().equals(descriptor.getLibraryUrlAbbreviation());
 	}
 }

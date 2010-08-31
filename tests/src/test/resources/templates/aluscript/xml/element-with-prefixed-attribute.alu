@@ -15,4 +15,5 @@
 @library (xml: http://aluminumproject.googlecode.com/xml)
 @library (external: http://aluminumproject.googlecode.com/xml)
 
-@xml.document (external.id: 'X43', external.namespace: 'http://external.example.com/')
+@xml.element (name: 'document', external.namespace: 'http://external.example.com/')
+	@xml.attribute(prefix: 'external', name: 'id', value: 'X43')

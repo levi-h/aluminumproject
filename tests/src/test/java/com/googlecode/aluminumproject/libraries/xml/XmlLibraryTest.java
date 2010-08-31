@@ -15,11 +15,28 @@
  */
 package com.googlecode.aluminumproject.libraries.xml;
 
+import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
 @SuppressWarnings("all")
 public abstract class XmlLibraryTest extends LibraryTest {
 	public XmlLibraryTest() {
 		super("templates/aluscript/xml", "aluscript");
+	}
+
+	@Override
+	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
+		configurationParameters.addParameter(AluScriptParser.AUTOMATIC_NEWLINES, "false");
+	}
+
+	protected String createXml(String... lines) {
+		StringBuilder xmlBuilder = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+
+		for (String line: lines) {
+			xmlBuilder.append("\n").append(line);
+		}
+
+		return xmlBuilder.toString();
 	}
 }
