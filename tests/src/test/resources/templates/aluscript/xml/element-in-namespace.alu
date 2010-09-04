@@ -13,5 +13,7 @@
 # limitations under the License.
 
 @library (d: http://aluminumproject.googlecode.com/xml)
+@library (xml: http://aluminumproject.googlecode.com/xml)
 
-@d.element (name: 'document', d.namespace: 'http://documents.example.com/')
+@xml.format
+	@d.element (name: 'document', d.namespace: 'http://documents.example.com/')

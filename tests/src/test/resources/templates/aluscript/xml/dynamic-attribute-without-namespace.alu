@@ -15,4 +15,5 @@
 @library (xml: http://aluminumproject.googlecode.com/xml)
 @library (external: http://aluminumproject.googlecode.com/xml)
 
-@xml.document (external.id: 'X43')
+@xml.format
+	@xml.document (external.id: 'X43')
