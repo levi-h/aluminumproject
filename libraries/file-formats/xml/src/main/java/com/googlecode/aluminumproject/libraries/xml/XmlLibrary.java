@@ -58,7 +58,7 @@ public class XmlLibrary extends AbstractLibrary {
 
 	@Override
 	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
-		if (Arrays.asList("parse", "select", "transform").contains(name)) {
+		if (Arrays.asList("select", "transform").contains(name)) {
 			throw new LibraryException("in the near future, '", name, "' will become an action",
 				" - please use the 'element' action instead");
 		}
