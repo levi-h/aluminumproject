@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+@library (c: http://aluminumproject.googlecode.com/core)
 @library (xml: http://aluminumproject.googlecode.com/xml)
-@library (external: http://aluminumproject.googlecode.com/xml)
 
-@xml.format
-	@xml.element (name: 'document', external.id: 'X43', external.namespace: 'http://external.example.com/')
+@xml.document (c.variable name: document)
+
+@xml.format (document: ${document})

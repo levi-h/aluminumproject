@@ -13,7 +13,8 @@
 # limitations under the License.
 
 @library (xml: http://aluminumproject.googlecode.com/xml)
-@library (external: http://aluminumproject.googlecode.com/xml)
 
 @xml.format
-	@xml.element (name: 'document', external.id: 'X43', external.namespace: 'http://external.example.com/')
+	@xml.document
+		@xml.page (number: 1)
+		@xml.page (number: 2)

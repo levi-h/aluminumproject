@@ -14,5 +14,6 @@
 
 @library (xml: http://aluminumproject.googlecode.com/xml)
 
-@xml.element (name: document)
-	@xml.element (name: page)
+@xml.format
+	@xml.element (name: document)
+		@xml.element (name: page)

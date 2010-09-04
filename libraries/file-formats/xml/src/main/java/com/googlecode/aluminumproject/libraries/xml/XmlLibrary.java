@@ -31,7 +31,8 @@ import java.util.Arrays;
 
 /**
  * Provides actions that work with XML documents. Internally, the <a href="http://www.xom.nu/">XOM</a> library is used,
- * though users of the XML library shouldn't have to be aware of that.
+ * though users of the XML library shouldn't have to be aware of that; they can work with the types in the {@code model}
+ * package.
  *
  * @author levi_h
  */
@@ -57,7 +58,7 @@ public class XmlLibrary extends AbstractLibrary {
 
 	@Override
 	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
-		if (Arrays.asList("format", "parse", "select", "transform").contains(name)) {
+		if (Arrays.asList("parse", "select", "transform").contains(name)) {
 			throw new LibraryException("in the near future, '", name, "' will become an action",
 				" - please use the 'element' action instead");
 		}

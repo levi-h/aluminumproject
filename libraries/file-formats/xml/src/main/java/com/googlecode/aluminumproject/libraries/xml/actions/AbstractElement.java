@@ -24,22 +24,19 @@ import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import nu.xom.Attribute;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
-import nu.xom.Serializer;
 import nu.xom.Text;
 
 /**
- * Abstract superclass of actions that produce an XML element.
+ * Abstract superclass of actions that produce an {@link com.googlecode.aluminumproject.libraries.xml.model.Element XML
+ * element}.
  * <p>
  * Abstract element actions can be nested: elements are added to their parents; the root element is sent to the {@link
  * Writer writer}.
@@ -157,7 +154,7 @@ abstract class AbstractElement extends AbstractAction {
 		AbstractElement parent = findAncestorOfType(AbstractElement.class);
 
 		if (parent == null) {
-			writeDocument(new Document(element), writer);
+			writer.write(new XomElement(element));
 		} else {
 			parent.addChild(element);
 		}
@@ -216,21 +213,5 @@ abstract class AbstractElement extends AbstractAction {
 		for (Node child: children) {
 			element.appendChild(child);
 		}
-	}
-
-	private void writeDocument(Document document, Writer writer) throws WriterException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-		Serializer serializer = new Serializer(out);
-		serializer.setLineSeparator("\n");
-		serializer.setIndent(4);
-
-		try {
-			serializer.write(document);
-		} catch (IOException exception) {
-			throw new WriterException(exception, "can't write document");
-		}
-
-		writer.write(new String(out.toByteArray()).trim());
 	}
 }
