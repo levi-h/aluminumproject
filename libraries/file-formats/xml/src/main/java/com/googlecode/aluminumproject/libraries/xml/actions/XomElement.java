@@ -39,7 +39,7 @@ class XomElement implements Element {
 	 * @param element the wrapped element
 	 */
 	public XomElement(nu.xom.Element element) {
-		this.element = element;
+		this.element = (element.getDocument() == null) ? new Document(element).getRootElement() : element;
 	}
 
 	public void writeDocument(Writer writer, int indentation) throws WriterException {
@@ -50,7 +50,7 @@ class XomElement implements Element {
 		serializer.setIndent(indentation);
 
 		try {
-			serializer.write(new Document(element));
+			serializer.write(element.getDocument());
 		} catch (IOException exception) {
 			throw new WriterException(exception, "can't write document");
 		}
