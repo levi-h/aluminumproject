@@ -15,14 +15,20 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
+import com.googlecode.aluminumproject.utilities.test.TestPropertySetContainer;
+
 import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
-@Test(groups = {"utilities", "fast"})
+@Test(groups = {"utilities", "slow"})
 public class EnvironmentUtilitiesTest {
 	public void versionShouldBeAvailable() {
 		String version = EnvironmentUtilities.getVersion();
 		assert version != null;
 		assert version.equals("test");
+	}
+
+	public void propertySetContainerShouldBeAvailable() {
+		assert EnvironmentUtilities.getPropertySetContainer() instanceof TestPropertySetContainer;
 	}
 }

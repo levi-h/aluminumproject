@@ -34,17 +34,25 @@ public class EnvironmentUtilities {
 	 * @return the current Aluminum version in the form <em>major.minor</em>
 	 */
 	public static String getVersion() {
-		return environment.getProperty("version");
+		return version;
 	}
 
-	private final static Logger logger;
+	/**
+	 * Returns a property set container with property sets that reflect the current environment.
+	 *
+	 * @return the property set container for the current environment
+	 */
+	public static PropertySetContainer getPropertySetContainer() {
+		return propertySetContainer;
+	}
 
-	private final static Properties environment;
+	private static String version;
+	private static PropertySetContainer propertySetContainer;
 
 	static {
-		logger = Logger.get(EnvironmentUtilities.class);
+		Logger logger = Logger.get(EnvironmentUtilities.class);
 
-		environment = new Properties();
+		Properties environment = new Properties();
 
 		try {
 			logger.debug("loading aluminum.properties");
@@ -53,7 +61,20 @@ public class EnvironmentUtilities {
 		} catch (IOException exception) {
 			logger.warn(exception, "can't read aluminum.properties");
 
-			environment.put("version", "unknown");
+			throw new ExceptionInInitializerError(exception);
+		}
+
+		version = environment.getProperty("version");
+
+		try {
+			String propertySetContainerClassName = environment.getProperty("property_set_container");
+
+			propertySetContainer =
+				ReflectionUtilities.instantiate(propertySetContainerClassName, PropertySetContainer.class);
+		} catch (UtilityException exception) {
+			logger.warn(exception, "can't create property set container");
+
+			throw new ExceptionInInitializerError(exception);
 		}
 	}
 }
