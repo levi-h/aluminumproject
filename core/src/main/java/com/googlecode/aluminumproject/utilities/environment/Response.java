@@ -15,22 +15,33 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import org.testng.annotations.Test;
+import java.util.List;
+import java.util.Map;
 
-@SuppressWarnings("all")
-@Test(groups = {"utilities", "slow"})
-public class EnvironmentUtilitiesTest {
-	public void versionShouldBeAvailable() {
-		String version = EnvironmentUtilities.getVersion();
-		assert version != null;
-		assert version.equals("test");
-	}
+/**
+ * The response of a server to a {@link Request request}.
+ *
+ * @author levi_h
+ */
+public interface Response {
+	/**
+	 * Returns the status code of this response.
+	 *
+	 * @return the status code that was sent by the server
+	 */
+	int getStatusCode();
 
-	public void propertySetContainerShouldBeAvailable() {
-		assert EnvironmentUtilities.getPropertySetContainer() instanceof TestPropertySetContainer;
-	}
+	/**
+	 * Returns the headers of this response.
+	 *
+	 * @return the headers that were sent by the server
+	 */
+	Map<String, List<String>> getHeaders();
 
-	public void webClientShouldBeAvailable() {
-		assert EnvironmentUtilities.getWebClient() instanceof TestWebClient;
-	}
+	/**
+	 * Returns the body of this response.
+	 *
+	 * @return the response body that was sent by the server
+	 */
+	byte[] getBody();
 }
