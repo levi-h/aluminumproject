@@ -48,8 +48,18 @@ public class EnvironmentUtilities {
 		return propertySetContainer;
 	}
 
+	/**
+	 * Returns an environment-specific web client.
+	 *
+	 * @return the web client for the current environment
+	 */
+	public static WebClient getWebClient() {
+		return webClient;
+	}
+
 	private static String version;
 	private static PropertySetContainer propertySetContainer;
+	private static WebClient webClient;
 
 	static {
 		Logger logger = Logger.get(EnvironmentUtilities.class);
@@ -75,6 +85,16 @@ public class EnvironmentUtilities {
 				ReflectionUtilities.instantiate(propertySetContainerClassName, PropertySetContainer.class);
 		} catch (UtilityException exception) {
 			logger.warn(exception, "can't create property set container");
+
+			throw new ExceptionInInitializerError(exception);
+		}
+
+		try {
+			String webClientClassName = environment.getProperty("web_client");
+
+			webClient = ReflectionUtilities.instantiate(webClientClassName, WebClient.class);
+		} catch (UtilityException exception) {
+			logger.warn(exception, "can't create web client");
 
 			throw new ExceptionInInitializerError(exception);
 		}
