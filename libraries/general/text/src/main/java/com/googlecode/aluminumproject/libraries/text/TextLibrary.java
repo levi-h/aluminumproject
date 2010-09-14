@@ -17,8 +17,8 @@ package com.googlecode.aluminumproject.libraries.text;
 
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.utilities.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
 /**
  * Provides actions and functions that help when working with text.

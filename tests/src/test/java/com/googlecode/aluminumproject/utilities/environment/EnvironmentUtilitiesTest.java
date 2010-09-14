@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.utilities;
-
-import com.googlecode.aluminumproject.utilities.test.TestPropertySetContainer;
+package com.googlecode.aluminumproject.utilities.environment;
 
 import org.testng.annotations.Test;
 

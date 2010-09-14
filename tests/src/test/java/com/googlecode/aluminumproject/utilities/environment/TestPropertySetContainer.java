@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.utilities.test;
+package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.PropertySetContainer;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.util.HashMap;

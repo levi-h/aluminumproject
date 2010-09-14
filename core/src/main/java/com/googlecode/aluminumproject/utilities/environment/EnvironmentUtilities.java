@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.utilities;
+package com.googlecode.aluminumproject.utilities.environment;
 
 import com.googlecode.aluminumproject.Logger;
+import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
+import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.io.IOException;
 import java.util.Properties;
