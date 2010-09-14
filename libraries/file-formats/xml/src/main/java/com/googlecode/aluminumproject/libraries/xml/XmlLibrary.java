@@ -24,7 +24,7 @@ import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributio
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.xml.actions.DynamicAttribute;
 import com.googlecode.aluminumproject.libraries.xml.actions.DynamicElement;
-import com.googlecode.aluminumproject.utilities.EnvironmentUtilities;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.util.Arrays;
