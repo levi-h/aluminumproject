@@ -41,7 +41,7 @@ public class FileSystemPropertySetContainer implements PropertySetContainer {
 	 * Creates a file system property set container.
 	 */
 	public FileSystemPropertySetContainer() {
-		this(new File(System.getProperty("user.home", ".aluminum")));
+		this(new File(System.getProperty("user.home"), ".aluminum"));
 	}
 
 	/**
