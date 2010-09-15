@@ -27,6 +27,7 @@ rootProject.name = 'aluminum'
 	'core-library': 'libraries/general/core',
 	'io-library': 'libraries/general/io',
 	'text-library': 'libraries/general/text',
+	'twitter-library': 'libraries/communication/twitter',
 	'xml-library': 'libraries/file-formats/xml',
 
 	'aluscript-parser': 'parsers/aluscript',
