@@ -68,18 +68,19 @@ public class AccountProvider implements ContextEnricher {
 		try {
 			PropertySetContainer propertySetContainer = EnvironmentUtilities.getPropertySetContainer();
 
+			Properties tokens = propertySetContainer.containsPropertySet(TOKENS_PROPERTY_SET)
+				? propertySetContainer.readPropertySet(TOKENS_PROPERTY_SET) : new Properties();
+
 			if (propertySetContainer.containsPropertySet(ACCOUNTS_PROPERTY_SET)) {
 				Properties accounts = propertySetContainer.readPropertySet(ACCOUNTS_PROPERTY_SET);
-				Properties tokens = propertySetContainer.containsPropertySet(TOKENS_PROPERTY_SET)
-					? propertySetContainer.readPropertySet(TOKENS_PROPERTY_SET) : new Properties();
 
 				if (convertAccounts(accounts, tokens)) {
 					propertySetContainer.writePropertySet(TOKENS_PROPERTY_SET, tokens);
 				}
+			}
 
-				if (!tokens.isEmpty()) {
-					addAccounts(tokens);
-				}
+			if (!tokens.isEmpty()) {
+				addAccounts(tokens);
 			}
 		} catch (UtilityException exception) {
 			throw new ConfigurationException(exception, "can't initialise account provider");

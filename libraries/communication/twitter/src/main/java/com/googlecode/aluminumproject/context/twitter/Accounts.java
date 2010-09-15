@@ -75,7 +75,9 @@ public class Accounts {
 	 * @throws ContextException when no account with the given name has been added
 	 */
 	public void setAccount(String account) throws ContextException {
-		checkAccount(account);
+		if (account != null) {
+			checkAccount(account);
+		}
 
 		this.account = account;
 	}
