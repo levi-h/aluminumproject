@@ -163,6 +163,10 @@ public class ReflectionUtilities {
 		if (getter == null) {
 			throw new UtilityException("property '", propertyName, "' is write-only");
 		} else {
+			if (!getter.isAccessible()) {
+				getter.setAccessible(true);
+			}
+
 			try {
 				return propertyType.cast(getter.invoke(bean));
 			} catch (Exception exception) {
@@ -207,6 +211,10 @@ public class ReflectionUtilities {
 		if (setter == null) {
 			throw new UtilityException("property '", propertyName, "' is read-only");
 		} else {
+			if (!setter.isAccessible()) {
+				setter.setAccessible(true);
+			}
+
 			try {
 				setter.invoke(bean, propertyValue);
 			} catch (Exception exception) {
