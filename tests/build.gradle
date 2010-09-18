@@ -21,17 +21,16 @@ dependencies {
 		}
 	}
 
-	testCompile group: 'org.testng', name: 'testng', version: '5.12.1'
+	testCompile group: 'org.testng', name: 'testng', version: '5.14'
 
-	testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.5.6'
-	testCompile group: 'ch.qos.logback', name: 'logback-core', version: '0.9.15'
-	testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.15'
+	testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
+	testCompile group: 'ch.qos.logback', name: 'logback-core', version: '0.9.24'
+	testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.24'
 
-	testRuntime group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '3.1'
+	testRuntime group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '3.2'
 
-	testRuntime group: 'javassist', name: 'javassist', version: '3.10.0.GA'
-	testCompile group: 'de.odysseus.juel', name: 'juel-api', version: '2.1.2'
-	testRuntime group: 'de.odysseus.juel', name: 'juel-impl', version: '2.1.2'
+	testRuntime group: 'org.javassist', name: 'javassist', version: '3.13.0-GA'
+	testCompile group: 'juel', name: 'juel', version: '2.2.1'
 
 	testRuntime group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 }

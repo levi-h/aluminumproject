@@ -18,15 +18,13 @@ package com.googlecode.aluminumproject.cli;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.PatternLayout;
-import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.WriterAppender;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.OutputStreamAppender;
 
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.IdentityHashMap;
@@ -207,16 +205,16 @@ public abstract class Command {
 		layout.setContext(loggerContext);
 		layout.start();
 
-		Appender<LoggingEvent> appender = new WriterAppender<LoggingEvent>() {
+		OutputStreamAppender<ILoggingEvent> appender = new OutputStreamAppender<ILoggingEvent>() {
 			@Override
 			public void start() {
-				setWriter(new OutputStreamWriter(outputStream));
+				setOutputStream(outputStream);
 
 				super.start();
 			}
 
 			@Override
-			protected void closeWriter() {
+			protected void closeOutputStream() {
 				// the underlying output stream is either System.out (when running standalone), which we can't close, or
 				// a byte array output stream (when testing), which we don't need to close
 			}

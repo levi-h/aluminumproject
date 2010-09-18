@@ -35,7 +35,7 @@ subprojects {
 	repositories {
 		mavenCentral()
 
-		mavenRepo(urls: 'http://repository.jboss.org/maven2/')
+		mavenRepo(urls: 'http://repository.jboss.org/nexus/content/groups/public-jboss/')
 	}
 
 	if (name != 'aluminum-tests') {
