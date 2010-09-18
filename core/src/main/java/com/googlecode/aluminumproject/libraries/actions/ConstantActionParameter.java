@@ -51,7 +51,7 @@ public class ConstantActionParameter implements ActionParameter {
 
 	public Object getValue(Type type, Context context) throws ActionException {
 		try {
-			return converterRegistry.convert(text, type);
+			return converterRegistry.convert(text, type, context);
 		} catch (ConverterException exception) {
 			throw new ActionException(exception, "can't convert parameter value");
 		}

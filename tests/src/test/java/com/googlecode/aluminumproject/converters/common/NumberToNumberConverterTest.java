@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -29,9 +31,13 @@ import org.testng.annotations.Test;
 public class NumberToNumberConverterTest {
 	private Converter<Number> converter;
 
+	private Context context;
+
 	@BeforeMethod
 	public void createConverter() {
 		converter = new NumberToNumberConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void converterShouldSupportPrimitiveTypes() {
@@ -57,47 +63,47 @@ public class NumberToNumberConverterTest {
 	public void wideningConversionsShouldBeSupported() {
 		Object convertedValue;
 
-		convertedValue = converter.convert(3, Byte.class);
+		convertedValue = converter.convert(3, Byte.class, context);
 		assert convertedValue instanceof Byte;
 		assert convertedValue.equals(Byte.valueOf((byte) 3));
 
-		convertedValue = converter.convert(21, Short.class);
+		convertedValue = converter.convert(21, Short.class, context);
 		assert convertedValue instanceof Short;
 		assert convertedValue.equals(Short.valueOf((short) 21));
 
-		convertedValue = converter.convert(987L, Integer.class);
+		convertedValue = converter.convert(987L, Integer.class, context);
 		assert convertedValue instanceof Integer;
 		assert convertedValue.equals(Integer.valueOf(987));
 
-		convertedValue = converter.convert(10, Long.class);
+		convertedValue = converter.convert(10, Long.class, context);
 		assert convertedValue instanceof Long;
 		assert convertedValue.equals(Long.valueOf(10L));
 
-		convertedValue = converter.convert(0.8, Float.class);
+		convertedValue = converter.convert(0.8, Float.class, context);
 		assert convertedValue instanceof Float;
 		assert convertedValue.equals(Float.valueOf(0.8F));
 
-		convertedValue = converter.convert(1.5F, Double.class);
+		convertedValue = converter.convert(1.5F, Double.class, context);
 		assert convertedValue instanceof Double;
 		assert convertedValue.equals(Double.valueOf(1.5));
 
-		convertedValue = converter.convert(12345, BigInteger.class);
+		convertedValue = converter.convert(12345, BigInteger.class, context);
 		assert convertedValue instanceof BigInteger;
 		assert convertedValue.equals(BigInteger.valueOf(12345L));
 
-		convertedValue = converter.convert(4.5F, BigDecimal.class);
+		convertedValue = converter.convert(4.5F, BigDecimal.class, context);
 		assert convertedValue instanceof BigDecimal;
 		assert convertedValue.equals(BigDecimal.valueOf(4.5));
 	}
 
 	public void narrowingConversionsShouldBeSupported() {
-		Object convertedValue = converter.convert(128, Byte.class);
+		Object convertedValue = converter.convert(128, Byte.class, context);
 		assert convertedValue instanceof Byte;
 		assert convertedValue.equals(Byte.valueOf(Byte.MIN_VALUE));
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertIntoUnsupportedTargetTypeShouldCauseException() {
-		converter.convert(10, String.class);
+		converter.convert(10, String.class, context);
 	}
 }

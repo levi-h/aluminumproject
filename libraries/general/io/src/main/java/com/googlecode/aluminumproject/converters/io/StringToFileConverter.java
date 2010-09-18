@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -32,7 +33,7 @@ public class StringToFileConverter extends ClassBasedConverter<String, File> {
 	public StringToFileConverter() {}
 
 	@Override
-	protected File convert(String value) throws ConverterException {
+	protected File convert(String value, Context context) throws ConverterException {
 		File file = new File(value);
 
 		if (!file.exists()) {

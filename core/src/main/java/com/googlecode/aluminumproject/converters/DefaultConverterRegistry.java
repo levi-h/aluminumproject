@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
@@ -201,7 +202,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		}
 	}
 
-	public <S> Object convert(S value, Type targetType) throws ConverterException {
+	public <S> Object convert(S value, Type targetType, Context context) throws ConverterException {
 		Object convertedValue;
 
 		if (value == null) {
@@ -222,7 +223,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 			} else {
 				Class<S> sourceType = Utilities.typed(value.getClass());
 
-				convertedValue = getConverter(sourceType, targetType).convert(value, targetType);
+				convertedValue = getConverter(sourceType, targetType).convert(value, targetType, context);
 			}
 		}
 

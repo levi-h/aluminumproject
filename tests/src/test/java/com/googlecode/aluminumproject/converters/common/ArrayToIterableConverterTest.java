@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -28,9 +30,13 @@ import org.testng.annotations.Test;
 public class ArrayToIterableConverterTest {
 	private Converter<Object> converter;
 
+	private Context context;
+
 	@BeforeMethod
 	public void createConverter() {
 		converter = new ArrayToIterableConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void converterShouldBeAbleToHandleArrays() {
@@ -46,7 +52,7 @@ public class ArrayToIterableConverterTest {
 	}
 
 	public void arraysShouldBeConvertible() {
-		Object iterable = converter.convert(new String[] {"a", "b"}, Iterable.class);
+		Object iterable = converter.convert(new String[] {"a", "b"}, Iterable.class, context);
 		assert iterable instanceof Iterable;
 
 		Iterator<?> iterator = ((Iterable<?>) iterable).iterator();
@@ -68,7 +74,7 @@ public class ArrayToIterableConverterTest {
 	}
 
 	public void primitiveArraysShouldBeConvertible() {
-		Object convertedValue = converter.convert(new int[] {1, 0}, Iterable.class);
+		Object convertedValue = converter.convert(new int[] {1, 0}, Iterable.class, context);
 		assert convertedValue instanceof Iterable;
 
 		Iterator<?> iterator = ((Iterable<?>) convertedValue).iterator();
@@ -91,6 +97,6 @@ public class ArrayToIterableConverterTest {
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertNonArrayShouldCauseException() {
-		converter.convert("1, 2, 3", Iterable.class);
+		converter.convert("1, 2, 3", Iterable.class, context);
 	}
 }

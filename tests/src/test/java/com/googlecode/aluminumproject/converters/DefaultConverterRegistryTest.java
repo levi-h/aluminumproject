@@ -21,6 +21,8 @@ import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPa
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.common.ObjectToStringConverter;
 import com.googlecode.aluminumproject.converters.test.IgnoredConverter;
 import com.googlecode.aluminumproject.converters.test.TestConverter;
@@ -33,12 +35,16 @@ import org.testng.annotations.Test;
 public class DefaultConverterRegistryTest {
 	private DefaultConverterRegistry converterRegistry;
 
+	private Context context;
+
 	@BeforeMethod
-	public void createConverterRegistry() {
+	public void createConverterRegistryAndContext() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 
 		converterRegistry = new DefaultConverterRegistry();
 		converterRegistry.initialise(new TestConfiguration(parameters), parameters);
+
+		context = new DefaultContext();
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
@@ -124,27 +130,27 @@ public class DefaultConverterRegistryTest {
 	}
 
 	public void convertingNullShouldResultInNull() {
-		assert converterRegistry.convert(null, Object.class) == null;
+		assert converterRegistry.convert(null, Object.class, context) == null;
 	}
 
 	public void convertingToActualTypeShouldResultInSourceValue() {
-		assert converterRegistry.convert(converterRegistry, ConverterRegistry.class) == converterRegistry;
+		assert converterRegistry.convert(converterRegistry, ConverterRegistry.class, context) == converterRegistry;
 	}
 
 	@Test(dependsOnMethods = "converterShouldBeFoundForSubtypesOfSourceType")
 	public void conversionShouldUseRegisteredConverters() {
-		Object convertedValue = converterRegistry.convert(2.5D, String.class);
+		Object convertedValue = converterRegistry.convert(2.5D, String.class, context);
 		assert convertedValue instanceof String;
 		assert convertedValue.equals("2.5");
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingConversionWithUnregisteredTypeShouldCauseException() {
-		converterRegistry.convert(1, Boolean.TYPE);
+		converterRegistry.convert(1, Boolean.TYPE, context);
 	}
 
 	@Test(dependsOnMethods = "conversionShouldUseRegisteredConverters", expectedExceptions = ConverterException.class)
 	public void illegalConversionShouldCauseException() {
-		converterRegistry.convert("running", Thread.State.class);
+		converterRegistry.convert("running", Thread.State.class, context);
 	}
 }

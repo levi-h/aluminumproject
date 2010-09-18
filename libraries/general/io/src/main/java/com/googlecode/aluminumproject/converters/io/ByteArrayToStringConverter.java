@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
@@ -30,7 +31,7 @@ public class ByteArrayToStringConverter extends ClassBasedConverter<byte[], Stri
 	public ByteArrayToStringConverter() {}
 
 	@Override
-	protected String convert(byte[] value) {
+	protected String convert(byte[] value, Context context) {
 		return new String(value);
 	}
 }

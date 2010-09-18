@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 
 import org.testng.annotations.BeforeMethod;
@@ -25,19 +27,23 @@ import org.testng.annotations.Test;
 public class ObjectToStringConverterTest {
 	private Converter<Object> converter;
 
+	private Context context;
+
 	@BeforeMethod
-	public void createConverter() {
+	public void createConverterAndContext() {
 		converter = new ObjectToStringConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void objectsShouldBeConvertible() {
 		Object convertedValue;
 
-		convertedValue = converter.convert(true, String.class);
+		convertedValue = converter.convert(true, String.class, context);
 		assert convertedValue instanceof String;
 		assert convertedValue.equals("true");
 
-		convertedValue = converter.convert(3, String.class);
+		convertedValue = converter.convert(3, String.class, context);
 		assert convertedValue instanceof String;
 		assert convertedValue.equals("3");
 	}

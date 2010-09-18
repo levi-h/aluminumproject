@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.converters.test;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
@@ -54,7 +55,7 @@ public class TestConverterRegistry implements ConverterRegistry {
 		return null;
 	}
 
-	public <S> Object convert(S value, Type targetType) {
+	public <S> Object convert(S value, Type targetType, Context context) {
 		return null;
 	}
 }

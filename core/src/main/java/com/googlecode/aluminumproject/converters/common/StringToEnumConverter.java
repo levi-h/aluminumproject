@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -39,7 +40,7 @@ public class StringToEnumConverter implements Converter<String> {
 		return (targetType instanceof Class) && ((Class<?>) targetType).isEnum();
 	}
 
-	public Object convert(String value, Type targetType) throws ConverterException {
+	public Object convert(String value, Type targetType, Context context) throws ConverterException {
 		if (!supportsTargetType(targetType)) {
 			throw new ConverterException("expected enum target type, not ", targetType);
 		}

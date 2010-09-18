@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -28,19 +30,23 @@ import org.testng.annotations.Test;
 public class StringToFileConverterTest {
 	private Converter<String> converter;
 
+	private Context context;
+
 	@BeforeMethod
-	public void createConverter() {
+	public void createConverterAndContext() {
 		converter = new StringToFileConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void existingPathShouldResultInExistingFile() {
-		Object convertedValue = converter.convert(System.getProperty("user.home"), File.class);
+		Object convertedValue = converter.convert(System.getProperty("user.home"), File.class, context);
 		assert convertedValue instanceof File;
 		assert ((File) convertedValue).exists();
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertUnknownPathShouldCauseException() {
-		converter.convert("** nonexistent **", File.class);
+		converter.convert("** nonexistent **", File.class, context);
 	}
 }
