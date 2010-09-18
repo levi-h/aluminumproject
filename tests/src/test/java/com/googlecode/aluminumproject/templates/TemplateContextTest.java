@@ -16,8 +16,7 @@
 package com.googlecode.aluminumproject.templates;
 
 import com.googlecode.aluminumproject.libraries.actions.Action;
-import com.googlecode.aluminumproject.libraries.test.actions.TestAction;
-import com.googlecode.aluminumproject.templates.test.TestActionElement;
+import com.googlecode.aluminumproject.libraries.actions.TestAction;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

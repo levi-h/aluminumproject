@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.converters;
 
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.converters.test.TestConverter;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

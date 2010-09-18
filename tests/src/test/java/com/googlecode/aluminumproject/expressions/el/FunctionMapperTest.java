@@ -26,7 +26,7 @@ import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.libraries.test.TestLibrary;
+import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.templates.AbstractTemplateElement;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateContext;

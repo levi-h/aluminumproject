@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.libraries.test.functions.TestFunctions;
 
 import java.lang.reflect.Method;
 

@@ -17,8 +17,7 @@ package com.googlecode.aluminumproject.parsers.aluscript;
 
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
-import com.googlecode.aluminumproject.parsers.aluscript.instructions.test.TestInstruction;
-import com.googlecode.aluminumproject.parsers.aluscript.test.TestAluScriptContext;
+import com.googlecode.aluminumproject.parsers.aluscript.instructions.TestInstruction;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionDescriptor;
 

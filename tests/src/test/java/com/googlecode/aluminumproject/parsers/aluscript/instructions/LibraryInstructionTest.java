@@ -16,7 +16,7 @@
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
-import com.googlecode.aluminumproject.parsers.aluscript.test.TestAluScriptContext;
+import com.googlecode.aluminumproject.parsers.aluscript.TestAluScriptContext;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.comments;
 
+import com.googlecode.aluminumproject.parsers.aluscript.TestAluScriptContext;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.LineParser;
-import com.googlecode.aluminumproject.parsers.aluscript.test.TestAluScriptContext;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

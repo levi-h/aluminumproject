@@ -16,7 +16,7 @@
 package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.utilities.resources.ClassPathResourceFinder;
 
 import org.testng.annotations.Test;

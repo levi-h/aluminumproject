@@ -16,10 +16,9 @@
 package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.libraries.test.functions.TestFunctions;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;

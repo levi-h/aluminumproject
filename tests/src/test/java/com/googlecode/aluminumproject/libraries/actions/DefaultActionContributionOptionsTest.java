@@ -17,13 +17,12 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionSkipper;
-import com.googlecode.aluminumproject.libraries.test.actions.TestActionFactory;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.templates.DefaultActionContext;

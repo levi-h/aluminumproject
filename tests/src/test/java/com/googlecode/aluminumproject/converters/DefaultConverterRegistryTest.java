@@ -20,12 +20,10 @@ import static com.googlecode.aluminumproject.converters.DefaultConverterRegistry
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.common.ObjectToStringConverter;
-import com.googlecode.aluminumproject.converters.test.IgnoredConverter;
-import com.googlecode.aluminumproject.converters.test.TestConverter;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

@@ -18,7 +18,7 @@ package com.googlecode.aluminumproject.libraries;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.utilities.Injector;
 
 import org.testng.annotations.BeforeMethod;
