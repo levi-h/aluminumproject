@@ -67,7 +67,7 @@ public class Convert extends AbstractAction {
 		try {
 			logger.debug("trying to convert ", value, " into ", type);
 
-			writer.write(configuration.getConverterRegistry().convert(value, type));
+			writer.write(configuration.getConverterRegistry().convert(value, type, context));
 		} catch (ConverterException exception) {
 			throw new ActionException(exception, "can't convert value");
 		}

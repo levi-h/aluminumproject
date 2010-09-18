@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
@@ -29,7 +30,7 @@ public class ObjectToStringConverter extends ClassBasedConverter<Object, String>
 	public ObjectToStringConverter() {}
 
 	@Override
-	protected String convert(Object value) {
+	protected String convert(Object value, Context context) {
 		return value.toString();
 	}
 }

@@ -57,7 +57,7 @@ public class ExpressionActionParameter implements ActionParameter {
 
 	public Object getValue(Type type, Context context) throws ActionException {
 		try {
-			return converterRegistry.convert(expressionFactory.create(text, context).evaluate(context), type);
+			return converterRegistry.convert(expressionFactory.create(text, context).evaluate(context), type, context);
 		} catch (ExpressionException exception) {
 			throw new ActionException(exception, "can't evaluate expression");
 		} catch (ConverterException exception) {

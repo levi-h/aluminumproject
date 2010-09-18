@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -29,29 +31,33 @@ import org.testng.annotations.Test;
 public class StringToTypeConverterTest {
 	private Converter<String> converter;
 
+	private Context context;
+
 	@BeforeMethod
-	public void createConverter() {
+	public void createConverterAndContext() {
 		converter = new StringToTypeConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void classNamesShouldBeConvertible() {
-		assert converter.convert("String", Type.class) == String.class;
-		assert converter.convert(getClass().getName(), Type.class) == getClass();
+		assert converter.convert("String", Type.class, context) == String.class;
+		assert converter.convert(getClass().getName(), Type.class, context) == getClass();
 	}
 
 	public void primitiveClassNamesShouldBeConvertible() {
-		assert converter.convert("boolean", Type.class) == Boolean.TYPE;
-		assert converter.convert("byte", Type.class) == Byte.TYPE;
-		assert converter.convert("char", Type.class) == Character.TYPE;
-		assert converter.convert("short", Type.class) == Short.TYPE;
-		assert converter.convert("int", Type.class) == Integer.TYPE;
-		assert converter.convert("long", Type.class) == Long.TYPE;
-		assert converter.convert("float", Type.class) == Float.TYPE;
-		assert converter.convert("double", Type.class) == Double.TYPE;
+		assert converter.convert("boolean", Type.class, context) == Boolean.TYPE;
+		assert converter.convert("byte", Type.class, context) == Byte.TYPE;
+		assert converter.convert("char", Type.class, context) == Character.TYPE;
+		assert converter.convert("short", Type.class, context) == Short.TYPE;
+		assert converter.convert("int", Type.class, context) == Integer.TYPE;
+		assert converter.convert("long", Type.class, context) == Long.TYPE;
+		assert converter.convert("float", Type.class, context) == Float.TYPE;
+		assert converter.convert("double", Type.class, context) == Double.TYPE;
 	}
 
 	public void parameterisedClassNamesShouldBeConvertible() {
-		Object type = converter.convert("Iterable<String>", Type.class);
+		Object type = converter.convert("Iterable<String>", Type.class, context);
 		assert type instanceof ParameterizedType;
 
 		ParameterizedType parameterisedType = (ParameterizedType) type;
@@ -64,6 +70,6 @@ public class StringToTypeConverterTest {
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void convertingNonexistentClassNameShouldCauseException() {
-		converter.convert("java.lang.Stirng", Type.class);
+		converter.convert("java.lang.Stirng", Type.class, context);
 	}
 }

@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -29,9 +31,13 @@ import org.testng.annotations.Test;
 public class StringToNumberConverterTest {
 	private Converter<String> converter;
 
+	private Context context;
+
 	@BeforeMethod
 	public void createConverter() {
 		converter = new StringToNumberConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void converterShouldSupportPrimitiveTypes() {
@@ -57,41 +63,41 @@ public class StringToNumberConverterTest {
 	public void validStringsShouldBeConvertible() {
 		Object convertedValue;
 
-		convertedValue = converter.convert("12", Byte.class);
+		convertedValue = converter.convert("12", Byte.class, context);
 		assert convertedValue instanceof Byte;
 		assert convertedValue.equals(Byte.valueOf((byte) 12));
 
-		convertedValue = converter.convert("1234", Short.class);
+		convertedValue = converter.convert("1234", Short.class, context);
 		assert convertedValue instanceof Short;
 		assert convertedValue.equals(Short.valueOf((short) 1234));
 
-		convertedValue = converter.convert("123456", Integer.class);
+		convertedValue = converter.convert("123456", Integer.class, context);
 		assert convertedValue instanceof Integer;
 		assert convertedValue.equals(Integer.valueOf(123456));
 
-		convertedValue = converter.convert("12345678", Long.class);
+		convertedValue = converter.convert("12345678", Long.class, context);
 		assert convertedValue instanceof Long;
 		assert convertedValue.equals(Long.valueOf(12345678L));
 
-		convertedValue = converter.convert("12.34", Float.class);
+		convertedValue = converter.convert("12.34", Float.class, context);
 		assert convertedValue instanceof Float;
 		assert convertedValue.equals(Float.valueOf(12.34F));
 
-		convertedValue = converter.convert("1234.5678", Double.class);
+		convertedValue = converter.convert("1234.5678", Double.class, context);
 		assert convertedValue instanceof Double;
 		assert convertedValue.equals(Double.valueOf(1234.5678D));
 
-		convertedValue = converter.convert("1234567890", BigInteger.class);
+		convertedValue = converter.convert("1234567890", BigInteger.class, context);
 		assert convertedValue instanceof BigInteger;
 		assert convertedValue.equals(BigInteger.valueOf(1234567890L));
 
-		convertedValue = converter.convert("12345.6789", BigDecimal.class);
+		convertedValue = converter.convert("12345.6789", BigDecimal.class, context);
 		assert convertedValue instanceof BigDecimal;
 		assert convertedValue.equals(BigDecimal.valueOf(12345.6789D));
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertInvalidStringShouldCauseException() {
-		converter.convert("one", Integer.class);
+		converter.convert("one", Integer.class, context);
 	}
 }

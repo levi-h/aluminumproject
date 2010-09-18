@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -28,9 +30,13 @@ import org.testng.annotations.Test;
 public class StringToEnumConverterTest {
 	private Converter<String> converter;
 
+	private Context context;
+
 	@BeforeMethod
-	public void createConverter() {
+	public void createConverterAndContext() {
 		converter = new StringToEnumConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void converterShouldSupportEnumTargetTypes() {
@@ -44,20 +50,20 @@ public class StringToEnumConverterTest {
 	}
 
 	public void literalNamesShouldBeConverted() {
-		assert converter.convert("FIELD", ElementType.class) == ElementType.FIELD;
-		assert converter.convert("NEW", Thread.State.class) == Thread.State.NEW;
+		assert converter.convert("FIELD", ElementType.class, context) == ElementType.FIELD;
+		assert converter.convert("NEW", Thread.State.class, context) == Thread.State.NEW;
 	}
 
 	@Test(dependsOnMethods = "literalNamesShouldBeConverted")
 	public void conversionShouldBeCaseInsensitive() {
-		assert converter.convert("field", ElementType.class) == ElementType.FIELD;
-		assert converter.convert("new", Thread.State.class) == Thread.State.NEW;
+		assert converter.convert("field", ElementType.class, context) == ElementType.FIELD;
+		assert converter.convert("new", Thread.State.class, context) == Thread.State.NEW;
 	}
 
 	@Test(dependsOnMethods = "conversionShouldBeCaseInsensitive")
 	public void conversionShouldPreferExactMatches() {
-		assert converter.convert("A", Letter.class) == Letter.A;
-		assert converter.convert("b", Letter.class) == Letter.b;
+		assert converter.convert("A", Letter.class, context) == Letter.A;
+		assert converter.convert("b", Letter.class, context) == Letter.b;
 	}
 
 	private static enum Letter {
@@ -66,11 +72,11 @@ public class StringToEnumConverterTest {
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void convertingNonexistingNameShouldCauseException() {
-		converter.convert("INTERFACE", ElementType.class);
+		converter.convert("INTERFACE", ElementType.class, context);
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void supplyingUnsupportedTargetTypeShouldCauseException() {
-		converter.convert("NAME", Enum.class);
+		converter.convert("NAME", Enum.class, context);
 	}
 }

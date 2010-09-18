@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.test.TestConverter;
 
 import org.testng.annotations.BeforeMethod;
@@ -25,9 +27,13 @@ import org.testng.annotations.Test;
 public class ClassBasedConverterTest {
 	private Converter<Float> converter;
 
+	private Context context;
+
 	@BeforeMethod
-	public void createConverter() {
+	public void createConverterAndContext() {
 		converter = new TestConverter();
+
+		context = new DefaultContext();
 	}
 
 	public void targetTypeShouldBeSupported() {
@@ -51,13 +57,13 @@ public class ClassBasedConverterTest {
 
 	@Test(dependsOnMethods = "targetTypeShouldBeSupported")
 	public void valueShouldBeConvertibleIntoSupportedType() {
-		Object convertedValue = converter.convert(12.5F, CharSequence.class);
+		Object convertedValue = converter.convert(12.5F, CharSequence.class, context);
 		assert convertedValue instanceof CharSequence;
 		assert convertedValue.equals("12.5");
 	}
 
 	@Test(dependsOnMethods = "subtypesOfTargetTypeShouldNotBeSupported", expectedExceptions = ConverterException.class)
 	public void conversionToUnsupportedTargetTypeShouldCauseException() {
-		converter.convert(12F, String.class);
+		converter.convert(12F, String.class, context);
 	}
 }

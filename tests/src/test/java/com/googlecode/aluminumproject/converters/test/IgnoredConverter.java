@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.converters.test;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
@@ -31,7 +32,7 @@ public class IgnoredConverter extends ClassBasedConverter<String, String> {
 	public IgnoredConverter() {}
 
 	@Override
-	protected String convert(String value) {
+	protected String convert(String value, Context context) {
 		return new StringBuilder(value).reverse().toString();
 	}
 }

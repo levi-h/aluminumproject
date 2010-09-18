@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
@@ -33,7 +34,7 @@ public abstract class ClassBasedConverter<S, T> implements Converter<S> {
 	private Class<T> targetType;
 
 	/**
-	 * Creates a simple converter.
+	 * Creates a class-based converter.
 	 */
 	protected ClassBasedConverter() {
 		targetType = Utilities.typed(GenericsUtilities.getTypeArgument(getClass(), ClassBasedConverter.class, 1));
@@ -48,20 +49,21 @@ public abstract class ClassBasedConverter<S, T> implements Converter<S> {
 			ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType).isAssignableFrom(this.targetType);
 	}
 
-	public Object convert(S value, Type targetType) throws ConverterException {
+	public Object convert(S value, Type targetType, Context context) throws ConverterException {
 		if (supportsTargetType(targetType)) {
-			return convert(value);
+			return convert(value, context);
 		} else {
 			throw new ConverterException("expected ", this.targetType.getName()," as target type, not ", targetType);
 		}
 	}
 
 	/**
-	 * Template method that will be invoked by the {@link #convert(Object, Type) convert method}.
+	 * Template method that will be invoked by the {@link #convert(Object, Type, Context) convert method}.
 	 *
 	 * @param value the value to convert
+	 * @param context the context of the conversion
 	 * @return the converted value
 	 * @throws ConverterException when the value can't be converted to the target type
 	 */
-	protected abstract T convert(S value) throws ConverterException;
+	protected abstract T convert(S value, Context context) throws ConverterException;
 }

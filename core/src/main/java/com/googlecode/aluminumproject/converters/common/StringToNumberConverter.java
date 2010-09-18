@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.converters.common;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
@@ -66,14 +67,14 @@ public class StringToNumberConverter implements Converter<String> {
 		return converters.containsKey(targetType);
 	}
 
-	public Object convert(String value, Type targetType) throws ConverterException {
-		return converters.get(targetType).convert(value, targetType);
+	public Object convert(String value, Type targetType, Context context) throws ConverterException {
+		return converters.get(targetType).convert(value, targetType, context);
 	}
 
 	@Ignored
 	private static class StringToByteConverter extends ClassBasedConverter<String, Byte> {
 		@Override
-		protected Byte convert(String value) throws ConverterException {
+		protected Byte convert(String value, Context context) throws ConverterException {
 			try {
 				return Byte.valueOf(value);
 			} catch (NumberFormatException exception) {
@@ -85,7 +86,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToShortConverter extends ClassBasedConverter<String, Short> {
 		@Override
-		protected Short convert(String value) throws ConverterException {
+		protected Short convert(String value, Context context) throws ConverterException {
 			try {
 				return Short.valueOf(value);
 			} catch (NumberFormatException exception) {
@@ -97,7 +98,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToIntegerConverter extends ClassBasedConverter<String, Integer> {
 		@Override
-		protected Integer convert(String value) throws ConverterException {
+		protected Integer convert(String value, Context context) throws ConverterException {
 			try {
 				return Integer.valueOf(value);
 			} catch (NumberFormatException exception) {
@@ -109,7 +110,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToLongConverter extends ClassBasedConverter<String, Long> {
 		@Override
-		protected Long convert(String value) throws ConverterException {
+		protected Long convert(String value, Context context) throws ConverterException {
 			try {
 				return Long.valueOf(value);
 			} catch (NumberFormatException exception) {
@@ -121,7 +122,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToFloatConverter extends ClassBasedConverter<String, Float> {
 		@Override
-		protected Float convert(String value) throws ConverterException {
+		protected Float convert(String value, Context context) throws ConverterException {
 			try {
 				return Float.valueOf(value);
 			} catch (NumberFormatException exception) {
@@ -133,7 +134,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToDoubleConverter extends ClassBasedConverter<String, Double> {
 		@Override
-		protected Double convert(String value) throws ConverterException {
+		protected Double convert(String value, Context context) throws ConverterException {
 			try {
 				return Double.valueOf(value);
 			} catch (NumberFormatException exception) {
@@ -145,7 +146,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToBigIntegerConverter extends ClassBasedConverter<String, BigInteger> {
 		@Override
-		protected BigInteger convert(String value) throws ConverterException {
+		protected BigInteger convert(String value, Context context) throws ConverterException {
 			try {
 				return new BigInteger(value);
 			} catch (NumberFormatException exception) {
@@ -157,7 +158,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToBigDecimalConverter extends ClassBasedConverter<String, BigDecimal> {
 		@Override
-		protected BigDecimal convert(String value) throws ConverterException {
+		protected BigDecimal convert(String value, Context context) throws ConverterException {
 			try {
 				return new BigDecimal(value);
 			} catch (NumberFormatException exception) {

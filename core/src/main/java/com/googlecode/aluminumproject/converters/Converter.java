@@ -15,10 +15,13 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.context.Context;
+
 import java.lang.reflect.Type;
 
 /**
- * Able to convert values of a source type to one or more target types.
+ * Able to convert values of a source type to one or more target types. It's possible for a converter to produce
+ * different values in different contexts.
  * <p>
  * Converters should support neither {@code null} source objects nor primitive source or target types and are encouraged
  * to be case-insensitive when converting strings.
@@ -53,9 +56,10 @@ public interface Converter<S> {
 	 *
 	 * @param value the value to convert
 	 * @param targetType the type to convert the value into
+	 * @param context the context in which the conversion takes place
 	 * @return the converted value
 	 * @throws ConverterException when the given target type is not supported or when something goes wrong while
 	 *                            converting the value
 	 */
-	Object convert(S value, Type targetType) throws ConverterException;
+	Object convert(S value, Type targetType, Context context) throws ConverterException;
 }

@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
@@ -30,7 +31,7 @@ public class StringToBooleanConverter extends ClassBasedConverter<String, Boolea
 	public StringToBooleanConverter() {}
 
 	@Override
-	protected Boolean convert(String value) {
+	protected Boolean convert(String value, Context context) {
 		return Boolean.parseBoolean(value);
 	}
 }

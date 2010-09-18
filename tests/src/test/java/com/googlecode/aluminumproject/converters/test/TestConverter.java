@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.converters.test;
 
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
@@ -43,7 +44,7 @@ public class TestConverter extends ClassBasedConverter<Float, CharSequence> {
 	}
 
 	@Override
-	protected CharSequence convert(Float value) {
+	protected CharSequence convert(Float value, Context context) {
 		return value.toString();
 	}
 }
