@@ -17,3 +17,5 @@
 dependencies {
 	compile project(':aluminum-core')
 }
+
+excludedFromApiDocs = true

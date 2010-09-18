@@ -60,19 +60,19 @@ subprojects {
 task createApiDocs(type: Javadoc, visible: false)  {
 	destinationDir = new File(project.buildDir, 'docs/api')
 
-	source subprojects.collect {subproject ->
+	def subprojectsToInclude = subprojects.findAll {subproject ->
+		!subproject.hasProperty('excludedFromApiDocs') || !subproject.property('excludedFromApiDocs')
+	}
+
+	source subprojectsToInclude.collect {subproject ->
 		subproject.sourceSets.main.java
 	}
-	classpath = files(subprojects.collect {subproject ->
+	classpath = files(subprojectsToInclude.collect {subproject ->
 		subproject.configurations.apiDocs.resolve()
 	})
 
-	options.links = ['http://java.sun.com/javase/6/docs/api/']
-
-	subprojects.each {subproject ->
-		if (subproject.hasProperty('apiDocUrls')) {
-			options.links += subproject.property('apiDocUrls')
-		}
+	options.links = subprojectsToInclude.inject(['http://java.sun.com/javase/6/docs/api/']) {links, subproject ->
+		subproject.hasProperty('apiDocUrls') ? links + subproject.property('apiDocUrls') : links
 	}
 }
 
