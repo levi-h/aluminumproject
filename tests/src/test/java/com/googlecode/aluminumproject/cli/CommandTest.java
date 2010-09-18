@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.cli;
 
-import com.googlecode.aluminumproject.cli.commands.test.TestCommand;
+import com.googlecode.aluminumproject.cli.commands.TestCommand;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

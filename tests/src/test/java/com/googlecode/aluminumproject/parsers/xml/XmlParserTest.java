@@ -16,11 +16,11 @@
 package com.googlecode.aluminumproject.parsers.xml;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.libraries.test.TestLibrary;
+import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.parsers.ParseException;
-import com.googlecode.aluminumproject.parsers.test.UpperCaseTemplateNameTranslator;
+import com.googlecode.aluminumproject.parsers.UpperCaseTemplateNameTranslator;
 import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
 import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;

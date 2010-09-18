@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.templates;
 
-import com.googlecode.aluminumproject.templates.test.TestActionElement;
-
 import java.util.List;
 
 import org.testng.annotations.BeforeMethod;

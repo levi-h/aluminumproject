@@ -16,11 +16,11 @@
 package com.googlecode.aluminumproject.utilities;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
+import com.googlecode.aluminumproject.expressions.TestExpressionFactory;
 import com.googlecode.aluminumproject.expressions.el.ElExpressionFactory;
-import com.googlecode.aluminumproject.expressions.test.TestExpressionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ConstantActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ExpressionActionParameter;
 

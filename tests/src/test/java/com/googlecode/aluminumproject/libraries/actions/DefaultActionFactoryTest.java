@@ -16,15 +16,10 @@
 package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
-import com.googlecode.aluminumproject.libraries.test.actions.AnnotatedAction;
-import com.googlecode.aluminumproject.libraries.test.actions.DynamicallyParameterisableAction;
-import com.googlecode.aluminumproject.libraries.test.actions.ParameterAction;
-import com.googlecode.aluminumproject.libraries.test.actions.TestAction;
-import com.googlecode.aluminumproject.libraries.test.actions.TestActionParameter;
 
 import java.lang.reflect.Type;
 import java.util.Collections;

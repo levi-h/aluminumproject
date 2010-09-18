@@ -16,17 +16,17 @@
 package com.googlecode.aluminumproject.serialisers.xml;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
-import com.googlecode.aluminumproject.expressions.test.TestExpressionFactory;
+import com.googlecode.aluminumproject.expressions.TestExpressionFactory;
 import com.googlecode.aluminumproject.libraries.Library;
+import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ConstantActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ExpressionActionParameter;
 import com.googlecode.aluminumproject.libraries.core.CoreLibrary;
-import com.googlecode.aluminumproject.libraries.test.TestLibrary;
 import com.googlecode.aluminumproject.resources.MemoryTemplateStoreFinderFactory;
 import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;

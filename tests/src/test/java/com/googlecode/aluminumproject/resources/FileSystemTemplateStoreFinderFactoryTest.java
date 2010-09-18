@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.utilities.resources.FileSystemResourceStoreFinder;
 
 import org.testng.annotations.Test;

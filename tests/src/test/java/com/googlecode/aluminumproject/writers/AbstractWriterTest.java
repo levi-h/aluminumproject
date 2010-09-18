@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.writers;
 
-import com.googlecode.aluminumproject.writers.test.TestWriter;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

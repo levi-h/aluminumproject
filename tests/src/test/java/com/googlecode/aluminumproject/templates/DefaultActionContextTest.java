@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.templates;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
@@ -25,12 +25,12 @@ import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.test.actions.TestActionContributionFactory;
-import com.googlecode.aluminumproject.libraries.test.actions.TestActionFactory;
-import com.googlecode.aluminumproject.libraries.test.actions.TestActionParameter;
+import com.googlecode.aluminumproject.libraries.actions.TestActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.TestActionFactory;
+import com.googlecode.aluminumproject.libraries.actions.TestActionParameter;
 import com.googlecode.aluminumproject.writers.StringWriter;
+import com.googlecode.aluminumproject.writers.TestWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.test.TestWriter;
 
 import java.util.EnumSet;
 import java.util.List;

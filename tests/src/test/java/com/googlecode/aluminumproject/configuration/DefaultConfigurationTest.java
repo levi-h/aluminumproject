@@ -30,44 +30,43 @@ import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
 import com.googlecode.aluminumproject.annotations.Named;
-import com.googlecode.aluminumproject.cache.test.TestCache;
-import com.googlecode.aluminumproject.configuration.test.TestConfigurationElementFactory;
+import com.googlecode.aluminumproject.cache.TestCache;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextEnricher;
-import com.googlecode.aluminumproject.context.test.IgnoredContextEnricher;
-import com.googlecode.aluminumproject.context.test.TestContextEnricher;
+import com.googlecode.aluminumproject.context.IgnoredContextEnricher;
+import com.googlecode.aluminumproject.context.TestContextEnricher;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
-import com.googlecode.aluminumproject.converters.test.TestConverterRegistry;
+import com.googlecode.aluminumproject.converters.TestConverterRegistry;
 import com.googlecode.aluminumproject.expressions.Expression;
 import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
-import com.googlecode.aluminumproject.expressions.test.IgnoredExpressionFactory;
-import com.googlecode.aluminumproject.expressions.test.TestExpressionFactory;
+import com.googlecode.aluminumproject.expressions.IgnoredExpressionFactory;
+import com.googlecode.aluminumproject.expressions.TestExpressionFactory;
+import com.googlecode.aluminumproject.libraries.IgnoredLibrary;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
-import com.googlecode.aluminumproject.libraries.test.IgnoredLibrary;
-import com.googlecode.aluminumproject.libraries.test.TestLibrary;
+import com.googlecode.aluminumproject.parsers.IgnoredParser;
 import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
-import com.googlecode.aluminumproject.parsers.test.IgnoredParser;
-import com.googlecode.aluminumproject.parsers.test.TestParser;
+import com.googlecode.aluminumproject.parsers.TestParser;
 import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
 import com.googlecode.aluminumproject.resources.MemoryTemplateStoreFinderFactory;
 import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
-import com.googlecode.aluminumproject.resources.test.TestTemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.test.TestTemplateStoreFinderFactory;
+import com.googlecode.aluminumproject.resources.TestTemplateFinderFactory;
+import com.googlecode.aluminumproject.resources.TestTemplateStoreFinderFactory;
+import com.googlecode.aluminumproject.serialisers.IgnoredSerialiser;
 import com.googlecode.aluminumproject.serialisers.SerialisationException;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
-import com.googlecode.aluminumproject.serialisers.test.IgnoredSerialiser;
-import com.googlecode.aluminumproject.serialisers.test.TestSerialiser;
+import com.googlecode.aluminumproject.serialisers.TestSerialiser;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.Template;
-import com.googlecode.aluminumproject.templates.test.TestTemplateElementFactory;
+import com.googlecode.aluminumproject.templates.TestTemplateElementFactory;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.util.Collections;
@@ -342,8 +341,9 @@ public class DefaultConfigurationTest {
 	public void parsersShouldBeNamedAfterTheirPackages() {
 		Configuration configuration = new DefaultConfiguration();
 
-		assert configuration.getParsers().containsKey("test");
-		assert configuration.getParsers().get("test") == findParserOfType(configuration, TestParser.class);
+		Map<String, Parser> parsers = configuration.getParsers();
+		assert parsers.containsKey("parsers");
+		assert parsers.get("parsers") == findParserOfType(configuration, TestParser.class);
 	}
 
 	@Test(dependsOnMethods = "parsersShouldNotBeNull")
@@ -429,8 +429,9 @@ public class DefaultConfigurationTest {
 	public void serialisersShouldBeNamedAfterTheirPackages() {
 		Configuration configuration = new DefaultConfiguration();
 
-		assert configuration.getSerialisers().containsKey("test");
-		assert configuration.getSerialisers().get("test") == findSerialiserOfType(configuration, TestSerialiser.class);
+		Map<String, Serialiser> serialisers = configuration.getSerialisers();
+		assert serialisers.containsKey("serialisers");
+		assert serialisers.get("serialisers") == findSerialiserOfType(configuration, TestSerialiser.class);
 	}
 
 	@Test(dependsOnMethods = "serialisersShouldNotBeNull")

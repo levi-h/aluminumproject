@@ -16,7 +16,7 @@
 package com.googlecode.aluminumproject.cache;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateBuilder;
 

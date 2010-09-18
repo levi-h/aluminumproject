@@ -1,11 +1,10 @@
 package com.googlecode.aluminumproject.expressions.el;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
-import java.awt.Point;
 import java.beans.FeatureDescriptor;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +12,6 @@ import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
-import javax.el.ValueExpression;
 
 import org.testng.annotations.Test;
 

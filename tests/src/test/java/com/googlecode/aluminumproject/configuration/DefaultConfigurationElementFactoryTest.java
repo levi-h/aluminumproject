@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
-import com.googlecode.aluminumproject.configuration.test.TestConfigurationElementCustomiser;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.util.HashMap;

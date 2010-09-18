@@ -17,14 +17,10 @@ package com.googlecode.aluminumproject.utilities;
 
 import static com.googlecode.aluminumproject.utilities.ConfigurationUtilities.findLibrary;
 
-import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
-import com.googlecode.aluminumproject.libraries.test.TestLibrary;
-
-import java.lang.reflect.Field;
-import java.util.Locale;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
+import com.googlecode.aluminumproject.libraries.TestLibrary;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

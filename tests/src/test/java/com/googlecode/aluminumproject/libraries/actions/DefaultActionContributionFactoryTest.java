@@ -16,9 +16,7 @@
 package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
-import com.googlecode.aluminumproject.libraries.test.actions.AnnotatedActionContribution;
-import com.googlecode.aluminumproject.libraries.test.actions.TestActionContribution;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

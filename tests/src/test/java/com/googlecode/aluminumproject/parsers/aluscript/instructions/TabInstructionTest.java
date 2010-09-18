@@ -16,7 +16,7 @@
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
-import com.googlecode.aluminumproject.parsers.aluscript.test.TestAluScriptContext;
+import com.googlecode.aluminumproject.parsers.aluscript.TestAluScriptContext;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TextElement;
 

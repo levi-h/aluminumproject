@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.text;
 
+import com.googlecode.aluminumproject.parsers.aluscript.TestAluScriptContext;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.LineParser;
-import com.googlecode.aluminumproject.parsers.aluscript.test.TestAluScriptContext;
 import com.googlecode.aluminumproject.templates.ExpressionElement;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TextElement;

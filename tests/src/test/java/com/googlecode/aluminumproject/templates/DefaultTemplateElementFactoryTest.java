@@ -17,11 +17,12 @@ package com.googlecode.aluminumproject.templates;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
-import com.googlecode.aluminumproject.configuration.test.TestConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.test.TestActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.TestActionInterceptor;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -37,13 +38,7 @@ public class DefaultTemplateElementFactoryTest {
 		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
 		templateElementFactory.initialise(new TestConfiguration(parameters), parameters);
 
-		List<ActionInterceptor> actionInterceptors = templateElementFactory.getActionInterceptors();
-		assert actionInterceptors != null;
-		assert actionInterceptors.size() == 1;
-
-		ActionInterceptor actionInterceptor = actionInterceptors.get(0);
-		assert actionInterceptor != null;
-		assert actionInterceptor instanceof TestActionInterceptor;
+		assert findActionInterceptorOfType(templateElementFactory, TestActionInterceptor.class) != null;
 	}
 
 	public void actionInterceptorsThatAreConfiguredAsConfigurationElementsShouldBeAdded() {
@@ -54,12 +49,25 @@ public class DefaultTemplateElementFactoryTest {
 		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
 		templateElementFactory.initialise(new TestConfiguration(parameters), parameters);
 
+		assert findActionInterceptorOfType(templateElementFactory, TestActionInterceptor.class) != null;
+	}
+
+	private <T extends ActionInterceptor> T findActionInterceptorOfType(
+			DefaultTemplateElementFactory templateElementFactory, Class<T> actionInterceptorType) {
 		List<ActionInterceptor> actionInterceptors = templateElementFactory.getActionInterceptors();
 		assert actionInterceptors != null;
-		assert actionInterceptors.size() == 1;
 
-		ActionInterceptor actionInterceptor = actionInterceptors.get(0);
-		assert actionInterceptor != null;
-		assert actionInterceptor instanceof TestActionInterceptor;
+		Iterator<ActionInterceptor> it = actionInterceptors.iterator();
+		T actionInterceptor = null;
+
+		while (it.hasNext() && (actionInterceptor == null)) {
+			ActionInterceptor actionInterceptorInList = it.next();
+
+			if (actionInterceptorType.isInstance(actionInterceptorInList)) {
+				actionInterceptor = actionInterceptorType.cast(actionInterceptorInList);
+			}
+		}
+
+		return actionInterceptor;
 	}
 }
