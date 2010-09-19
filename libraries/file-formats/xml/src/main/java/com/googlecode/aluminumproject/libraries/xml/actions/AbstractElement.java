@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
@@ -52,6 +53,7 @@ abstract class AbstractElement extends AbstractAction {
 	private Map<String, Map<String, String>> attributes;
 
 	private List<Node> children;
+	private boolean moreChildrenAllowed;
 
 	/**
 	 * Creates an abstract element action.
@@ -59,9 +61,10 @@ abstract class AbstractElement extends AbstractAction {
 	protected AbstractElement() {
 		namespaces = new LinkedHashMap<String, String>();
 
-		children = new LinkedList<Node>();
-
 		attributes = new LinkedHashMap<String, Map<String, String>>();
+
+		children = new LinkedList<Node>();
+		moreChildrenAllowed = true;
 	}
 
 	/**
@@ -75,18 +78,41 @@ abstract class AbstractElement extends AbstractAction {
 	 * Adds a child element to the element.
 	 *
 	 * @param child the element to add
+	 * @throws ActionException when the child can't be added
 	 */
-	protected void addChild(Element child) {
-		children.add(child);
+	protected void addChild(Element child) throws ActionException {
+		addChildNode(child);
 	}
 
 	/**
 	 * Adds a text element to the element.
 	 *
 	 * @param text the text to add
+	 * @throws ActionException when the text can't be added
 	 */
 	protected void addText(String text) {
-		children.add(new Text(text));
+		addChildNode(new Text(text));
+	}
+
+	/**
+	 * Sets the text of this element. After setting an element's text, no other children may be added.
+	 *
+	 * @param text the text to set
+	 * @throws ActionException when the text can't be set
+	 */
+	@Ignored
+	public void setText(String text) throws ActionException {
+		addText(text);
+
+		moreChildrenAllowed = false;
+	}
+
+	private void addChildNode(Node child) throws ActionException {
+		if (!moreChildrenAllowed) {
+			throw new ActionException("can't add ", child, ": the element does not allow any more children");
+		}
+
+		children.add(child);
 	}
 
 	/**
