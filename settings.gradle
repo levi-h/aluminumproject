@@ -25,6 +25,7 @@ rootProject.name = 'aluminum'
 	'servlet': 'integration/servlet',
 
 	'core-library': 'libraries/general/core',
+	'g11n-library': 'libraries/general/g11n',
 	'io-library': 'libraries/general/io',
 	'text-library': 'libraries/general/text',
 	'xml-library': 'libraries/file-formats/xml',
