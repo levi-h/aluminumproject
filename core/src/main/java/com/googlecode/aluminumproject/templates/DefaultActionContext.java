@@ -22,6 +22,7 @@ import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -29,6 +30,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -99,7 +101,11 @@ public class DefaultActionContext implements ActionContext {
 		return Collections.unmodifiableMap(parameters);
 	}
 
-	public void addParameter(String name, ActionParameter parameter) {
+	public void addParameter(String name, ActionParameter parameter) throws ActionException {
+		if (action != null) {
+			throw new ActionException("can't add parameter '", name, "': an action has already been created");
+		}
+
 		parameters.put(name, parameter);
 	}
 
@@ -107,7 +113,12 @@ public class DefaultActionContext implements ActionContext {
 		return Collections.unmodifiableMap(actionContributionFactories);
 	}
 
-	public void addActionContribution(ActionContributionFactory contributionFactory, ActionParameter parameter) {
+	public void addActionContribution(ActionContributionFactory contributionFactory, ActionParameter parameter)
+			throws ActionException {
+		if (EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION).contains(phase)) {
+			throw new ActionException("can't add action contribution: all contributions have been made");
+		}
+
 		actionContributionFactories.put(contributionFactory, parameter);
 	}
 
@@ -127,7 +138,11 @@ public class DefaultActionContext implements ActionContext {
 		return action;
 	}
 
-	public void setAction(Action action) {
+	public void setAction(Action action) throws ActionException {
+		if (this.action != null) {
+			throw new ActionException("the action context already contains an action");
+		}
+
 		this.action = action;
 	}
 
@@ -141,8 +156,12 @@ public class DefaultActionContext implements ActionContext {
 		return interceptors.get(phase);
 	}
 
-	public void addInterceptor(ActionInterceptor interceptor) {
+	public void addInterceptor(ActionInterceptor interceptor) throws ActionException {
 		for (ActionPhase phase: interceptor.getPhases()) {
+			if ((this.phase != null) && (this.phase.compareTo(phase) > 0)) {
+				throw new ActionException("can't add interceptor for past phase ", phase);
+			}
+
 			logger.debug("adding interceptor ", interceptor, " for phase ", phase);
 
 			interceptors.get(phase).add(0, interceptor);

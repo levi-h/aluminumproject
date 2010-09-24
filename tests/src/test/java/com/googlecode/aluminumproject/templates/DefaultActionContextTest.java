@@ -23,8 +23,10 @@ import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
+import com.googlecode.aluminumproject.libraries.actions.TestAction;
 import com.googlecode.aluminumproject.libraries.actions.TestActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.TestActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.TestActionParameter;
@@ -106,6 +108,14 @@ public class DefaultActionContextTest {
 		assert parameters.get("test") == parameter;
 	}
 
+	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = ActionException.class)
+	public void addingParameterAfterActionHasBeenCreatedShouldCauseException() {
+		actionContext.setPhase(ActionPhase.CREATION);
+		actionContext.setAction(new TestAction());
+
+		actionContext.addParameter("test", new TestActionParameter("test"));
+	}
+
 	public void contributionFactoriesShouldInitiallyBeEmpty() {
 		Map<ActionContributionFactory, ActionParameter> actionContributionFactories =
 			actionContext.getActionContributionFactories();
@@ -126,6 +136,19 @@ public class DefaultActionContextTest {
 
 		assert actionContributionFactories.containsKey(actionContributionFactory);
 		assert actionContributionFactories.get(actionContributionFactory) == parameter;
+	}
+
+	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = ActionException.class)
+	public void addingActionContributionAfterContributionsHaveBeenMadeShouldCauseException() {
+		actionContext.setPhase(ActionPhase.CREATION);
+
+		actionContext.addActionContribution(new TestActionContributionFactory(), new TestActionParameter("test"));
+	}
+
+	@Test(expectedExceptions = ActionException.class)
+	public void replacingActionShouldCauseException() {
+		actionContext.setAction(new TestAction());
+		actionContext.setAction(new TestAction());
 	}
 
 	public void interceptorsShouldInitiallyBeEmpty() {
@@ -168,6 +191,19 @@ public class DefaultActionContextTest {
 		assert executionInterceptors.size() == 1;
 		assert executionInterceptors.contains(interceptor);
 
+	}
+
+	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = ActionException.class)
+	public void addingInterceptorForPastPhaseShouldCauseException() {
+		actionContext.setPhase(ActionPhase.EXECUTION);
+
+		actionContext.addInterceptor(new ActionInterceptor() {
+			public Set<ActionPhase> getPhases() {
+				return EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION);
+			}
+
+			public void intercept(ActionContext actionContext) {}
+		});
 	}
 
 	public void initialPhaseShouldBeNull() {
