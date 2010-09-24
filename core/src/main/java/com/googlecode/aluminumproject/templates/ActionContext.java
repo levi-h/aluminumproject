@@ -22,6 +22,7 @@ import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -35,7 +36,9 @@ import java.util.Map;
  * <p>
  * An action context has a number of {@link ActionPhase phases}, which means that not every part of the context is
  * accessible all of the time (e.g. the {@link #getAction() action itself} is not available until it is {@link
- * ActionPhase#CREATION created}).
+ * ActionPhase#CREATION created}). For the same reason, not every part of the action context can be changed during every
+ * phase (e.g. after the {@link ActionPhase#CONTRIBUTION contribution phase}, it does no longer make sense to {@link
+ * #addActionContribution(ActionContributionFactory, ActionParameter) add action contributions}).
  *
  * @author levi_h
  */
@@ -87,8 +90,9 @@ public interface ActionContext {
 	 *
 	 * @param name the name of the parameter to add
 	 * @param parameter the parameter to add
+	 * @throws ActionException when an action has already been created
 	 */
-	void addParameter(String name, ActionParameter parameter);
+	void addParameter(String name, ActionParameter parameter) throws ActionException;
 
 	/**
 	 * Returns the factories of the action contributions that will be made to the action.
@@ -102,8 +106,10 @@ public interface ActionContext {
 	 *
 	 * @param contributionFactory the factory that will create the action contribution
 	 * @param parameter the parameter that should be supplied to the action contribution
+	 * @throws ActionException when it is too late to add an action contribution
 	 */
-	void addActionContribution(ActionContributionFactory contributionFactory, ActionParameter parameter);
+	void addActionContribution(ActionContributionFactory contributionFactory, ActionParameter parameter)
+		throws ActionException;
 
 	/**
 	 * Returns the action that will be executed.
@@ -116,15 +122,17 @@ public interface ActionContext {
 	 * Sets the action that will be executed.
 	 *
 	 * @param action the action to execute
+	 * @throws ActionException when an action has already been created
 	 */
-	void setAction(Action action);
+	void setAction(Action action) throws ActionException;
 
 	/**
 	 * Adds an interceptor to this action context. The later an action interceptor is added, the higher its priority.
 	 *
 	 * @param interceptor the interceptor to add
+	 * @throws ActionException when the interceptor has no chance of running
 	 */
-	void addInterceptor(ActionInterceptor interceptor);
+	void addInterceptor(ActionInterceptor interceptor) throws ActionException;
 
 	/**
 	 * Returns the current phase of this action context.
