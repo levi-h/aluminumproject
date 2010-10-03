@@ -45,9 +45,11 @@ import java.util.Map;
 public class DefaultActionContext implements ActionContext {
 	private Configuration configuration;
 
+	private ActionDescriptor actionDescriptor;
 	private ActionFactory actionFactory;
+
 	private Map<String, ActionParameter> parameters;
-	private Map<ActionContributionFactory, ActionParameter> actionContributionFactories;
+	private Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories;
 
 	private Context context;
 	private Writer writer;
@@ -65,17 +67,20 @@ public class DefaultActionContext implements ActionContext {
 	 * Creates a default action context.
 	 *
 	 * @param configuration the current configuration
+	 * @param actionDescriptor the descriptor of the action
 	 * @param actionFactory the action factory that will create the action
 	 * @param context the context that the action will use
 	 * @param writer the writer that the writer will use
 	 */
-	public DefaultActionContext(
-			Configuration configuration, ActionFactory actionFactory, Context context, Writer writer) {
+	public DefaultActionContext(Configuration configuration,
+			ActionDescriptor actionDescriptor, ActionFactory actionFactory, Context context, Writer writer) {
 		this.configuration = configuration;
 
+		this.actionDescriptor = actionDescriptor;
 		this.actionFactory = actionFactory;
+
 		parameters = new HashMap<String, ActionParameter>();
-		actionContributionFactories = new LinkedHashMap<ActionContributionFactory, ActionParameter>();
+		actionContributionFactories = new LinkedHashMap<ActionContributionDescriptor, ActionContributionFactory>();
 
 		this.context = context;
 		this.writer = writer;
@@ -91,6 +96,10 @@ public class DefaultActionContext implements ActionContext {
 
 	public Configuration getConfiguration() {
 		return configuration;
+	}
+
+	public ActionDescriptor getActionDescriptor() {
+		return actionDescriptor;
 	}
 
 	public ActionFactory getActionFactory() {
@@ -109,17 +118,17 @@ public class DefaultActionContext implements ActionContext {
 		parameters.put(name, parameter);
 	}
 
-	public Map<ActionContributionFactory, ActionParameter> getActionContributionFactories() {
+	public Map<ActionContributionDescriptor, ActionContributionFactory> getActionContributionFactories() {
 		return Collections.unmodifiableMap(actionContributionFactories);
 	}
 
-	public void addActionContribution(ActionContributionFactory contributionFactory, ActionParameter parameter)
-			throws ActionException {
+	public void addActionContribution(ActionContributionDescriptor descriptor,
+			ActionContributionFactory contributionFactory) throws ActionException {
 		if (EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION).contains(phase)) {
 			throw new ActionException("can't add action contribution: all contributions have been made");
 		}
 
-		actionContributionFactories.put(contributionFactory, parameter);
+		actionContributionFactories.put(descriptor, contributionFactory);
 	}
 
 	public Context getContext() {

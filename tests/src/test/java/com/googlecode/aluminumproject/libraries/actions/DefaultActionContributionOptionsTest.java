@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionSkipper;
 import com.googlecode.aluminumproject.templates.ActionContext;
+import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.templates.DefaultActionContext;
 import com.googlecode.aluminumproject.writers.ListWriter;
@@ -51,7 +52,7 @@ public class DefaultActionContributionOptionsTest {
 
 		actionContributionOptions = new DefaultActionContributionOptions();
 		actionContext = new DefaultActionContext(configuration,
-			new TestActionFactory(), new DefaultContext(), new ListWriter());
+			new ActionDescriptor("test", "test"), new TestActionFactory(), new DefaultContext(), new ListWriter());
 
 		converterRegistry = new DefaultConverterRegistry();
 		converterRegistry.initialise(configuration, parameters);

@@ -47,6 +47,7 @@ import org.testng.annotations.Test;
 public class DefaultActionContextTest {
 	private Configuration configuration;
 
+	private ActionDescriptor actionDescriptor;
 	private ActionFactory actionFactory;
 
 	private Context context;
@@ -58,23 +59,28 @@ public class DefaultActionContextTest {
 	public void createActionContext() {
 		configuration = new TestConfiguration(new ConfigurationParameters());
 
+		actionDescriptor = new ActionDescriptor("test", "test");
 		actionFactory = new TestActionFactory();
 
 		context = new DefaultContext();
 		writer = new TestWriter();
 
-		actionContext = new DefaultActionContext(configuration, actionFactory, context, writer);
+		actionContext = new DefaultActionContext(configuration, actionDescriptor, actionFactory, context, writer);
 	}
 
 	public void configurationShouldBeConfigurationOfConstructor() {
 		assert actionContext.getConfiguration() == configuration;
 	}
 
-	public void initialActionFactoryShouldBeActionFactoryOfConstructor() {
+	public void actionDescriptorShouldBeActionDescriptorOfConstructor() {
+		assert actionContext.getActionDescriptor() == actionDescriptor;
+	}
+
+	public void actionFactoryShouldBeActionFactoryOfConstructor() {
 		assert actionContext.getActionFactory() == actionFactory;
 	}
 
-	public void initialContextShouldBeContextOfConstructor() {
+	public void contextShouldBeContextOfConstructor() {
 		assert actionContext.getContext() == context;
 	}
 
@@ -117,32 +123,35 @@ public class DefaultActionContextTest {
 	}
 
 	public void contributionFactoriesShouldInitiallyBeEmpty() {
-		Map<ActionContributionFactory, ActionParameter> actionContributionFactories =
+		Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories =
 			actionContext.getActionContributionFactories();
 		assert actionContributionFactories != null;
 		assert actionContributionFactories.isEmpty();
 	}
 
 	public void actionContributionsShouldBeAddable() {
+		ActionContributionDescriptor descriptor =
+			new ActionContributionDescriptor("test", "test", new TestActionParameter("test"));
 		ActionContributionFactory actionContributionFactory = new TestActionContributionFactory();
-		ActionParameter parameter = new TestActionParameter("test");
 
-		actionContext.addActionContribution(actionContributionFactory, parameter);
+		actionContext.addActionContribution(descriptor, actionContributionFactory);
 
-		Map<ActionContributionFactory, ActionParameter> actionContributionFactories =
+		Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories =
 			actionContext.getActionContributionFactories();
 		assert actionContributionFactories != null;
 		assert actionContributionFactories.size() == 1;
 
-		assert actionContributionFactories.containsKey(actionContributionFactory);
-		assert actionContributionFactories.get(actionContributionFactory) == parameter;
+		assert actionContributionFactories.containsKey(descriptor);
+		assert actionContributionFactories.get(descriptor) == actionContributionFactory;
 	}
 
 	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = ActionException.class)
 	public void addingActionContributionAfterContributionsHaveBeenMadeShouldCauseException() {
 		actionContext.setPhase(ActionPhase.CREATION);
 
-		actionContext.addActionContribution(new TestActionContributionFactory(), new TestActionParameter("test"));
+		actionContext.addActionContribution(
+			new ActionContributionDescriptor("test", "test", new TestActionParameter("test")),
+			new TestActionContributionFactory());
 	}
 
 	@Test(expectedExceptions = ActionException.class)
