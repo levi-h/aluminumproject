@@ -38,7 +38,7 @@ import java.util.Map;
  * accessible all of the time (e.g. the {@link #getAction() action itself} is not available until it is {@link
  * ActionPhase#CREATION created}). For the same reason, not every part of the action context can be changed during every
  * phase (e.g. after the {@link ActionPhase#CONTRIBUTION contribution phase}, it does no longer make sense to {@link
- * #addActionContribution(ActionContributionFactory, ActionParameter) add action contributions}).
+ * #addActionContribution(ActionContributionDescriptor, ActionContributionFactory) add action contributions}).
  *
  * @author levi_h
  */
@@ -49,6 +49,13 @@ public interface ActionContext {
 	 * @return the current configuration
 	 */
 	Configuration getConfiguration();
+
+	/**
+	 * Returns the descriptor of the created action.
+	 *
+	 * @return the action's descriptor
+	 */
+	ActionDescriptor getActionDescriptor();
 
 	/**
 	 * Returns the factory that will be used to create the action.
@@ -99,17 +106,17 @@ public interface ActionContext {
 	 *
 	 * @return the action's contribution factories
 	 */
-	Map<ActionContributionFactory, ActionParameter> getActionContributionFactories();
+	Map<ActionContributionDescriptor, ActionContributionFactory> getActionContributionFactories();
 
 	/**
 	 * Adds an action contribution to the set of action contributions that will be made to the action.
 	 *
+	 * @param descriptor the descriptor of the action contribution factory
 	 * @param contributionFactory the factory that will create the action contribution
-	 * @param parameter the parameter that should be supplied to the action contribution
 	 * @throws ActionException when it is too late to add an action contribution
 	 */
-	void addActionContribution(ActionContributionFactory contributionFactory, ActionParameter parameter)
-		throws ActionException;
+	void addActionContribution(
+		ActionContributionDescriptor descriptor, ActionContributionFactory contributionFactory) throws ActionException;
 
 	/**
 	 * Returns the action that will be executed.

@@ -158,7 +158,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		ActionFactory actionFactory = findActionFactory(library, name);
 		logger.debug("found action factory for action with name '", name, "': ", actionFactory);
 
-		Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionFactories =
+		Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories =
 			createActionContributionFactories(contributionDescriptors, libraryUrlAbbreviations);
 		logger.debug("created action contributions factories ",
 			"for action with name '", name, "': ", actionContributionFactories);
@@ -167,11 +167,11 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 			Collections.unmodifiableList(actionInterceptors), libraryUrlAbbreviations);
 	}
 
-	private Map<ActionContributionFactory, ActionContributionDescriptor> createActionContributionFactories(
+	private Map<ActionContributionDescriptor, ActionContributionFactory> createActionContributionFactories(
 			List<ActionContributionDescriptor> contributionDescriptors,
 			Map<String, String> libraryUrlAbbreviations) throws TemplateException {
-		Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionFactories =
-			new LinkedHashMap<ActionContributionFactory, ActionContributionDescriptor>();
+		Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories =
+			new LinkedHashMap<ActionContributionDescriptor, ActionContributionFactory>();
 
 		for (ActionContributionDescriptor descriptor: contributionDescriptors) {
 			String libraryUrlAbbreviation = descriptor.getLibraryUrlAbbreviation();
@@ -184,7 +184,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 			ActionContributionFactory actionContributionFactory =
 				findActionContributionFactory(library, descriptor.getName());
 
-			actionContributionFactories.put(actionContributionFactory, descriptor);
+			actionContributionFactories.put(descriptor, actionContributionFactory);
 		}
 
 		return actionContributionFactories;
@@ -297,7 +297,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	 */
 	protected ActionElement createActionElement(
 			ActionDescriptor actionDescriptor, ActionFactory actionFactory, Map<String, ActionParameter> parameters,
-			Map<ActionContributionFactory, ActionContributionDescriptor> actionContributionFactories,
+			Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories,
 			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations) {
 		logger.debug("creating action element for action factory ", actionFactory, ", parameters ", parameters, ", ",
 			"action interceptors ", actionInterceptors, ", and contribution factories ", actionContributionFactories);
