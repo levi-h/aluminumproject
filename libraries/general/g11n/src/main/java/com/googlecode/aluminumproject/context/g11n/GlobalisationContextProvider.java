@@ -38,11 +38,17 @@ import java.util.Locale;
  * #LOCALE_PROVIDER_CLASS} parameter. By default, a {@link ConstantLocaleProvider constant locale provider} will be
  * used with either the value of the configuration parameter {@value #LOCALE} or the {@link Locale#getDefault() default
  * locale}.
+ * <p>
+ * The globalisation context's resource bundle provider will be {@link NameBasedResourceBundleProvider name-based},
+ * unless a different one is configured via a configuration parameter named {@value #RESOURCE_BUNDLE_PROVIDER_CLASS}.
+ * The base name of the default resource bundle provider can be configured by using the {@value
+ * #RESOURCE_BUNDLE_BASE_NAME} parameter; by default, {@value #DEFAULT_RESOURCE_BUNDLE_BASE_NAME} will be used.
  *
  * @author levi_h
  */
 public class GlobalisationContextProvider implements ContextEnricher {
 	private LocaleProvider localeProvider;
+	private ResourceBundleProvider resourceBundleProvider;
 
 	private final Logger logger;
 
@@ -56,6 +62,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	public void initialise(
 			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
 		createLocaleProvider(configuration, parameters);
+		createResourceBundleProvider(configuration, parameters);
 	}
 
 	private void createLocaleProvider(
@@ -93,9 +100,28 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
+	private void createResourceBundleProvider(
+			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+		String resourceBundleProviderClassName = parameters.getValue(RESOURCE_BUNDLE_PROVIDER_CLASS, null);
+
+		if (resourceBundleProviderClassName == null) {
+			String baseName = parameters.getValue(RESOURCE_BUNDLE_BASE_NAME, DEFAULT_RESOURCE_BUNDLE_BASE_NAME);
+
+			logger.debug("no resource bundle provider configured, ",
+				"using name-based resource bundle provider with base name '", baseName, "'");
+
+			resourceBundleProvider = new NameBasedResourceBundleProvider(baseName);
+		} else {
+			logger.debug("using configured resource bundle provider of type ", resourceBundleProviderClassName);
+
+			resourceBundleProvider = configuration.getConfigurationElementFactory().instantiate(
+				resourceBundleProviderClassName, ResourceBundleProvider.class);
+		}
+	}
+
 	public void beforeTemplate(Context context) throws ContextException {
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT,
-			new GlobalisationContext(localeProvider));
+			new GlobalisationContext(localeProvider, resourceBundleProvider));
 	}
 
 	public void afterTemplate(Context context) throws ContextException {
@@ -112,4 +138,20 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	 * when no locale provider is configured.
 	 */
 	public final static String LOCALE = "library.g11n.locale";
+
+	/**
+	 * The name of the configuration parameter with the class name of the resource bundle provider that should be used.
+	 */
+	public final static String RESOURCE_BUNDLE_PROVIDER_CLASS = "library.g11n.resource_bundle_provider.class";
+
+	/**
+	 * The name of the configuration parameter that contains the base name that will be passed to the name-based
+	 * resource bundle provider when no resource bundle provider is configured.
+	 */
+	public final static String RESOURCE_BUNDLE_BASE_NAME = "library.g11n.resource_bundle_base_name";
+
+	/**
+	 * The base name that will be supplied to the name-based resource bundle provider if none is configured: {@value}.
+	 */
+	public final static String DEFAULT_RESOURCE_BUNDLE_BASE_NAME = "resources/aluminum";
 }
