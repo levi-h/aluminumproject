@@ -29,14 +29,17 @@ import com.googlecode.aluminumproject.context.ContextException;
  */
 public class GlobalisationContext {
 	private LocaleProvider localeProvider;
+	private ResourceBundleProvider resourceBundleProvider;
 
 	/**
 	 * Creates a globalisation context.
 	 *
 	 * @param localeProvider the locale provider to use
+	 * @param resourceBundleProvider the resource bundle provider to use
 	 */
-	public GlobalisationContext(LocaleProvider localeProvider) {
+	public GlobalisationContext(LocaleProvider localeProvider, ResourceBundleProvider resourceBundleProvider) {
 		this.localeProvider = localeProvider;
+		this.resourceBundleProvider = resourceBundleProvider;
 	}
 
 	/**
@@ -55,6 +58,24 @@ public class GlobalisationContext {
 	 */
 	public void setLocaleProvider(LocaleProvider localeProvider) {
 		this.localeProvider = localeProvider;
+	}
+
+	/**
+	 * Returns this globalisation context's resource bundle provider.
+	 *
+	 * @return the resource bundle provider of this globalisation context
+	 */
+	public ResourceBundleProvider getResourceBundleProvider() {
+		return resourceBundleProvider;
+	}
+
+	/**
+	 * Returns this globalisation context's resource bundle provider.
+	 *
+	 * @param resourceBundleProvider the new resource bundle provider for this globalisation context
+	 */
+	public void setResourceBundleProvider(ResourceBundleProvider resourceBundleProvider) {
+		this.resourceBundleProvider = resourceBundleProvider;
 	}
 
 	/**

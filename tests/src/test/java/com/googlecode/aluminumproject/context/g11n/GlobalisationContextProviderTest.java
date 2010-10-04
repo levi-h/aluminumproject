@@ -18,6 +18,8 @@ package com.googlecode.aluminumproject.context.g11n;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.LOCALE;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.LOCALE_PROVIDER_CLASS;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_BASE_NAME;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_PROVIDER_CLASS;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
@@ -25,6 +27,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -107,6 +110,7 @@ public class GlobalisationContextProviderTest {
 		}
 	}
 
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
 	public void localeProviderShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(LOCALE_PROVIDER_CLASS, SpanishLocaleProvider.class.getName());
@@ -125,5 +129,53 @@ public class GlobalisationContextProviderTest {
 		String country = locale.getCountry();
 		assert country != null;
 		assert country.equals("ES");
+	}
+
+	@Test(dependsOnMethods = "defaultLocaleProviderShouldProvideDefaultLocale")
+	public void defaultResourceBundleProviderShouldProvideResourcesFromResourceBundleWithDefaultBaseName() {
+		initialiseGlobalisationContextProvider();
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		ResourceBundle resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
+		assert resourceBundle != null;
+		assert resourceBundle.containsKey("aluminum");
+		assert resourceBundle.getString("aluminum").equals("a powerful and flexible template engine");
+	}
+
+	@Test(dependsOnMethods = "defaultResourceBundleProviderShouldProvideResourcesFromResourceBundleWithDefaultBaseName")
+	public void baseNameOfDefaultResourceBundleProviderShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(RESOURCE_BUNDLE_BASE_NAME, "resources/projects");
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		ResourceBundle resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
+		assert resourceBundle != null;
+		assert resourceBundle.containsKey("rivoli");
+		assert resourceBundle.getString("rivoli").equals("the framework that makes generating reports fun");
+	}
+
+	public static class ProjectsResourceBundleProvider extends NameBasedResourceBundleProvider {
+		public ProjectsResourceBundleProvider() {
+			super("resources/projects");
+		}
+	}
+
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
+	public void resourceBundleProviderShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(RESOURCE_BUNDLE_PROVIDER_CLASS, ProjectsResourceBundleProvider.class.getName());
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		ResourceBundle resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
+		assert resourceBundle != null;
+		assert resourceBundle.containsKey("aluminum");
+		assert resourceBundle.getString("aluminum").equals("a powerful and flexible template engine");
 	}
 }
