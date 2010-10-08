@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.serialisers;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.templates.Template;
 
 /**
@@ -32,7 +31,7 @@ public class TestSerialiser implements Serialiser {
 	 */
 	public TestSerialiser() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

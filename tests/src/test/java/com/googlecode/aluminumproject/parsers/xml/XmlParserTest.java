@@ -107,19 +107,19 @@ public class XmlParserTest {
 		TestConfiguration configuration = new TestConfiguration(parameters);
 
 		TestLibrary library = new TestLibrary();
-		library.initialise(configuration, parameters);
+		library.initialise(configuration);
 		configuration.addLibrary(library);
 
 		TemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(configuration, parameters);
+		templateElementFactory.initialise(configuration);
 		configuration.setTemplateElementFactory(templateElementFactory);
 
 		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
-		templateFinderFactory.initialise(configuration, parameters);
+		templateFinderFactory.initialise(configuration);
 		configuration.setTemplateFinderFactory(templateFinderFactory);
 
 		XmlParser parser = new XmlParser();
-		parser.initialise(configuration, parameters);
+		parser.initialise(configuration);
 
 		return parser;
 	}

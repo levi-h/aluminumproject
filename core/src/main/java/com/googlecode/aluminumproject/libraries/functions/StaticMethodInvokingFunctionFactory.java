@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
@@ -47,8 +46,8 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 	}
 
 	@Override
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
-		super.initialise(configuration, parameters);
+	public void initialise(Configuration configuration) {
+		super.initialise(configuration);
 
 		information =
 			new FunctionInformation(getFunctionName(), method.getGenericReturnType(), getArgumentInformation());

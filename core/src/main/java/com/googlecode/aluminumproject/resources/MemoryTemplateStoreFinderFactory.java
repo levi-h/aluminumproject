@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.resources.MemoryResourceStoreFinder;
 import com.googlecode.aluminumproject.utilities.resources.ResourceStoreFinder;
 
@@ -39,7 +38,7 @@ public class MemoryTemplateStoreFinderFactory implements TemplateStoreFinderFact
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		logger.debug("creating in-memory template store finder");
 
 		templateStoreFinder = new MemoryResourceStoreFinder();

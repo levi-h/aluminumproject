@@ -25,8 +25,7 @@ public interface ConfigurationElement {
 	 * Initialises this configuration element. This method should be invoked by a {@link Configuration configuration}.
 	 *
 	 * @param configuration the configuration that this configuration element is part of
-	 * @param parameters initialisation parameters for this configuration element
 	 * @throws ConfigurationException when this configuration element can't be initialised
 	 */
-	void initialise(Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException;
+	void initialise(Configuration configuration) throws ConfigurationException;
 }

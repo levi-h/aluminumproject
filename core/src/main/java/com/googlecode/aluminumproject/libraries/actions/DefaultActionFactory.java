@@ -20,7 +20,6 @@ import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 import com.googlecode.aluminumproject.libraries.LibraryException;
@@ -88,9 +87,8 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 	}
 
 	@Override
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		super.initialise(configuration, parameters);
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		super.initialise(configuration);
 
 		parameterSetters = new HashMap<String, Method>();
 

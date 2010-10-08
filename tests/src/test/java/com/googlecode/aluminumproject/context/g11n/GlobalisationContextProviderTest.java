@@ -51,7 +51,7 @@ public class GlobalisationContextProviderTest {
 	}
 
 	private void initialiseGlobalisationContextProvider(ConfigurationParameters parameters) {
-		globalisationContextProvider.initialise(new TestConfiguration(parameters), parameters);
+		globalisationContextProvider.initialise(new TestConfiguration(parameters));
 	}
 
 	public void globalisationContextShouldBeAddedToContextBeforeTemplate() {

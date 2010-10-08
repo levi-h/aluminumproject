@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.expressions.el;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.expressions.Expression;
 import com.googlecode.aluminumproject.expressions.ExpressionException;
@@ -37,7 +36,6 @@ import javax.el.ValueExpression;
  */
 public class ElExpressionFactory implements ExpressionFactory {
 	private Configuration configuration;
-	private ConfigurationParameters parameters;
 
 	private javax.el.ExpressionFactory expressionFactory;
 
@@ -46,9 +44,8 @@ public class ElExpressionFactory implements ExpressionFactory {
 	 */
 	public ElExpressionFactory() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
-		this.parameters = parameters;
 
 		expressionFactory = javax.el.ExpressionFactory.newInstance();
 
@@ -91,12 +88,12 @@ public class ElExpressionFactory implements ExpressionFactory {
 
 	public Expression create(String value, Context context) throws ExpressionException {
 		try {
-			ElContext elContext = new ElContext(context, configuration, parameters);
+			ElContext elContext = new ElContext(context, configuration);
 
 			ValueExpression expression =
 				expressionFactory.createValueExpression(elContext, value, Object.class);
 
-			return new ElExpression(expression, configuration, parameters);
+			return new ElExpression(expression, configuration);
 		} catch (ConfigurationException exception) {
 			throw new ExpressionException(exception, "can't create EL context");
 		} catch (ELException exception) {

@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.context;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 
 /**
  * A context enricher that can be used in tests.
@@ -34,7 +33,7 @@ public class TestContextEnricher implements ContextEnricher {
 	 */
 	public TestContextEnricher() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

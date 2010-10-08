@@ -16,11 +16,10 @@
 package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.resources.ResourceStoreFinder;
 
 /**
- * ...
+ * A template store finder factory that can be used in tests.
  *
  * @author levi_h
  */
@@ -32,7 +31,7 @@ public class TestTemplateStoreFinderFactory implements TemplateStoreFinderFactor
 	 */
 	public TestTemplateStoreFinderFactory() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

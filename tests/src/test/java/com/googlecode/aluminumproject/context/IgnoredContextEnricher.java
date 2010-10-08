@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.context;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 
 /**
  * A context enricher that should not be used when a package is scanned.
@@ -31,7 +30,7 @@ public class IgnoredContextEnricher implements ContextEnricher {
 	 */
 	public IgnoredContextEnricher() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+	public void initialise(Configuration configuration) {}
 
 	public void beforeTemplate(Context context) {}
 

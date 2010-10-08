@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.converters;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 
 import java.lang.reflect.Type;
@@ -34,7 +33,7 @@ public class TestConverterRegistry implements ConverterRegistry {
 	 */
 	public TestConverterRegistry() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

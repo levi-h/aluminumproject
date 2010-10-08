@@ -50,19 +50,18 @@ public class TestAluScriptContext extends AluScriptContext {
 	}
 
 	private static Configuration createConfiguration() {
-		ConfigurationParameters configurationParameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(configurationParameters);
+		TestConfiguration configuration = new TestConfiguration(new ConfigurationParameters());
 
 		TemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(configuration, configurationParameters);
+		templateElementFactory.initialise(configuration);
 		configuration.setTemplateElementFactory(templateElementFactory);
 
 		Library library = new TestLibrary();
-		library.initialise(configuration, configurationParameters);
+		library.initialise(configuration);
 		configuration.addLibrary(library);
 
 		ExpressionFactory expressionFactory = new TestExpressionFactory();
-		expressionFactory.initialise(configuration, configurationParameters);
+		expressionFactory.initialise(configuration);
 		configuration.addExpressionFactory(expressionFactory);
 
 		return configuration;

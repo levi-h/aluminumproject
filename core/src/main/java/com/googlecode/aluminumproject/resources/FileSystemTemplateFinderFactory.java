@@ -18,7 +18,6 @@ package com.googlecode.aluminumproject.resources;
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.resources.CompoundResourceFinder;
 import com.googlecode.aluminumproject.utilities.resources.FileSystemResourceFinder;
 import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;
@@ -45,9 +44,8 @@ public class FileSystemTemplateFinderFactory implements TemplateFinderFactory {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		templateDirectories = parameters.getValues(TEMPLATE_DIRECTORIES);
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		templateDirectories = configuration.getParameters().getValues(TEMPLATE_DIRECTORIES);
 
 		if (templateDirectories.length == 0) {
 			throw new ConfigurationException("please provide one or more template directories");

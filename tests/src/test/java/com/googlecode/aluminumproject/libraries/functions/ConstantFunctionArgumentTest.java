@@ -34,10 +34,8 @@ public class ConstantFunctionArgumentTest {
 
 	@BeforeMethod
 	public void createArgument() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		ConverterRegistry converterRegistry = new DefaultConverterRegistry();
-		converterRegistry.initialise(new TestConfiguration(parameters), parameters);
+		converterRegistry.initialise(new TestConfiguration(new ConfigurationParameters()));
 
 		argument = new ConstantFunctionArgument("32768", converterRegistry);
 

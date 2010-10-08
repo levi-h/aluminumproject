@@ -23,9 +23,7 @@ public class ElContextTest {
 		parameters.addParameter(ElContext.EL_RESOLVER_WITHOUT_BASE_PACKAGES,
 			ReflectionUtilities.getPackageName(DictionaryElResolver.class));
 
-		TestConfiguration configuration = new TestConfiguration(parameters);
-
-		ElContext elContext = new ElContext(new DefaultContext(), configuration, parameters);
+		ElContext elContext = new ElContext(new DefaultContext(), new TestConfiguration(parameters));
 		ELResolver elResolver = elContext.getELResolver();
 
 		assert elResolver.getValue(elContext, null, "en_nl") instanceof Dictionary;
@@ -39,9 +37,7 @@ public class ElContextTest {
 		parameters.addParameter(ElContext.EL_RESOLVER_WITH_BASE_PACKAGES,
 			ReflectionUtilities.getPackageName(TranslationElResolver.class));
 
-		TestConfiguration configuration = new TestConfiguration(parameters);
-
-		ElContext elContext = new ElContext(new DefaultContext(), configuration, parameters);
+		ElContext elContext = new ElContext(new DefaultContext(), new TestConfiguration(parameters));
 		ELResolver elResolver = elContext.getELResolver();
 
 		Object translation = elResolver.getValue(elContext, elResolver.getValue(elContext, null, "nl_en"), "boom");

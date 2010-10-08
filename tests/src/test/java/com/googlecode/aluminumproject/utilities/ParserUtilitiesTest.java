@@ -40,15 +40,14 @@ public class ParserUtilitiesTest {
 
 	@BeforeMethod
 	public void createExpressionFactories() {
-		ConfigurationParameters configurationParameters = new ConfigurationParameters();
-		configuration = new TestConfiguration(configurationParameters);
+		configuration = new TestConfiguration(new ConfigurationParameters());
 
 		elExpressionFactory = new ElExpressionFactory();
-		elExpressionFactory.initialise(configuration, configurationParameters);
+		elExpressionFactory.initialise(configuration);
 		configuration.addExpressionFactory(elExpressionFactory);
 
 		testExpressionFactory = new TestExpressionFactory();
-		testExpressionFactory.initialise(configuration, configurationParameters);
+		testExpressionFactory.initialise(configuration);
 		configuration.addExpressionFactory(testExpressionFactory);
 	}
 

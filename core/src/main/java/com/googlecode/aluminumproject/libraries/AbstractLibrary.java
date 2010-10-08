@@ -20,7 +20,6 @@ import com.googlecode.aluminumproject.annotations.FunctionClass;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
@@ -72,7 +71,6 @@ public abstract class AbstractLibrary implements Library {
 	private String[] packageNames;
 
 	private Configuration configuration;
-	private ConfigurationParameters parameters;
 
 	private List<ActionFactory> actionFactories;
 	private List<ActionContributionFactory> actionContributionFactories;
@@ -92,10 +90,8 @@ public abstract class AbstractLibrary implements Library {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
-		this.parameters = parameters;
 
 		actionFactories = new LinkedList<ActionFactory>();
 		actionContributionFactories = new LinkedList<ActionContributionFactory>();
@@ -238,7 +234,7 @@ public abstract class AbstractLibrary implements Library {
 	 * @param libraryElement the library element to initialise
 	 */
 	protected void initialiseLibraryElement(LibraryElement libraryElement) {
-		libraryElement.initialise(configuration, parameters);
+		libraryElement.initialise(configuration);
 		libraryElement.setLibrary(this);
 	}
 

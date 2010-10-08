@@ -53,7 +53,7 @@ public class TemplateProcessorTest {
 	public static class NameParser implements Parser {
 		private Configuration configuration;
 
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+		public void initialise(Configuration configuration) {
 			this.configuration = configuration;
 		}
 
@@ -130,27 +130,27 @@ public class TemplateProcessorTest {
 		TestConfiguration configuration = new TestConfiguration(parameters);
 
 		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
-		templateFinderFactory.initialise(configuration, parameters);
+		templateFinderFactory.initialise(configuration);
 		configuration.setTemplateFinderFactory(templateFinderFactory);
 
 		Parser parser = new XmlParser();
-		parser.initialise(configuration, parameters);
+		parser.initialise(configuration);
 		configuration.addParser("xml", parser);
 
 		TemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(configuration, parameters);
+		templateElementFactory.initialise(configuration);
 		configuration.setTemplateElementFactory(templateElementFactory);
 
 		Library library = new TestLibrary();
-		library.initialise(configuration, parameters);
+		library.initialise(configuration);
 		configuration.addLibrary(library);
 
 		ConverterRegistry converterRegistry = new TestConverterRegistry();
-		converterRegistry.initialise(configuration, parameters);
+		converterRegistry.initialise(configuration);
 		configuration.setConverterRegistry(converterRegistry);
 
 		TestContextEnricher contextEnricher = new TestContextEnricher();
-		contextEnricher.initialise(configuration, parameters);
+		contextEnricher.initialise(configuration);
 		configuration.addContextEnricher(contextEnricher);
 
 		assert !contextEnricher.isBeforeTemplateInvoked();

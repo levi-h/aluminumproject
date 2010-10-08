@@ -76,8 +76,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
 
 		converters = new HashSet<Converter<?>>();
@@ -87,6 +86,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 
 		Set<String> converterPackages = new HashSet<String>();
 
+		ConfigurationParameters parameters = configuration.getParameters();
 		Collections.addAll(converterPackages,
 			parameters.getValues(CONVERTER_PACKAGES, getPackageName(Converter.class)));
 		Collections.addAll(converterPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));

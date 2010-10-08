@@ -75,18 +75,18 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
 
-		createActionInterceptors(parameters);
+		createActionInterceptors();
 	}
 
-	private void createActionInterceptors(ConfigurationParameters parameters) throws ConfigurationException {
+	private void createActionInterceptors() throws ConfigurationException {
 		actionInterceptors = new LinkedList<ActionInterceptor>();
 
 		Set<String> actionInterceptorPackages = new HashSet<String>();
 
+		ConfigurationParameters parameters = configuration.getParameters();
 		Collections.addAll(actionInterceptorPackages, parameters.getValues(ACTION_INTERCEPTOR_PACKAGES));
 		Collections.addAll(actionInterceptorPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
 

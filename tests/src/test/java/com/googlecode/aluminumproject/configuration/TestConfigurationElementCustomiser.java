@@ -31,7 +31,7 @@ public class TestConfigurationElementCustomiser implements ConfigurationElementC
 	 */
 	public TestConfigurationElementCustomiser() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

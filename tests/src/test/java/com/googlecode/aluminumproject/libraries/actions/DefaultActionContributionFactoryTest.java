@@ -29,14 +29,13 @@ public class DefaultActionContributionFactoryTest {
 
 	@BeforeMethod
 	public void createActionContributionFactories() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(parameters);
+		TestConfiguration configuration = new TestConfiguration(new ConfigurationParameters());
 
 		unannotatedActionContributionFactory = new DefaultActionContributionFactory(TestActionContribution.class);
-		unannotatedActionContributionFactory.initialise(configuration, parameters);
+		unannotatedActionContributionFactory.initialise(configuration);
 
 		annotatedActionContributionFactory = new DefaultActionContributionFactory(AnnotatedActionContribution.class);
-		annotatedActionContributionFactory.initialise(configuration, parameters);
+		annotatedActionContributionFactory.initialise(configuration);
 	}
 
 	public void unannotatedActionContributionShouldResultInHumanisedClassNameAsName() {

@@ -37,10 +37,8 @@ public class DefaultConverterRegistryTest {
 
 	@BeforeMethod
 	public void createConverterRegistryAndContext() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		converterRegistry = new DefaultConverterRegistry();
-		converterRegistry.initialise(new TestConfiguration(parameters), parameters);
+		converterRegistry.initialise(new TestConfiguration(new ConfigurationParameters()));
 
 		context = new DefaultContext();
 	}
@@ -60,7 +58,7 @@ public class DefaultConverterRegistryTest {
 		parameters.addParameter(CONVERTER_PACKAGES, getPackageName(TestConverter.class));
 
 		converterRegistry = new DefaultConverterRegistry();
-		converterRegistry.initialise(new TestConfiguration(parameters), parameters);
+		converterRegistry.initialise(new TestConfiguration(parameters));
 
 		Converter<? super Float> converter = converterRegistry.getConverter(Float.class, CharSequence.class);
 		assert converter instanceof TestConverter;
@@ -71,7 +69,7 @@ public class DefaultConverterRegistryTest {
 		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(TestConverter.class));
 
 		converterRegistry = new DefaultConverterRegistry();
-		converterRegistry.initialise(new TestConfiguration(parameters), parameters);
+		converterRegistry.initialise(new TestConfiguration(parameters));
 
 		Converter<? super Float> converter = converterRegistry.getConverter(Float.class, CharSequence.class);
 		assert converter instanceof TestConverter;

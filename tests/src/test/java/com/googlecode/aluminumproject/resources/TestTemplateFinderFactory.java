@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;
 
 /**
@@ -32,7 +31,7 @@ public class TestTemplateFinderFactory implements TemplateFinderFactory {
 	 */
 	public TestTemplateFinderFactory() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

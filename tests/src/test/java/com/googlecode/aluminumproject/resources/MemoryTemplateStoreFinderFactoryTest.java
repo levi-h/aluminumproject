@@ -26,19 +26,15 @@ import org.testng.annotations.Test;
 @Test(groups = {"core", "fast"})
 public class MemoryTemplateStoreFinderFactoryTest {
 	public void factoryShouldCreateMemoryTemplateStoreFinder() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		TemplateStoreFinderFactory templateStoreFinderFactory = new MemoryTemplateStoreFinderFactory();
-		templateStoreFinderFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateStoreFinderFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
 		assert templateStoreFinderFactory.createTemplateStoreFinder() instanceof MemoryResourceStoreFinder;
 	}
 
 	@Test(dependsOnMethods = "factoryShouldCreateMemoryTemplateStoreFinder")
 	public void repeatedCreationShouldResultInSingleTemplateStoreFinder() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		TemplateStoreFinderFactory templateStoreFinderFactory = new MemoryTemplateStoreFinderFactory();
-		templateStoreFinderFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateStoreFinderFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
 
 		ResourceStoreFinder firstTemplateStoreFinder = templateStoreFinderFactory.createTemplateStoreFinder();
 		ResourceStoreFinder secondTemplateStoreFinder = templateStoreFinderFactory.createTemplateStoreFinder();
