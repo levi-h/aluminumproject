@@ -15,8 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.model;
 
+import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * An XML element.
@@ -24,6 +28,16 @@ import com.googlecode.aluminumproject.writers.WriterException;
  * @author levi_h
  */
 public interface Element {
+	/**
+	 * Selects elements and/or namespace, attribute, text, or comment values with an XPath query.
+	 *
+	 * @param expression the XPath expression to use
+	 * @param context a set of namespaces that form the context for the XPath expression
+	 * @return a list of results
+	 * @throws ActionException when the given expression is invalid or when one of the results is of an unsupported type
+	 */
+	List<?> select(String expression, Map<String, String> context) throws ActionException;
+
 	/**
 	 * Writes a document with this element as root element to a writer.
 	 *

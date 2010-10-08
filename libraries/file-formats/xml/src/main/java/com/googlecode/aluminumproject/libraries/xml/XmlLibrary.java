@@ -24,10 +24,8 @@ import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributio
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.xml.actions.DynamicAttribute;
 import com.googlecode.aluminumproject.libraries.xml.actions.DynamicElement;
-import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
-
-import java.util.Arrays;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
 /**
  * Provides actions that work with XML documents. Internally, the <a href="http://www.xom.nu/">XOM</a> library is used,
@@ -58,7 +56,7 @@ public class XmlLibrary extends AbstractLibrary {
 
 	@Override
 	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
-		if (Arrays.asList("select", "transform").contains(name)) {
+		if (name.equals("transform")) {
 			throw new LibraryException("in the near future, '", name, "' will become an action",
 				" - please use the 'element' action instead");
 		}
