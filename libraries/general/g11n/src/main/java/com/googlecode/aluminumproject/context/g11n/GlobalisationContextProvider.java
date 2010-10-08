@@ -59,14 +59,14 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		createLocaleProvider(configuration, parameters);
-		createResourceBundleProvider(configuration, parameters);
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		createLocaleProvider(configuration);
+		createResourceBundleProvider(configuration);
 	}
 
-	private void createLocaleProvider(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	private void createLocaleProvider(Configuration configuration) throws ConfigurationException {
+		ConfigurationParameters parameters = configuration.getParameters();
+
 		String localeProviderClassName = parameters.getValue(LOCALE_PROVIDER_CLASS, null);
 
 		if (localeProviderClassName == null) {
@@ -100,8 +100,9 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
-	private void createResourceBundleProvider(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	private void createResourceBundleProvider(Configuration configuration) throws ConfigurationException {
+		ConfigurationParameters parameters = configuration.getParameters();
+
 		String resourceBundleProviderClassName = parameters.getValue(RESOURCE_BUNDLE_PROVIDER_CLASS, null);
 
 		if (resourceBundleProviderClassName == null) {

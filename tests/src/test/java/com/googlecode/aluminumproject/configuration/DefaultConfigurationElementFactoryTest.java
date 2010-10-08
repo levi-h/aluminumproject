@@ -32,10 +32,8 @@ public class DefaultConfigurationElementFactoryTest {
 
 	@BeforeMethod
 	public void createConfigurationElementFactory() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		configurationElementFactory = new DefaultConfigurationElementFactory();
-		configurationElementFactory.initialise(new TestConfiguration(parameters), parameters);
+		configurationElementFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
 	}
 
 	public void classShouldBeInstantiable() {
@@ -65,7 +63,7 @@ public class DefaultConfigurationElementFactoryTest {
 			ReflectionUtilities.getPackageName(TestConfigurationElementCustomiser.class));
 
 		DefaultConfigurationElementFactory configurationElementFactory = new DefaultConfigurationElementFactory();
-		configurationElementFactory.initialise(new TestConfiguration(parameters), parameters);
+		configurationElementFactory.initialise(new TestConfiguration(parameters));
 
 		List<ConfigurationElementCustomiser> customisers =
 			configurationElementFactory.getConfigurationElementCustomisers();
@@ -80,7 +78,7 @@ public class DefaultConfigurationElementFactoryTest {
 			ReflectionUtilities.getPackageName(TestConfigurationElementCustomiser.class));
 
 		DefaultConfigurationElementFactory configurationElementFactory = new DefaultConfigurationElementFactory();
-		configurationElementFactory.initialise(new TestConfiguration(parameters), parameters);
+		configurationElementFactory.initialise(new TestConfiguration(parameters));
 
 		List<ConfigurationElementCustomiser> customisers =
 			configurationElementFactory.getConfigurationElementCustomisers();
@@ -98,7 +96,7 @@ public class DefaultConfigurationElementFactoryTest {
 		TestConfiguration configuration = new TestConfiguration(parameters);
 
 		DefaultConfigurationElementFactory configurationElementFactory = new DefaultConfigurationElementFactory();
-		configurationElementFactory.initialise(configuration, parameters);
+		configurationElementFactory.initialise(configuration);
 
 		List<ConfigurationElementCustomiser> configurationElementCustomisers =
 			configurationElementFactory.getConfigurationElementCustomisers();
@@ -126,7 +124,7 @@ public class DefaultConfigurationElementFactoryTest {
 			ReflectionUtilities.getPackageName(TestConfigurationElementCustomiser.class));
 
 		DefaultConfigurationElementFactory configurationElementFactory = new DefaultConfigurationElementFactory();
-		configurationElementFactory.initialise(new TestConfiguration(parameters), parameters);
+		configurationElementFactory.initialise(new TestConfiguration(parameters));
 
 		assert configurationElementFactory.instantiate(Customisable.class.getName(), Customisable.class).isCustomised();
 	}

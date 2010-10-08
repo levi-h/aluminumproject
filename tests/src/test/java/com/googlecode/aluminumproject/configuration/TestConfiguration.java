@@ -39,6 +39,8 @@ import java.util.Map;
  * @author levi_h
  */
 public class TestConfiguration implements Configuration {
+	private ConfigurationParameters parameters;
+
 	private ConfigurationElementFactory configurationElementFactory;
 	private ConverterRegistry converterRegistry;
 	private TemplateElementFactory templateElementFactory;
@@ -58,14 +60,20 @@ public class TestConfiguration implements Configuration {
 	 * @param parameters the parameters to use for the configuration element factory
 	 */
 	public TestConfiguration(ConfigurationParameters parameters) {
+		this.parameters = parameters;
+
 		configurationElementFactory = new DefaultConfigurationElementFactory();
-		configurationElementFactory.initialise(this, parameters);
+		configurationElementFactory.initialise(this);
 
 		libraries = new ArrayList<Library>();
 		parsers = new HashMap<String, Parser>();
 		serialisers = new HashMap<String, Serialiser>();
 		contextEnrichers = new ArrayList<ContextEnricher>();
 		expressionFactories = new ArrayList<ExpressionFactory>();
+	}
+
+	public ConfigurationParameters getParameters() {
+		return parameters;
 	}
 
 	public ConfigurationElementFactory getConfigurationElementFactory() {

@@ -31,11 +31,8 @@ public class AbstractLibraryElementTest {
 
 	@BeforeMethod
 	public void createLibraryElement() {
-		ConfigurationParameters configurationParameters = new ConfigurationParameters();
-		Configuration configuration = new TestConfiguration(configurationParameters);
-
 		libraryElement = new DefaultLibraryElement();
-		libraryElement.initialise(configuration, configurationParameters);
+		libraryElement.initialise(new TestConfiguration(new ConfigurationParameters()));
 	}
 
 	public void injectingFieldsShouldIncludeConfiguration() {

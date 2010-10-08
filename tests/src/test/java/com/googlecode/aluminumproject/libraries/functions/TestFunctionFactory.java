@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.Library;
 
@@ -42,7 +41,7 @@ public class TestFunctionFactory implements FunctionFactory {
 		information = new FunctionInformation("test", Void.TYPE, Collections.<FunctionArgumentInformation>emptyList());
 	}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

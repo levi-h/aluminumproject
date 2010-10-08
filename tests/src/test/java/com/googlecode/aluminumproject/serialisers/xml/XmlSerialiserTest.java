@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.serialisers.xml;
 
+import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
@@ -52,55 +53,24 @@ import org.testng.annotations.Test;
 @SuppressWarnings("all")
 @Test(groups = {"serialisers", "serialisers-xml", "fast"})
 public class XmlSerialiserTest {
-	private TestConfiguration configuration;
-
-	private ExpressionFactory expressionFactory;
-
 	private TemplateBuilder templateBuilder;
 
+	private Configuration configuration;
+
 	@BeforeMethod
-	public void createConfigurationAndTemplateBuilder() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(parameters);
-
-		this.configuration = configuration;
-
-		ConverterRegistry converterRegistry = new DefaultConverterRegistry();
-		converterRegistry.initialise(configuration, parameters);
-		configuration.setConverterRegistry(converterRegistry);
-
-		TemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(configuration, parameters);
-		configuration.setTemplateElementFactory(templateElementFactory);
-
-		Library coreLibrary = new CoreLibrary();
-		coreLibrary.initialise(configuration, parameters);
-		configuration.addLibrary(coreLibrary);
-
-		Library testLibrary = new TestLibrary();
-		testLibrary.initialise(configuration, parameters);
-		configuration.addLibrary(testLibrary);
-
-		TemplateStoreFinderFactory templateStoreFinderFactory = new MemoryTemplateStoreFinderFactory();
-		templateStoreFinderFactory.initialise(configuration, parameters);
-		configuration.setTemplateStoreFinderFactory(templateStoreFinderFactory);
-
-		Serialiser serialiser = new XmlSerialiser();
-		serialiser.initialise(configuration, parameters);
-		configuration.addSerialiser("xml", serialiser);
-
-		expressionFactory = new TestExpressionFactory();
-		expressionFactory.initialise(configuration, parameters);
-		configuration.addExpressionFactory(expressionFactory);
-
+	public void createTemplateBuilder() {
 		templateBuilder = new TemplateBuilder();
 	}
 
 	public void emptyTemplateShouldResultInEmptyDocument() {
+		createConfiguration();
+
 		assert getTemplateText().equals("");
 	}
 
 	public void actionElementWithoutChildrenShouldResultInCombinedOpenAndCloseTag() {
+		createConfiguration();
+
 		ActionDescriptor actionDescriptor = new ActionDescriptor("test", "test");
 		Map<String, ActionParameter> parameters = Collections.emptyMap();
 		List<ActionContributionDescriptor> contributionDescriptors = Collections.emptyList();
@@ -116,6 +86,8 @@ public class XmlSerialiserTest {
 
 	@Test(dependsOnMethods = "textElementShouldResultInText")
 	public void actionElementWithChildrenShouldResultInSeparateOpenAndCloseTags() {
+		createConfiguration();
+
 		ActionDescriptor actionDescriptor = new ActionDescriptor("test", "test");
 		Map<String, ActionParameter> parameters = Collections.emptyMap();
 		List<ActionContributionDescriptor> contributionDescriptors = Collections.emptyList();
@@ -138,6 +110,8 @@ public class XmlSerialiserTest {
 		"actionElementWithChildrenShouldResultInSeparateOpenAndCloseTags"
 	})
 	public void libraryUrlAbbreviationsShouldNotBeRepeatedInChildTags() {
+		createConfiguration();
+
 		ActionDescriptor actionDescriptor = new ActionDescriptor("test", "test");
 		Map<String, ActionParameter> parameters = Collections.emptyMap();
 		List<ActionContributionDescriptor> contributionDescriptors = Collections.emptyList();
@@ -157,6 +131,8 @@ public class XmlSerialiserTest {
 
 	@Test(dependsOnMethods = "actionElementWithoutChildrenShouldResultInCombinedOpenAndCloseTag")
 	public void versionedLibraryUrlsShouldBeUsable() {
+		createConfiguration();
+
 		ActionDescriptor actionDescriptor = new ActionDescriptor("test", "test");
 		Map<String, ActionParameter> parameters = Collections.emptyMap();
 		List<ActionContributionDescriptor> contributionDescriptors = Collections.emptyList();
@@ -172,6 +148,8 @@ public class XmlSerialiserTest {
 
 	@Test(dependsOnMethods = "actionElementWithoutChildrenShouldResultInCombinedOpenAndCloseTag")
 	public void parametersShouldResultInAttributes() {
+		createConfiguration();
+
 		ActionDescriptor actionDescriptor = new ActionDescriptor("test", "test");
 		Map<String, ActionParameter> parameters = Collections.<String, ActionParameter>singletonMap(
 			"description", new ConstantActionParameter("test", configuration.getConverterRegistry()));
@@ -188,10 +166,12 @@ public class XmlSerialiserTest {
 	}
 
 	public void contributionsShouldResultInAttributes() {
+		createConfiguration();
+
 		ActionDescriptor actionDescriptor = new ActionDescriptor("test", "test");
 		Map<String, ActionParameter> parameters = Collections.emptyMap();
 		List<ActionContributionDescriptor> contributions = Arrays.asList(new ActionContributionDescriptor("c", "if",
-			new ExpressionActionParameter(expressionFactory, "[proceed]", configuration.getConverterRegistry())));
+			new ExpressionActionParameter(getExpressionFactory(), "[proceed]", configuration.getConverterRegistry())));
 
 		Map<String, String> libraryUrlAbbreviations = new LinkedHashMap<String, String>();
 		libraryUrlAbbreviations.put("c", "http://aluminumproject.googlecode.com/core");
@@ -226,9 +206,7 @@ public class XmlSerialiserTest {
 		configurationParameters.addParameter(
 			XmlSerialiser.ELEMENT_NAME_TRANSLATOR_CLASS, UpperCaseElementNameTranslator.class.getName());
 
-		Serialiser serialiser = new XmlSerialiser();
-		serialiser.initialise(configuration, configurationParameters);
-		configuration.addSerialiser("xml", serialiser);
+		createConfiguration(configurationParameters);
 
 		ActionDescriptor actionDescriptor = new ActionDescriptor("TEST", "test");
 
@@ -237,7 +215,7 @@ public class XmlSerialiserTest {
 
 		List<ActionContributionDescriptor> contributions = new LinkedList<ActionContributionDescriptor>();
 		contributions.add(new ActionContributionDescriptor("C", "if",
-			new ExpressionActionParameter(expressionFactory, "[proceed]", configuration.getConverterRegistry())));
+			new ExpressionActionParameter(getExpressionFactory(), "[proceed]", configuration.getConverterRegistry())));
 
 		Map<String, String> libraryUrlAbbreviations = new LinkedHashMap<String, String>();
 		libraryUrlAbbreviations.put("C", "http://aluminumproject.googlecode.com/core");
@@ -253,6 +231,8 @@ public class XmlSerialiserTest {
 	}
 
 	public void textElementShouldResultInText() {
+		createConfiguration();
+
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createTextElement(
 			"text", Collections.<String, String>emptyMap()));
 		templateBuilder.restoreCurrentTemplateElement();
@@ -261,11 +241,55 @@ public class XmlSerialiserTest {
 	}
 
 	public void expressionElementShouldResultInExpressionText() {
+		createConfiguration();
+
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createExpressionElement(
-			expressionFactory, "[name]", Collections.<String, String>emptyMap()));
+			getExpressionFactory(), "[name]", Collections.<String, String>emptyMap()));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("[name]");
+	}
+
+	private void createConfiguration() {
+		createConfiguration(new ConfigurationParameters());
+	}
+
+	private void createConfiguration(ConfigurationParameters parameters) {
+		TestConfiguration configuration = new TestConfiguration(parameters);
+
+		ConverterRegistry converterRegistry = new DefaultConverterRegistry();
+		converterRegistry.initialise(configuration);
+		configuration.setConverterRegistry(converterRegistry);
+
+		TemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
+		templateElementFactory.initialise(configuration);
+		configuration.setTemplateElementFactory(templateElementFactory);
+
+		Library coreLibrary = new CoreLibrary();
+		coreLibrary.initialise(configuration);
+		configuration.addLibrary(coreLibrary);
+
+		Library testLibrary = new TestLibrary();
+		testLibrary.initialise(configuration);
+		configuration.addLibrary(testLibrary);
+
+		TemplateStoreFinderFactory templateStoreFinderFactory = new MemoryTemplateStoreFinderFactory();
+		templateStoreFinderFactory.initialise(configuration);
+		configuration.setTemplateStoreFinderFactory(templateStoreFinderFactory);
+
+		Serialiser serialiser = new XmlSerialiser();
+		serialiser.initialise(configuration);
+		configuration.addSerialiser("xml", serialiser);
+
+		ExpressionFactory expressionFactory = new TestExpressionFactory();
+		expressionFactory.initialise(configuration);
+		configuration.addExpressionFactory(expressionFactory);
+
+		this.configuration = configuration;
+	}
+
+	private ExpressionFactory getExpressionFactory() {
+		return configuration.getExpressionFactories().get(0);
 	}
 
 	private String getTemplateText() {

@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.cache;
 
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.templates.Template;
 
 import java.util.HashMap;
@@ -42,7 +41,7 @@ public class MemoryCache implements Cache {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+	public void initialise(Configuration configuration) {}
 
 	public void storeTemplate(Key key, Template template) {
 		logger.debug("storing ", template, " under ", key);

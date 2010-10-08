@@ -226,7 +226,7 @@ public class DefaultConfigurationTest {
 	}
 
 	public static class ExternalLibrary implements Library {
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+		public void initialise(Configuration configuration) {}
 
 		public LibraryInformation getInformation() {
 			return new LibraryInformation("http://aluminumproject.googlecode.com/external", "test", "External library");
@@ -315,7 +315,7 @@ public class DefaultConfigurationTest {
 
 	@Named("external")
 	public static class ExternalParser implements Parser {
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+		public void initialise(Configuration configuration) {}
 
 		public Template parseTemplate(String name) throws ParseException {
 			throw new ParseException("can't parse template '", name, "'");
@@ -403,7 +403,7 @@ public class DefaultConfigurationTest {
 
 	@Named("external")
 	public static class ExternalSerialiser implements Serialiser {
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+		public void initialise(Configuration configuration) {}
 
 		public void serialiseTemplate(Template template, String name) throws SerialisationException {
 			throw new SerialisationException("can't serialise template '", name, "'");
@@ -490,7 +490,7 @@ public class DefaultConfigurationTest {
 	}
 
 	public static class ExternalContextEnricher implements ContextEnricher {
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+		public void initialise(Configuration configuration) {}
 
 		public void beforeTemplate(Context context) {}
 
@@ -560,7 +560,7 @@ public class DefaultConfigurationTest {
 	}
 
 	public static class ExternalExpressionFactory implements ExpressionFactory {
-		public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+		public void initialise(Configuration configuration) {}
 
 		public List<ExpressionOccurrence> findExpressions(String text) {
 			return Collections.emptyList();

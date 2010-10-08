@@ -18,7 +18,6 @@ package com.googlecode.aluminumproject.resources;
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.resources.FileSystemResourceStoreFinder;
 import com.googlecode.aluminumproject.utilities.resources.ResourceStoreFinder;
 
@@ -44,9 +43,8 @@ public class FileSystemTemplateStoreFinderFactory implements TemplateStoreFinder
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		directory = parameters.getValue(DIRECTORY, null);
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		directory = configuration.getParameters().getValue(DIRECTORY, null);
 
 		if (directory == null) {
 			throw new ConfigurationException("please provide a directory");

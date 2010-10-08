@@ -42,23 +42,22 @@ public class DefaultActionFactoryTest {
 
 	@BeforeMethod
 	public void createActionFactories() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(parameters);
+		TestConfiguration configuration = new TestConfiguration(new ConfigurationParameters());
 
 		configuration.setConverterRegistry(new DefaultConverterRegistry());
-		configuration.getConverterRegistry().initialise(configuration, parameters);
+		configuration.getConverterRegistry().initialise(configuration);
 
 		unannotatedActionFactory = new DefaultActionFactory(TestAction.class);
-		unannotatedActionFactory.initialise(configuration, parameters);
+		unannotatedActionFactory.initialise(configuration);
 
 		annotatedActionFactory = new DefaultActionFactory(AnnotatedAction.class);
-		annotatedActionFactory.initialise(configuration, parameters);
+		annotatedActionFactory.initialise(configuration);
 
 		parameterActionFactory = new DefaultActionFactory(ParameterAction.class);
-		parameterActionFactory.initialise(configuration, parameters);
+		parameterActionFactory.initialise(configuration);
 
 		dynamicallyParameterisableActionFactory = new DefaultActionFactory(DynamicallyParameterisableAction.class);
-		dynamicallyParameterisableActionFactory.initialise(configuration, parameters);
+		dynamicallyParameterisableActionFactory.initialise(configuration);
 
 		context = new DefaultContext();
 	}

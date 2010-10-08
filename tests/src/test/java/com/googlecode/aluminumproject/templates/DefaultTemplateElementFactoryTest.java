@@ -36,7 +36,7 @@ public class DefaultTemplateElementFactoryTest {
 			ReflectionUtilities.getPackageName(TestActionInterceptor.class));
 
 		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateElementFactory.initialise(new TestConfiguration(parameters));
 
 		assert findActionInterceptorOfType(templateElementFactory, TestActionInterceptor.class) != null;
 	}
@@ -47,7 +47,7 @@ public class DefaultTemplateElementFactoryTest {
 			ReflectionUtilities.getPackageName(TestActionInterceptor.class));
 
 		DefaultTemplateElementFactory templateElementFactory = new DefaultTemplateElementFactory();
-		templateElementFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateElementFactory.initialise(new TestConfiguration(parameters));
 
 		assert findActionInterceptorOfType(templateElementFactory, TestActionInterceptor.class) != null;
 	}

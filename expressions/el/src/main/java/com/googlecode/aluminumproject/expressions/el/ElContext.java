@@ -19,7 +19,6 @@ import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
@@ -64,7 +63,6 @@ public class ElContext extends ELContext {
 	private Context context;
 
 	private Configuration configuration;
-	private ConfigurationParameters parameters;
 
 	private ELResolver elResolver;
 	private javax.el.FunctionMapper functionMapper;
@@ -75,15 +73,12 @@ public class ElContext extends ELContext {
 	 *
 	 * @param context the context to use when finding variables
 	 * @param configuration the configuration used
-	 * @param parameters the configuration parameters used
 	 * @throws ConfigurationException when the custom EL resolvers can't be determined
 	 */
-	public ElContext(Context context,
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public ElContext(Context context, Configuration configuration) throws ConfigurationException {
 		this.context = context;
 
 		this.configuration = configuration;
-		this.parameters = parameters;
 
 		elResolver = createElResolver();
 		functionMapper = createFunctionMapper();
@@ -108,7 +103,7 @@ public class ElContext extends ELContext {
 
 	private void addCustomElResolvers(
 			CompositeELResolver elResolver, String elResolverPackages) throws ConfigurationException {
-		for (String elResolverPackage: parameters.getValues(elResolverPackages)) {
+		for (String elResolverPackage: configuration.getParameters().getValues(elResolverPackages)) {
 			List<Class<?>> elResolverClasses;
 
 			try {

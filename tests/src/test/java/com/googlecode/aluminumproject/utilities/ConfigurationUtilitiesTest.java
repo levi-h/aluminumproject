@@ -36,7 +36,7 @@ public class ConfigurationUtilitiesTest {
 		TestConfiguration configuration = new TestConfiguration(parameters);
 
 		TestLibrary testLibrary = new TestLibrary();
-		testLibrary.initialise(configuration, parameters);
+		testLibrary.initialise(configuration);
 		configuration.addLibrary(testLibrary);
 
 		this.configuration = configuration;

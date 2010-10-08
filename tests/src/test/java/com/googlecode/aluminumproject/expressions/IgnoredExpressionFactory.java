@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.expressions;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 
@@ -36,7 +35,7 @@ public class IgnoredExpressionFactory implements ExpressionFactory {
 	 */
 	public IgnoredExpressionFactory() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+	public void initialise(Configuration configuration) {}
 
 	public List<ExpressionOccurrence> findExpressions(String text) {
 		return Collections.emptyList();

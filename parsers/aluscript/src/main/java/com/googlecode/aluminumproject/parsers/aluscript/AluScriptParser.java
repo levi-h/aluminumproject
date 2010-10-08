@@ -93,17 +93,16 @@ public class AluScriptParser implements Parser {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
 
-		templateExtension = parameters.getValue(TEMPLATE_EXTENSION, null);
+		templateExtension = configuration.getParameters().getValue(TEMPLATE_EXTENSION, null);
 
 		if (templateExtension != null) {
 			logger.debug("using template extension '", templateExtension, "'");
 		}
 
-		createSettings(parameters);
+		createSettings();
 
 		lineParsers = Arrays.<LineParser>asList(
 			new CommentLineParser(),
@@ -117,7 +116,9 @@ public class AluScriptParser implements Parser {
 		);
 	}
 
-	private void createSettings(ConfigurationParameters parameters) throws ConfigurationException {
+	private void createSettings() throws ConfigurationException {
+		ConfigurationParameters parameters = configuration.getParameters();
+
 		settings = new AluScriptSettings();
 
 		String templateNameTranslatorClassName = parameters.getValue(TEMPLATE_NAME_TRANSLATOR_CLASS, null);

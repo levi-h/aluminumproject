@@ -27,9 +27,7 @@ import org.testng.annotations.Test;
 public class FileSystemTemplateStoreFinderFactoryTest {
 	@Test(expectedExceptions = ConfigurationException.class)
 	public void notSupplyingDirectoryShouldCauseException() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
-		new FileSystemTemplateStoreFinderFactory().initialise(new TestConfiguration(parameters), parameters);
+		new FileSystemTemplateStoreFinderFactory().initialise(new TestConfiguration(new ConfigurationParameters()));
 	}
 
 	public void supplyingDirectoryParameterShouldResultInFileSystemTemplateStoreFinder() {
@@ -37,7 +35,7 @@ public class FileSystemTemplateStoreFinderFactoryTest {
 		parameters.addParameter(FileSystemTemplateStoreFinderFactory.DIRECTORY, System.getProperty("java.io.tmpdir"));
 
 		TemplateStoreFinderFactory templateStoreFinderFactory = new FileSystemTemplateStoreFinderFactory();
-		templateStoreFinderFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateStoreFinderFactory.initialise(new TestConfiguration(parameters));
 		assert templateStoreFinderFactory.createTemplateStoreFinder() instanceof FileSystemResourceStoreFinder;
 	}
 }

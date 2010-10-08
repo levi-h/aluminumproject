@@ -36,16 +36,15 @@ public class StaticMethodInvokingFunctionFactoryTest {
 
 	@BeforeMethod
 	public void createFunctionFactories() throws NoSuchMethodException {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(parameters);
+		TestConfiguration configuration = new TestConfiguration(new ConfigurationParameters());
 
 		unannotatedFunctionFactory =
 			new StaticMethodInvokingFunctionFactory(TestFunctions.class.getMethod("max", Integer.TYPE, Integer.TYPE));
-		unannotatedFunctionFactory.initialise(configuration, parameters);
+		unannotatedFunctionFactory.initialise(configuration);
 
 		annotatedFunctionFactory =
 			new StaticMethodInvokingFunctionFactory(TestFunctions.class.getMethod("min", Integer.TYPE, Integer.TYPE));
-		annotatedFunctionFactory.initialise(configuration, parameters);
+		annotatedFunctionFactory.initialise(configuration);
 	}
 
 	public void unannotatedMethodShouldResultInMethodNameAsFunctionName() {

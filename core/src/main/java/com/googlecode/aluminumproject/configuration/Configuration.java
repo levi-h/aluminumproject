@@ -34,12 +34,18 @@ import java.util.Map;
  * Contains all dynamic parts of the {@link Aluminum template engine}.
  * <p>
  * A configuration consists of {@link ConfigurationElement configuration elements}. Upon creation, a configuration is
- * required to {@link ConfigurationElement#initialise(Configuration, ConfigurationParameters) initialise} the elements
- * it consists of.
+ * required to {@link ConfigurationElement#initialise(Configuration) initialise} the elements it consists of.
  *
  * @author levi_h
  */
 public interface Configuration {
+	/**
+	 * Returns the parameters that this configuration was created with.
+	 *
+	 * @return this configuration's parameters
+	 */
+	ConfigurationParameters getParameters();
+
 	/**
 	 * Returns the configuration element factory.
 	 *

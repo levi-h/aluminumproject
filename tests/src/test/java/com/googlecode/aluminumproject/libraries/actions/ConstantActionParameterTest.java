@@ -34,11 +34,10 @@ public class ConstantActionParameterTest {
 
 	@BeforeMethod
 	public void createParameter() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		TestConfiguration configuration = new TestConfiguration(parameters);
+		TestConfiguration configuration = new TestConfiguration(new ConfigurationParameters());
 
 		ConverterRegistry converterRegistry = new DefaultConverterRegistry();
-		converterRegistry.initialise(configuration, parameters);
+		converterRegistry.initialise(configuration);
 
 		parameter = new ConstantActionParameter("128", converterRegistry);
 

@@ -19,7 +19,6 @@ import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
@@ -63,9 +62,8 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 	}
 
 	@Override
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		super.initialise(configuration, parameters);
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		super.initialise(configuration);
 
 		String name = "";
 		Type parameterType;

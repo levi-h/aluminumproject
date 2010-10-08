@@ -56,12 +56,12 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws ConfigurationException {
 		customisers = new LinkedList<ConfigurationElementCustomiser>();
 
 		Set<String> customiserPackages = new HashSet<String>();
 
+		ConfigurationParameters parameters = configuration.getParameters();
 		Collections.addAll(customiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES));
 		Collections.addAll(customiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
 
@@ -95,7 +95,7 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 		}
 
 		for (ConfigurationElementCustomiser customiser: customisers) {
-			customiser.initialise(configuration, parameters);
+			customiser.initialise(configuration);
 		}
 	}
 

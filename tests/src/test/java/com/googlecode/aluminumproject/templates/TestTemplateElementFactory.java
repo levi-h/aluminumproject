@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.templates;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 
@@ -36,7 +35,7 @@ public class TestTemplateElementFactory implements TemplateElementFactory {
 	 */
 	public TestTemplateElementFactory() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

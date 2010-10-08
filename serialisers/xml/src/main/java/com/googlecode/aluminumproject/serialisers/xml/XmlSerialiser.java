@@ -19,7 +19,6 @@ import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.resources.ResourceException;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
 import com.googlecode.aluminumproject.serialisers.SerialisationException;
@@ -52,7 +51,7 @@ import java.util.Map;
  * Subclasses that want to support more template element types or would like to use different template element
  * serialisers can override the {@link #addTemplateElementSerialisers(Map) addTemplateElementSerialisers method} or
  * {@link #addTemplateElementSerialiser(Class, TemplateElementSerialiser) add} a template element serialiser from the
- * {@link #initialise(Configuration, ConfigurationParameters) initialise method}.
+ * {@link #initialise(Configuration) initialise method}.
  * <p>
  * To support a custom naming strategy in templates, the XML serialiser allows an {@link ElementNameTranslator element
  * name translator} to be configured (using the {@value #ELEMENT_NAME_TRANSLATOR_CLASS} configuration property). If no
@@ -78,11 +77,10 @@ public class XmlSerialiser implements Serialiser {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
 
-		createElementNameTranslator(parameters);
+		createElementNameTranslator();
 
 		templateElementSerialisers = new HashMap<Class<? extends TemplateElement>, TemplateElementSerialiser<?>>();
 
@@ -91,9 +89,9 @@ public class XmlSerialiser implements Serialiser {
 		addTemplateElementSerialisers(templateElementSerialisers);
 	}
 
-	private void createElementNameTranslator(ConfigurationParameters parameters) {
-		String elementNameTranslatorClass =
-			parameters.getValue(ELEMENT_NAME_TRANSLATOR_CLASS, XmlElementNameTranslator.class.getName());
+	private void createElementNameTranslator() {
+		String elementNameTranslatorClass = configuration.getParameters().getValue(
+			ELEMENT_NAME_TRANSLATOR_CLASS, XmlElementNameTranslator.class.getName());
 
 		logger.debug("creating element name translator of type '", elementNameTranslatorClass, "'");
 

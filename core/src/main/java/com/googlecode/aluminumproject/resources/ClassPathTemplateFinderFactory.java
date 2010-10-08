@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.resources.ClassPathResourceFinder;
 import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;
 
@@ -42,8 +41,8 @@ public class ClassPathTemplateFinderFactory implements TemplateFinderFactory {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
-		templatePath = parameters.getValue(TEMPLATE_PATH, null);
+	public void initialise(Configuration configuration) {
+		templatePath = configuration.getParameters().getValue(TEMPLATE_PATH, null);
 
 		if (templatePath != null) {
 			logger.debug("using template path '", templatePath, "'");

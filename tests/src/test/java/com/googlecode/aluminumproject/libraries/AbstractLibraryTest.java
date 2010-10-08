@@ -226,9 +226,8 @@ public class AbstractLibraryTest {
 	public void libraryElementsShouldBeInitialisedAndHaveTheirLibrariesInjected() {
 		DefaultLibrary library = new DefaultLibrary(false, false, ReflectionUtilities.getPackageName(String.class)) {
 			@Override
-			public void initialise(
-					Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-				super.initialise(configuration, parameters);
+			public void initialise(Configuration configuration) throws ConfigurationException {
+				super.initialise(configuration);
 
 				addActionFactory(new TestActionFactory());
 				addActionContributionFactory(new TestActionContributionFactory());
@@ -236,10 +235,9 @@ public class AbstractLibraryTest {
 			}
 		};
 
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		Configuration configuration = new TestConfiguration(parameters);
+		Configuration configuration = new TestConfiguration(new ConfigurationParameters());
 
-		library.initialise(configuration, parameters);
+		library.initialise(configuration);
 
 		ActionFactory actionFactory = getActionFactory(library.getActionFactories(), "test");
 		assert actionFactory != null;
@@ -262,10 +260,8 @@ public class AbstractLibraryTest {
 	}
 
 	private Library createLibrary(boolean addCommonElements, boolean dynamicElementsSupported, String... packageNames) {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		Library library = new DefaultLibrary(addCommonElements, dynamicElementsSupported, packageNames);
-		library.initialise(new TestConfiguration(parameters), parameters);
+		library.initialise(new TestConfiguration(new ConfigurationParameters()));
 
 		return library;
 	}

@@ -25,19 +25,15 @@ import org.testng.annotations.Test;
 @Test(groups = {"core", "fast"})
 public class ClassPathTemplateFinderFactoryTest {
 	public void factoryShouldCreateClassPathResourceFinders() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
-		templateFinderFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateFinderFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
 		assert templateFinderFactory.createTemplateFinder() instanceof ClassPathResourceFinder;
 	}
 
 	@Test(dependsOnMethods = "factoryShouldCreateClassPathResourceFinders")
 	public void templatePathShouldDefaultToClassPathRoot() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
-		templateFinderFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateFinderFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
 		assert templateFinderFactory.createTemplateFinder().find("templates/xml/test.xml") != null;
 	}
 
@@ -47,7 +43,7 @@ public class ClassPathTemplateFinderFactoryTest {
 		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates/xml");
 
 		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
-		templateFinderFactory.initialise(new TestConfiguration(parameters), parameters);
+		templateFinderFactory.initialise(new TestConfiguration(parameters));
 		assert templateFinderFactory.createTemplateFinder().find("test.xml") != null;
 	}
 }

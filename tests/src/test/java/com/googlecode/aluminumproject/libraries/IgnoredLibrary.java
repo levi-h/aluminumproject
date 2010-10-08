@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.libraries;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
@@ -36,7 +35,7 @@ public class IgnoredLibrary implements Library {
 	 */
 	public IgnoredLibrary() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+	public void initialise(Configuration configuration) {}
 
 	public LibraryInformation getInformation() {
 		return null;

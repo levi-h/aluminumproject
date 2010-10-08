@@ -75,9 +75,10 @@ public class XmlParser implements Parser {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
+
+		ConfigurationParameters parameters = configuration.getParameters();
 
 		templateExtension = parameters.getValue(TEMPLATE_EXTENSION, null);
 
@@ -85,16 +86,16 @@ public class XmlParser implements Parser {
 			logger.debug("using template extension '", templateExtension, "'");
 		}
 
-		createTemplateNameTranslator(parameters);
+		createTemplateNameTranslator();
 
 		allowNonActionTags = Boolean.parseBoolean(parameters.getValue(ALLOW_NON_ACTION_TAGS, "false"));
 
 		logger.debug("non-action tags are ", allowNonActionTags ? "" : "not ", "allowed");
 	}
 
-	private void createTemplateNameTranslator(ConfigurationParameters parameters) throws ConfigurationException {
-		String templateNameTranslatorClassName =
-			parameters.getValue(TEMPLATE_NAME_TRANSLATOR_CLASS, XmlTemplateNameTranslator.class.getName());
+	private void createTemplateNameTranslator() throws ConfigurationException {
+		String templateNameTranslatorClassName = configuration.getParameters().getValue(
+			TEMPLATE_NAME_TRANSLATOR_CLASS, XmlTemplateNameTranslator.class.getName());
 
 		logger.debug("creating template name translator of type '", templateNameTranslatorClassName, "'");
 

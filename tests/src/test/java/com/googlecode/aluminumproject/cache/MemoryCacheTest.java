@@ -30,10 +30,8 @@ public class MemoryCacheTest {
 
 	@BeforeMethod
 	public void createCache() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		cache = new MemoryCache();
-		cache.initialise(new TestConfiguration(parameters), parameters);
+		cache.initialise(new TestConfiguration(new ConfigurationParameters()));
 	}
 
 	public void storedTemplateShouldBeFindable() {

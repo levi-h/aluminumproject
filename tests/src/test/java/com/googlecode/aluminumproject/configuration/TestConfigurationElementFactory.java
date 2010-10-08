@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
-
 /**
  * A configuration element factory that can be used in tests.
  *
@@ -29,7 +28,7 @@ public class TestConfigurationElementFactory implements ConfigurationElementFact
 	 */
 	public TestConfigurationElementFactory() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

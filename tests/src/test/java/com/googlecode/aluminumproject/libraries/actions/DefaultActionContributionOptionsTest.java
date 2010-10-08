@@ -47,15 +47,14 @@ public class DefaultActionContributionOptionsTest {
 
 	@BeforeMethod
 	public void createActionContributionOptions() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		Configuration configuration = new TestConfiguration(parameters);
+		Configuration configuration = new TestConfiguration(new ConfigurationParameters());
 
 		actionContributionOptions = new DefaultActionContributionOptions();
 		actionContext = new DefaultActionContext(configuration,
 			new ActionDescriptor("test", "test"), new TestActionFactory(), new DefaultContext(), new ListWriter());
 
 		converterRegistry = new DefaultConverterRegistry();
-		converterRegistry.initialise(configuration, parameters);
+		converterRegistry.initialise(configuration);
 	}
 
 	public void notSettingParametersShouldLeaveThemEmpty() {

@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.libraries;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.actions.TestActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.functions.Add;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
@@ -47,9 +46,8 @@ public class TestLibrary extends AbstractLibrary {
 	}
 
 	@Override
-	public void initialise(
-			Configuration configuration, ConfigurationParameters parameters) throws ConfigurationException {
-		super.initialise(configuration, parameters);
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		super.initialise(configuration);
 
 		addActionContributionFactory(new TestActionContributionFactory());
 

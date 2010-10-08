@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.parsers;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.templates.Template;
 
 /**
@@ -32,7 +31,7 @@ public class IgnoredParser implements Parser {
 	 */
 	public IgnoredParser() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+	public void initialise(Configuration configuration) {}
 
 	public Template parseTemplate(String name) throws ParseException {
 		return null;

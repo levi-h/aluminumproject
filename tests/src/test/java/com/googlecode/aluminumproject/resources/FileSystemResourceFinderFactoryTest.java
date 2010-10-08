@@ -30,10 +30,8 @@ import org.testng.annotations.Test;
 public class FileSystemResourceFinderFactoryTest {
 	@Test(expectedExceptions = ConfigurationException.class)
 	public void omittingTemplateDirectoriesShouldCauseException() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-
 		TemplateFinderFactory templateFinderFactory = new FileSystemTemplateFinderFactory();
-		templateFinderFactory.initialise(new DefaultConfiguration(parameters), parameters);
+		templateFinderFactory.initialise(new DefaultConfiguration(new ConfigurationParameters()));
 	}
 
 	public void supplyingSingleTemplateDirectoryShouldResultInFileSystemResourceFinder() {
@@ -41,7 +39,7 @@ public class FileSystemResourceFinderFactoryTest {
 		parameters.addParameter(TEMPLATE_DIRECTORIES, System.getProperty("java.io.tmpdir"));
 
 		TemplateFinderFactory templateFinderFactory = new FileSystemTemplateFinderFactory();
-		templateFinderFactory.initialise(new DefaultConfiguration(parameters), parameters);
+		templateFinderFactory.initialise(new DefaultConfiguration(parameters));
 		assert templateFinderFactory.createTemplateFinder() instanceof FileSystemResourceFinder;
 	}
 
@@ -51,7 +49,7 @@ public class FileSystemResourceFinderFactoryTest {
 			String.format("%s, %s", System.getProperty("user.home"), System.getProperty("java.io.tmpdir")));
 
 		TemplateFinderFactory templateFinderFactory = new FileSystemTemplateFinderFactory();
-		templateFinderFactory.initialise(new DefaultConfiguration(parameters), parameters);
+		templateFinderFactory.initialise(new DefaultConfiguration(parameters));
 		assert templateFinderFactory.createTemplateFinder() instanceof CompoundResourceFinder;
 	}
 }

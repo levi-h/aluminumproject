@@ -18,7 +18,6 @@ package com.googlecode.aluminumproject.libraries;
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.Injector;
 
 /**
@@ -43,7 +42,7 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {
+	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 
 		injector = new Injector();

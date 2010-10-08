@@ -158,7 +158,7 @@ public class DefaultConfiguration implements Configuration {
 		logger = Logger.get(getClass());
 
 		createConfigurationElementFactory();
-		configurationElementFactory.initialise(this, parameters);
+		configurationElementFactory.initialise(this);
 
 		createConverterRegistry();
 		createTemplateElementFactory();
@@ -414,34 +414,38 @@ public class DefaultConfiguration implements Configuration {
 	}
 
 	private void initialise() throws ConfigurationException {
-		converterRegistry.initialise(this, parameters);
-		templateElementFactory.initialise(this, parameters);
-		templateFinderFactory.initialise(this, parameters);
-		templateStoreFinderFactory.initialise(this, parameters);
+		converterRegistry.initialise(this);
+		templateElementFactory.initialise(this);
+		templateFinderFactory.initialise(this);
+		templateStoreFinderFactory.initialise(this);
 
 		if (cache != null) {
-			cache.initialise(this, parameters);
+			cache.initialise(this);
 		}
 
 		for (Library library: libraries) {
-			library.initialise(this, parameters);
+			library.initialise(this);
 		}
 
 		for (Parser parser: parsers.values()) {
-			parser.initialise(this, parameters);
+			parser.initialise(this);
 		}
 
 		for (Serialiser serialiser: serialisers.values()) {
-			serialiser.initialise(this, parameters);
+			serialiser.initialise(this);
 		}
 
 		for (ContextEnricher contextEnricher: contextEnrichers) {
-			contextEnricher.initialise(this, parameters);
+			contextEnricher.initialise(this);
 		}
 
 		for (ExpressionFactory expressionFactory: expressionFactories) {
-			expressionFactory.initialise(this, parameters);
+			expressionFactory.initialise(this);
 		}
+	}
+
+	public ConfigurationParameters getParameters() {
+		return parameters;
 	}
 
 	public ConfigurationElementFactory getConfigurationElementFactory() {

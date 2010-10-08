@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.serialisers;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.templates.Template;
 
 /**
@@ -32,7 +31,7 @@ public class IgnoredSerialiser implements Serialiser {
 	 */
 	public IgnoredSerialiser() {}
 
-	public void initialise(Configuration configuration, ConfigurationParameters parameters) {}
+	public void initialise(Configuration configuration) {}
 
 	public void serialiseTemplate(Template template, String name) {}
 }
