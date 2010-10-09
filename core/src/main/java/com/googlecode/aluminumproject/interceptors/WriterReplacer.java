@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
+import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
@@ -28,7 +29,8 @@ import java.util.Set;
 
 /**
  * An {@link ActionInterceptor action interceptor} that will replace the {@link Writer writer} that will be used by the
- * {@link Action action}.
+ * {@link Action action} that it contributes to. If the new writer is not a decorative writer, then it will be closed
+ * after it has been used.
  *
  * @author levi_h
  */
@@ -45,10 +47,19 @@ public abstract class WriterReplacer implements ActionInterceptor {
 	public void intercept(ActionContext actionContext)
 			throws ActionException, ContextException, WriterException {
 		Writer originalWriter = actionContext.getWriter();
+		Writer writer = createWriter(actionContext);
 
-		actionContext.setWriter(createWriter(actionContext));
-		actionContext.proceed();
-		actionContext.setWriter(originalWriter);
+		actionContext.setWriter(writer);
+
+		try {
+			actionContext.proceed();
+		} finally {
+			actionContext.setWriter(originalWriter);
+
+			if (!(writer instanceof DecorativeWriter)) {
+				writer.close();
+			}
+		}
 	}
 
 	/**
