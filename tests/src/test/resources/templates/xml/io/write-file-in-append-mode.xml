@@ -14,4 +14,4 @@
   - limitations under the License.
  -->
 
-<io:write-file target="${file}" append="true" xmlns:io="http://aluminumproject.googlecode.com/io"> sky</io:write-file>
+<c:template c:with-writer="${io:appendingFileWriter(file)}" xmlns:c="http://aluminumproject.googlecode.com/core" xmlns:io="http://aluminumproject.googlecode.com/io"> sky</c:template>

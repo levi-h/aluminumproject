@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2010 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.libraries.io.actions;
+package com.googlecode.aluminumproject.libraries.io.functions;
 
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"libraries", "libraries-io", "slow"})
-public class WriteFileTest extends IoLibraryTest {
+public class WritersTest extends IoLibraryTest {
 	public void linesShouldBeWrittenToFile() throws IOException {
 		File file = createTemporaryFile();
 
@@ -81,22 +81,5 @@ public class WriteFileTest extends IoLibraryTest {
 		String firstLine = lines.get(0);
 		assert firstLine != null;
 		assert firstLine.equals("blue");
-	}
-
-	public void decorativeWritersShouldBeInherited() throws IOException {
-		File file = createTemporaryFile();
-
-		Context context = new DefaultContext();
-		context.setVariable("file", file);
-
-		processTemplate("write-file-with-decorative-writers", context);
-
-		List<String> lines = readLines(file);
-		assert lines != null;
-		assert lines.size() == 1;
-
-		String firstLine = lines.get(0);
-		assert firstLine != null;
-		assert firstLine.equals("red");
 	}
 }

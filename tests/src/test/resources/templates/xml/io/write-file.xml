@@ -14,4 +14,4 @@
   - limitations under the License.
  -->
 
-<io:write-file target="${file}" xmlns:io="http://aluminumproject.googlecode.com/io">blue</io:write-file>
+<c:template c:with-writer="${io:fileWriter(file)}" xmlns:c="http://aluminumproject.googlecode.com/core" xmlns:io="http://aluminumproject.googlecode.com/io">blue</c:template>
