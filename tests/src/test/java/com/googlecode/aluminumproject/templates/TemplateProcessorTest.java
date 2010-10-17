@@ -124,7 +124,7 @@ public class TemplateProcessorTest {
 
 	public void contextEnrichersShouldBeInvoked() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates/xml");
+		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates");
 		parameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
 
 		TestConfiguration configuration = new TestConfiguration(parameters);

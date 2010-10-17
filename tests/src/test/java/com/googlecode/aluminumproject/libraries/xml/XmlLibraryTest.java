@@ -22,7 +22,7 @@ import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 @SuppressWarnings("all")
 public abstract class XmlLibraryTest extends LibraryTest {
 	public XmlLibraryTest() {
-		super("templates/aluscript/xml", "aluscript");
+		super("templates/xml", "aluscript");
 	}
 
 	@Override

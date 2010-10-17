@@ -30,7 +30,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public abstract class IoLibraryTest extends LibraryTest {
 	public IoLibraryTest() {
-		super("templates/xml/io", "xml");
+		super("templates/io", "xml");
 	}
 
 	protected File createTemporaryFile(int lineCount) throws IOException {

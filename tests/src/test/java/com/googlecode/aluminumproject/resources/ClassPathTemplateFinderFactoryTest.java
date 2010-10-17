@@ -34,13 +34,13 @@ public class ClassPathTemplateFinderFactoryTest {
 	public void templatePathShouldDefaultToClassPathRoot() {
 		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
 		templateFinderFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
-		assert templateFinderFactory.createTemplateFinder().find("templates/xml/test.xml") != null;
+		assert templateFinderFactory.createTemplateFinder().find("templates/test.xml") != null;
 	}
 
 	@Test(dependsOnMethods = "templatePathShouldDefaultToClassPathRoot")
 	public void templatePathShouldChangeClassPathPrefix() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates/xml");
+		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates");
 
 		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
 		templateFinderFactory.initialise(new TestConfiguration(parameters));
