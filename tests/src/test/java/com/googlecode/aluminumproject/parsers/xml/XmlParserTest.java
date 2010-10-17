@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
 public class XmlParserTest {
 	public void templateExtensionShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates/xml");
+		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates");
 		parameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
 
 		assert createParser(parameters).parseTemplate("test") != null;
@@ -52,11 +52,11 @@ public class XmlParserTest {
 		parameters.addParameter(
 			XmlParser.TEMPLATE_NAME_TRANSLATOR_CLASS, UpperCaseTemplateNameTranslator.class.getName());
 
-		assert createParser(parameters).parseTemplate("templates/xml/upper-case.xml") != null;
+		assert createParser(parameters).parseTemplate("templates/upper-case.xml") != null;
 	}
 
 	public void libraryUrlAbbreviationsShouldBeSetOnTemplateElements() {
-		Template template = createParser().parseTemplate("templates/xml/test.xml");
+		Template template = createParser().parseTemplate("templates/test.xml");
 
 		List<TemplateElement> rootElements = template.getChildren(null);
 		assert rootElements != null;
@@ -70,7 +70,7 @@ public class XmlParserTest {
 
 	@Test(dependsOnMethods = "libraryUrlAbbreviationsShouldBeSetOnTemplateElements")
 	public void libraryUrlAbbreviationsShouldWorkWithoutNamespaces() {
-		Template template = createParser().parseTemplate("templates/xml/test-without-namespace.xml");
+		Template template = createParser().parseTemplate("templates/test-without-namespace.xml");
 
 		List<TemplateElement> rootElements = template.getChildren(null);
 		assert rootElements != null;
@@ -84,14 +84,14 @@ public class XmlParserTest {
 
 	@Test(expectedExceptions = ParseException.class)
 	public void tagsWithoutLibraryShouldCauseException() {
-		createParser().parseTemplate("templates/xml/html.xml");
+		createParser().parseTemplate("templates/html.xml");
 	}
 
 	public void tagsWithoutLibraryShouldBePossibleWithTagsAllowed() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(XmlParser.ALLOW_NON_ACTION_TAGS, "true");
 
-		Template template = createParser(parameters).parseTemplate("templates/xml/html.xml");
+		Template template = createParser(parameters).parseTemplate("templates/html.xml");
 		assert template != null;
 
 		StringWriter stringWriter = new StringWriter();

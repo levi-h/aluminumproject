@@ -20,6 +20,6 @@ import com.googlecode.aluminumproject.libraries.LibraryTest;
 @SuppressWarnings("all")
 public class CommonLibraryTest extends LibraryTest {
 	public CommonLibraryTest() {
-		super("templates/xml/common", "xml");
+		super("templates/common", "xml");
 	}
 }

@@ -34,7 +34,7 @@ public class AluTest extends AbstractCommandTest {
 		workingDirectory = System.getProperty("user.dir");
 
 		System.setProperty("user.dir",
-			Thread.currentThread().getContextClassLoader().getResource("templates/aluscript/cli").getPath());
+			Thread.currentThread().getContextClassLoader().getResource("templates/cli").getPath());
 	}
 
 	@AfterClass

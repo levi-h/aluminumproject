@@ -20,6 +20,6 @@ import com.googlecode.aluminumproject.libraries.LibraryTest;
 @SuppressWarnings("all")
 public abstract class TextLibraryTest extends LibraryTest {
 	public TextLibraryTest() {
-		super("templates/xml/text", "xml");
+		super("templates/text", "xml");
 	}
 }

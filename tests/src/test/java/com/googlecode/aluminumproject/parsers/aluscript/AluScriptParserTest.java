@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
 public class AluScriptParserTest {
 	public void templateExtensionShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(TEMPLATE_PATH, "templates/aluscript");
+		parameters.addParameter(TEMPLATE_PATH, "templates");
 		parameters.addParameter(TEMPLATE_EXTENSION, "alu");
 
 		assert createParser(parameters).parseTemplate("test") != null;
@@ -51,11 +51,11 @@ public class AluScriptParserTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(TEMPLATE_NAME_TRANSLATOR_CLASS, UpperCaseTemplateNameTranslator.class.getName());
 
-		assert createParser(parameters).parseTemplate("templates/aluscript/upper-case.alu") != null;
+		assert createParser(parameters).parseTemplate("templates/upper-case.alu") != null;
 	}
 
 	public void newlinesShouldBeAddedAutomaticallyByDefault() {
-		Template template = createParser().parseTemplate("templates/aluscript/text.alu");
+		Template template = createParser().parseTemplate("templates/text.alu");
 
 		List<TemplateElement> rootElements = template.getChildren(null);
 		assert rootElements != null;
@@ -83,7 +83,7 @@ public class AluScriptParserTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(AUTOMATIC_NEWLINES, "false");
 
-		Template template = createParser(parameters).parseTemplate("templates/aluscript/text.alu");
+		Template template = createParser(parameters).parseTemplate("templates/text.alu");
 
 		List<TemplateElement> rootElements = template.getChildren(null);
 		assert rootElements != null;
