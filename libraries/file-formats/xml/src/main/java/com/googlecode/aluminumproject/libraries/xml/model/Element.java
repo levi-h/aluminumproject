@@ -39,6 +39,15 @@ public interface Element {
 	List<?> select(String expression, Map<String, String> context) throws ActionException;
 
 	/**
+	 * Transforms this element using a style sheet.
+	 *
+	 * @param styleSheet the root element of the style sheet to use
+	 * @return the text and/or elements that the transformation resulted in
+	 * @throws ActionException when something goes wrong during the transformation
+	 */
+	List<?> transform(Element styleSheet) throws ActionException;
+
+	/**
 	 * Writes a document with this element as root element to a writer.
 	 *
 	 * @param writer the writer to use

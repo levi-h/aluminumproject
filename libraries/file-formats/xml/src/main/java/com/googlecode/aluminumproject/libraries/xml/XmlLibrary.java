@@ -56,11 +56,6 @@ public class XmlLibrary extends AbstractLibrary {
 
 	@Override
 	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
-		if (name.equals("transform")) {
-			throw new LibraryException("in the near future, '", name, "' will become an action",
-				" - please use the 'element' action instead");
-		}
-
 		ActionFactory actionFactory = new DefaultActionFactory(DynamicElement.class);
 		initialiseLibraryElement(actionFactory);
 		return actionFactory;

@@ -33,6 +33,8 @@ import nu.xom.Nodes;
 import nu.xom.Serializer;
 import nu.xom.XPathContext;
 import nu.xom.XPathException;
+import nu.xom.xslt.XSLException;
+import nu.xom.xslt.XSLTransform;
 
 /**
  * An element that wraps a XOM element.
@@ -75,6 +77,39 @@ class XomElement implements Element {
 				results.add(new XomElement((nu.xom.Element) node));
 			} else if ((node instanceof nu.xom.Attribute) || (node instanceof nu.xom.Namespace)
 					|| (node instanceof nu.xom.Text) || (node instanceof Comment)) {
+				results.add(node.getValue());
+			} else {
+				throw new ActionException("unsupported node type: ", node.getClass().getSimpleName());
+			}
+		}
+
+		return results;
+	}
+
+	public List<?> transform(Element styleSheet) throws ActionException {
+		if (!(styleSheet instanceof XomElement)) {
+			throw new ActionException("can't use style sheet ", styleSheet);
+		}
+
+		Nodes nodes;
+
+		try {
+			Document inputDocument = new Document(new nu.xom.Element(element));
+			Document styleSheetDocument = new Document(new nu.xom.Element(((XomElement) styleSheet).element));
+
+			nodes = new XSLTransform(styleSheetDocument).transform(inputDocument);
+		} catch (XSLException exception) {
+			throw new ActionException(exception, "can't transform document");
+		}
+
+		List<Object> results = new ArrayList<Object>(nodes.size());
+
+		for (int i = 0; i < nodes.size(); i++) {
+			Node node = nodes.get(i);
+
+			if (node instanceof nu.xom.Element) {
+				results.add(new XomElement((nu.xom.Element) node));
+			} else if ((node instanceof nu.xom.Text)) {
 				results.add(node.getValue());
 			} else {
 				throw new ActionException("unsupported node type: ", node.getClass().getSimpleName());
