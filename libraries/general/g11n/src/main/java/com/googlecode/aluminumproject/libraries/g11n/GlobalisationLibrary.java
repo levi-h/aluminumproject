@@ -17,6 +17,9 @@ package com.googlecode.aluminumproject.libraries.g11n;
 
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.g11n.actions.LocalisedParameter;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
@@ -37,10 +40,18 @@ public class GlobalisationLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/g11n";
 		String version = EnvironmentUtilities.getVersion();
 
-		information = new LibraryInformation(url, version, "Globalisation library");
+		information = new LibraryInformation(url, version, "Globalisation library", false, true, false);
 	}
 
 	public LibraryInformation getInformation() {
 		return information;
+	}
+
+	@Override
+	public ActionContributionFactory getDynamicActionContributionFactory(String name) {
+		ActionContributionFactory actionContributionFactory =
+			new DefaultActionContributionFactory(LocalisedParameter.class);
+		initialiseLibraryElement(actionContributionFactory);
+		return actionContributionFactory;
 	}
 }
