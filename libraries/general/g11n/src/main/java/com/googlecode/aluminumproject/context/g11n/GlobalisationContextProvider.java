@@ -43,12 +43,18 @@ import java.util.Locale;
  * unless a different one is configured via a configuration parameter named {@value #RESOURCE_BUNDLE_PROVIDER_CLASS}.
  * The base name of the default resource bundle provider can be configured by using the {@value
  * #RESOURCE_BUNDLE_BASE_NAME} parameter; by default, {@value #DEFAULT_RESOURCE_BUNDLE_BASE_NAME} will be used.
+ * <p>
+ * The date format provider that will be used for the globalisation context can be configured by providing a parameter
+ * named {@value #DATE_FORMAT_PROVIDER_CLASS}. If none is configured, the date format provider will be {@link
+ * LocaleBasedDateFormatProvider locale-based}. Its custom pattern will be {@value #DEFAULT_DATE_FORMAT_CUSTOM_PATTERN},
+ * unless the configuration contains a {@value #DATE_FORMAT_CUSTOM_PATTERN} parameter.
  *
  * @author levi_h
  */
 public class GlobalisationContextProvider implements ContextEnricher {
 	private LocaleProvider localeProvider;
 	private ResourceBundleProvider resourceBundleProvider;
+	private DateFormatProvider dateFormatProvider;
 
 	private final Logger logger;
 
@@ -62,6 +68,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	public void initialise(Configuration configuration) throws ConfigurationException {
 		createLocaleProvider(configuration);
 		createResourceBundleProvider(configuration);
+		createDateFormatProvider(configuration);
 	}
 
 	private void createLocaleProvider(Configuration configuration) throws ConfigurationException {
@@ -120,9 +127,29 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
+	private void createDateFormatProvider(Configuration configuration) throws ConfigurationException {
+		ConfigurationParameters parameters = configuration.getParameters();
+
+		String dateFormatProviderClassName = parameters.getValue(DATE_FORMAT_PROVIDER_CLASS, null);
+
+		if (dateFormatProviderClassName == null) {
+			String customPattern = parameters.getValue(DATE_FORMAT_CUSTOM_PATTERN, DEFAULT_DATE_FORMAT_CUSTOM_PATTERN);
+
+			logger.debug("no date format provider configured, ",
+				"using locale-based date format provider with custom pattern '", customPattern, "'");
+
+			dateFormatProvider = new LocaleBasedDateFormatProvider(customPattern);
+		} else {
+			logger.debug("using configured date format provider of type ", dateFormatProviderClassName);
+
+			dateFormatProvider = configuration.getConfigurationElementFactory().instantiate(
+				dateFormatProviderClassName, DateFormatProvider.class);
+		}
+	}
+
 	public void beforeTemplate(Context context) throws ContextException {
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT,
-			new GlobalisationContext(localeProvider, resourceBundleProvider));
+			new GlobalisationContext(localeProvider, resourceBundleProvider, dateFormatProvider));
 	}
 
 	public void afterTemplate(Context context) throws ContextException {
@@ -149,10 +176,29 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	 * The name of the configuration parameter that contains the base name that will be passed to the name-based
 	 * resource bundle provider when no resource bundle provider is configured.
 	 */
-	public final static String RESOURCE_BUNDLE_BASE_NAME = "library.g11n.resource_bundle_base_name";
+	public final static String RESOURCE_BUNDLE_BASE_NAME = "library.g11n.resource_bundle_provider.name_based.base_name";
 
 	/**
 	 * The base name that will be supplied to the name-based resource bundle provider if none is configured: {@value}.
 	 */
 	public final static String DEFAULT_RESOURCE_BUNDLE_BASE_NAME = "resources/aluminum";
+
+	/**
+	 * The name of the configuration parameter that holds the class name of the date format provider that should be
+	 * used.
+	 */
+	public final static String DATE_FORMAT_PROVIDER_CLASS = "library.g11n.date_format_provider.class";
+
+	/**
+	 * The name of the configuration parameter that contains the custom pattern that, when no date format provider is
+	 * configured, the locale-based date format provider will be created with.
+	 */
+	public final static String DATE_FORMAT_CUSTOM_PATTERN =
+		"library.g11n.date_format_provider.locale_based.custom_pattern";
+
+	/**
+	 * The custom pattern that will be supplied to the locale-based date format provider when neither a date provider
+	 * nor a custom pattern is configured: {@value}.
+	 */
+	public final static String DEFAULT_DATE_FORMAT_CUSTOM_PATTERN = "yyyy-MM-dd, HH:mm";
 }

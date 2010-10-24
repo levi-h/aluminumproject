@@ -16,6 +16,8 @@
 package com.googlecode.aluminumproject.context.g11n;
 
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.DATE_FORMAT_CUSTOM_PATTERN;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.DATE_FORMAT_PROVIDER_CLASS;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.LOCALE;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.LOCALE_PROVIDER_CLASS;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_BASE_NAME;
@@ -24,8 +26,13 @@ import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextPr
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.libraries.g11n.model.DateFormatType;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -177,5 +184,68 @@ public class GlobalisationContextProviderTest {
 		assert resourceBundle != null;
 		assert resourceBundle.containsKey("aluminum");
 		assert resourceBundle.getString("aluminum").equals("a powerful and flexible template engine");
+	}
+
+	@Test(dependsOnMethods = "defaultLocaleShouldBeConfigurable")
+	public void defaultDateFormatProviderShouldBeLocaleBased() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(LOCALE, "fr_FR");
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		DateFormat dateFormat =
+			GlobalisationContext.from(context).getDateFormatProvider().provide(DateFormatType.MEDIUM_DATE, context);
+		assert dateFormat != null;
+		assert dateFormat.format(new Date(0L)).equals("1 janv. 1970");
+	}
+
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
+	public void defaultDateFormatProviderShouldUseDefaultCustomPattern() {
+		initialiseGlobalisationContextProvider();
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		DateFormat dateFormat =
+			GlobalisationContext.from(context).getDateFormatProvider().provide(DateFormatType.CUSTOM, context);
+		assert dateFormat != null;
+		assert dateFormat.format(new Date(0L)).equals("1970-01-01, 00:00");
+	}
+
+	@Test(dependsOnMethods = "defaultDateFormatProviderShouldUseDefaultCustomPattern")
+	public void customPatternOfDefaultDateFormatShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(DATE_FORMAT_CUSTOM_PATTERN, "yyyyMMdd");
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		DateFormat dateFormat =
+			GlobalisationContext.from(context).getDateFormatProvider().provide(DateFormatType.CUSTOM, context);
+		assert dateFormat != null;
+		assert dateFormat.format(new Date(0L)).equals("19700101");
+	}
+
+	public static class YearFormatProvider implements DateFormatProvider {
+		public DateFormat provide(DateFormatType type, Context context) throws ContextException {
+			return new SimpleDateFormat("yy");
+		}
+	}
+
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
+	public void dateFormatProviderShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(DATE_FORMAT_PROVIDER_CLASS, YearFormatProvider.class.getName());
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		DateFormat dateFormat =
+			GlobalisationContext.from(context).getDateFormatProvider().provide(DateFormatType.LONG_DATE, context);
+		assert dateFormat != null;
+		assert dateFormat.format(new Date(0L)).equals("70");
 	}
 }

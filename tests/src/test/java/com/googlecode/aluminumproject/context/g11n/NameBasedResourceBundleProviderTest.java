@@ -39,7 +39,8 @@ public class NameBasedResourceBundleProviderTest {
 		LocaleProvider localeProvider = new ConstantLocaleProvider(Locale.getDefault());
 		ResourceBundleProvider resourceBundleProvider = new TestResourceBundleProvider();
 
-		GlobalisationContext globalisationContext = new GlobalisationContext(localeProvider, resourceBundleProvider);
+		GlobalisationContext globalisationContext =
+			new GlobalisationContext(localeProvider, resourceBundleProvider, null);
 
 		context = new DefaultContext();
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT, globalisationContext);
