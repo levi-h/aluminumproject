@@ -30,16 +30,20 @@ import com.googlecode.aluminumproject.context.ContextException;
 public class GlobalisationContext {
 	private LocaleProvider localeProvider;
 	private ResourceBundleProvider resourceBundleProvider;
+	private DateFormatProvider dateFormatProvider;
 
 	/**
 	 * Creates a globalisation context.
 	 *
 	 * @param localeProvider the locale provider to use
 	 * @param resourceBundleProvider the resource bundle provider to use
+	 * @param dateFormatProvider the date format provider to use
 	 */
-	public GlobalisationContext(LocaleProvider localeProvider, ResourceBundleProvider resourceBundleProvider) {
+	public GlobalisationContext(LocaleProvider localeProvider,
+			ResourceBundleProvider resourceBundleProvider, DateFormatProvider dateFormatProvider) {
 		this.localeProvider = localeProvider;
 		this.resourceBundleProvider = resourceBundleProvider;
+		this.dateFormatProvider = dateFormatProvider;
 	}
 
 	/**
@@ -70,12 +74,30 @@ public class GlobalisationContext {
 	}
 
 	/**
-	 * Returns this globalisation context's resource bundle provider.
+	 * Replaces this globalisation context's resource bundle provider.
 	 *
 	 * @param resourceBundleProvider the new resource bundle provider for this globalisation context
 	 */
 	public void setResourceBundleProvider(ResourceBundleProvider resourceBundleProvider) {
 		this.resourceBundleProvider = resourceBundleProvider;
+	}
+
+	/**
+	 * Returns this globalisation context's date format provider.
+	 *
+	 * @return the date format provider of this globalisation context
+	 */
+	public DateFormatProvider getDateFormatProvider() {
+		return dateFormatProvider;
+	}
+
+	/**
+	 * Replaces this globalisation context's date format provider.
+	 *
+	 * @param dateFormatProvider the new date format provider for this globalisation context
+	 */
+	public void setDateFormatProvider(DateFormatProvider dateFormatProvider) {
+		this.dateFormatProvider = dateFormatProvider;
 	}
 
 	/**
