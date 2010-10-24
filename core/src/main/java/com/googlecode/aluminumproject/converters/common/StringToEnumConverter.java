@@ -23,6 +23,8 @@ import java.lang.reflect.Type;
 
 /**
  * Converts the name of an to {@link Enum enum} into an enum constant. All enum types are supported.
+ * <p>
+ * The conversion is case-insensitive. Using spaces instead of underscores is supported.
  *
  * @author levi_h
  */
@@ -56,7 +58,7 @@ public class StringToEnumConverter implements Converter<String> {
 
 			if (name.equals(value)) {
 				exactMatch = enumConstant;
-			} else if ((match == null) && name.equalsIgnoreCase(value)) {
+			} else if ((match == null) && name.equalsIgnoreCase(value.replace(' ', '_'))) {
 				match = enumConstant;
 			}
 		}

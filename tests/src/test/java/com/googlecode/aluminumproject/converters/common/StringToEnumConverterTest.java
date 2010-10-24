@@ -61,6 +61,11 @@ public class StringToEnumConverterTest {
 	}
 
 	@Test(dependsOnMethods = "conversionShouldBeCaseInsensitive")
+	public void underscoresShouldBeReplaceableWithSpaces() {
+		assert converter.convert("annotation type", ElementType.class, context) == ElementType.ANNOTATION_TYPE;
+	}
+
+	@Test(dependsOnMethods = "conversionShouldBeCaseInsensitive")
 	public void conversionShouldPreferExactMatches() {
 		assert converter.convert("A", Letter.class, context) == Letter.A;
 		assert converter.convert("b", Letter.class, context) == Letter.b;
