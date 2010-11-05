@@ -40,7 +40,7 @@ public class NameBasedResourceBundleProviderTest {
 		ResourceBundleProvider resourceBundleProvider = new TestResourceBundleProvider();
 
 		GlobalisationContext globalisationContext =
-			new GlobalisationContext(localeProvider, resourceBundleProvider, null);
+			new GlobalisationContext(localeProvider, resourceBundleProvider, null, null);
 
 		context = new DefaultContext();
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT, globalisationContext);

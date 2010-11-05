@@ -20,6 +20,8 @@ import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextPr
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.DATE_FORMAT_PROVIDER_CLASS;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.LOCALE;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.LOCALE_PROVIDER_CLASS;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.NUMBER_FORMAT_CUSTOM_PATTERN;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.NUMBER_FORMAT_PROVIDER_CLASS;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_BASE_NAME;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_PROVIDER_CLASS;
 
@@ -29,8 +31,11 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.g11n.model.DateFormatType;
+import com.googlecode.aluminumproject.libraries.g11n.model.NumberFormatType;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -247,5 +252,75 @@ public class GlobalisationContextProviderTest {
 			GlobalisationContext.from(context).getDateFormatProvider().provide(DateFormatType.LONG_DATE, context);
 		assert dateFormat != null;
 		assert dateFormat.format(new Date(0L)).equals("70");
+	}
+
+	@Test(dependsOnMethods = "defaultLocaleShouldBeConfigurable")
+	public void defaultNumberFormatProviderShouldBeLocaleBased() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(LOCALE, "nl_NL");
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		NumberFormat numberFormat =
+			GlobalisationContext.from(context).getNumberFormatProvider().provide(NumberFormatType.PERCENTAGE, context);
+		assert numberFormat != null;
+		assert numberFormat.format(0.8).equals("80%");
+	}
+
+	@Test(dependsOnMethods = "defaultNumberFormatProviderShouldBeLocaleBased")
+	public void defaultNumberFormatProviderShouldUseDefaultCustomPattern() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(LOCALE, "nl_NL");
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		NumberFormat numberFormat =
+			GlobalisationContext.from(context).getNumberFormatProvider().provide(NumberFormatType.CUSTOM, context);
+		assert numberFormat != null;
+		assert numberFormat.format(1000L).equals("1.000");
+		assert numberFormat.format(-1.5).equals("-1,5");
+	}
+
+	@Test(dependsOnMethods = "defaultNumberFormatProviderShouldUseDefaultCustomPattern")
+	public void customPatternOfDefaultNumberFormatProviderShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(LOCALE, "nl_NL");
+		parameters.addParameter(NUMBER_FORMAT_CUSTOM_PATTERN, "#,#00.0");
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		NumberFormat numberFormat =
+			GlobalisationContext.from(context).getNumberFormatProvider().provide(NumberFormatType.CUSTOM, context);
+		assert numberFormat != null;
+		assert numberFormat.format(1000L).equals("1.000,0");
+		assert numberFormat.format(-1.5).equals("-01,5");
+	}
+
+	public static class IntegerFormatProvider implements NumberFormatProvider {
+		public NumberFormat provide(NumberFormatType type, Context context) throws ContextException {
+			return new DecimalFormat("0");
+		}
+	}
+
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
+	public void numberFormatProviderShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(NUMBER_FORMAT_PROVIDER_CLASS, IntegerFormatProvider.class.getName());
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		NumberFormat numberFormat =
+			GlobalisationContext.from(context).getNumberFormatProvider().provide(NumberFormatType.NUMBER, context);
+		assert numberFormat != null;
+		assert numberFormat.format(12.5).equals("12");
+		assert numberFormat.format(-12.5).equals("-12");
 	}
 }

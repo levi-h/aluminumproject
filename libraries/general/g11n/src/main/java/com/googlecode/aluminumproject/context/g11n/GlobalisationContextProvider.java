@@ -48,6 +48,11 @@ import java.util.Locale;
  * named {@value #DATE_FORMAT_PROVIDER_CLASS}. If none is configured, the date format provider will be {@link
  * LocaleBasedDateFormatProvider locale-based}. Its custom pattern will be {@value #DEFAULT_DATE_FORMAT_CUSTOM_PATTERN},
  * unless the configuration contains a {@value #DATE_FORMAT_CUSTOM_PATTERN} parameter.
+ * <p>
+ * The default number format provider for the globalisation context is {@link LocaleBasedNumberFormatProvider
+ * locale-based}; a custom one can be configured through the {@value #NUMBER_FORMAT_PROVIDER_CLASS}. The {@value
+ * #NUMBER_FORMAT_CUSTOM_PATTERN} parameter controls custom pattern of the locale-based number format provider; without
+ * any configuration, {@value #DEFAULT_NUMBER_FORMAT_CUSTOM_PATTERN} will be used.
  *
  * @author levi_h
  */
@@ -55,6 +60,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	private LocaleProvider localeProvider;
 	private ResourceBundleProvider resourceBundleProvider;
 	private DateFormatProvider dateFormatProvider;
+	private NumberFormatProvider numberFormatProvider;
 
 	private final Logger logger;
 
@@ -69,6 +75,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		createLocaleProvider(configuration);
 		createResourceBundleProvider(configuration);
 		createDateFormatProvider(configuration);
+		createNumberFormatProvider(configuration);
 	}
 
 	private void createLocaleProvider(Configuration configuration) throws ConfigurationException {
@@ -147,9 +154,30 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
+	private void createNumberFormatProvider(Configuration configuration) throws ConfigurationException {
+		ConfigurationParameters parameters = configuration.getParameters();
+
+		String numberFormatProviderClassName = parameters.getValue(NUMBER_FORMAT_PROVIDER_CLASS, null);
+
+		if (numberFormatProviderClassName == null) {
+			String customPattern =
+				parameters.getValue(NUMBER_FORMAT_CUSTOM_PATTERN, DEFAULT_NUMBER_FORMAT_CUSTOM_PATTERN);
+
+			logger.debug("no number format provider configured, ",
+				"using locale-based number format provider with custom pattern '", customPattern, "'");
+
+			numberFormatProvider = new LocaleBasedNumberFormatProvider(customPattern);
+		} else {
+			logger.debug("using configured number format provider of type ", numberFormatProviderClassName);
+
+			numberFormatProvider = configuration.getConfigurationElementFactory().instantiate(
+				numberFormatProviderClassName, NumberFormatProvider.class);
+		}
+	}
+
 	public void beforeTemplate(Context context) throws ContextException {
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT,
-			new GlobalisationContext(localeProvider, resourceBundleProvider, dateFormatProvider));
+			new GlobalisationContext(localeProvider, resourceBundleProvider, dateFormatProvider, numberFormatProvider));
 	}
 
 	public void afterTemplate(Context context) throws ContextException {
@@ -201,4 +229,20 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	 * nor a custom pattern is configured: {@value}.
 	 */
 	public final static String DEFAULT_DATE_FORMAT_CUSTOM_PATTERN = "yyyy-MM-dd, HH:mm";
+
+	/** The name of the configuration parameter that contains the class name of the number format provider to use. */
+	public final static String NUMBER_FORMAT_PROVIDER_CLASS = "library.g11n.number_format_provider.class";
+
+	/**
+	 * The name of the configuration prarameter that holds the custom pattern to create the default number format
+	 * provider with.
+	 */
+	public final static String NUMBER_FORMAT_CUSTOM_PATTERN =
+		"library.g11n.date_format_provider.locale_based.custom_pattern";
+
+	/**
+	 * The custom pattern that will be used for the locale-based number format provider when none is configured:
+	 * {@value}.
+	 */
+	public final static String DEFAULT_NUMBER_FORMAT_CUSTOM_PATTERN = "#,##0.##";
 }

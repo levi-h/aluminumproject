@@ -31,6 +31,7 @@ public class GlobalisationContext {
 	private LocaleProvider localeProvider;
 	private ResourceBundleProvider resourceBundleProvider;
 	private DateFormatProvider dateFormatProvider;
+	private NumberFormatProvider numberFormatProvider;
 
 	/**
 	 * Creates a globalisation context.
@@ -38,12 +39,14 @@ public class GlobalisationContext {
 	 * @param localeProvider the locale provider to use
 	 * @param resourceBundleProvider the resource bundle provider to use
 	 * @param dateFormatProvider the date format provider to use
+	 * @param numberFormatProvider the number format provider to use
 	 */
-	public GlobalisationContext(LocaleProvider localeProvider,
-			ResourceBundleProvider resourceBundleProvider, DateFormatProvider dateFormatProvider) {
+	public GlobalisationContext(LocaleProvider localeProvider, ResourceBundleProvider resourceBundleProvider,
+			DateFormatProvider dateFormatProvider, NumberFormatProvider numberFormatProvider) {
 		this.localeProvider = localeProvider;
 		this.resourceBundleProvider = resourceBundleProvider;
 		this.dateFormatProvider = dateFormatProvider;
+		this.numberFormatProvider = numberFormatProvider;
 	}
 
 	/**
@@ -98,6 +101,24 @@ public class GlobalisationContext {
 	 */
 	public void setDateFormatProvider(DateFormatProvider dateFormatProvider) {
 		this.dateFormatProvider = dateFormatProvider;
+	}
+
+	/**
+	 * Returns this globalisation context's number format provider.
+	 *
+	 * @return the number format provider of this globalisation context
+	 */
+	public NumberFormatProvider getNumberFormatProvider() {
+		return numberFormatProvider;
+	}
+
+	/**
+	 * Replaces this globalisation context's number format provider.
+	 *
+	 * @param numberFormatProvider the new number format provider for this globalisation context
+	 */
+	public void setNumberFormatProvider(NumberFormatProvider numberFormatProvider) {
+		this.numberFormatProvider = numberFormatProvider;
 	}
 
 	/**
