@@ -41,7 +41,7 @@ public class LocaleBasedDateFormatProviderTest {
 		dateFormatProvider = new LocaleBasedDateFormatProvider("yyyyMMdd HHmm");
 
 		GlobalisationContext globalisationContext =
-			new GlobalisationContext(localeProvider, null, dateFormatProvider);
+			new GlobalisationContext(localeProvider, null, dateFormatProvider, null);
 
 		context = new DefaultContext();
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT, globalisationContext);
