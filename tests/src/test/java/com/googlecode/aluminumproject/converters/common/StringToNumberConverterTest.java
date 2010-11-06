@@ -100,4 +100,17 @@ public class StringToNumberConverterTest {
 	public void tryingToConvertInvalidStringShouldCauseException() {
 		converter.convert("one", Integer.class, context);
 	}
+
+	public void mostSuitableTypeShouldBeSelectedForConversionsToBaseType() {
+		assert converter.convert("-5", Number.class, context) instanceof Integer;
+		assert converter.convert("5", Number.class, context) instanceof Integer;
+		assert converter.convert("-5000000000", Number.class, context) instanceof Long;
+		assert converter.convert("5000000000", Number.class, context) instanceof Long;
+		assert converter.convert("-50000000000000000000", Number.class, context) instanceof BigInteger;
+		assert converter.convert("50000000000000000000", Number.class, context) instanceof BigInteger;
+		assert converter.convert("-0.5", Number.class, context) instanceof Double;
+		assert converter.convert("0.5", Number.class, context) instanceof Double;
+		assert converter.convert("-50000000000.00000000005", Number.class, context) instanceof BigDecimal;
+		assert converter.convert("50000000000.00000000005", Number.class, context) instanceof BigDecimal;
+	}
 }
