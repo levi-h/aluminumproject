@@ -32,7 +32,7 @@ public class FormatNumberTest extends GlobalisationLibraryTest {
 	@BeforeMethod
 	public void createContext() {
 		context = new DefaultContext();
-		context.setVariable("number", 12.3);
+		context.setVariable("number", 1234.5);
 	}
 
 	protected void addConfigurationParameters(ConfigurationParameters parameters) {
@@ -40,10 +40,34 @@ public class FormatNumberTest extends GlobalisationLibraryTest {
 	}
 
 	public void customNumberFormatShouldBeUsedByDefault() {
-		assert processTemplate("format-number", context).equals("12.3");
+		assert processTemplate("format-number", context).equals("1,234.5");
 	}
 
-	public void numberFormatShouldBeUsed() {
-		assert processTemplate("format-number-with-type", context).equals("£12.30");
+	public void typeShouldBeUsed() {
+		assert processTemplate("format-number-with-type", context).equals("£1,234.50");
+	}
+
+	public void optionsShouldBeUsed() {
+		processTemplate("format-number-with-options", context);
+
+		Object numberWithoutGrouping = context.getVariable(Context.TEMPLATE_SCOPE, "no grouping");
+		assert numberWithoutGrouping != null;
+		assert numberWithoutGrouping.equals("1234.5");
+
+		Object numberWithoutFractionDigits = context.getVariable(Context.TEMPLATE_SCOPE, "no fraction digits");
+		assert numberWithoutFractionDigits != null;
+		assert numberWithoutFractionDigits.equals("1,234");
+
+		Object numberWithTwoFractionDigits = context.getVariable(Context.TEMPLATE_SCOPE, "two fraction digits");
+		assert numberWithTwoFractionDigits != null;
+		assert numberWithTwoFractionDigits.equals("1,234.50");
+
+		Object numberWithOneIntegerDigit = context.getVariable(Context.TEMPLATE_SCOPE, "one integer digit");
+		assert numberWithOneIntegerDigit != null;
+		assert numberWithOneIntegerDigit.equals("4.5");
+
+		Object numberWithSevenIntegerDigits = context.getVariable(Context.TEMPLATE_SCOPE, "seven integer digits");
+		assert numberWithSevenIntegerDigits != null;
+		assert numberWithSevenIntegerDigits.equals("0,001,234.5");
 	}
 }
