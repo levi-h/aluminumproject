@@ -36,6 +36,12 @@ public class FormatNumber extends AbstractAction {
 
 	private NumberFormatType type;
 
+	private Boolean grouping;
+	private Integer minimumIntegerDigits;
+	private Integer maximumIntegerDigits;
+	private Integer minimumFractionDigits;
+	private Integer maximumFractionDigits;
+
 	/**
 	 * Creates a <em>format number</em> action.
 	 */
@@ -54,6 +60,15 @@ public class FormatNumber extends AbstractAction {
 	}
 
 	/**
+	 * Sets whether grouping will be used.
+	 *
+	 * @param grouping {@code true} to use grouping, {@code false} otherwise
+	 */
+	public void setGrouping(Boolean grouping) {
+		this.grouping = grouping;
+	}
+
+	/**
 	 * Sets how the number should be formatted. If no number format type is set, this action falls back to the custom
 	 * type.
 	 *
@@ -63,8 +78,64 @@ public class FormatNumber extends AbstractAction {
 		this.type = type;
 	}
 
+	/**
+	 * Sets the minimum number of digits that will be used for the fractional part of the number.
+	 *
+	 * @param minimumFractionDigits the minimum number of fraction digits to use
+	 */
+	public void setMinimumFractionDigits(Integer minimumFractionDigits) {
+		this.minimumFractionDigits = minimumFractionDigits;
+	}
+
+	/**
+	 * Sets the maximum number of digits that will be used for the fractional part of the number.
+	 *
+	 * @param maximumFractionDigits the maximum number of fraction digits to use
+	 */
+	public void setMaximumFractionDigits(Integer maximumFractionDigits) {
+		this.maximumFractionDigits = maximumFractionDigits;
+	}
+
+	/**
+	 * Sets the minimum number of digits that will be used for the integer part of the number.
+	 *
+	 * @param minimumIntegerDigits the minimum number of integer digits to use
+	 */
+	public void setMinimumIntegerDigits(Integer minimumIntegerDigits) {
+		this.minimumIntegerDigits = minimumIntegerDigits;
+	}
+
+	/**
+	 * Sets the maximum number of digits that will be used for the integer part of the number.
+	 *
+	 * @param maximumIntegerDigits the maximum number of integer digits to use
+	 */
+	public void setMaximumIntegerDigits(Integer maximumIntegerDigits) {
+		this.maximumIntegerDigits = maximumIntegerDigits;
+	}
+
 	public void execute(Context context, Writer writer) throws ContextException, WriterException {
 		NumberFormat numberFormat = GlobalisationContext.from(context).getNumberFormatProvider().provide(type, context);
+
+		if (grouping != null) {
+			numberFormat.setGroupingUsed(grouping);
+		}
+
+		if (maximumFractionDigits != null) {
+			numberFormat.setMaximumFractionDigits(maximumFractionDigits);
+		}
+
+		if (minimumFractionDigits != null) {
+			numberFormat.setMinimumFractionDigits(minimumFractionDigits);
+		}
+
+		if (maximumIntegerDigits != null) {
+			numberFormat.setMaximumIntegerDigits(maximumIntegerDigits);
+		}
+
+		if (minimumIntegerDigits != null) {
+			numberFormat.setMinimumIntegerDigits(minimumIntegerDigits);
+		}
 
 		logger.debug("formatting number ", value, " using number format ", numberFormat);
 
