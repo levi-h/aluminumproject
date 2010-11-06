@@ -51,7 +51,7 @@ public class LocaleBasedNumberFormatProviderTest {
 	public void currencyTypeShouldResultInCurrencyProvider() {
 		NumberFormat numberFormat = numberFormatProvider.provide(NumberFormatType.CURRENCY, context);
 		assert numberFormat != null;
-		assert numberFormat.format(1234.5).equals("1.234,50 €"): numberFormat.format(3.5);
+		assert numberFormat.format(1234.5).equals("1.234,50 \u20ac");
 	}
 
 	public void percentageTypeShouldResultInPercentageProvider() {

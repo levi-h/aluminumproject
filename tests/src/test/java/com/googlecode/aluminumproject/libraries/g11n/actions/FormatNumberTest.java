@@ -44,7 +44,7 @@ public class FormatNumberTest extends GlobalisationLibraryTest {
 	}
 
 	public void typeShouldBeUsed() {
-		assert processTemplate("format-number-with-type", context).equals("£1,234.50");
+		assert processTemplate("format-number-with-type", context).equals("\u00a31,234.50");
 	}
 
 	public void optionsShouldBeUsed() {
