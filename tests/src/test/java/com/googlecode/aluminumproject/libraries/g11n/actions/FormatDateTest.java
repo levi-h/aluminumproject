@@ -45,7 +45,12 @@ public class FormatDateTest extends GlobalisationLibraryTest {
 		assert processTemplate("format-date", context).equals("1970-01-01, 00:00");
 	}
 
-	public void dateFormatTypeShouldBeUsed() {
+	public void typeShouldBeUsed() {
 		assert processTemplate("format-date-with-type", context).equals("Jan 1, 1970");
+	}
+
+	@Test(dependsOnMethods = "typeShouldBeUsed")
+	public void customLocaleShouldBeUsed() {
+		assert processTemplate("format-date-with-custom-locale", context).equals("1-gen-1970");
 	}
 }
