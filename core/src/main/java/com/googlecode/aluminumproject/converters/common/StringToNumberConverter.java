@@ -33,6 +33,10 @@ import java.util.Map;
  * Converts {@link String strings} to {@link Byte bytes}, {@link Short shorts}, {@link Integer integers}, {@link Long
  * longs}, {@link Float floats}, {@link Double doubles}, {@link BigInteger big integers}, and {@link BigDecimal big
  * decimals} using the various {@code valueOf}-methods and, for big integers and big decimals, constructors.
+ * <p>
+ * Converting strings to the {@link Number base type} is supported as well: in that case, the most suitable type
+ * will be chosen from the set of types that are most commonly used (i.e. integer, long, big integer, double, big
+ * decimal).
  *
  * @author levi_h
  */
@@ -57,6 +61,7 @@ public class StringToNumberConverter implements Converter<String> {
 
 		converters.put(BigInteger.class, new StringToBigIntegerConverter());
 		converters.put(BigDecimal.class, new StringToBigDecimalConverter());
+		converters.put(Number.class, new StringToBaseTypeConverter());
 	}
 
 	public boolean supportsSourceType(Class<? extends String> sourceType) {
@@ -164,6 +169,42 @@ public class StringToNumberConverter implements Converter<String> {
 			} catch (NumberFormatException exception) {
 				throw new ConverterException(exception, "can't convert to big decimal");
 			}
+		}
+	}
+
+	@Ignored
+	private class StringToBaseTypeConverter extends ClassBasedConverter<String, Number> {
+		@Override
+		protected Number convert(String value, Context context) throws ConverterException {
+			Number convertedValue;
+
+			BigDecimal bigDecimalValue =
+				(BigDecimal) converters.get(BigDecimal.class).convert(value, BigDecimal.class, context);
+			BigInteger bigIntegerValue = bigDecimalValue.toBigInteger();
+
+			if (bigDecimalValue.compareTo(new BigDecimal(bigIntegerValue)) == 0) {
+				if ((bigIntegerValue.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) >= 0) &&
+						(bigIntegerValue.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0)) {
+					if ((bigIntegerValue.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0) &&
+						(bigIntegerValue.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0)) {
+						convertedValue = bigIntegerValue.intValue();
+					} else {
+						convertedValue = bigIntegerValue.longValue();
+					}
+				} else {
+					convertedValue = bigIntegerValue;
+				}
+			} else {
+				Double doubleValue = bigDecimalValue.doubleValue();
+
+				if (bigDecimalValue.compareTo(new BigDecimal(doubleValue)) == 0) {
+					convertedValue = doubleValue;
+				} else {
+					convertedValue = bigDecimalValue;
+				}
+			}
+
+			return convertedValue;
 		}
 	}
 }
