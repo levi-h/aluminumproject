@@ -41,6 +41,12 @@ public class LocaliseTest extends GlobalisationLibraryTest {
 		Context context = new DefaultContext();
 		context.setVariable("allowMissingKey", true);
 
-		assert processTemplate("localise-with-missing-key", context).equals("??missing??");
+		assert processTemplate("localise-with-missing-key", context).equals("??rivoli??");
+	}
+
+	@Test(dependsOnMethods = "localisedResourceShouldBeFindableWithExistingKey")
+	public void customResourceBundleShouldBeUsed() {
+		String output = processTemplate("localise-with-custom-resource-bundle");
+		assert output.equals("the framework that makes generating reports fun");
 	}
 }
