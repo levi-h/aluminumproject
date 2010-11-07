@@ -70,4 +70,9 @@ public class FormatNumberTest extends GlobalisationLibraryTest {
 		assert numberWithSevenIntegerDigits != null;
 		assert numberWithSevenIntegerDigits.equals("0,001,234.5");
 	}
+
+	@Test(dependsOnMethods = "customNumberFormatShouldBeUsedByDefault")
+	public void customPatternShouldBeUsed() {
+		assert processTemplate("format-number-with-custom-pattern", context).equals("1234.5");
+	}
 }
