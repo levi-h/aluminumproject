@@ -14,4 +14,4 @@
 
 @library (g: http://aluminumproject.googlecode.com/g11n)
 
-@g.localise (key: 'rivoli', allow missing key: ${allowMissingKey})
+@g.localise (key: 'rivoli', g.with resource bundle: 'resources/projects')
