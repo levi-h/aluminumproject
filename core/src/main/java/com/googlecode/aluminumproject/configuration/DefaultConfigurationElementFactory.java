@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * The default {@link ConfigurationElementFactory bean factory} implementation.
+ * The default {@link ConfigurationElementFactory configuration element factory} implementation.
  * <p>
  * To allow for easy customisation of new objects, the default configuration element factory contains a list of {@link
  * ConfigurationElementCustomiser configuration element customisers}. This list is empty by default, but when either the
@@ -50,7 +50,7 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 	private final Logger logger;
 
 	/**
-	 * Creates a default bean factory.
+	 * Creates a default configuration element factory.
 	 */
 	public DefaultConfigurationElementFactory() {
 		logger = Logger.get(getClass());
@@ -109,14 +109,15 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 	}
 
 	public <T> T instantiate(String className, Class<T> type) throws ConfigurationException {
-		logger.debug("instantiating ", className, " with type ", type.getName(), " from bean factory");
+		logger.debug("instantiating ", className, " with type ", type.getName(), " from configuration element factory");
 
 		T object;
 
 		try {
 			object = ReflectionUtilities.instantiate(className, type);
 		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't instantiate ", className, " from bean factory");
+			throw new ConfigurationException(exception,
+				"can't instantiate ", className, " from configuration element factory");
 		}
 
 		for (ConfigurationElementCustomiser customiser: customisers) {

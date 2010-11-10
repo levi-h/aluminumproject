@@ -21,3 +21,5 @@ dependencies {
 processResources {
 	filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
 }
+
+packagesToExcludeFromApiDocs = ['com.googlecode.aluminumproject.libraries.common.actions']

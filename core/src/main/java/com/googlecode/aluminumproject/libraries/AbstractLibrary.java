@@ -26,8 +26,6 @@ import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactor
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
-import com.googlecode.aluminumproject.libraries.common.actions.CallFunction;
-import com.googlecode.aluminumproject.libraries.common.actions.FunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.libraries.functions.StaticMethodInvokingFunctionFactory;
@@ -106,6 +104,19 @@ public abstract class AbstractLibrary implements Library {
 	}
 
 	private void findActions() throws ConfigurationException {
+		findActions(packageNames);
+	}
+
+	/**
+	 * Adds all of the actions from the {@code com.googlecode.aluminumproject.libraries.common.actions} package.
+	 *
+	 * @throws ConfigurationException when one of the common actions can't be configured
+	 */
+	protected void addCommonActions() throws ConfigurationException {
+		findActions("com.googlecode.aluminumproject.libraries.common.actions");
+	}
+
+	private void findActions(String... packageNames) {
 		List<Class<? extends Action>> actionClasses;
 
 		try {
@@ -124,19 +135,6 @@ public abstract class AbstractLibrary implements Library {
 
 			addActionFactory(new DefaultActionFactory(actionClass));
 		}
-	}
-
-	/**
-	 * Adds the common actions:
-	 * <ul>
-	 * <li>An action to {@link CallFunction call a function}.
-	 * </ul>
-	 *
-	 * @throws ConfigurationException when one of the common actions can't be configured
-	 */
-	protected void addCommonActions() throws ConfigurationException {
-		addActionFactory(new DefaultActionFactory(CallFunction.class));
-		addActionFactory(new DefaultActionFactory(FunctionArgument.class));
 	}
 
 	/**

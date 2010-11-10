@@ -20,4 +20,4 @@ dependencies {
 	apiDocs group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 }
 
-apiDocUrls = ['http://java.sun.com/javaee/5/docs/api/']
+apiDocUrls = ['http://download.oracle.com/javaee/5/api/']
