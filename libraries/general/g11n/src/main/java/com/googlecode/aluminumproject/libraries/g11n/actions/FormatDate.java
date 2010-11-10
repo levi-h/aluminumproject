@@ -18,9 +18,9 @@ package com.googlecode.aluminumproject.libraries.g11n.actions;
 import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
+import com.googlecode.aluminumproject.context.g11n.DateFormatType;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.g11n.model.DateFormatType;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 

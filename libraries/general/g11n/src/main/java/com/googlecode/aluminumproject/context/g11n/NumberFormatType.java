@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.libraries.g11n.model;
+package com.googlecode.aluminumproject.context.g11n;
 
 /**
  * A way to format a {@link Number number}.

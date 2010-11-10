@@ -30,9 +30,9 @@ import java.util.Locale;
 
 /**
  * Enriches the context with a {@link GlobalisationContext globalisation context}. Before each template, a globalisation
- * context is created and made available as an implicit object (with the name {@value
- * GlobalisationContext#GLOBALISATION_CONTEXT_IMPLICIT_OBJECT}). After the template has been processed, the implicit
- * object is removed again.
+ * context is created and made available as an implicit object. It can be obtained by using a {@link
+ * GlobalisationContext#from(Context) utility method}. After the template has been processed, the implicit object is
+ * removed again.
  * <p>
  * The type of the locale provider that the globalisation context is created with can be configured with the {@value
  * #LOCALE_PROVIDER_CLASS} parameter. By default, a {@link ConstantLocaleProvider constant locale provider} will be

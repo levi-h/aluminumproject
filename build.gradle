@@ -61,7 +61,7 @@ task createApiDocs(type: Javadoc, visible: false)  {
 	destinationDir = new File(project.buildDir, 'docs/api')
 
 	def subprojectsToInclude = subprojects.findAll {subproject ->
-		!subproject.hasProperty('excludedFromApiDocs') || !subproject.property('excludedFromApiDocs')
+		subproject.name != 'aluminum-tests'
 	}
 
 	source subprojectsToInclude.collect {subproject ->
@@ -71,8 +71,17 @@ task createApiDocs(type: Javadoc, visible: false)  {
 		subproject.configurations.apiDocs.resolve()
 	})
 
-	options.links = subprojectsToInclude.inject(['http://java.sun.com/javase/6/docs/api/']) {links, subproject ->
+	options.links = subprojectsToInclude.inject(['http://download.oracle.com/javase/6/docs/api/']) {links, subproject ->
 		subproject.hasProperty('apiDocUrls') ? links + subproject.property('apiDocUrls') : links
+	}
+
+	def excludedPackages = subprojectsToInclude.inject([]) {excludedPackages, subproject ->
+		excludedPackages + (subproject.hasProperty('packagesToExcludeFromApiDocs')
+			? subproject.property('packagesToExcludeFromApiDocs') : [])
+	}
+
+	exclude {details ->
+		details.directory && excludedPackages.contains(details.relativePath.pathString.replace('/', '.'))
 	}
 }
 

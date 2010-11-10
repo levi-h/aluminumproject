@@ -19,8 +19,8 @@ import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
+import com.googlecode.aluminumproject.context.g11n.NumberFormatType;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.g11n.model.NumberFormatType;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 

@@ -33,7 +33,6 @@ import com.googlecode.aluminumproject.writers.Writer;
  * <li>The action can be {@link ActionContributionOptions#skipAction() skipped} altogether;
  * <li>An {@link ActionInterceptor interceptor} can be {@link
  *     ActionContributionOptions#addInterceptor(ActionInterceptor) added}.
- * <li>
  * </ul>
  * An action contribution is being created with a {@link ActionParameter parameter}. This parameter can be passed to the
  * action, but it can also be used to base logic on (e.g. whether or not the action should be executed).

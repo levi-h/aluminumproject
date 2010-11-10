@@ -30,8 +30,6 @@ import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.libraries.g11n.model.DateFormatType;
-import com.googlecode.aluminumproject.libraries.g11n.model.NumberFormatType;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;

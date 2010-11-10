@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.context.g11n;
 
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
-import com.googlecode.aluminumproject.libraries.g11n.model.NumberFormatType;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
