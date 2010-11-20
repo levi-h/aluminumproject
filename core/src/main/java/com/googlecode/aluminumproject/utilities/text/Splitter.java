@@ -99,8 +99,8 @@ public class Splitter {
 	 *
 	 * @param text the text to split
 	 * @param tokenProcessor the token processor to notify of each token that can be found
-	 * @throws UtilityException when the text to split ends with an escape character or when it contains an unclosed
-	 *                          quote character
+	 * @throws UtilityException when the text to split ends with an escape character, when it contains an unclosed quote
+	 *                          character, or when the token processor can't process one of the tokens
 	 */
 	public void split(String text, TokenProcessor tokenProcessor) throws UtilityException {
 		StringBuilder textBuffer = new StringBuilder();
@@ -185,7 +185,8 @@ public class Splitter {
 		return matches;
 	}
 
-	private void processTokens(StringBuilder buffer, List<Match> matches, TokenProcessor tokenProcessor) {
+	private void processTokens(
+			StringBuilder buffer, List<Match> matches, TokenProcessor tokenProcessor) throws UtilityException {
 		Match match;
 		int offset = 0;
 
@@ -285,7 +286,8 @@ public class Splitter {
 		 * @param separator the separator that was found (the empty string in case of the last token)
 		 * @param separatorPattern the pattern that matches the separator that was found ({@code null} for the last
 		 *                         token)
+		 * @throws UtilityException when the token can't be processed (e.g. when the separator order is unexpected)
 		 */
-		void process(String token, String separator, String separatorPattern);
+		void process(String token, String separator, String separatorPattern) throws UtilityException;
 	}
 }
