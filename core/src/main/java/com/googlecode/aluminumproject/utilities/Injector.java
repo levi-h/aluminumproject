@@ -82,22 +82,7 @@ public class Injector {
 
 				logger.debug("injecting ", value, " into ", field, " of ", injectable);
 
-				if (!field.isAccessible()) {
-					try {
-						field.setAccessible(true);
-					} catch (SecurityException exception) {
-						throw new UtilityException("can't make field ",
-							field.getDeclaringClass().getSimpleName(), "#", field.getName(), " accessible");
-					}
-				}
-
-				try {
-					field.set(injectable, value);
-				} catch (IllegalArgumentException exception) {
-					throw new UtilityException(exception, "can't inject ", field);
-				} catch (IllegalAccessException exception) {
-					throw new UtilityException(exception, "may not inject ", field);
-				}
+				ReflectionUtilities.setFieldValue(injectable, field.getName(), value);
 			}
 		}
 	}
