@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
@@ -37,7 +37,7 @@ import java.util.Set;
  *
  * @author levi_h
  */
-@ActionContributionInformation(parameterType = "String")
+@Typed("String")
 public class Text implements ActionContribution {
 	/**
 	 * Creates a <em>text</em> action contribution.

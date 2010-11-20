@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.libraries.core.actions;
 
 import static com.googlecode.aluminumproject.context.Context.ALUMINUM_IMPLICIT_OBJECT;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
@@ -37,8 +37,7 @@ import java.util.Map;
  * @see IncludeLocal
  */
 public class Block extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private String name;
+	private @Required String name;
 
 	/**
 	 * Creates a <em>block</em> action.

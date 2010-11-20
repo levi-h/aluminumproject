@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.ConstantLocaleProvider;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
@@ -40,7 +40,7 @@ import java.util.Set;
  *
  * @author levi_h
  */
-@ActionContributionInformation(parameterType = "java.util.Locale")
+@Typed("java.util.Locale")
 public class WithLocale implements ActionContribution {
 	/**
 	 * Creates a <em>with locale</em> action contribution.

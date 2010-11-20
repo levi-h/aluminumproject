@@ -16,6 +16,8 @@
 package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
@@ -32,14 +34,14 @@ import java.lang.reflect.Type;
  * contribution} class and examines it to retrieve information about it. Normally, reflection is used to obtain the
  * action contribution information, though this can be influenced by annotating the action contribution class.
  * <p>
- * The name of an action contribution class annotated with {@link
- * com.googlecode.aluminumproject.annotations.ActionContributionInformation &#64;ActionContributionInformation} will be
- * the value of the {@code name} attribute. For unannotated action contribution classes, the lower cased {@link
+ * When an action contribution class is annotated with {@link Named &#64;Named}, the annotation value will become the
+ * name of the action contribution. For unannotated action contribution classes, the lower cased {@link
  * StringUtilities#humanise(String) humanised} class name will become the name (this means the the action contribution
  * {@code OnDays} would get the name <em>on days</em>).
  * <p>
- * Similarly, the parameter type of annotated action contributions will be inferred from the {@code parameterType}
- * attribute. When an action contribution is not annotated, {@link Object} will be used as its parameter type.
+ * Similarly, the parameter type of annotated action contributions will be inferred from the {@link Typed &#64;Typed}
+ * annotation. When no such annotation is present on the action contribution's class, {@link Object} will be used as its
+ * parameter type.
  * <p>
  * The action contribution will be created by the {@link ConfigurationElementFactory configuration element factory}
  * in the configuration. After its creation, any of the action contribution's fields that are declared to be {@link
@@ -65,30 +67,27 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 	public void initialise(Configuration configuration) throws ConfigurationException {
 		super.initialise(configuration);
 
-		String name = "";
+		String name;
+
+		if (actionContributionClass.isAnnotationPresent(Named.class)) {
+			name = actionContributionClass.getAnnotation(Named.class).value();
+		} else {
+			name = StringUtilities.humanise(actionContributionClass.getSimpleName()).toLowerCase();
+		}
+
 		Type parameterType;
 
-		Class<com.googlecode.aluminumproject.annotations.ActionContributionInformation> informationClass =
-			com.googlecode.aluminumproject.annotations.ActionContributionInformation.class;
-
-		if (actionContributionClass.isAnnotationPresent(informationClass)) {
-			com.googlecode.aluminumproject.annotations.ActionContributionInformation information =
-				actionContributionClass.getAnnotation(informationClass);
-
-			name = information.name();
-
+		if (actionContributionClass.isAnnotationPresent(Typed.class)) {
 			try {
-				parameterType = GenericsUtilities.getType(information.parameterType(), "java.lang", "java.util");
+				String parameterTypeName = actionContributionClass.getAnnotation(Typed.class).value();
+
+				parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
 			} catch (UtilityException exception) {
 				throw new ConfigurationException(exception,
 					"can't get parameter type for action contribution class ", actionContributionClass.getName());
 			}
 		} else {
 			parameterType = Object.class;
-		}
-
-		if (name.equals("")) {
-			name = StringUtilities.humanise(actionContributionClass.getSimpleName()).toLowerCase();
 		}
 
 		logger.debug("using name '", name, "' and parameter type ", parameterType,

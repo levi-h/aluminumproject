@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
@@ -38,8 +38,7 @@ import java.util.ResourceBundle;
  * @author levi_h
  */
 public class Localise extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private String key;
+	private @Required String key;
 
 	private boolean allowMissingKey;
 

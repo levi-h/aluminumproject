@@ -17,6 +17,9 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
@@ -43,23 +46,21 @@ import java.util.Map;
  * information about it. By default, reflection will be used to compose information about the action and its parameters,
  * but this can be overridden by annotating the action class.
  * <p>
- * If an action class is annotated with {@link com.googlecode.aluminumproject.annotations.ActionInformation
- * &#64;ActionInformation}, the action name will be the value of the {@code name} attribute. Otherwise, the name that is
- * used is the name of the action class, {@link StringUtilities#humanise(String) humanised} and written in lower case
- * (so the action {@code CamelCase} would get the name <em>camel case</em>).
+ * If an action class is annotated with {@link Named &#64;Named}, its value will be used to name the action. Otherwise,
+ * the name that is used is the name of the action class, {@link StringUtilities#humanise(String) humanised} and written
+ * in lower case (so the action {@code CamelCase} would get the name <em>camel case</em>).
  * <p>
  * {@link ActionParameter Action parameters} are found by iterating through all of the action's non-final, non-static
  * fields that aren't annotated with {@link Ignored &#64;Ignored} or {@link Injected &#64;Injected}. Action parameters
  * have the following properties:
  * <ul>
  * <li>A <i>name<i>: by default, this is the humanised name of the field, in lower case (so the field {@code fullName}
- *     would result in a parameter with the name <em>full name</em>);
- * <li>A <i>type</i>: this is the same as the field type;
- * <li>Whether it is <i>required</i> or not: all parameters are considered optional by default.
+ *     would result in a parameter with the name <em>full name</em>), though it may be overridden by placing a {@link
+ *     Named &#64;Named} annotation on the field;
+ * <li>A <i>type</i>: this is the same as the field type, unless the field is annotated with {@link Typed &#64;Typed};
+ * <li>Whether it is <i>required</i> or not: all parameters that are not marked {@link Required &#64;Required} are
+ *     considered optional.
  * </ul>
- * The parameter's name, type, and whether it's required or not can be overridden by annotating its field with {@link
- * com.googlecode.aluminumproject.annotations.ActionParameterInformation &#64;ActionParameterInformation}.
- * <p>
  * Actions may support dynamic parameters by implementing {@link DynamicallyParameterisable the dynamically
  * parameterisable interface}. Any parameters that are supplied to the action factory but whose names don't match any of
  * the found parameter names will be set as dynamic parameters.
@@ -97,16 +98,11 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 	}
 
 	private String getActionName() {
-		String actionName = "";
+		String actionName;
 
-		Class<com.googlecode.aluminumproject.annotations.ActionInformation> informationClass =
-			com.googlecode.aluminumproject.annotations.ActionInformation.class;
-
-		if (actionClass.isAnnotationPresent(informationClass)) {
-			actionName = actionClass.getAnnotation(informationClass).name();
-		}
-
-		if (actionName.equals("")) {
+		if (actionClass.isAnnotationPresent(Named.class)) {
+			actionName = actionClass.getAnnotation(Named.class).value();
+		} else {
 			actionName = StringUtilities.humanise(actionClass.getSimpleName()).toLowerCase();
 		}
 
@@ -134,40 +130,29 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		}
 
 		for (Field parameterField: parameterFields) {
-			Class<com.googlecode.aluminumproject.annotations.ActionParameterInformation> parameterInformationClass =
-				com.googlecode.aluminumproject.annotations.ActionParameterInformation.class;
-
-			com.googlecode.aluminumproject.annotations.ActionParameterInformation annotatedParameterInformation =
-				parameterField.getAnnotation(parameterInformationClass);
-
 			String parameterName;
-			String parameterTypeName;
-			Type parameterType;
-			boolean required;
 
-			if (annotatedParameterInformation == null) {
-				parameterName = "";
-				parameterTypeName = "";
-				required = false;
+			if (parameterField.isAnnotationPresent(Named.class)) {
+				parameterName = parameterField.getAnnotation(Named.class).value();
 			} else {
-				parameterName = annotatedParameterInformation.name();
-				parameterTypeName = annotatedParameterInformation.type();
-				required = annotatedParameterInformation.required();
-			}
-
-			if (parameterName.equals("")) {
 				parameterName = StringUtilities.humanise(parameterField.getName()).toLowerCase();
 			}
 
-			if (parameterTypeName.equals("")) {
-				parameterType = parameterField.getGenericType();
-			} else {
+			Type parameterType;
+
+			if (parameterField.isAnnotationPresent(Typed.class)) {
 				try {
+					String parameterTypeName = parameterField.getAnnotation(Typed.class).value();
+
 					parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
 				} catch (UtilityException exception) {
 					throw new ConfigurationException(exception, "can't get type of parameter '", parameterName, "'");
 				}
+			} else {
+				parameterType = parameterField.getGenericType();
 			}
+
+			boolean required = parameterField.isAnnotationPresent(Required.class);
 
 			logger.debug("found ", required ? "required" : "optional", " parameter;",
 				" name: '", parameterName, "', type: ", parameterType);

@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
@@ -54,16 +55,11 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 	}
 
 	private String getFunctionName() {
-		String functionName = "";
+		String functionName;
 
-		Class<com.googlecode.aluminumproject.annotations.FunctionInformation> informationClass =
-			com.googlecode.aluminumproject.annotations.FunctionInformation.class;
-
-		if (method.isAnnotationPresent(informationClass)) {
-			functionName = method.getAnnotation(informationClass).name();
-		}
-
-		if (functionName.equals("")) {
+		if (method.isAnnotationPresent(Named.class)) {
+			functionName = method.getAnnotation(Named.class).value();
+		} else {
 			functionName = method.getName();
 		}
 
@@ -88,18 +84,11 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 				while ((j < parameterAnnotations[i].length) && (argumentName == null)) {
 					Annotation annotation = parameterAnnotations[i][j];
 
-					if (annotation instanceof com.googlecode.aluminumproject.annotations.FunctionArgumentInformation) {
-						com.googlecode.aluminumproject.annotations.FunctionArgumentInformation informationAnnotation =
-							(com.googlecode.aluminumproject.annotations.FunctionArgumentInformation) annotation;
-
-						argumentName = informationAnnotation.name();
+					if (annotation instanceof Named) {
+						argumentName = ((Named) annotation).value();
 					} else {
 						j++;
 					}
-				}
-
-				if ((argumentName != null) && argumentName.equals("")) {
-					argumentName = null;
 				}
 			}
 

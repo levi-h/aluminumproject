@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;
 
 /**
@@ -24,7 +23,6 @@ import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.Whitespac
  *
  * @author levi_h
  */
-@ActionContributionInformation(parameterType = "int")
 public class NewlinesToPreserve extends WhitespaceToPreserve {
 	/**
 	 * Creates a <em>newlines to preserve</em> action contribution.

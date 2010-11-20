@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
-import com.googlecode.aluminumproject.annotations.FunctionArgumentInformation;
 import com.googlecode.aluminumproject.annotations.FunctionClass;
-import com.googlecode.aluminumproject.annotations.FunctionInformation;
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 
 /**
@@ -48,9 +47,8 @@ public class TestFunctions {
 	 * @param b the second value to compare
 	 * @return the lowest of the two values
 	 */
-	@FunctionInformation(name = "minimumValue")
-	public static int min(@FunctionArgumentInformation(name = "firstValue") int a,
-			@FunctionArgumentInformation(name = "secondValue") int b) {
+	@Named("minimumValue")
+	public static int min(@Named("firstValue") int a, @Named("secondValue") int b) {
 		return (a < b) ? a : b;
 	}
 

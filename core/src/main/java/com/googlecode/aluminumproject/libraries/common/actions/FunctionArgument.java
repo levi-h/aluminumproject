@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.common.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.Library;
@@ -34,8 +34,7 @@ import com.googlecode.aluminumproject.writers.Writer;
  * @author levi_h
  */
 public class FunctionArgument extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private Object value;
+	private @Required Object value;
 
 	private @Injected DefaultActionFactory factory;
 	private @Injected Configuration configuration;

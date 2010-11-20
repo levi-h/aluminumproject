@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -36,8 +36,7 @@ import java.util.TreeMap;
  * @author levi_h
  */
 public class Each extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private Iterable<?> elements;
+	private @Required Iterable<?> elements;
 
 	private String elementName;
 	private String informationName;

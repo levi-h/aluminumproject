@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.libraries.core.actions;
 
 import static com.googlecode.aluminumproject.context.Context.ALUMINUM_IMPLICIT_OBJECT;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -36,8 +36,7 @@ import java.util.Map;
  * @author levi_h
  */
 public class BlockContents extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private String name;
+	private @Required String name;
 
 	/**
 	 * Creates a <em>block contents</em> action.

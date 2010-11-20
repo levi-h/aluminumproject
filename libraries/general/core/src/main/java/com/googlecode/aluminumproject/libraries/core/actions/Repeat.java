@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -32,8 +32,7 @@ import com.googlecode.aluminumproject.writers.WriterException;
  * @author levi_h
  */
 public class Repeat extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private int count;
+	private @Required int count;
 
 	private String informationName;
 

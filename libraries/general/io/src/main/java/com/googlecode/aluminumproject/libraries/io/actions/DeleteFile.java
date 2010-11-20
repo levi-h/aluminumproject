@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.io.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
@@ -31,8 +31,7 @@ import java.io.File;
  * @author levi_h
  */
 public class DeleteFile extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private File file;
+	private @Required File file;
 
 	/**
 	 * Creates a <em>delete file</em> action.

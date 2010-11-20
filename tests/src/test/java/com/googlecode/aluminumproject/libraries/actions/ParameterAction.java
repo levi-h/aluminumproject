@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -25,9 +25,8 @@ import com.googlecode.aluminumproject.writers.Writer;
  * @author levi_h
  */
 public class ParameterAction extends AbstractAction {
-	@ActionParameterInformation(type = "String")
 	@SuppressWarnings("unused")
-	private ActionParameter descriptionParameter;
+	private @Typed("String") ActionParameter descriptionParameter;
 
 	/**
 	 * Creates a parameter action.

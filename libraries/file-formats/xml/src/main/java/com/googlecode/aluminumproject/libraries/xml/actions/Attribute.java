@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -30,12 +30,8 @@ import com.googlecode.aluminumproject.writers.WriterException;
  */
 public class Attribute extends AbstractAction {
 	private String prefix;
-
-	@ActionParameterInformation(required = true)
-	private String name;
-
-	@ActionParameterInformation(required = true)
-	private String value;
+	private @Required String name;
+	private @Required String value;
 
 	/**
 	 * Creates an <em>attribute</em> action.

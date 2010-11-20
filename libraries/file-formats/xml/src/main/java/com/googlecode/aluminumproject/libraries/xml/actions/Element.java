@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 
 /**
  * Produces an XML element, the name of which is given as a parameter. Attributes can be added by nesting {@link
@@ -24,8 +24,7 @@ import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
  * @author levi_h
  */
 public class Element extends AbstractElement {
-	@ActionParameterInformation(required = true)
-	private String name;
+	private @Required String name;
 
 	/**
 	 * Creates an <em>element</em> action.

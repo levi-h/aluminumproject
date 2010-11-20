@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.io.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
@@ -31,11 +31,8 @@ import java.io.File;
  * @author levi_h
  */
 public class RenameFile extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private File source;
-
-	@ActionParameterInformation(required = true)
-	private String targetName;
+	private @Required File source;
+	private @Required String targetName;
 
 	/**
 	 * Creates a <em>rename file</em> action.

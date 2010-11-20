@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.common.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.Library;
@@ -45,8 +45,7 @@ import java.util.List;
  * @author levi_h
  */
 public class CallFunction extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private String name;
+	private @Required String name;
 
 	private List<FunctionArgument> arguments;
 

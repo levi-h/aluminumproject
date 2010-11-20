@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.libraries.text.actions;
 
 import com.googlecode.aluminumproject.Logger;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
@@ -35,6 +36,7 @@ import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.Whitespac
  *
  * @author levi_h
  */
+@Typed("int")
 public abstract class WhitespaceToPreserve implements ActionContribution {
 	private WhitespaceType type;
 

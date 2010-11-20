@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
 import com.googlecode.aluminumproject.libraries.actions.Action;
@@ -32,7 +32,7 @@ import com.googlecode.aluminumproject.writers.Writer;
  *
  * @author levi_h
  */
-@ActionContributionInformation(parameterType = "com.googlecode.aluminumproject.writers.Writer")
+@Typed("com.googlecode.aluminumproject.writers.Writer")
 public class WithWriter implements ActionContribution {
 	/**
 	 * Creates a <em>with writer</em> action contribution.

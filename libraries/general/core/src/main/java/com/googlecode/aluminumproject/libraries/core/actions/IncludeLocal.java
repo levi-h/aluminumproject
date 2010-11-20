@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
@@ -44,8 +44,7 @@ import java.util.Map;
  * @see Template
  */
 public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
-	@ActionParameterInformation(required = true)
-	private String name;
+	private @Required String name;
 
 	/**
 	 * Creates an <em>include local</em> action.

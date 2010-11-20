@@ -15,7 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.io.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -34,8 +35,7 @@ import java.util.List;
  * @author levi_h
  */
 public class ListFiles extends AbstractAction {
-	@ActionParameterInformation(name = "in", required = true)
-	private File location;
+	private @Named("in") @Required File location;
 
 	private FileFilter filter;
 

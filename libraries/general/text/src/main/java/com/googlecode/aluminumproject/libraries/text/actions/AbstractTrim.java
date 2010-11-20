@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
@@ -32,6 +33,7 @@ import com.googlecode.aluminumproject.writers.TrimWriter.TrimType;
  *
  * @author levi_h
  */
+@Typed("com.googlecode.aluminumproject.writers.TrimWriter$TrimType")
 abstract class AbstractTrim implements ActionContribution {
 	private boolean multiline;
 
