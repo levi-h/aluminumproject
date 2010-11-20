@@ -45,9 +45,8 @@ public class XmlLibrary extends AbstractLibrary {
 
 		String url = "http://aluminumproject.googlecode.com/xml";
 		String version = EnvironmentUtilities.getVersion();
-		String displayName = "XML library";
 
-		information = new LibraryInformation(url, version, displayName, true, true, false);
+		information = new LibraryInformation(url, version, true, true, false);
 	}
 
 	public LibraryInformation getInformation() {

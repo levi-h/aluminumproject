@@ -30,8 +30,6 @@ public class LibraryInformation {
 	private String url;
 	private String version;
 
-	private String displayName;
-
 	private boolean dynamicActionsSupported;
 	private boolean dynamicActionContributionsSupported;
 	private boolean dynamicFunctionsSupported;
@@ -41,10 +39,9 @@ public class LibraryInformation {
 	 *
 	 * @param url the URL that uniquely identifies the library
 	 * @param version the version of the library
-	 * @param displayName the name that should be used when referring to the library
 	 */
-	public LibraryInformation(String url, String version, String displayName) {
-		this(url, version, displayName, false, false, false);
+	public LibraryInformation(String url, String version) {
+		this(url, version, false, false, false);
 	}
 
 	/**
@@ -52,17 +49,14 @@ public class LibraryInformation {
 	 *
 	 * @param url the URL that uniquely identifies the library
 	 * @param version the version of the library
-	 * @param displayName the name that should be used when referring to the library
 	 * @param dynamicActionsSupported whether or not the library supports dynamic actions
 	 * @param dynamicActionContributionsSupported whether or not the library supports dynamic action contributions
 	 * @param dynamicFunctionsSupported whether or not the library supports dynamic functions
 	 */
-	public LibraryInformation(String url, String version, String displayName, boolean dynamicActionsSupported,
+	public LibraryInformation(String url, String version, boolean dynamicActionsSupported,
 			boolean dynamicActionContributionsSupported, boolean dynamicFunctionsSupported) {
 		this.url = url;
 		this.version = version;
-
-		this.displayName = displayName;
 
 		this.dynamicActionsSupported = dynamicActionsSupported;
 		this.dynamicActionContributionsSupported = dynamicActionContributionsSupported;
@@ -96,15 +90,6 @@ public class LibraryInformation {
 	 */
 	public String getVersionedUrl() {
 		return String.format("%s/%s", getUrl(), getVersion());
-	}
-
-	/**
-	 * Returns the display name of the library.
-	 *
-	 * @return the library's display name
-	 */
-	public String getDisplayName() {
-		return displayName;
 	}
 
 	/**
