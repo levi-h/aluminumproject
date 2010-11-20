@@ -136,6 +136,15 @@ public class SplitterTest {
 		assert tokens.get(1).equals(new Token("' '", "", null));
 	}
 
+	public void quotationCharactersShouldBeNestable() {
+		List<QuotationCharacters> quotationCharacters = Arrays.asList(new QuotationCharacters('(', ')', true));
+
+		List<Token> tokens = split(new Splitter(Arrays.asList(",\\s"), quotationCharacters), "a, (b, (c, d))");
+		assert tokens.size() == 2;
+		assert tokens.get(0).equals(new Token("a", ", ", ",\\s"));
+		assert tokens.get(1).equals(new Token("(b, (c, d))", "", null));
+	}
+
 	@Test(dependsOnMethods = "quotationCharactersShouldPreventSeparation", expectedExceptions = UtilityException.class)
 	public void notClosingQuotationMarksShouldCauseException() {
 		List<QuotationCharacters> quotationCharacters = Arrays.asList(new QuotationCharacters('\'', '\'', false));
