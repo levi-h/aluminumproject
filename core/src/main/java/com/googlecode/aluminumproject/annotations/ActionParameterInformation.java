@@ -27,22 +27,22 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Type;
 
 /**
- * Contains information about the parameter of an {@link Action action}. When put on a setter, {@link
+ * Contains information about the parameter of an {@link Action action}. When put on a field, {@link
  * DefaultActionFactory default action factories} will use the information to fill {@link
  * com.googlecode.aluminumproject.libraries.actions.ActionParameterInformation action parameter information}.
  *
  * @author levi_h
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
 public @interface ActionParameterInformation {
 	/**
-	 * The name of the parameter. If not given, the property name will be used as parameter name.
+	 * The name of the parameter. If not given, the field name will be used as parameter name.
 	 */
 	String name() default "";
 
 	/**
-	 * The type of the parameter. If not given, the property type will be used as parameter type (most of the time, this
+	 * The type of the parameter. If not given, the field type will be used as parameter type (most of the time, this
 	 * will be what is needed anyway - this attribute is especially useful for parameters of the type {@link
 	 * ActionParameter}).
 	 * <p>

@@ -39,15 +39,6 @@ public class Template extends AbstractAction {
 	 */
 	public Template() {}
 
-	/**
-	 * Sets the name of the variable to store the template in.
-	 *
-	 * @param name the name of the variable to use
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		if (name == null) {
 			logger.debug("invoking body");

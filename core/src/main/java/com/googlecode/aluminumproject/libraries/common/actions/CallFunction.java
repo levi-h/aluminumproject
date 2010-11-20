@@ -45,6 +45,7 @@ import java.util.List;
  * @author levi_h
  */
 public class CallFunction extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private String name;
 
 	private List<FunctionArgument> arguments;
@@ -56,16 +57,6 @@ public class CallFunction extends AbstractAction {
 	 */
 	public CallFunction() {
 		arguments = new LinkedList<FunctionArgument>();
-	}
-
-	/**
-	 * Sets the name of the function to call.
-	 *
-	 * @param name the function name to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**

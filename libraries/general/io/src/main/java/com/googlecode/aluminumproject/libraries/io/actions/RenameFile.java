@@ -31,33 +31,16 @@ import java.io.File;
  * @author levi_h
  */
 public class RenameFile extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private File source;
+
+	@ActionParameterInformation(required = true)
 	private String targetName;
 
 	/**
 	 * Creates a <em>rename file</em> action.
 	 */
 	public RenameFile() {}
-
-	/**
-	 * Sets the file that should be renamed.
-	 *
-	 * @param source the source file
-	 */
-	@ActionParameterInformation(required = true)
-	public void setSource(File source) {
-		this.source = source;
-	}
-
-	/**
-	 * Sets the name that the file should get.
-	 *
-	 * @param targetName the new name for the file
-	 */
-	@ActionParameterInformation(required = true)
-	public void setTargetName(String targetName) {
-		this.targetName = targetName;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException {
 		File target = new File(source.getParentFile(), targetName);

@@ -36,8 +36,8 @@ import java.util.List;
  * @author levi_h
  */
 public abstract class AbstractAction implements Action {
-	private Action parent;
-	private ActionBody body;
+	private @Ignored Action parent;
+	private @Ignored ActionBody body;
 
 	/** The logger to use. */
 	protected final Logger logger;
@@ -95,7 +95,6 @@ public abstract class AbstractAction implements Action {
 		return Utilities.typed(action);
 	}
 
-	@Ignored
 	public void setParent(Action parent) {
 		this.parent = parent;
 	}
@@ -216,7 +215,6 @@ public abstract class AbstractAction implements Action {
 		return decorativeWriter;
 	}
 
-	@Ignored
 	public void setBody(ActionBody body) {
 		this.body = body;
 	}

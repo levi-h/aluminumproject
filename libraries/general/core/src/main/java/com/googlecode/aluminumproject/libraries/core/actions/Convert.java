@@ -33,7 +33,10 @@ import java.lang.reflect.Type;
  * @author levi_h
  */
 public class Convert extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private Object value;
+
+	@ActionParameterInformation(required = true)
 	private Type type;
 
 	private @Injected Configuration configuration;
@@ -42,26 +45,6 @@ public class Convert extends AbstractAction {
 	 * Creates a <em>convert</em> action.
 	 */
 	public Convert() {}
-
-	/**
-	 * Sets the value that should be converted.
-	 *
-	 * @param value the value to convert
-	 */
-	@ActionParameterInformation(required = true)
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
-	/**
-	 * Sets the type that the value should be converted into.
-	 *
-	 * @param type the desired type
-	 */
-	@ActionParameterInformation(required = true)
-	public void setType(Type type) {
-		this.type = type;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException {
 		try {

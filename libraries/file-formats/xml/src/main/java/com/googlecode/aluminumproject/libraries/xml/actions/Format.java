@@ -43,24 +43,6 @@ public class Format extends AbstractAction {
 		indentation = DEFAULT_INDENTATION;
 	}
 
-	/**
-	 * Sets the document that should be formatted.
-	 *
-	 * @param document the document to format
-	 */
-	public void setDocument(Element document) {
-		this.document = document;
-	}
-
-	/**
-	 * Sets the number of spaces that should be used to indent the document with.
-	 *
-	 * @param indentation the indentation to use
-	 */
-	public void setIndentation(int indentation) {
-		this.indentation = indentation;
-	}
-
 	public void execute(Context context, Writer writer) throws ActionException, WriterException {
 		Element document;
 

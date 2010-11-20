@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.libraries.core.actions;
 
 import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -46,25 +47,16 @@ import java.util.Map;
  * @see Template
  */
 public class IncludeLocal extends AbstractAction implements DynamicallyParameterisable {
+	@ActionParameterInformation(required = true)
 	private String name;
 
-	private Map<String, ActionParameter> variables;
+	private @Ignored Map<String, ActionParameter> variables;
 
 	/**
 	 * Creates an <em>include local</em> action.
 	 */
 	public IncludeLocal() {
 		variables = new HashMap<String, ActionParameter>();
-	}
-
-	/**
-	 * Sets the name of the variable that contains the includable template elements.
-	 *
-	 * @param name the variable name of the template elements to include
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public void setParameter(String name, ActionParameter parameter) throws ActionException {

@@ -20,7 +20,6 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
-import com.googlecode.aluminumproject.libraries.io.functions.FileFilters;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.File;
@@ -35,29 +34,15 @@ import java.util.List;
  * @author levi_h
  */
 public class ListFiles extends AbstractAction {
+	@ActionParameterInformation(name = "in", required = true)
 	private File location;
 
 	private FileFilter filter;
 
 	/**
-	 * Sets the location in which will be looked for files.
-	 *
-	 * @param location the location to use
+	 * Creates a <em>list files</em> action.
 	 */
-	@ActionParameterInformation(name = "in", required = true)
-	public void setLocation(File location) {
-		this.location = location;
-	}
-
-	/**
-	 * Sets the filter that should accept the files.
-	 *
-	 * @param filter the filter to apply
-	 * @see FileFilters
-	 */
-	public void setFilter(FileFilter filter) {
-		this.filter = filter;
-	}
+	public ListFiles() {}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException {
 		File[] files = location.listFiles(filter);

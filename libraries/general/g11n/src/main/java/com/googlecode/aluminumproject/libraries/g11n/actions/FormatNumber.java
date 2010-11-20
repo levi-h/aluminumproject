@@ -32,6 +32,7 @@ import java.text.NumberFormat;
  * @author levi_h
  */
 public class FormatNumber extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private Number value;
 
 	private NumberFormatType type;
@@ -47,71 +48,6 @@ public class FormatNumber extends AbstractAction {
 	 */
 	public FormatNumber() {
 		type = NumberFormatType.CUSTOM;
-	}
-
-	/**
-	 * Sets the number that should be formatted.
-	 *
-	 * @param value the number to format
-	 */
-	@ActionParameterInformation(required = true)
-	public void setValue(Number value) {
-		this.value = value;
-	}
-
-	/**
-	 * Sets whether grouping will be used.
-	 *
-	 * @param grouping {@code true} to use grouping, {@code false} otherwise
-	 */
-	public void setGrouping(Boolean grouping) {
-		this.grouping = grouping;
-	}
-
-	/**
-	 * Sets how the number should be formatted. If no number format type is set, this action falls back to the custom
-	 * type.
-	 *
-	 * @param type the way in which the number should be formatted
-	 */
-	public void setType(NumberFormatType type) {
-		this.type = type;
-	}
-
-	/**
-	 * Sets the minimum number of digits that will be used for the fractional part of the number.
-	 *
-	 * @param minimumFractionDigits the minimum number of fraction digits to use
-	 */
-	public void setMinimumFractionDigits(Integer minimumFractionDigits) {
-		this.minimumFractionDigits = minimumFractionDigits;
-	}
-
-	/**
-	 * Sets the maximum number of digits that will be used for the fractional part of the number.
-	 *
-	 * @param maximumFractionDigits the maximum number of fraction digits to use
-	 */
-	public void setMaximumFractionDigits(Integer maximumFractionDigits) {
-		this.maximumFractionDigits = maximumFractionDigits;
-	}
-
-	/**
-	 * Sets the minimum number of digits that will be used for the integer part of the number.
-	 *
-	 * @param minimumIntegerDigits the minimum number of integer digits to use
-	 */
-	public void setMinimumIntegerDigits(Integer minimumIntegerDigits) {
-		this.minimumIntegerDigits = minimumIntegerDigits;
-	}
-
-	/**
-	 * Sets the maximum number of digits that will be used for the integer part of the number.
-	 *
-	 * @param maximumIntegerDigits the maximum number of integer digits to use
-	 */
-	public void setMaximumIntegerDigits(Integer maximumIntegerDigits) {
-		this.maximumIntegerDigits = maximumIntegerDigits;
 	}
 
 	public void execute(Context context, Writer writer) throws ContextException, WriterException {

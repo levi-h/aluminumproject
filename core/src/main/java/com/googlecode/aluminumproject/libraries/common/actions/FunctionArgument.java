@@ -34,6 +34,7 @@ import com.googlecode.aluminumproject.writers.Writer;
  * @author levi_h
  */
 public class FunctionArgument extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private Object value;
 
 	private @Injected DefaultActionFactory factory;
@@ -43,16 +44,6 @@ public class FunctionArgument extends AbstractAction {
 	 * Creates a <i>function argument</i> action.
 	 */
 	public FunctionArgument() {}
-
-	/**
-	 * Sets the value of the function argument.
-	 *
-	 * @param value the argument value to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setValue(Object value) {
-		this.value = value;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException {
 		findCallFunction().addArgument(new ConstantFunctionArgument(value, configuration.getConverterRegistry()));

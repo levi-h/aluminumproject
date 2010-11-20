@@ -36,22 +36,13 @@ import java.util.Map;
  * @author levi_h
  */
 public class BlockContents extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private String name;
 
 	/**
 	 * Creates a <em>block contents</em> action.
 	 */
 	public BlockContents() {}
-
-	/**
-	 * Sets the name of the block to use.
-	 *
-	 * @param name the name of the block
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		ActionBody block = getBlock(context);

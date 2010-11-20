@@ -30,42 +30,17 @@ import com.googlecode.aluminumproject.writers.WriterException;
  */
 public class Attribute extends AbstractAction {
 	private String prefix;
+
+	@ActionParameterInformation(required = true)
 	private String name;
+
+	@ActionParameterInformation(required = true)
 	private String value;
 
 	/**
 	 * Creates an <em>attribute</em> action.
 	 */
 	public Attribute() {}
-
-	/**
-	 * Sets the namespace prefix of the attribute.
-	 *
-	 * @param prefix the attribute prefix to use
-	 */
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-
-	/**
-	 * Sets the name of the attribute.
-	 *
-	 * @param name the attribute name to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Sets the value of the attribute.
-	 *
-	 * @param value the attribute value to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setValue(String value) {
-		this.value = value;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		AbstractElement element = findAncestorOfType(AbstractElement.class);

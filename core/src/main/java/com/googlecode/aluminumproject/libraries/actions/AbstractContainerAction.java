@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -29,7 +30,7 @@ import com.googlecode.aluminumproject.writers.WriterException;
  * @param <T> the type of the container object
  */
 public abstract class AbstractContainerAction<T> extends AbstractAction implements ContainerAction<T> {
-	private T containerObject;
+	private @Ignored T containerObject;
 
 	/**
 	 * Created an abstract container action.

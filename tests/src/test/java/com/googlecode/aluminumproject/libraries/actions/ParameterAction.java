@@ -25,18 +25,14 @@ import com.googlecode.aluminumproject.writers.Writer;
  * @author levi_h
  */
 public class ParameterAction extends AbstractAction {
+	@ActionParameterInformation(type = "String")
+	@SuppressWarnings("unused")
+	private ActionParameter descriptionParameter;
+
 	/**
 	 * Creates a parameter action.
 	 */
 	public ParameterAction() {}
-
-	/**
-	 * Sets the parameter that contains the description of this action.
-	 *
-	 * @param descriptionParameter the parameter containing the description to use
-	 */
-	@ActionParameterInformation(type = "String")
-	public void setDescriptionParameter(ActionParameter descriptionParameter) {}
 
 	public void execute(Context context, Writer writer) {}
 }

@@ -27,18 +27,14 @@ import com.googlecode.aluminumproject.writers.Writer;
  */
 @ActionInformation(name = "test")
 public class AnnotatedAction extends AbstractAction {
+	@ActionParameterInformation(name = "desc", required = true)
+	@SuppressWarnings("unused")
+	private String description;
+
 	/**
 	 * Creates an annotated action.
 	 */
 	public AnnotatedAction() {}
-
-	/**
-	 * Sets the description of this action.
-	 *
-	 * @param description the description to use
-	 */
-	@ActionParameterInformation(name = "desc", required = true)
-	public void setDescription(String description) {}
 
 	public void execute(Context context, Writer writer) {}
 }

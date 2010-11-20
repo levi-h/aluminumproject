@@ -37,22 +37,13 @@ import java.util.Map;
  * @see IncludeLocal
  */
 public class Block extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private String name;
 
 	/**
 	 * Creates a <em>block</em> action.
 	 */
 	public Block() {}
-
-	/**
-	 * Sets the name of the block to store.
-	 *
-	 * @param name the name of the block
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException {
 		Map<String, Object> templateInformation = Utilities.typed(context.getImplicitObject(ALUMINUM_IMPLICIT_OBJECT));

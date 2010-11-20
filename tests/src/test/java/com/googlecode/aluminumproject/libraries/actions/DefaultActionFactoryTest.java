@@ -96,7 +96,7 @@ public class DefaultActionFactoryTest {
 	}
 
 	@Test(dependsOnMethods = "unannotatedParameterShouldBeRecognised")
-	public void unannotatedParameterShouldResultInHumanisedPropertyNameAsParameterName() {
+	public void unannotatedParameterShouldResultInHumanisedFieldNameAsParameterName() {
 		String parameterName = unannotatedActionFactory.getInformation().getParameterInformation().get(0).getName();
 		assert parameterName != null;
 		assert parameterName.equals("description");
@@ -110,7 +110,7 @@ public class DefaultActionFactoryTest {
 	}
 
 	@Test(dependsOnMethods = {"unannotatedParameterShouldBeRecognised", "annotatedParameterShouldBeRecognised"})
-	public void parameterTypeShouldBecomePropertyTypeByDefault() {
+	public void parameterTypeShouldBecomeFieldTypeByDefault() {
 		Type unannotatedParameterType =
 			unannotatedActionFactory.getInformation().getParameterInformation().get(0).getType();
 		assert unannotatedParameterType == String.class;
@@ -122,7 +122,7 @@ public class DefaultActionFactoryTest {
 
 	@Test(dependsOnMethods = {
 		"parameterOfTypeActionParameterShouldBeRecognised",
-		"parameterTypeShouldBecomePropertyTypeByDefault"
+		"parameterTypeShouldBecomeFieldTypeByDefault"
 	})
 	public void annotatedParameterShouldResultInAnnotationAttributeAsParameterType() {
 		assert parameterActionFactory.getInformation().getParameterInformation().get(0).getType() == String.class;
@@ -149,7 +149,7 @@ public class DefaultActionFactoryTest {
 		annotatedActionFactory.create(Collections.<String, ActionParameter>emptyMap(), context);
 	}
 
-	@Test(dependsOnMethods = "unannotatedParameterShouldResultInHumanisedPropertyNameAsParameterName")
+	@Test(dependsOnMethods = "unannotatedParameterShouldResultInHumanisedFieldNameAsParameterName")
 	public void supplyingOptionalParametersShouldCreateAction() {
 		Map<String, ActionParameter> parameters =
 			Collections.<String, ActionParameter>singletonMap("description", new TestActionParameter("Test action."));
@@ -200,7 +200,7 @@ public class DefaultActionFactoryTest {
 	}
 
 	@Test(dependsOnMethods = {
-		"unannotatedParameterShouldResultInHumanisedPropertyNameAsParameterName",
+		"unannotatedParameterShouldResultInHumanisedFieldNameAsParameterName",
 		"superfluousParametersShouldBeSetAsDynamicParametersWhenActionIsDynamicallyParameterisable"
 	})
 	public void regularParametersShouldBePreferredOverDynamicOnes() {
