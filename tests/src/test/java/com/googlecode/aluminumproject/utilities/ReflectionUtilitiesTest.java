@@ -15,9 +15,11 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
+import java.awt.Point;
 import java.text.Collator;
 import java.util.AbstractMap;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,6 +98,39 @@ public class ReflectionUtilitiesTest {
 
 	public void interfacesShouldBeRecognisedAsBeingAbstract() {
 		assert ReflectionUtilities.isAbstract(Map.class);
+	}
+
+	@Test(expectedExceptions = UtilityException.class)
+	public void gettingValueOfUnknownFieldShouldCauseException() {
+		ReflectionUtilities.getFieldValue(new Object(), "name");
+	}
+
+	public void gettingFieldValueShouldGiveCorrectValue() {
+		Object fieldValue = ReflectionUtilities.getFieldValue(new Point(), "x");
+		assert fieldValue instanceof Integer;
+		assert ((Integer) fieldValue).intValue() == 0;
+	}
+
+	@Test(expectedExceptions = UtilityException.class)
+	public void settingFieldValueWithWrongTypeShouldCauseException() {
+		ReflectionUtilities.setFieldValue(new Point(), "x", 0L);
+	}
+
+	@Test(expectedExceptions = UtilityException.class)
+	public void settingValueOfUnknownFieldShouldCauseException() {
+		ReflectionUtilities.setFieldValue(new Point(), "z", 4);
+	}
+
+	@Test(expectedExceptions = UtilityException.class)
+	public void settingValueOfFinalFieldShouldCauseException() {
+		ReflectionUtilities.setFieldValue("", "CASE_INSENSITIVE_ORDER", Collections.reverseOrder());
+	}
+
+	public void settingFieldValueShouldUpdateBean() {
+		Point point = new Point();
+
+		ReflectionUtilities.setFieldValue(point, "x", 3);
+		assert point.x == 3;
 	}
 
 	public void gettersShouldBeRecognisedAsSuch() throws NoSuchMethodException {

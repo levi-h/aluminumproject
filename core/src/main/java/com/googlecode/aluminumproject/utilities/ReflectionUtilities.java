@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.utilities;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -126,6 +127,95 @@ public class ReflectionUtilities {
 	 */
 	public static boolean isAbstract(Class<?> type) {
 		return Modifier.isAbstract(type.getModifiers());
+	}
+
+	/**
+	 * Obtains the value of a field from a certain bean.
+	 *
+	 * @param bean the bean whose field value should be returned
+	 * @param fieldName the name of the field to retrieve
+	 * @return the value of the field with the specified name from the given bean
+	 * @throws UtilityException when the field value can't be got
+	 */
+	public static Object getFieldValue(Object bean, String fieldName) throws UtilityException {
+		Field field = getAccessibleField(bean, fieldName);
+
+		try {
+			return field.get(bean);
+		} catch (IllegalArgumentException exception) {
+			throw new UtilityException(exception, "can't get value of field '", field, "' from ", bean);
+		} catch (IllegalAccessException exception) {
+			throw new UtilityException(exception, "may not get value of field '", field, "' from ", bean);
+		}
+	}
+
+	/**
+	 * Sets the value of a field on a certain bean.
+	 *
+	 * @param bean the bean whose field value should be set
+	 * @param fieldName the name of the field to set
+	 * @param value the new value for the field
+	 * @throws UtilityException when the field value can't be set
+	 */
+	public static void setFieldValue(Object bean, String fieldName, Object value) throws UtilityException {
+		Field field = getAccessibleField(bean, fieldName);
+
+		try {
+			field.set(bean, value);
+		} catch (IllegalArgumentException exception) {
+			throw new UtilityException(exception, "can't set value of field '", field, "' on ", bean);
+		} catch (IllegalAccessException exception) {
+			throw new UtilityException(exception, "may not set value of field '", field, "' on ", bean);
+		}
+	}
+
+	private static Field getAccessibleField(Object bean, String name) throws UtilityException {
+		Field field;
+
+		try {
+			field = getField(bean.getClass(), name);
+
+			if (field == null) {
+				throw new UtilityException("can't find field named '", name, "' on ", bean);
+			}
+
+			if (!field.isAccessible()) {
+				field.setAccessible(true);
+			}
+		} catch (SecurityException exception) {
+			throw new UtilityException(exception, "may not access field '", name, "' on ", bean);
+		}
+
+		return field;
+	}
+
+	private static Field getField(Class<?> beanClass, String name) throws SecurityException {
+		Field field;
+
+		try {
+			field = beanClass.getDeclaredField(name);
+		} catch (NoSuchFieldException exception) {
+			field = null;
+		}
+
+		if (field == null) {
+			Class<?>[] interfaces = beanClass.getInterfaces();
+			int i = 0;
+
+			while ((i < interfaces.length) && (field == null)) {
+				field = getField(interfaces[i++], name);
+			}
+		}
+
+		if (field == null) {
+			Class<?> superclass = beanClass.getSuperclass();
+
+			if (superclass != null) {
+				field = getField(superclass, name);
+			}
+		}
+
+		return field;
 	}
 
 	/**
