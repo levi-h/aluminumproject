@@ -24,9 +24,9 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
+import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.actions.DynamicallyParameterisable;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.text.Splitter;
 import com.googlecode.aluminumproject.utilities.text.Splitter.TokenProcessor;
@@ -40,7 +40,6 @@ import java.util.Arrays;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -54,14 +53,12 @@ import java.util.Map;
  *
  * @author levi_h
  */
-public class Format extends AbstractAction implements DynamicallyParameterisable {
+public class Format extends AbstractDynamicallyParameterisableAction {
 	private FormatType type;
 
 	@ActionParameterInformation(required = true)
 	private String formatString;
 	private @Ignored List<Parameter> parameters;
-
-	private @Ignored Map<String, ActionParameter> dynamicParameters;
 
 	private @Injected Configuration configuration;
 
@@ -72,26 +69,21 @@ public class Format extends AbstractAction implements DynamicallyParameterisable
 		type = FormatType.INTERPOLATION;
 
 		parameters = new LinkedList<Parameter>();
-
-		dynamicParameters = new LinkedHashMap<String, ActionParameter>();
 	}
 
 	/**
 	 * Adds a format parameter.
 	 *
-	 * @param parameter the parameter to add
+	 * @param name the name of the parameter to add (may be {@code null})
+	 * @param value the value of the parameter to add
 	 */
-	protected void addParameter(Parameter parameter) {
-		parameters.add(parameter);
-	}
-
-	public void setParameter(String name, ActionParameter parameter) throws ActionException {
-		dynamicParameters.put(name, parameter);
+	protected void addParameter(String name, Object value) {
+		parameters.add(new Parameter(name, value));
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, WriterException {
-		for (String name: dynamicParameters.keySet()) {
-			addParameter(new Parameter(name, dynamicParameters.get(name).getValue(String.class, context)));
+		for (Map.Entry<String, ActionParameter> dynamicParameter: getDynamicParameters().entrySet()) {
+			addParameter(dynamicParameter.getKey(), dynamicParameter.getValue().getValue(String.class, context));
 		}
 
 		getBody().invoke(context, new NullWriter());
@@ -284,7 +276,7 @@ public class Format extends AbstractAction implements DynamicallyParameterisable
 		public FormatParameter() {}
 
 		public void execute(Context context, Writer writer) throws ActionException {
-			findAncestorOfType(Format.class).addParameter(new Parameter(name, value));
+			findAncestorOfType(Format.class).addParameter(name, value);
 		}
 	}
 }
