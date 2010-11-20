@@ -279,9 +279,8 @@ public class AbstractLibraryTest {
 
 			String url = "http://aluminumproject.googlecode.com/default";
 			String version = "test";
-			String displayName = "Default library";
 
-			information = new LibraryInformation(url, version, displayName,
+			information = new LibraryInformation(url, version,
 				dynamicElementsSupported, dynamicElementsSupported, dynamicElementsSupported);
 		}
 

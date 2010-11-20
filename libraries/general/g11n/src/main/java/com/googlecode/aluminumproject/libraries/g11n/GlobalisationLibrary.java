@@ -40,7 +40,7 @@ public class GlobalisationLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/g11n";
 		String version = EnvironmentUtilities.getVersion();
 
-		information = new LibraryInformation(url, version, "Globalisation library", false, true, false);
+		information = new LibraryInformation(url, version, false, true, false);
 	}
 
 	public LibraryInformation getInformation() {

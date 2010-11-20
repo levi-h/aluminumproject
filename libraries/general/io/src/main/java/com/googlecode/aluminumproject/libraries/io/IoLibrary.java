@@ -17,8 +17,8 @@ package com.googlecode.aluminumproject.libraries.io;
 
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
 /**
  * Provides actions and functions related to input and output.
@@ -37,9 +37,7 @@ public class IoLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/io";
 		String version = EnvironmentUtilities.getVersion();
 
-		String displayName = "I/O library";
-
-		information = new LibraryInformation(url, version, displayName);
+		information = new LibraryInformation(url, version);
 	}
 
 	public LibraryInformation getInformation() {

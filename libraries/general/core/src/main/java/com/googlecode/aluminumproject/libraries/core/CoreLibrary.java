@@ -17,8 +17,8 @@ package com.googlecode.aluminumproject.libraries.core;
 
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
 /**
  * Contains actions that can be used in almost any template.
@@ -37,9 +37,7 @@ public class CoreLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/core";
 		String version = EnvironmentUtilities.getVersion();
 
-		String displayName = "Core library";
-
-		information = new LibraryInformation(url, version, displayName);
+		information = new LibraryInformation(url, version);
 	}
 
 	public LibraryInformation getInformation() {
