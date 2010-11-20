@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
@@ -46,8 +46,7 @@ import java.util.Map;
  * @author levi_h
  */
 public class Include extends AbstractDynamicallyParameterisableAction {
-	@ActionParameterInformation(required = true)
-	private String name;
+	private @Required String name;
 	private String parser;
 
 	private @Injected Configuration configuration;

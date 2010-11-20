@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
@@ -29,11 +29,8 @@ import com.googlecode.aluminumproject.writers.WriterException;
  * @author levi_h
  */
 public class Transform extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private Element document;
-
-	@ActionParameterInformation(required = true)
-	private Element styleSheet;
+	private @Required Element document;
+	private @Required Element styleSheet;
 
 	/**
 	 * Creates a <em>transform</em> action.

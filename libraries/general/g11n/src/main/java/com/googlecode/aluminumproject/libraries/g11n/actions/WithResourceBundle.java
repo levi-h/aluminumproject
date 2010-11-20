@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NameBasedResourceBundleProvider;
@@ -41,7 +41,7 @@ import java.util.Set;
  *
  * @author levi_h
  */
-@ActionContributionInformation(parameterType = "String")
+@Typed("String")
 public class WithResourceBundle implements ActionContribution {
 
 	public boolean canBeMadeTo(ActionFactory actionFactory) {

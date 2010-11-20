@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.DateFormatType;
@@ -33,8 +33,7 @@ import java.util.Date;
  * @author levi_h
  */
 public class FormatDate extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private Date value;
+	private @Required Date value;
 
 	private DateFormatType type;
 

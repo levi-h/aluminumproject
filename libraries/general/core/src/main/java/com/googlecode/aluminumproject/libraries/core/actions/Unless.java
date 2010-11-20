@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
@@ -29,7 +29,7 @@ import com.googlecode.aluminumproject.writers.Writer;
  * @author levi_h
  * @see If
  */
-@ActionContributionInformation(parameterType = "boolean")
+@Typed("boolean")
 public class Unless implements ActionContribution {
 	/**
 	 * Creates an <em>unless</em> action contribution.

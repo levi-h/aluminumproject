@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2010 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,28 @@
  */
 package com.googlecode.aluminumproject.annotations;
 
-import com.googlecode.aluminumproject.libraries.actions.Action;
-import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
+import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Type;
 
 /**
- * Contains information about an {@link Action action}. It will be used by the {@link DefaultActionFactory default
- * action factory} to complete {@link com.googlecode.aluminumproject.libraries.actions.ActionInformation action
- * information} when it's applied to an action class.
+ * Used to specify the type of an action parameter.
+ * <p>
+ * Note that the type of the <em>value</em> attribute is {@code String}, since {@link Type types} are not permitted. Its
+ * value will be converted to a type by {@link GenericsUtilities#getType(String, String...) the getType utility method}
+ * (with {@code java.lang} and {@code java.util} as default packages).
  *
  * @author levi_h
- * @see ActionParameterInformation
  */
+@Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface ActionInformation {
-	/**
-	 * The name of the action.
-	 */
-	String name();
+@Target({ElementType.TYPE, ElementType.FIELD})
+public @interface Typed {
+	/** The type of the parameter. */
+	String value();
 }

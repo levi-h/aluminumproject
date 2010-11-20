@@ -16,7 +16,8 @@
 package com.googlecode.aluminumproject.libraries.core.actions;
 
 import com.googlecode.aluminumproject.Logger;
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
@@ -54,7 +55,8 @@ public class Variable {
 	 *
 	 * @author levi_h
 	 */
-	@ActionContributionInformation(name = "variable name", parameterType = "String")
+	@Named("variable name")
+	@Typed("String")
 	public static class Name implements ActionContribution {
 		/**
 		 * Creates a <em>variable name</em> action contribution.
@@ -156,7 +158,8 @@ public class Variable {
 	 *
 	 * @author levi_h
 	 */
-	@ActionContributionInformation(name = "variable scope", parameterType = "String")
+	@Named("variable scope")
+	@Typed("String")
 	public static class Scope implements ActionContribution {
 		/**
 		 * Creates a <em>variable scope</em> action contribution.

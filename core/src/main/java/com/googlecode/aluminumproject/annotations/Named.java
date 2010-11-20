@@ -15,6 +15,9 @@
  */
 package com.googlecode.aluminumproject.annotations;
 
+import com.googlecode.aluminumproject.libraries.actions.Action;
+import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 
@@ -24,12 +27,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to override the names that are used for {@link Parser parsers} and {@link Serialiser serialisers}.
+ * Used to override the names that are used for {@link Action actions}, action parameters, {@link ActionContribution
+ * action contributions}, {@link Function functions}, function arguments, {@link Parser parsers}, and {@link Serialiser
+ * serialisers}.
  *
  * @author levi_h
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 public @interface Named {
 	/** The name to use. */
 	String value();

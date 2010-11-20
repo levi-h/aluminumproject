@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -32,9 +32,7 @@ import java.util.List;
  */
 public class SetVariable extends AbstractAction {
 	private String scope;
-
-	@ActionParameterInformation(required = true)
-	private String name;
+	private @Required String name;
 	private Object value;
 
 	/**

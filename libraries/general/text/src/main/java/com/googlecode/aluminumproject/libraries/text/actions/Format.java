@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionInformation;
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterException;
@@ -56,8 +56,7 @@ import java.util.Map;
 public class Format extends AbstractDynamicallyParameterisableAction {
 	private FormatType type;
 
-	@ActionParameterInformation(required = true)
-	private String formatString;
+	private @Required String formatString;
 	private @Ignored List<Parameter> parameters;
 
 	private @Injected Configuration configuration;
@@ -263,12 +262,11 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 	 *
 	 * @author levi_h
 	 */
-	@ActionInformation(name = "parameter")
+	@Named("parameter")
 	public static class FormatParameter extends AbstractAction {
 		private String name;
 
-		@ActionParameterInformation(required = true)
-		private Object value;
+		private @Required Object value;
 
 		/**
 		 * Creates a <em>format parameter</em> action.

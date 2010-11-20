@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.DateFormatProvider;
@@ -52,7 +52,7 @@ import java.util.TimeZone;
  *
  * @author levi_h
  */
-@ActionContributionInformation(parameterType = "String")
+@Typed("String")
 public class WithCustomPattern implements ActionContribution {
 	/**
 	 * Creates a <em>with custom pattern</em> action contribution.

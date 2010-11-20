@@ -15,7 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.io.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
@@ -32,11 +33,8 @@ import java.io.IOException;
  * @author levi_h
  */
 public class CopyFile extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private File source;
-
-	@ActionParameterInformation(name = "to", required = true)
-	private File targetDirectory;
+	private @Required File source;
+	private @Named("to") @Required File targetDirectory;
 
 	/**
 	 * Creates a <em>copy file</em> action.

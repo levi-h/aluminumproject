@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
@@ -32,8 +32,7 @@ import java.text.NumberFormat;
  * @author levi_h
  */
 public class FormatNumber extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private Number value;
+	private @Required Number value;
 
 	private NumberFormatType type;
 

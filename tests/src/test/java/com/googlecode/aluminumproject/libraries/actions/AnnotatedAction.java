@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionInformation;
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -25,11 +25,10 @@ import com.googlecode.aluminumproject.writers.Writer;
  *
  * @author levi_h
  */
-@ActionInformation(name = "test")
+@Named("test")
 public class AnnotatedAction extends AbstractAction {
-	@ActionParameterInformation(name = "desc", required = true)
 	@SuppressWarnings("unused")
-	private String description;
+	private @Named("desc") @Required String description;
 
 	/**
 	 * Creates an annotated action.

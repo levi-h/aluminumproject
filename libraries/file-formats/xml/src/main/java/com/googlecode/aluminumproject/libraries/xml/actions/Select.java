@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -49,11 +49,9 @@ import java.util.Map;
  * @author levi_h
  */
 public class Select extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private com.googlecode.aluminumproject.libraries.xml.model.Element element;
+	private @Required com.googlecode.aluminumproject.libraries.xml.model.Element element;
 
-	@ActionParameterInformation(required = true)
-	private String expression;
+	private @Required String expression;
 	private @Ignored Map<String, String> context;
 
 	/**
@@ -78,11 +76,8 @@ public class Select extends AbstractAction {
 	 * @author levi_h
 	 */
 	public static class Namespace extends AbstractAction {
-		@ActionParameterInformation(required = true)
-		private String prefix;
-
-		@ActionParameterInformation(required = true)
-		private String url;
+		private @Required String prefix;
+		private @Required String url;
 
 		/**
 		 * Creates a <em>namespace</em> action.

@@ -15,7 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionContributionInformation;
+import com.googlecode.aluminumproject.annotations.Named;
+import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -24,7 +25,8 @@ import com.googlecode.aluminumproject.writers.Writer;
  *
  * @author levi_h
  */
-@ActionContributionInformation(name = "annotated test", parameterType = "String")
+@Named("annotated test")
+@Typed("String")
 public class AnnotatedActionContribution implements ActionContribution {
 	/**
 	 * Creates an annotated action contribution.

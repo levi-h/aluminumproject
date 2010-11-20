@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
@@ -33,11 +33,8 @@ import java.lang.reflect.Type;
  * @author levi_h
  */
 public class Convert extends AbstractAction {
-	@ActionParameterInformation(required = true)
-	private Object value;
-
-	@ActionParameterInformation(required = true)
-	private Type type;
+	private @Required Object value;
+	private @Required Type type;
 
 	private @Injected Configuration configuration;
 
