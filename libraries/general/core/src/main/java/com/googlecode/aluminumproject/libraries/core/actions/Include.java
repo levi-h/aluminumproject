@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.libraries.core.actions;
 
 import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
@@ -48,10 +49,11 @@ import java.util.Map;
  * @author levi_h
  */
 public class Include extends AbstractAction implements DynamicallyParameterisable {
+	@ActionParameterInformation(required = true)
 	private String name;
 	private String parser;
 
-	private Map<String, ActionParameter> variables;
+	private @Ignored Map<String, ActionParameter> variables;
 
 	private @Injected Configuration configuration;
 
@@ -60,25 +62,6 @@ public class Include extends AbstractAction implements DynamicallyParameterisabl
 	 */
 	public Include() {
 		variables = new HashMap<String, ActionParameter>();
-	}
-
-	/**
-	 * Sets the name of the template to include.
-	 *
-	 * @param name the template name to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Sets the name of the parser that will be used to parse the included template.
-	 *
-	 * @param parser the parser to use
-	 */
-	public void setParser(String parser) {
-		this.parser = parser;
 	}
 
 	public void setParameter(String name, ActionParameter parameter) {

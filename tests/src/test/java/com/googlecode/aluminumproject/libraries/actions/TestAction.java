@@ -24,17 +24,13 @@ import com.googlecode.aluminumproject.writers.Writer;
  * @author levi_h
  */
 public class TestAction extends AbstractAction {
+	@SuppressWarnings("unused")
+	private String description;
+
 	/**
 	 * Creates a test action.
 	 */
 	public TestAction() {}
-
-	/**
-	 * Sets the description of this action.
-	 *
-	 * @param description the description to use
-	 */
-	public void setDescription(String description) {}
 
 	public void execute(Context context, Writer writer) {}
 }

@@ -25,14 +25,15 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.util.List;
 
 /**
- * Sets a variable in the context. The value of the variable can be given by setting the {@link #setValue(Object) value
- * parameter} or by using the body. If the body contains more than one value, they will be collected in a list.
+ * Sets a variable in the context. The value of the variable can be given by setting the <em>value</em> parameter or by
+ * using the body. If the body contains more than one value, they will be collected in a list.
  *
  * @author levi_h
  */
 public class SetVariable extends AbstractAction {
 	private String scope;
 
+	@ActionParameterInformation(required = true)
 	private String name;
 	private Object value;
 
@@ -41,35 +42,6 @@ public class SetVariable extends AbstractAction {
 	 */
 	public SetVariable() {
 		value = NO_VALUE;
-	}
-
-	/**
-	 * Sets the name of the scope in which the variable will be set. If no scope is given, the innermost scope will be
-	 * used.
-	 *
-	 * @param scope the scope of the variable
-	 */
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
-
-	/**
-	 * Sets the name of the variable.
-	 *
-	 * @param name the name of the variable to set
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Sets the value of the variable.
-	 *
-	 * @param value the value of the variable to set
-	 */
-	public void setValue(Object value) {
-		this.value = value;
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException {

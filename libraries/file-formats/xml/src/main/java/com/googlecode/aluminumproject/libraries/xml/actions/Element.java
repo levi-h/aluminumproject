@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
  * @author levi_h
  */
 public class Element extends AbstractElement {
+	@ActionParameterInformation(required = true)
 	private String name;
 
 	/**
@@ -34,15 +35,5 @@ public class Element extends AbstractElement {
 	@Override
 	protected String getElementName() {
 		return name;
-	}
-
-	/**
-	 * Sets the name of the element.
-	 *
-	 * @param name the element name to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setName(String name) {
-		this.name = name;
 	}
 }

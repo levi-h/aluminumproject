@@ -34,15 +34,6 @@ public class Scope extends AbstractAction {
 	 */
 	public Scope() {}
 
-	/**
-	 * Sets the name of the new scope. If no name is given, {@value #DEFAULT_NAME} (with a suffix) will be used.
-	 *
-	 * @param name the name of the scope to add
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public void execute(Context context, Writer writer) throws ActionException {
 		addScope(context);
 

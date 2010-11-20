@@ -27,10 +27,10 @@ import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 import com.googlecode.aluminumproject.utilities.UtilityException;
-import com.googlecode.aluminumproject.utilities.finders.MethodFinder;
-import com.googlecode.aluminumproject.utilities.finders.MethodFinder.MethodFilter;
+import com.googlecode.aluminumproject.utilities.finders.FieldFinder;
+import com.googlecode.aluminumproject.utilities.finders.FieldFinder.FieldFilter;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -48,16 +48,16 @@ import java.util.Map;
  * used is the name of the action class, {@link StringUtilities#humanise(String) humanised} and written in lower case
  * (so the action {@code CamelCase} would get the name <em>camel case</em>).
  * <p>
- * {@link ActionParameter Action parameters} are found by iterating through all of the action's setters that aren't
- * annotated with {@link Ignored &#64;Ignored}. Action parameters have the following properties:
+ * {@link ActionParameter Action parameters} are found by iterating through all of the action's non-final, non-static
+ * fields that aren't annotated with {@link Ignored &#64;Ignored} or {@link Injected &#64;Injected}. Action parameters
+ * have the following properties:
  * <ul>
- * <li>A <i>name<i>: by default, this is the humanised name of the property, in lower case (so the method {@code
- *     setName(String name)} would result in a parameter with the name <em>name</em>);
- * <li>A <i>type</i>: this is the value of the parameter of the setter (so the method {@code setName(String name)} would
- *     cause the parameter to have the type {@code String});
+ * <li>A <i>name<i>: by default, this is the humanised name of the field, in lower case (so the field {@code fullName}
+ *     would result in a parameter with the name <em>full name</em>);
+ * <li>A <i>type</i>: this is the same as the field type;
  * <li>Whether it is <i>required</i> or not: all parameters are considered optional by default.
  * </ul>
- * The parameter's name, type, and whether it's required or not can be overridden by annotating its setter with {@link
+ * The parameter's name, type, and whether it's required or not can be overridden by annotating its field with {@link
  * com.googlecode.aluminumproject.annotations.ActionParameterInformation &#64;ActionParameterInformation}.
  * <p>
  * Actions may support dynamic parameters by implementing {@link DynamicallyParameterisable the dynamically
@@ -73,7 +73,7 @@ import java.util.Map;
 public class DefaultActionFactory extends AbstractLibraryElement implements ActionFactory {
 	private Class<? extends Action> actionClass;
 
-	private Map<String, Method> parameterSetters;
+	private Map<String, Field> parameterFields;
 
 	private ActionInformation information;
 
@@ -90,7 +90,7 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 	public void initialise(Configuration configuration) throws ConfigurationException {
 		super.initialise(configuration);
 
-		parameterSetters = new HashMap<String, Method>();
+		parameterFields = new HashMap<String, Field>();
 
 		information = new ActionInformation(getActionName(),
 			getParameterInformation(), DynamicallyParameterisable.class.isAssignableFrom(actionClass));
@@ -118,27 +118,27 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 	private List<ActionParameterInformation> getParameterInformation() throws ConfigurationException {
 		List<ActionParameterInformation> parameterInformation = new LinkedList<ActionParameterInformation>();
 
-		List<Method> parameterSetters;
+		List<Field> parameterFields;
 
 		try {
-			parameterSetters = MethodFinder.find(new MethodFilter() {
-				public boolean accepts(Method method) {
-					int modifiers = method.getModifiers();
+			parameterFields = FieldFinder.find(new FieldFilter() {
+				public boolean accepts(Field field) {
+					int modifiers = field.getModifiers();
 
-					return Modifier.isPublic(modifiers) && !Modifier.isAbstract(modifiers)
-						&& ReflectionUtilities.isSetter(method) && (method.getAnnotation(Ignored.class) == null);
+					return !Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers) &&
+						(field.getAnnotation(Ignored.class) == null) && (field.getAnnotation(Injected.class) == null);
 				}
 			}, actionClass);
 		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find parameter setters");
+			throw new ConfigurationException(exception, "can't find parameter fields");
 		}
 
-		for (Method parameterSetter: parameterSetters) {
+		for (Field parameterField: parameterFields) {
 			Class<com.googlecode.aluminumproject.annotations.ActionParameterInformation> parameterInformationClass =
 				com.googlecode.aluminumproject.annotations.ActionParameterInformation.class;
 
 			com.googlecode.aluminumproject.annotations.ActionParameterInformation annotatedParameterInformation =
-				parameterSetter.getAnnotation(parameterInformationClass);
+				parameterField.getAnnotation(parameterInformationClass);
 
 			String parameterName;
 			String parameterTypeName;
@@ -156,13 +156,11 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 			}
 
 			if (parameterName.equals("")) {
-				String propertyName = ReflectionUtilities.getPropertyName(parameterSetter);
-
-				parameterName = StringUtilities.humanise(propertyName).toLowerCase();
+				parameterName = StringUtilities.humanise(parameterField.getName()).toLowerCase();
 			}
 
 			if (parameterTypeName.equals("")) {
-				parameterType = parameterSetter.getGenericParameterTypes()[0];
+				parameterType = parameterField.getGenericType();
 			} else {
 				try {
 					parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
@@ -174,7 +172,7 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 			logger.debug("found ", required ? "required" : "optional", " parameter;",
 				" name: '", parameterName, "', type: ", parameterType);
 
-			this.parameterSetters.put(parameterName, parameterSetter);
+			this.parameterFields.put(parameterName, parameterField);
 
 			parameterInformation.add(new ActionParameterInformation(parameterName, parameterType, required));
 		}
@@ -232,9 +230,9 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 				ActionParameter parameter = parameters.remove(parameterName);
 				Object parameterValue;
 
-				Method parameterSetter = parameterSetters.get(parameterName);
+				Field parameterField = parameterFields.get(parameterName);
 
-				if (parameterSetter.getParameterTypes()[0] == ActionParameter.class) {
+				if (parameterField.getType() == ActionParameter.class) {
 					parameterValue = parameter;
 				} else {
 					parameterValue = parameter.getValue(parameterInformation.getType(), context);
@@ -243,9 +241,7 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 				logger.debug("setting parameter '", parameterName, "' (value: ", parameterValue, ")");
 
 				try {
-					String propertyName = ReflectionUtilities.getPropertyName(parameterSetter);
-
-					ReflectionUtilities.setProperty(action, Object.class, propertyName, parameterValue);
+					ReflectionUtilities.setFieldValue(action, parameterField.getName(), parameterValue);
 				} catch (UtilityException exception) {
 					throw new ActionException(exception, "can't set parameter '", parameterName, "'",
 						" (value: ", parameterValue, ") on action ", action);

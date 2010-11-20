@@ -32,12 +32,13 @@ import java.util.ResourceBundle;
  * ResourceBundleProvider resource bundle provider}'s {@link ResourceBundle resource bundle}.
  * <p>
  * If no resource can be found for a given key, the action will throw an exception. If this behaviour is not desired,
- * it's possible to indicate this by {@link #setAllowMissingKey(boolean) allowing missing keys}; in that case, the key
- * will be wrapped in two pairs of question marks and used as resource.
+ * it's possible to indicate this by using the <em>allow missing key</em> parameter; in that case, the key will be
+ * wrapped in two pairs of question marks and used as resource.
  *
  * @author levi_h
  */
 public class Localise extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private String key;
 
 	private boolean allowMissingKey;
@@ -45,28 +46,7 @@ public class Localise extends AbstractAction {
 	/**
 	 * Creates a <em>localise</em> action.
 	 */
-	public Localise() {
-		allowMissingKey = false;
-	}
-
-	/**
-	 * Sets the key of the localised resource to write.
-	 *
-	 * @param key the key of the resource in the resource bundle
-	 */
-	@ActionParameterInformation(required = true)
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	/**
-	 * Sets whether it is allowed for the resource key to be missing.
-	 *
-	 * @param allowMissingKey {@code true} if a missing key is allowed, {@code false} if it isn't
-	 */
-	public void setAllowMissingKey(boolean allowMissingKey) {
-		this.allowMissingKey = allowMissingKey;
-	}
+	public Localise() {}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		Object resource;

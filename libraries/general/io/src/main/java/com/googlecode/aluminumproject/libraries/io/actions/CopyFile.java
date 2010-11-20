@@ -32,33 +32,16 @@ import java.io.IOException;
  * @author levi_h
  */
 public class CopyFile extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private File source;
+
+	@ActionParameterInformation(name = "to", required = true)
 	private File targetDirectory;
 
 	/**
 	 * Creates a <em>copy file</em> action.
 	 */
 	public CopyFile() {}
-
-	/**
-	 * Sets the source file.
-	 *
-	 * @param source the file to copy
-	 */
-	@ActionParameterInformation(required = true)
-	public void setSource(File source) {
-		this.source = source;
-	}
-
-	/**
-	 * Sets the directory to which the file should be copied.
-	 *
-	 * @param targetDirectory the target directory to use
-	 */
-	@ActionParameterInformation(name = "to", required = true)
-	public void setTargetDirectory(File targetDirectory) {
-		this.targetDirectory = targetDirectory;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException {
 		File target = new File(targetDirectory, source.getName());

@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -48,36 +49,18 @@ import java.util.Map;
  * @author levi_h
  */
 public class Select extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private com.googlecode.aluminumproject.libraries.xml.model.Element element;
 
+	@ActionParameterInformation(required = true)
 	private String expression;
-	private Map<String, String> context;
+	private @Ignored Map<String, String> context;
 
 	/**
 	 * Creates a <em>select</em> action.
 	 */
 	public Select() {
 		context = new HashMap<String, String>();
-	}
-
-	/**
-	 * Sets the element that the XPath query will be executed upon.
-	 *
-	 * @param element the element to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setElement(com.googlecode.aluminumproject.libraries.xml.model.Element element) {
-		this.element = element;
-	}
-
-	/**
-	 * Sets the XPath query to execute.
-	 *
-	 * @param expression the XPath expression to use as a query
-	 */
-	@ActionParameterInformation(required = true)
-	public void setExpression(String expression) {
-		this.expression = expression;
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
@@ -95,33 +78,16 @@ public class Select extends AbstractAction {
 	 * @author levi_h
 	 */
 	public static class Namespace extends AbstractAction {
+		@ActionParameterInformation(required = true)
 		private String prefix;
+
+		@ActionParameterInformation(required = true)
 		private String url;
 
 		/**
 		 * Creates a <em>namespace</em> action.
 		 */
 		public Namespace() {}
-
-		/**
-		 * Sets the prefix of the namespace to add.
-		 *
-		 * @param prefix the namespace prefix to use
-		 */
-		@ActionParameterInformation(required = true)
-		public void setPrefix(String prefix) {
-			this.prefix = prefix;
-		}
-
-		/**
-		 * Sets the URL of the namespace to add.
-		 *
-		 * @param url the namespace URL to use
-		 */
-		@ActionParameterInformation(required = true)
-		public void setUrl(String url) {
-			this.url = url;
-		}
 
 		public void execute(Context context, Writer writer) throws ActionException {
 			Select select = findAncestorOfType(Select.class);

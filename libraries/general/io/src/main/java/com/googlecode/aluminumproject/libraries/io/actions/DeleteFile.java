@@ -31,22 +31,13 @@ import java.io.File;
  * @author levi_h
  */
 public class DeleteFile extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private File file;
 
 	/**
 	 * Creates a <em>delete file</em> action.
 	 */
 	public DeleteFile() {}
-
-	/**
-	 * Sets the file that should be deleted.
-	 *
-	 * @param file the file to delete
-	 */
-	@ActionParameterInformation(required = true)
-	public void setFile(File file) {
-		this.file = file;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException {
 		delete(file);

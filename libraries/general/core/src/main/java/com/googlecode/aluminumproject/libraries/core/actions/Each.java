@@ -36,6 +36,7 @@ import java.util.TreeMap;
  * @author levi_h
  */
 public class Each extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private Iterable<?> elements;
 
 	private String elementName;
@@ -47,36 +48,6 @@ public class Each extends AbstractAction {
 	public Each() {
 		elementName = DEFAULT_ELEMENT_NAME;
 		informationName = DEFAULT_INFORMATION_NAME;
-	}
-
-	/**
-	 * Sets the elements that will be iterated.
-	 *
-	 * @param elements the elements to iterate over
-	 */
-	@ActionParameterInformation(required = true)
-	public void setElements(Iterable<?> elements) {
-		this.elements = elements;
-	}
-
-	/**
-	 * Sets the name of the variable under which the current element will be available. If this parameter is omitted,
-	 * {@value #DEFAULT_ELEMENT_NAME} will be used as variable name.
-	 *
-	 * @param elementName the variable name to use for the current element
-	 */
-	public void setElementName(String elementName) {
-		this.elementName = elementName;
-	}
-
-	/**
-	 * Sets the name of the variable that will contain {@link LoopInformation loop information}. The default information
-	 * name is {@value #DEFAULT_INFORMATION_NAME}.
-	 *
-	 * @param informationName the variable name to use for information about the current loop
-	 */
-	public void setInformationName(String informationName) {
-		this.informationName = informationName;
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {

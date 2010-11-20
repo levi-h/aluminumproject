@@ -33,6 +33,7 @@ import java.util.Date;
  * @author levi_h
  */
 public class FormatDate extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private Date value;
 
 	private DateFormatType type;
@@ -42,25 +43,6 @@ public class FormatDate extends AbstractAction {
 	 */
 	public FormatDate() {
 		type = DateFormatType.CUSTOM;
-	}
-
-	/**
-	 * Sets the date that should be formatted.
-	 *
-	 * @param value the date to format
-	 */
-	@ActionParameterInformation(required = true)
-	public void setValue(Date value) {
-		this.value = value;
-	}
-
-	/**
-	 * Sets how the date should be formatted. By default, a custom date format will be used.
-	 *
-	 * @param type the type of the date format to use
-	 */
-	public void setType(DateFormatType type) {
-		this.type = type;
 	}
 
 	public void execute(Context context, Writer writer) throws ContextException, WriterException {

@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
@@ -33,7 +34,7 @@ import java.util.Map;
  * @author levi_h
  */
 public class DynamicElement extends AbstractElement implements DynamicallyParameterisable {
-	private Map<String, ActionParameter> parameters;
+	private @Ignored Map<String, ActionParameter> parameters;
 
 	/**
 	 * Creates a dynamic element.

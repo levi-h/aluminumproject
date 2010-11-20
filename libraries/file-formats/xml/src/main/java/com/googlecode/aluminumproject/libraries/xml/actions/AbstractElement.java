@@ -48,12 +48,12 @@ abstract class AbstractElement extends AbstractAction {
 	/** This action's action descriptor. */
 	protected @Injected ActionDescriptor descriptor;
 
-	private Map<String, String> namespaces;
+	private @Ignored Map<String, String> namespaces;
 
-	private Map<String, Map<String, String>> attributes;
+	private @Ignored Map<String, Map<String, String>> attributes;
 
-	private List<Node> children;
-	private boolean moreChildrenAllowed;
+	private @Ignored List<Node> children;
+	private @Ignored boolean moreChildrenAllowed;
 
 	/**
 	 * Creates an abstract element action.
@@ -100,7 +100,6 @@ abstract class AbstractElement extends AbstractAction {
 	 * @param text the text to set
 	 * @throws ActionException when the text can't be set
 	 */
-	@Ignored
 	public void setText(String text) throws ActionException {
 		addText(text);
 

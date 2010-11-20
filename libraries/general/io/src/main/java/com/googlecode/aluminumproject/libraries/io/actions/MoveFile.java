@@ -29,33 +29,16 @@ import java.io.File;
  * @author levi_h
  */
 public class MoveFile extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private File source;
+
+	@ActionParameterInformation(name = "to", required = true)
 	private File targetDirectory;
 
 	/**
 	 * Creates a <em>move file</em> action.
 	 */
 	public MoveFile() {}
-
-	/**
-	 * Sets the file that should be moved.
-	 *
-	 * @param source the source file
-	 */
-	@ActionParameterInformation(required = true)
-	public void setSource(File source) {
-		this.source = source;
-	}
-
-	/**
-	 * Sets the new directory for the file.
-	 *
-	 * @param targetDirectory the destination directory
-	 */
-	@ActionParameterInformation(name = "to", required = true)
-	public void setTargetDirectory(File targetDirectory) {
-		this.targetDirectory = targetDirectory;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException {
 		File target = new File(targetDirectory, source.getName());

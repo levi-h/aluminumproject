@@ -32,6 +32,7 @@ import com.googlecode.aluminumproject.writers.WriterException;
  * @author levi_h
  */
 public class Repeat extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private int count;
 
 	private String informationName;
@@ -41,26 +42,6 @@ public class Repeat extends AbstractAction {
 	 */
 	public Repeat() {
 		informationName = DEFAULT_INFORMATION_NAME;
-	}
-
-	/**
-	 * Sets the number of times that the body should be invoked.
-	 *
-	 * @param count the repeat count
-	 */
-	@ActionParameterInformation(required = true)
-	public void setCount(int count) {
-		this.count = count;
-	}
-
-	/**
-	 * Sets the name of the variable that will contain {@link LoopInformation loop information}. The default information
-	 * name is {@value #DEFAULT_INFORMATION_NAME}.
-	 *
-	 * @param informationName the variable name to use for information about the current loop
-	 */
-	public void setInformationName(String informationName) {
-		this.informationName = informationName;
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {

@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.text.actions;
 
 import com.googlecode.aluminumproject.annotations.ActionInformation;
 import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
@@ -56,10 +57,11 @@ import java.util.Map;
 public class Format extends AbstractAction implements DynamicallyParameterisable {
 	private FormatType type;
 
+	@ActionParameterInformation(required = true)
 	private String formatString;
-	private List<Parameter> parameters;
+	private @Ignored List<Parameter> parameters;
 
-	private Map<String, ActionParameter> dynamicParameters;
+	private @Ignored Map<String, ActionParameter> dynamicParameters;
 
 	private @Injected Configuration configuration;
 
@@ -72,25 +74,6 @@ public class Format extends AbstractAction implements DynamicallyParameterisable
 		parameters = new LinkedList<Parameter>();
 
 		dynamicParameters = new LinkedHashMap<String, ActionParameter>();
-	}
-
-	/**
-	 * Sets the way in which the text will be formatted. The default format type is interpolation.
-	 *
-	 * @param type the format type to use
-	 */
-	public void setType(FormatType type) {
-		this.type = type;
-	}
-
-	/**
-	 * Sets the format string that will be used.
-	 *
-	 * @param formatString the string to format
-	 */
-	@ActionParameterInformation(required = true)
-	public void setFormatString(String formatString) {
-		this.formatString = formatString;
 	}
 
 	/**
@@ -291,31 +274,14 @@ public class Format extends AbstractAction implements DynamicallyParameterisable
 	@ActionInformation(name = "parameter")
 	public static class FormatParameter extends AbstractAction {
 		private String name;
+
+		@ActionParameterInformation(required = true)
 		private Object value;
 
 		/**
 		 * Creates a <em>format parameter</em> action.
 		 */
 		public FormatParameter() {}
-
-		/**
-		 * Sets the name of the parameter.
-		 *
-		 * @param name the name to use
-		 */
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		/**
-		 * Sets the value of the parameter.
-		 *
-		 * @param value the value to use
-		 */
-		@ActionParameterInformation(required = true)
-		public void setValue(Object value) {
-			this.value = value;
-		}
 
 		public void execute(Context context, Writer writer) throws ActionException {
 			findAncestorOfType(Format.class).addParameter(new Parameter(name, value));

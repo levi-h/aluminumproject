@@ -29,33 +29,16 @@ import com.googlecode.aluminumproject.writers.WriterException;
  * @author levi_h
  */
 public class Transform extends AbstractAction {
+	@ActionParameterInformation(required = true)
 	private Element document;
+
+	@ActionParameterInformation(required = true)
 	private Element styleSheet;
 
 	/**
 	 * Creates a <em>transform</em> action.
 	 */
 	public Transform() {}
-
-	/**
-	 * Sets the document that should be transformed.
-	 *
-	 * @param document the document to transform
-	 */
-	@ActionParameterInformation(required = true)
-	public void setDocument(Element document) {
-		this.document = document;
-	}
-
-	/**
-	 * Sets the style sheet that will be used to transform the document with.
-	 *
-	 * @param styleSheet the style sheet to use
-	 */
-	@ActionParameterInformation(required = true)
-	public void setStyleSheet(Element styleSheet) {
-		this.styleSheet = styleSheet;
-	}
 
 	public void execute(Context context, Writer writer) throws ActionException, WriterException {
 		logger.debug("transforming document ", document, " using style sheet ", styleSheet);

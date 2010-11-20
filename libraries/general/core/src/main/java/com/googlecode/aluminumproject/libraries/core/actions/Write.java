@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Writes a value to the writer. The value to write can be supplied in two ways: using the {@link #setValue(Object)
- * value parameter} or in the action body.
+ * Writes a value to the writer. The value to write can be supplied in two ways: using the <em>value</em> parameter or
+ * in the action body.
  *
  * @author levi_h
  */
@@ -38,15 +38,6 @@ public class Write extends AbstractAction {
 	 */
 	public Write() {
 		value = NO_VALUE;
-	}
-
-	/**
-	 * Sets the value that should be sent to the writer.
-	 *
-	 * @param value the value to write
-	 */
-	public void setValue(Object value) {
-		this.value = value;
 	}
 
 	public void execute(Context context, Writer writer) throws ActionException, WriterException {
