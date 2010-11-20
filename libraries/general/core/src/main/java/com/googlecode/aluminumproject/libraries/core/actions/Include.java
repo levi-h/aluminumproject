@@ -16,15 +16,13 @@
 package com.googlecode.aluminumproject.libraries.core.actions;
 
 import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
-import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
-import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
+import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.actions.DynamicallyParameterisable;
 import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.utilities.Utilities;
@@ -32,7 +30,6 @@ import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -48,25 +45,17 @@ import java.util.Map;
  *
  * @author levi_h
  */
-public class Include extends AbstractAction implements DynamicallyParameterisable {
+public class Include extends AbstractDynamicallyParameterisableAction {
 	@ActionParameterInformation(required = true)
 	private String name;
 	private String parser;
-
-	private @Ignored Map<String, ActionParameter> variables;
 
 	private @Injected Configuration configuration;
 
 	/**
 	 * Creates an <em>include</em> action.
 	 */
-	public Include() {
-		variables = new HashMap<String, ActionParameter>();
-	}
-
-	public void setParameter(String name, ActionParameter parameter) {
-		variables.put(name, parameter);
-	}
+	public Include() {}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		String parser = this.parser;
@@ -82,7 +71,7 @@ public class Include extends AbstractAction implements DynamicallyParameterisabl
 
 		getBody().invoke(subcontext, new NullWriter());
 
-		for (Map.Entry<String, ActionParameter> variable: variables.entrySet()) {
+		for (Map.Entry<String, ActionParameter> variable: getDynamicParameters().entrySet()) {
 			String variableName = variable.getKey();
 			Object variableValue = variable.getValue().getValue(Object.class, context);
 

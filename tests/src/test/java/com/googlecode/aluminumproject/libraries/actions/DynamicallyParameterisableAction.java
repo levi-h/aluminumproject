@@ -18,8 +18,6 @@ package com.googlecode.aluminumproject.libraries.actions;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,17 +25,13 @@ import java.util.Map;
  *
  * @author levi_h
  */
-public class DynamicallyParameterisableAction extends AbstractAction implements DynamicallyParameterisable {
+public class DynamicallyParameterisableAction extends AbstractDynamicallyParameterisableAction {
 	private String regularParameter;
-
-	private Map<String, ActionParameter> dynamicParameters;
 
 	/**
 	 * Creates a dynamically parameterisable action.
 	 */
-	public DynamicallyParameterisableAction() {
-		dynamicParameters = new HashMap<String, ActionParameter>();
-	}
+	public DynamicallyParameterisableAction() {}
 
 	/**
 	 * Returns the value of the regular parameter.
@@ -48,26 +42,9 @@ public class DynamicallyParameterisableAction extends AbstractAction implements 
 		return regularParameter;
 	}
 
-	/**
-	 * Sets a regular, non-dynamic parameter.
-	 *
-	 * @param regularParameter the value to use for the regular parameter
-	 */
-	public void setRegularParameter(String regularParameter) {
-		this.regularParameter = regularParameter;
-	}
-
-	/**
-	 * Returns all dynamic parameters that were {@link #setParameter(String, ActionParameter) set}.
-	 *
-	 * @return all of this action's dynamic parameters
-	 */
+	@Override
 	public Map<String, ActionParameter> getDynamicParameters() {
-		return Collections.unmodifiableMap(dynamicParameters);
-	}
-
-	public void setParameter(String name, ActionParameter parameter) {
-		dynamicParameters.put(name, parameter);
+		return super.getDynamicParameters();
 	}
 
 	public void execute(Context context, Writer writer) {}

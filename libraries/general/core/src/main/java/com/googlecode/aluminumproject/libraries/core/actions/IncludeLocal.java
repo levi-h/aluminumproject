@@ -16,19 +16,16 @@
 package com.googlecode.aluminumproject.libraries.core.actions;
 
 import com.googlecode.aluminumproject.annotations.ActionParameterInformation;
-import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
-import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
+import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.actions.DynamicallyParameterisable;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,22 +43,14 @@ import java.util.Map;
  * @author levi_h
  * @see Template
  */
-public class IncludeLocal extends AbstractAction implements DynamicallyParameterisable {
+public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 	@ActionParameterInformation(required = true)
 	private String name;
-
-	private @Ignored Map<String, ActionParameter> variables;
 
 	/**
 	 * Creates an <em>include local</em> action.
 	 */
-	public IncludeLocal() {
-		variables = new HashMap<String, ActionParameter>();
-	}
-
-	public void setParameter(String name, ActionParameter parameter) throws ActionException {
-		variables.put(name, parameter);
-	}
+	public IncludeLocal() {}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		Object body = context.getVariable(Context.TEMPLATE_SCOPE, name);
@@ -71,7 +60,7 @@ public class IncludeLocal extends AbstractAction implements DynamicallyParameter
 
 			getBody().invoke(subcontext, new NullWriter());
 
-			for (Map.Entry<String, ActionParameter> variable: variables.entrySet()) {
+			for (Map.Entry<String, ActionParameter> variable: getDynamicParameters().entrySet()) {
 				String variableName = variable.getKey();
 				Object variableValue = variable.getValue().getValue(Object.class, context);
 
