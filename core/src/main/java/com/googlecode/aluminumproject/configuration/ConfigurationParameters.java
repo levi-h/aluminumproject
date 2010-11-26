@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.configuration;
 import com.googlecode.aluminumproject.Logger;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -93,5 +94,46 @@ public class ConfigurationParameters {
 		}
 
 		return values;
+	}
+
+	/**
+	 * Finds a map of parameter values. Value maps are found by retrieving a parameter value and splitting it around
+	 * commas and colons.
+	 *
+	 * @param name the name of the parameter to retrieve the value map of
+	 * @param defaultValueMap the value map to return if no configuration parameter exists with the given name
+	 * @return the value map of the parameter with the given name
+	 * @throws ConfigurationException when the parameter value can't be parsed into a map
+	 */
+	public Map<String, String> getValueMap(
+			String name, Map<String, String> defaultValueMap) throws ConfigurationException {
+		Map<String, String> valueMap;
+
+		if (parameters.containsKey(name)) {
+			valueMap = new LinkedHashMap<String, String>();
+
+			for (String entry: parameters.get(name).split("\\s*,\\s*")) {
+				String[] keyAndValue = entry.split("\\s*:\\s*");
+
+				if (keyAndValue.length == 2) {
+					String key = keyAndValue[0];
+					String value = keyAndValue[1];
+
+					if (valueMap.containsKey(key)) {
+						throw new ConfigurationException("duplicate key '", key, "' ",
+							"in value map of parameter '", name, "'");
+					} else {
+						valueMap.put(key, value);
+					}
+				} else {
+					throw new ConfigurationException("illegal entry (", entry, ") ",
+						"for value map of parameter '", name, "'");
+				}
+			}
+		} else {
+			return defaultValueMap;
+		}
+
+		return valueMap;
 	}
 }

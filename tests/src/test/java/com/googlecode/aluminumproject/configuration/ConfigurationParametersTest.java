@@ -16,6 +16,9 @@
 package com.googlecode.aluminumproject.configuration;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -62,5 +65,40 @@ public class ConfigurationParametersTest {
 
 	public void valuesShouldFallBackToDefaultWhenParameterWasNotAdded() {
 		assert Arrays.equals(parameters.getValues("name", "default", "default"), new String[] {"default", "default"});
+	}
+
+	public void valueMapShouldBeRetrievable() {
+		parameters.addParameter("name", "key: value, other key: other value");
+
+		Map<String, String> expectedValueMap = new HashMap<String, String>();
+		expectedValueMap.put("key", "value");
+		expectedValueMap.put("other key", "other value");
+
+		Map<String, String> valueMap = parameters.getValueMap("name", Collections.<String, String>emptyMap());
+		assert valueMap != null;
+		assert valueMap.equals(expectedValueMap);
+	}
+
+	public void valueMapShouldFallBackToDefaultWhenParameterWasNotAdded() {
+		Map<String, String> defaultParameterMap = new HashMap<String, String>();
+		defaultParameterMap.put("default key", "default value");
+
+		Map<String, String> valueMap = parameters.getValueMap("name", defaultParameterMap);
+		assert valueMap != null;
+		assert valueMap.equals(defaultParameterMap);
+	}
+
+	@Test(expectedExceptions = ConfigurationException.class)
+	public void retrievingValueMapWithIllegalEntriesShouldCauseException() {
+		parameters.addParameter("name", "key");
+
+		parameters.getValueMap("name", Collections.<String, String>emptyMap());
+	}
+
+	@Test(expectedExceptions = ConfigurationException.class)
+	public void retrievingValueMapWithDuplicateKeysShouldCauseException() {
+		parameters.addParameter("name", "key: value, key: value");
+
+		parameters.getValueMap("name", Collections.<String, String>emptyMap());
 	}
 }
