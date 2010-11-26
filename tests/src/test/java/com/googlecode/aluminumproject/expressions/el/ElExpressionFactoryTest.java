@@ -15,27 +15,20 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 
 import java.util.List;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"expressions", "expressions-el", "fast"})
 public class ElExpressionFactoryTest {
-	private ExpressionFactory expressionFactory;
-
-	@BeforeMethod
-	public void createExpressionFactory() {
-		expressionFactory = new ElExpressionFactory();
-		expressionFactory.initialise(new DefaultConfiguration());
-	}
-
 	public void defaultConfigurationShouldFindElExpressionFactory() {
 		List<ExpressionFactory> expressionFactories = new DefaultConfiguration().getExpressionFactories();
 		assert expressionFactories != null;
@@ -50,14 +43,14 @@ public class ElExpressionFactoryTest {
 	}
 
 	public void expressionStartingWithDollarSignShouldBeRecognised() {
-		List<ExpressionOccurrence> occurrences = expressionFactory.findExpressions("${a}");
+		List<ExpressionOccurrence> occurrences = createExpressionFactory().findExpressions("${a}");
 		assert occurrences != null;
 		assert occurrences.size() == 1;
 		assert occurrences.contains(new ExpressionOccurrence(0, 4));
 	}
 
 	public void expressionStartingWithPoundSignShouldBeRecognised() {
-		List<ExpressionOccurrence> occurrences = expressionFactory.findExpressions("#{a}");
+		List<ExpressionOccurrence> occurrences = createExpressionFactory().findExpressions("#{a}");
 		assert occurrences != null;
 		assert occurrences.size() == 1;
 		assert occurrences.contains(new ExpressionOccurrence(0, 4));
@@ -68,7 +61,7 @@ public class ElExpressionFactoryTest {
 		"expressionStartingWithPoundSignShouldBeRecognised"
 	})
 	public void seriesOfExpressionsShouldBeRecognised() {
-		List<ExpressionOccurrence> occurrences = expressionFactory.findExpressions("${a} #{b} ${c}");
+		List<ExpressionOccurrence> occurrences = createExpressionFactory().findExpressions("${a} #{b} ${c}");
 		assert occurrences != null;
 		assert occurrences.size() == 3;
 		assert occurrences.contains(new ExpressionOccurrence(0, 4));
@@ -77,26 +70,44 @@ public class ElExpressionFactoryTest {
 	}
 
 	public void expressionContainingQuotedEndingCharacterShouldBeRecognised() {
-		List<ExpressionOccurrence> occurrences = expressionFactory.findExpressions("${'}'}");
+		List<ExpressionOccurrence> occurrences = createExpressionFactory().findExpressions("${'}'}");
 		assert occurrences != null;
 		assert occurrences.size() == 1;
 		assert occurrences.contains(new ExpressionOccurrence(0, 6));
 	}
 
 	public void incompleteExpressionShouldNotBeRecognised() {
-		List<ExpressionOccurrence> occurrences = expressionFactory.findExpressions("${a");
+		List<ExpressionOccurrence> occurrences = createExpressionFactory().findExpressions("${a");
 		assert occurrences != null;
 		assert occurrences.isEmpty();
 	}
 
 	public void escapedExpressionShouldNotBeRecognised() {
-		List<ExpressionOccurrence> occurrences = expressionFactory.findExpressions("\\${a}");
+		List<ExpressionOccurrence> occurrences = createExpressionFactory().findExpressions("\\${a}");
 		assert occurrences != null;
 		assert occurrences.isEmpty();
 	}
 
 	@Test(dependsOnMethods = "expressionStartingWithDollarSignShouldBeRecognised")
 	public void recognisedExpressionShouldBeCreatable() {
-		assert expressionFactory.create("${a}", new DefaultContext()) != null;
+		assert createExpressionFactory().create("${a}", new DefaultContext()) != null;
+	}
+
+	@Test(dependsOnMethods = "recognisedExpressionShouldBeCreatable", expectedExceptions = ExpressionException.class)
+	public void expressionFactoryPropertiesShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(ElExpressionFactory.EXPRESSION_FACTORY_PROPERTIES, "javax.el.methodInvocations: false");
+
+		createExpressionFactory(parameters).create("${''.isEmpty()}", new DefaultContext());
+	}
+
+	private ExpressionFactory createExpressionFactory() {
+		return createExpressionFactory(new ConfigurationParameters());
+	}
+
+	private ExpressionFactory createExpressionFactory(ConfigurationParameters parameters) {
+		ExpressionFactory expressionFactory = new ElExpressionFactory();
+		expressionFactory.initialise(new DefaultConfiguration(parameters));
+		return expressionFactory;
 	}
 }

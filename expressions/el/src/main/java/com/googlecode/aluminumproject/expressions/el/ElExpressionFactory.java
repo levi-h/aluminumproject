@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
@@ -24,13 +25,20 @@ import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
 
 /**
  * An {@link ExpressionFactory expression factory} that uses the Unified Expression Language to create expressions.
+ * <p>
+ * {@link ExpressionFactory Expression factories} may be constructed with a number of implementation-specific
+ * properties. The properties to supply can be configured by providing a parameter named {@value
+ * #EXPRESSION_FACTORY_PROPERTIES}; by default, the expression factory is created without any parameters.
  *
  * @author levi_h
  */
@@ -39,15 +47,34 @@ public class ElExpressionFactory implements ExpressionFactory {
 
 	private javax.el.ExpressionFactory expressionFactory;
 
+	private final Logger logger;
+
 	/**
 	 * Creates an EL expression factory.
 	 */
-	public ElExpressionFactory() {}
+	public ElExpressionFactory() {
+		logger = Logger.get(getClass());
+	}
 
 	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
 
-		expressionFactory = javax.el.ExpressionFactory.newInstance();
+		Map<String, String> emptyPropertyMap = Collections.emptyMap();
+
+		Map<String, String> propertyMap =
+			configuration.getParameters().getValueMap(EXPRESSION_FACTORY_PROPERTIES, emptyPropertyMap);
+
+		if (propertyMap.equals(emptyPropertyMap)) {
+			logger.debug("creating expression factory without properties");
+
+			expressionFactory = javax.el.ExpressionFactory.newInstance();
+		} else {
+			logger.debug("creating expression factory with properties ", propertyMap);
+
+			Properties properties = new Properties();
+			properties.putAll(propertyMap);
+			expressionFactory = javax.el.ExpressionFactory.newInstance(properties);
+		}
 
 		FunctionDelegateFactory.addConfiguration(configuration);
 	}
@@ -100,4 +127,10 @@ public class ElExpressionFactory implements ExpressionFactory {
 			throw new ExpressionException(exception, "can't create expression");
 		}
 	}
+
+	/**
+	 * The name of the configuration parameter that contains a {@link Map map} of properties that the EL expression
+	 * factory should be created with.
+	 */
+	public final static String EXPRESSION_FACTORY_PROPERTIES = "expression_factory.el.expression_factory_properties";
 }
