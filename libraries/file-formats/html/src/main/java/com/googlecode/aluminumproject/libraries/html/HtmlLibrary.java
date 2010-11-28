@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -62,10 +63,15 @@ public class HtmlLibrary extends AbstractLibrary {
 	private void addTagFactories() throws ConfigurationException {
 		Properties tagInformation = new Properties();
 
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
 		try {
-			tagInformation.load(classLoader.getResourceAsStream("html4.properties"));
+			InputStream tagInformationStream =
+				Thread.currentThread().getContextClassLoader().getResourceAsStream("html4.properties");
+
+			try {
+				tagInformation.load(tagInformationStream);
+			} finally {
+				tagInformationStream.close();
+			}
 		} catch (IOException exception) {
 			throw new ConfigurationException(exception, "can't read HTML 4 tag information");
 		}
