@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.parsers.xml;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.UpperCaseTemplateNameTranslator;
@@ -25,11 +24,8 @@ import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
 import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.Template;
-import com.googlecode.aluminumproject.templates.TemplateContext;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
-import com.googlecode.aluminumproject.writers.StringWriter;
-import com.googlecode.aluminumproject.writers.TextWriter;
 
 import java.util.List;
 import java.util.Map;
@@ -85,18 +81,6 @@ public class XmlParserTest {
 	@Test(expectedExceptions = ParseException.class)
 	public void tagsWithoutLibraryShouldCauseException() {
 		createParser().parseTemplate("templates/html.xml");
-	}
-
-	public void tagsWithoutLibraryShouldBePossibleWithTagsAllowed() {
-		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(XmlParser.ALLOW_NON_ACTION_TAGS, "true");
-
-		Template template = createParser(parameters).parseTemplate("templates/html.xml");
-		assert template != null;
-
-		StringWriter stringWriter = new StringWriter();
-		template.processChildren(new TemplateContext(), new DefaultContext(), new TextWriter(stringWriter, true));
-		assert stringWriter.getString().equals("<html id=\"document\"></html>");
 	}
 
 	private XmlParser createParser() {
