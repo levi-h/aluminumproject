@@ -48,12 +48,6 @@ import org.xml.sax.XMLReader;
  * translator} to be configured (using the {@value #TEMPLATE_NAME_TRANSLATOR_CLASS} configuration property). If no
  * template name translator is configured, the {@link XmlTemplateNameTranslator default template name translator} will
  * be used.
- * <p>
- * All tags in the XML templates are expected to be actions - any tag that is not an action causes an exception. It's
- * possible to configure the XML parser to allow these tags by using the boolean parameter {@value
- * #ALLOW_NON_ACTION_TAGS}. When used, it causes all unrecognised tags to be parsed into text elements. Note that
- * whether a tag is an action or not is determined by looking at the prefix only; if a tag's prefix maps to a library,
- * it's considered to be an action tag.
  *
  * @author levi_h
  */
@@ -63,8 +57,6 @@ public class XmlParser implements Parser {
 	private String templateExtension;
 
 	private TemplateNameTranslator templateNameTranslator;
-
-	private boolean allowNonActionTags;
 
 	private final Logger logger;
 
@@ -87,10 +79,6 @@ public class XmlParser implements Parser {
 		}
 
 		createTemplateNameTranslator();
-
-		allowNonActionTags = Boolean.parseBoolean(parameters.getValue(ALLOW_NON_ACTION_TAGS, "false"));
-
-		logger.debug("non-action tags are ", allowNonActionTags ? "" : "not ", "allowed");
 	}
 
 	private void createTemplateNameTranslator() throws ConfigurationException {
@@ -109,8 +97,7 @@ public class XmlParser implements Parser {
 		XMLReader parser = createParser();
 		logger.debug("created XML parser");
 
-		TemplateHandler templateHandler =
-			new TemplateHandler(configuration, templateNameTranslator, allowNonActionTags);
+		TemplateHandler templateHandler = new TemplateHandler(configuration, templateNameTranslator);
 		parser.setContentHandler(templateHandler);
 		logger.debug("using template handler ", templateHandler);
 
@@ -179,10 +166,4 @@ public class XmlParser implements Parser {
 	 * used.
 	 */
 	public final static String TEMPLATE_NAME_TRANSLATOR_CLASS = "parser.xml.template_name_translator.class";
-
-	/**
-	 * The name of the configuration parameter that determines whether tags that are not actions should be added as
-	 * text elements. By default, non-action tags are disallowed and will cause a parse exception.
-	 */
-	public final static String ALLOW_NON_ACTION_TAGS = "parser.xml.allow_non_action_tags";
 }

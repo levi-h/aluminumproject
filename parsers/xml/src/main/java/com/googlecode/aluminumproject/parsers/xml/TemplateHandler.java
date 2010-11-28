@@ -53,8 +53,6 @@ public class TemplateHandler extends DefaultHandler {
 	private Configuration configuration;
 	private TemplateNameTranslator templateNameTranslator;
 
-	private boolean allowNonActionTags;
-
 	private Stack<Map<String, String>> libraryUrlAbbreviationsStack;
 
 	private TemplateBuilder templateBuilder;
@@ -68,14 +66,10 @@ public class TemplateHandler extends DefaultHandler {
 	 *
 	 * @param configuration the configuration to use
 	 * @param templateNameTranslator the template name translator to use
-	 * @param allowNonActionTags whether or not to allow non-action tags
 	 */
-	public TemplateHandler(
-			Configuration configuration, TemplateNameTranslator templateNameTranslator, boolean allowNonActionTags) {
+	public TemplateHandler(Configuration configuration, TemplateNameTranslator templateNameTranslator) {
 		this.configuration = configuration;
 		this.templateNameTranslator = templateNameTranslator;
-
-		this.allowNonActionTags = allowNonActionTags;
 
 		libraryUrlAbbreviationsStack = new Stack<Map<String, String>>();
 
@@ -108,42 +102,25 @@ public class TemplateHandler extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		handleText();
 
-		if (!getLibraryUrlAbbreviations().containsValue(uri) && allowNonActionTags) {
-			logger.debug("adding non-action tag '", qName, "' as text");
+		logger.debug("starting parsing element '", qName, "'");
 
-			textBuffer.append("<");
-			textBuffer.append(qName);
+		String library = qName.contains(":") ? qName.split(":")[0] : "";
+		String actionName = templateNameTranslator.translateActionName(localName);
 
-			for (int i = 0; i < attributes.getLength(); i++) {
-				textBuffer.append(" ");
-				textBuffer.append(attributes.getQName(i));
-				textBuffer.append("=\"");
-				textBuffer.append(attributes.getValue(i));
-				textBuffer.append("\"");
-			}
+		ActionDescriptor action = new ActionDescriptor(library, actionName);
+		Map<String, ActionParameter> parameters = new HashMap<String, ActionParameter>();
+		List<ActionContributionDescriptor> contributions = new LinkedList<ActionContributionDescriptor>();
 
-			textBuffer.append(">");
-		} else {
-			logger.debug("starting parsing element '", qName, "'");
+		processAttributes(attributes, parameters, contributions);
 
-			String library = qName.contains(":") ? qName.split(":")[0] : "";
-			String actionName = templateNameTranslator.translateActionName(localName);
+		logger.debug("parameters for action '", actionName, "': ", parameters);
+		logger.debug("contributions for action '", actionName, "': ", contributions);
 
-			ActionDescriptor action = new ActionDescriptor(library, actionName);
-			Map<String, ActionParameter> parameters = new HashMap<String, ActionParameter>();
-			List<ActionContributionDescriptor> contributions = new LinkedList<ActionContributionDescriptor>();
+		TemplateElement actionElement = createActionElement(action, parameters, contributions);
+		logger.debug("created action element ", actionElement);
 
-			processAttributes(attributes, parameters, contributions);
-
-			logger.debug("parameters for action '", actionName, "': ", parameters);
-			logger.debug("contributions for action '", actionName, "': ", contributions);
-
-			TemplateElement actionElement = createActionElement(action, parameters, contributions);
-			logger.debug("created action element ", actionElement);
-
-			templateBuilder.addTemplateElement(actionElement);
-			logger.debug("added action element");
-		}
+		templateBuilder.addTemplateElement(actionElement);
+		logger.debug("added action element");
 	}
 
 	private void processAttributes(Attributes attributes,
@@ -180,17 +157,9 @@ public class TemplateHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		handleText();
 
-		if (!getLibraryUrlAbbreviations().containsValue(uri) && allowNonActionTags) {
-			logger.debug("adding non-action close tag '", qName, "' as text");
+		templateBuilder.restoreCurrentTemplateElement();
 
-			textBuffer.append(String.format("</%s>", qName));
-
-			handleText();
-		} else {
-			templateBuilder.restoreCurrentTemplateElement();
-
-			logger.debug("finished parsing element '", qName, "'");
-		}
+		logger.debug("finished parsing element '", qName, "'");
 	}
 
 	private void handleText() throws SAXException {
