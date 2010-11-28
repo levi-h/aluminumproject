@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.libraries.html;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.libraries.html.HtmlLibraryTest;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 import com.googlecode.aluminumproject.templates.TemplateException;
 
