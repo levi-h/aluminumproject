@@ -15,10 +15,22 @@
  */
 package com.googlecode.aluminumproject.libraries.html;
 
+import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+import com.googlecode.aluminumproject.libraries.html.actions.TagFactory;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Allows users to generate HTML documents.
@@ -33,14 +45,67 @@ public class HtmlLibrary extends AbstractLibrary {
 	 */
 	public HtmlLibrary() {
 		super(ReflectionUtilities.getPackageName(HtmlLibrary.class));
+	}
+
+	@Override
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		super.initialise(configuration);
 
 		String url = "http://aluminumproject.googlecode.com/html";
 		String version = EnvironmentUtilities.getVersion();
 
 		information = new LibraryInformation(url, version);
+
+		addTagFactories();
+	}
+
+	private void addTagFactories() throws ConfigurationException {
+		Properties tagInformation = new Properties();
+
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+		try {
+			tagInformation.load(classLoader.getResourceAsStream("html4.properties"));
+		} catch (IOException exception) {
+			throw new ConfigurationException(exception, "can't read HTML 4 tag information");
+		}
+
+		Map<String, String[]> attributeGroups = new HashMap<String, String[]>();
+		List<String> tagNames = new LinkedList<String>();
+
+		Enumeration<?> propertyNames = tagInformation.propertyNames();
+
+		while (propertyNames.hasMoreElements()) {
+			String propertyName = (String) propertyNames.nextElement();
+			String property = tagInformation.getProperty(propertyName);
+
+			if (property.equals("attribute group")) {
+				attributeGroups.put(propertyName,
+					tagInformation.getProperty(String.format("%s.attributes", propertyName)).split(", "));
+			} else if (property.equals("tag")) {
+				tagNames.add(propertyName);
+			}
+		}
+
+		for (String tagName: tagNames) {
+			List<String> attributes = new LinkedList<String>();
+
+			for (String attribute: tagInformation.getProperty(String.format("%s.attributes", tagName)).split(", ")) {
+				if (attributeGroups.containsKey(attribute)) {
+					Collections.addAll(attributes, attributeGroups.get(attribute));
+				} else {
+					attributes.add(attribute);
+				}
+			}
+
+			boolean open = Boolean.parseBoolean(tagInformation.getProperty(String.format("%s.open", tagName), "false"));
+
+			addActionFactory(new TagFactory(tagName, attributes, open));
+		}
 	}
 
 	public LibraryInformation getInformation() {
 		return information;
 	}
+
 }
