@@ -32,6 +32,8 @@ public class IgnoredContextEnricher implements ContextEnricher {
 
 	public void initialise(Configuration configuration) {}
 
+	public void disable() {}
+
 	public void beforeTemplate(Context context) {}
 
 	public void afterTemplate(Context context) {}

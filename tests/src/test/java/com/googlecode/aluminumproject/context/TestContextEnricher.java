@@ -37,6 +37,10 @@ public class TestContextEnricher implements ContextEnricher {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	public void beforeTemplate(Context context) {
 		beforeTemplateInvoked = true;
 	}

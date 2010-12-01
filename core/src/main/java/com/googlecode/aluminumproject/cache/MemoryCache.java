@@ -43,6 +43,10 @@ public class MemoryCache implements Cache {
 
 	public void initialise(Configuration configuration) {}
 
+	public void disable() {
+		templates.clear();
+	}
+
 	public void storeTemplate(Key key, Template template) {
 		logger.debug("storing ", template, " under ", key);
 

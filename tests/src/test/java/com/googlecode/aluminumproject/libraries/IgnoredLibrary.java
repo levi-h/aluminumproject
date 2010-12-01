@@ -37,6 +37,8 @@ public class IgnoredLibrary implements Library {
 
 	public void initialise(Configuration configuration) {}
 
+	public void disable() {}
+
 	public LibraryInformation getInformation() {
 		return null;
 	}

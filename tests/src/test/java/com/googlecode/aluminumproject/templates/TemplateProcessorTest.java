@@ -57,6 +57,10 @@ public class TemplateProcessorTest {
 			this.configuration = configuration;
 		}
 
+		public void disable() {
+			configuration = null;
+		}
+
 		public Template parseTemplate(String name) throws ParseException {
 			Map<String, String> libraryUrlAbbreviations = Collections.emptyMap();
 
@@ -89,6 +93,8 @@ public class TemplateProcessorTest {
 			new DefaultContext(), new TextWriter(stringWriter, true));
 
 		assert stringWriter.getString().equals("cache");
+
+		configuration.close();
 	}
 
 	public void parsedTemplatesShouldBeCached() {
@@ -106,6 +112,8 @@ public class TemplateProcessorTest {
 		assert stringWriter.getString().equals("test");
 
 		assert configuration.getCache().findTemplate(new Cache.Key("test", "name")) != null;
+
+		configuration.close();
 	}
 
 	public void cacheShouldBeOptional() {
@@ -120,6 +128,8 @@ public class TemplateProcessorTest {
 			new DefaultContext(), new TextWriter(stringWriter, true));
 
 		assert stringWriter.getString().equals("test");
+
+		configuration.close();
 	}
 
 	public void contextEnrichersShouldBeInvoked() {

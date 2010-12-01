@@ -45,6 +45,10 @@ public class TestFunctionFactory implements FunctionFactory {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this function factory was initialised with.
 	 *

@@ -41,8 +41,6 @@ test {
 
 		suiteName = 'aluminum'
 		testName = 'aluminum'
-
-		forkEvery = 50
 	}
 
 	include '**/*.class'

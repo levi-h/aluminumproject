@@ -20,6 +20,7 @@ import static com.googlecode.aluminumproject.resources.FileSystemTemplateFinderF
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.utilities.resources.CompoundResourceFinder;
 import com.googlecode.aluminumproject.utilities.resources.FileSystemResourceFinder;
 
@@ -31,7 +32,7 @@ public class FileSystemResourceFinderFactoryTest {
 	@Test(expectedExceptions = ConfigurationException.class)
 	public void omittingTemplateDirectoriesShouldCauseException() {
 		TemplateFinderFactory templateFinderFactory = new FileSystemTemplateFinderFactory();
-		templateFinderFactory.initialise(new DefaultConfiguration(new ConfigurationParameters()));
+		templateFinderFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
 	}
 
 	public void supplyingSingleTemplateDirectoryShouldResultInFileSystemResourceFinder() {
@@ -39,7 +40,7 @@ public class FileSystemResourceFinderFactoryTest {
 		parameters.addParameter(TEMPLATE_DIRECTORIES, System.getProperty("java.io.tmpdir"));
 
 		TemplateFinderFactory templateFinderFactory = new FileSystemTemplateFinderFactory();
-		templateFinderFactory.initialise(new DefaultConfiguration(parameters));
+		templateFinderFactory.initialise(new TestConfiguration(parameters));
 		assert templateFinderFactory.createTemplateFinder() instanceof FileSystemResourceFinder;
 	}
 
@@ -49,7 +50,7 @@ public class FileSystemResourceFinderFactoryTest {
 			String.format("%s, %s", System.getProperty("user.home"), System.getProperty("java.io.tmpdir")));
 
 		TemplateFinderFactory templateFinderFactory = new FileSystemTemplateFinderFactory();
-		templateFinderFactory.initialise(new DefaultConfiguration(parameters));
+		templateFinderFactory.initialise(new TestConfiguration(parameters));
 		assert templateFinderFactory.createTemplateFinder() instanceof CompoundResourceFinder;
 	}
 }

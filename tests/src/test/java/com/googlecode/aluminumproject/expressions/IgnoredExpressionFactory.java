@@ -37,6 +37,8 @@ public class IgnoredExpressionFactory implements ExpressionFactory {
 
 	public void initialise(Configuration configuration) {}
 
+	public void disable() {}
+
 	public List<ExpressionOccurrence> findExpressions(String text) {
 		return Collections.emptyList();
 	}

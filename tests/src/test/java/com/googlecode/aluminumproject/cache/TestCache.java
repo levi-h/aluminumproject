@@ -35,6 +35,10 @@ public class TestCache implements Cache {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this cache was initialised with.
 	 *

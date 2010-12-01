@@ -85,15 +85,15 @@ public abstract class AbstractLibrary implements Library {
 	protected AbstractLibrary(String... packageNames) {
 		this.packageNames = packageNames;
 
+		actionFactories = new LinkedList<ActionFactory>();
+		actionContributionFactories = new LinkedList<ActionContributionFactory>();
+		functionFactories = new LinkedList<FunctionFactory>();
+
 		logger = Logger.get(getClass());
 	}
 
 	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
-
-		actionFactories = new LinkedList<ActionFactory>();
-		actionContributionFactories = new LinkedList<ActionContributionFactory>();
-		functionFactories = new LinkedList<FunctionFactory>();
 
 		logger.debug("finding actions, action contributions, and functions in packages '", packageNames, "'");
 
@@ -234,6 +234,12 @@ public abstract class AbstractLibrary implements Library {
 	protected void initialiseLibraryElement(LibraryElement libraryElement) {
 		libraryElement.initialise(configuration);
 		libraryElement.setLibrary(this);
+	}
+
+	public void disable() {
+		actionFactories.clear();
+		actionContributionFactories.clear();
+		functionFactories.clear();
 	}
 
 	public List<ActionFactory> getActionFactories() {

@@ -24,11 +24,14 @@ import com.googlecode.aluminumproject.writers.Writer;
  * The template engine.
  * <p>
  * A template engine should be created once with a certain {@link Configuration configuration}. After that, the {@link
- * #processTemplate(String, String, Context, Writer) processTemplate method} can be used repeatedly.
+ * #processTemplate(String, String, Context, Writer) processTemplate method} can be used repeatedly. A template engine
+ * that will no longer be used should be {@link #stop() stopped}.
  *
  * @author levi_h
  */
 public class Aluminum {
+	private Configuration configuration;
+
 	private TemplateProcessor templateProcessor;
 
 	/**
@@ -37,6 +40,8 @@ public class Aluminum {
 	 * @param configuration the configuration to use
 	 */
 	public Aluminum(Configuration configuration) {
+		this.configuration = configuration;
+
 		templateProcessor = new TemplateProcessor(configuration);
 	}
 
@@ -62,5 +67,14 @@ public class Aluminum {
 		} catch (RuntimeException exception) {
 			throw new AluminumException(exception, "can't process template");
 		}
+	}
+
+	/**
+	 * Stops this template engine.
+	 *
+	 * @throws AluminumException when this template engine can't be stopped
+	 */
+	public void stop() throws AluminumException {
+		configuration.close();
 	}
 }

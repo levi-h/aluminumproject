@@ -36,12 +36,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"expressions", "expressions-el", "fast"})
 public class FunctionMapperTest {
+	private Configuration configuration;
+
 	private FunctionMapper functionMapper;
 
 	@BeforeMethod
@@ -50,7 +53,7 @@ public class FunctionMapperTest {
 		parameters.addParameter(LIBRARY_PACKAGES, getPackageName(TestLibrary.class));
 		parameters.addParameter(EXPRESSION_FACTORY_PACKAGES, getPackageName(ElExpressionFactory.class));
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 
 		Context context = new DefaultContext();
 
@@ -69,6 +72,11 @@ public class FunctionMapperTest {
 		internalInformation.put(Template.TEMPLATE_CONTEXT_KEY, templateContext);
 
 		functionMapper = new FunctionMapper(context, configuration);
+	}
+
+	@AfterMethod
+	public void closeConfiguration() {
+		configuration.close();
 	}
 
 	public void resolvingFunctionWithUnknownPrefixShouldResultInNull() {

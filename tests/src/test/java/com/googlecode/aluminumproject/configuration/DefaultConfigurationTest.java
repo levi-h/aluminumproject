@@ -74,26 +74,36 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"core", "fast"})
 public class DefaultConfigurationTest {
-	public void configurationElementFactoryShouldDefaultToDefaultConfigurationElementFactory() {
-		ConfigurationElementFactory configurationElementFactory =
-			new DefaultConfiguration().getConfigurationElementFactory();
+	private Configuration configuration;
 
-		assert configurationElementFactory instanceof DefaultConfigurationElementFactory;
+	@AfterMethod
+	public void closeConfiguration() {
+		if (configuration != null) {
+			configuration.close();
+
+			configuration = null;
+		}
+	}
+
+	public void configurationElementFactoryShouldDefaultToDefaultConfigurationElementFactory() {
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getConfigurationElementFactory() instanceof DefaultConfigurationElementFactory;
 	}
 
 	public void configurationElementFactoryShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONFIGURATION_ELEMENT_FACTORY_CLASS, TestConfigurationElementFactory.class.getName());
 
-		ConfigurationElementFactory configurationElementFactory =
-			new DefaultConfiguration(parameters).getConfigurationElementFactory();
+		configuration = new DefaultConfiguration(parameters);
 
-		assert configurationElementFactory instanceof TestConfigurationElementFactory;
+		assert configuration.getConfigurationElementFactory() instanceof TestConfigurationElementFactory;
 	}
 
 	@Test(dependsOnMethods = "configurationElementFactoryShouldBeConfigurable")
@@ -101,22 +111,41 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONFIGURATION_ELEMENT_FACTORY_CLASS, TestConfigurationElementFactory.class.getName());
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 
 		TestConfigurationElementFactory configurationElementFactory =
 			(TestConfigurationElementFactory) configuration.getConfigurationElementFactory();
 		assert configurationElementFactory.getConfiguration() == configuration;
 	}
 
+	@Test(dependsOnMethods = "configurationShouldInitialiseConfigurationElementFactory")
+	public void configurationShouldDisableConfigurationElementFactoryWhenItIsClosed() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONFIGURATION_ELEMENT_FACTORY_CLASS, TestConfigurationElementFactory.class.getName());
+
+		Configuration configuration = new DefaultConfiguration(parameters);
+
+		TestConfigurationElementFactory configurationElementFactory =
+			(TestConfigurationElementFactory) configuration.getConfigurationElementFactory();
+
+		configuration.close();
+
+		assert configurationElementFactory.getConfiguration() == null;
+	}
+
 	public void converterRegistryShouldDefaultToDefaultConverterRegistry() {
-		assert new DefaultConfiguration().getConverterRegistry() instanceof DefaultConverterRegistry;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getConverterRegistry() instanceof DefaultConverterRegistry;
 	}
 
 	public void converterRegistryShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONVERTER_REGISTRY_CLASS, TestConverterRegistry.class.getName());
 
-		assert new DefaultConfiguration(parameters).getConverterRegistry() instanceof TestConverterRegistry;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert configuration.getConverterRegistry() instanceof TestConverterRegistry;
 	}
 
 	@Test(dependsOnMethods = "converterRegistryShouldBeConfigurable")
@@ -124,20 +153,38 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONVERTER_REGISTRY_CLASS, TestConverterRegistry.class.getName());
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 
 		assert ((TestConverterRegistry) configuration.getConverterRegistry()).getConfiguration() == configuration;
 	}
 
+	@Test(dependsOnMethods = "configurationShouldInitialiseConverterRegistry")
+	public void configurationShouldDisableConverterRegistryWhenItIsClosed() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CONVERTER_REGISTRY_CLASS, TestConverterRegistry.class.getName());
+
+		Configuration configuration = new DefaultConfiguration(parameters);
+
+		TestConverterRegistry converterRegistry = (TestConverterRegistry) configuration.getConverterRegistry();
+
+		configuration.close();
+
+		assert converterRegistry.getConfiguration() == null;
+	}
+
 	public void templateElementFactoryShouldDefaultToDefaultTemplateElementFactory() {
-		assert new DefaultConfiguration().getTemplateElementFactory() instanceof DefaultTemplateElementFactory;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getTemplateElementFactory() instanceof DefaultTemplateElementFactory;
 	}
 
 	public void templateElementFactoryShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(TEMPLATE_ELEMENT_FACTORY_CLASS, TestTemplateElementFactory.class.getName());
 
-		assert new DefaultConfiguration(parameters).getTemplateElementFactory() instanceof TestTemplateElementFactory;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert configuration.getTemplateElementFactory() instanceof TestTemplateElementFactory;
 	}
 
 	@Test(dependsOnMethods = "templateElementFactoryShouldBeConfigurable")
@@ -145,22 +192,41 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(TEMPLATE_ELEMENT_FACTORY_CLASS, TestTemplateElementFactory.class.getName());
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 
 		TestTemplateElementFactory templateElementFactory =
 			(TestTemplateElementFactory) configuration.getTemplateElementFactory();
 		assert templateElementFactory.getConfiguration() == configuration;
 	}
 
+	@Test(dependsOnMethods = "configurationShouldInitialiseTemplateElementFactory")
+	public void configurationShouldDisableTemplateElementFactoryWhenItIsClosed() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TEMPLATE_ELEMENT_FACTORY_CLASS, TestTemplateElementFactory.class.getName());
+
+		Configuration configuration = new DefaultConfiguration(parameters);
+
+		TestTemplateElementFactory templateElementFactory =
+			(TestTemplateElementFactory) configuration.getTemplateElementFactory();
+
+		configuration.close();
+
+		assert templateElementFactory.getConfiguration() == null;
+	}
+
 	public void templateFinderFactoryShouldDefaultToClassPathTemplateFinderFactory() {
-		assert new DefaultConfiguration().getTemplateFinderFactory() instanceof ClassPathTemplateFinderFactory;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getTemplateFinderFactory() instanceof ClassPathTemplateFinderFactory;
 	}
 
 	public void templateFinderFactoryShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, TestTemplateFinderFactory.class.getName());
 
-		assert new DefaultConfiguration(parameters).getTemplateFinderFactory() instanceof TestTemplateFinderFactory;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert configuration.getTemplateFinderFactory() instanceof TestTemplateFinderFactory;
 	}
 
 	@Test(dependsOnMethods = "templateFinderFactoryShouldBeConfigurable")
@@ -168,25 +234,41 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, TestTemplateFinderFactory.class.getName());
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 
 		TestTemplateFinderFactory templateFinderFactory =
 			(TestTemplateFinderFactory) configuration.getTemplateFinderFactory();
 		assert templateFinderFactory.getConfiguration() == configuration;
 	}
 
+	@Test(dependsOnMethods = "configurationShouldInitialiseTemplateFinderFactory")
+	public void configurationShouldDisableTemplateFinderFactoryWhenItIsClosed() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, TestTemplateFinderFactory.class.getName());
+
+		Configuration configuration = new DefaultConfiguration(parameters);
+
+		TestTemplateFinderFactory templateFinderFactory =
+			(TestTemplateFinderFactory) configuration.getTemplateFinderFactory();
+
+		configuration.close();
+
+		assert templateFinderFactory.getConfiguration() == null;
+	}
+
 	public void templateStoreFinderFactoryShouldDefaultToMemoryTemplateStoreFinderFactory() {
-		assert new DefaultConfiguration().getTemplateStoreFinderFactory() instanceof MemoryTemplateStoreFinderFactory;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getTemplateStoreFinderFactory() instanceof MemoryTemplateStoreFinderFactory;
 	}
 
 	public void templateStoreFinderFactoryShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(TEMPLATE_STORE_FINDER_FACTORY_CLASS, TestTemplateStoreFinderFactory.class.getName());
 
-		TemplateStoreFinderFactory templateStoreFinderFactory =
-			new DefaultConfiguration(parameters).getTemplateStoreFinderFactory();
+		configuration = new DefaultConfiguration(parameters);
 
-		assert templateStoreFinderFactory instanceof TestTemplateStoreFinderFactory;
+		assert configuration.getTemplateStoreFinderFactory() instanceof TestTemplateStoreFinderFactory;
 	}
 
 	@Test(dependsOnMethods = "templateStoreFinderFactoryShouldBeConfigurable")
@@ -194,39 +276,76 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(TEMPLATE_STORE_FINDER_FACTORY_CLASS, TestTemplateStoreFinderFactory.class.getName());
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 
 		TestTemplateStoreFinderFactory templateStoreFinderFactory =
 			(TestTemplateStoreFinderFactory) configuration.getTemplateStoreFinderFactory();
 		assert templateStoreFinderFactory.getConfiguration() == configuration;
 	}
 
+	@Test(dependsOnMethods = "configurationShouldInitialiseTemplateStoreFinderFactory")
+	public void configurationShouldDisableTemplateStoreFinderFactoryWhenItIsClosed() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TEMPLATE_STORE_FINDER_FACTORY_CLASS, TestTemplateStoreFinderFactory.class.getName());
+
+		Configuration configuration = new DefaultConfiguration(parameters);
+
+		TestTemplateStoreFinderFactory templateStoreFinderFactory =
+			(TestTemplateStoreFinderFactory) configuration.getTemplateStoreFinderFactory();
+
+		configuration.close();
+
+		assert templateStoreFinderFactory.getConfiguration() == null;
+	}
+
 	public void cacheShouldDefaultToNull() {
-		assert new DefaultConfiguration().getCache() == null;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getCache() == null;
 	}
 
 	public void cacheShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CACHE_CLASS, TestCache.class.getName());
 
-		assert new DefaultConfiguration(parameters).getCache() instanceof TestCache;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert configuration.getCache() instanceof TestCache;
 	}
 
 	public void configurationShouldInitialiseCache() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CACHE_CLASS, TestCache.class.getName());
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 
 		assert ((TestCache) configuration.getCache()).getConfiguration() == configuration;
 	}
 
+	@Test(dependsOnMethods = "configurationShouldInitialiseCache")
+	public void configurationShouldDisableCacheWhenItIsClosed() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(CACHE_CLASS, TestCache.class.getName());
+
+		Configuration configuration = new DefaultConfiguration(parameters);
+
+		TestCache cache = (TestCache) configuration.getCache();
+
+		configuration.close();
+
+		assert cache.getConfiguration() == null;
+	}
+
 	public void librariesShouldNotBeNull() {
-		assert new DefaultConfiguration().getLibraries() != null;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getLibraries() != null;
 	}
 
 	public static class ExternalLibrary implements Library {
 		public void initialise(Configuration configuration) {}
+
+		public void disable() {}
 
 		public LibraryInformation getInformation() {
 			return new LibraryInformation("http://aluminumproject.googlecode.com/external", "test");
@@ -259,24 +378,41 @@ public class DefaultConfigurationTest {
 
 	@Test(dependsOnMethods = "librariesShouldNotBeNull")
 	public void librariesOutsideLibraryPackagesShouldNotBeFound() {
-		assert findLibraryOfType(new DefaultConfiguration(), ExternalLibrary.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findLibraryOfType(configuration, ExternalLibrary.class) == null;
 	}
 
 	@Test(dependsOnMethods = "librariesShouldNotBeNull")
 	public void ignoredLibrariesShouldNotBeFound() {
-		assert findLibraryOfType(new DefaultConfiguration(), IgnoredLibrary.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findLibraryOfType(configuration, IgnoredLibrary.class) == null;
 	}
 
 	@Test(dependsOnMethods = "librariesShouldNotBeNull")
 	public void librariesInsideLibraryPackagesShouldBeFound() {
-		assert findLibraryOfType(new DefaultConfiguration(), TestLibrary.class) != null;
+		configuration = new DefaultConfiguration();
+
+		assert findLibraryOfType(configuration, TestLibrary.class) != null;
 	}
 
 	@Test(dependsOnMethods = "librariesInsideLibraryPackagesShouldBeFound")
 	public void configurationShouldInitialiseLibraries() {
-		DefaultConfiguration configuration = new DefaultConfiguration();
+		configuration = new DefaultConfiguration();
 
 		assert findLibraryOfType(configuration, TestLibrary.class).getConfiguration() == configuration;
+	}
+
+	@Test(dependsOnMethods = "configurationShouldInitialiseLibraries")
+	public void configurationShouldDisableLibrariesWhenItIsClosed() {
+		Configuration configuration = new DefaultConfiguration();
+
+		TestLibrary library = findLibraryOfType(configuration, TestLibrary.class);
+
+		configuration.close();
+
+		assert library.getConfiguration() == null;
 	}
 
 	@Test(dependsOnMethods = "librariesShouldNotBeNull")
@@ -284,13 +420,19 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(LIBRARY_PACKAGES, getPackageName(ExternalLibrary.class));
 
-		assert findLibraryOfType(new DefaultConfiguration(parameters), ExternalLibrary.class) != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findLibraryOfType(configuration, ExternalLibrary.class) != null;
 	}
 
 	@Test(dependsOnMethods = "librariesShouldNotBeNull")
 	public void libraryPackagesShouldBeExtendedByConfigurationElementPackages() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalLibrary.class));
+
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findLibraryOfType(configuration, ExternalLibrary.class) != null;
 	}
 
 	private static <T extends Library> T findLibraryOfType(Configuration configuration, Class<T> libraryType) {
@@ -310,12 +452,16 @@ public class DefaultConfigurationTest {
 	}
 
 	public void parsersShouldNotBeNull() {
-		assert new DefaultConfiguration().getParsers() != null;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getParsers() != null;
 	}
 
 	@Named("external")
 	public static class ExternalParser implements Parser {
 		public void initialise(Configuration configuration) {}
+
+		public void disable() {}
 
 		public Template parseTemplate(String name) throws ParseException {
 			throw new ParseException("can't parse template '", name, "'");
@@ -324,22 +470,28 @@ public class DefaultConfigurationTest {
 
 	@Test(dependsOnMethods = "parsersShouldNotBeNull")
 	public void parsersOutsideParserPackagesShouldNotBeFound() {
-		assert findParserOfType(new DefaultConfiguration(), ExternalParser.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findParserOfType(configuration, ExternalParser.class) == null;
 	}
 
 	@Test(dependsOnMethods = "parsersShouldNotBeNull")
 	public void ignoredParsersShouldNotBeFound() {
-		assert findParserOfType(new DefaultConfiguration(), IgnoredParser.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findParserOfType(configuration, IgnoredParser.class) == null;
 	}
 
 	@Test(dependsOnMethods = "parsersShouldNotBeNull")
 	public void parsersInsideParserPackagesShouldBeFound() {
-		assert findParserOfType(new DefaultConfiguration(), TestParser.class) != null;
+		configuration = new DefaultConfiguration();
+
+		assert findParserOfType(configuration, TestParser.class) != null;
 	}
 
 	@Test(dependsOnMethods = "parsersInsideParserPackagesShouldBeFound")
 	public void parsersShouldBeNamedAfterTheirPackages() {
-		Configuration configuration = new DefaultConfiguration();
+		configuration = new DefaultConfiguration();
 
 		Map<String, Parser> parsers = configuration.getParsers();
 		assert parsers.containsKey("parsers");
@@ -351,7 +503,9 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(PARSER_PACKAGES, getPackageName(ExternalParser.class));
 
-		assert findParserOfType(new DefaultConfiguration(parameters), ExternalParser.class) != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findParserOfType(configuration, ExternalParser.class) != null;
 	}
 
 	@Test(dependsOnMethods = "parsersShouldNotBeNull")
@@ -359,7 +513,9 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalParser.class));
 
-		assert findParserOfType(new DefaultConfiguration(parameters), ExternalParser.class) != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findParserOfType(configuration, ExternalParser.class) != null;
 	}
 
 	@Test(dependsOnMethods = "parserPackagesShouldBeConfigurable")
@@ -367,7 +523,7 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(PARSER_PACKAGES, getPackageName(ExternalParser.class));
 
-		Configuration configuration = new DefaultConfiguration(parameters);
+		configuration = new DefaultConfiguration(parameters);
 		Map<String, Parser> parsers = configuration.getParsers();
 
 		assert parsers.containsKey("external");
@@ -376,9 +532,20 @@ public class DefaultConfigurationTest {
 
 	@Test(dependsOnMethods = "parsersInsideParserPackagesShouldBeFound")
 	public void configurationShouldInitialiseParsers() {
-		DefaultConfiguration configuration = new DefaultConfiguration();
+		configuration = new DefaultConfiguration();
 
 		assert findParserOfType(configuration, TestParser.class).getConfiguration() == configuration;
+	}
+
+	@Test(dependsOnMethods = "parsersInsideParserPackagesShouldBeFound")
+	public void configurationShouldDisableParsersWhenItIsClosed() {
+		Configuration configuration = new DefaultConfiguration();
+
+		TestParser parser = findParserOfType(configuration, TestParser.class);
+
+		configuration.close();
+
+		assert parser.getConfiguration() == null;
 	}
 
 	private static <T extends Parser> T findParserOfType(Configuration configuration, Class<T> parserType) {
@@ -398,12 +565,16 @@ public class DefaultConfigurationTest {
 	}
 
 	public void serialisersShouldNotBeNull() {
-		assert new DefaultConfiguration().getSerialisers() != null;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getSerialisers() != null;
 	}
 
 	@Named("external")
 	public static class ExternalSerialiser implements Serialiser {
 		public void initialise(Configuration configuration) {}
+
+		public void disable() {}
 
 		public void serialiseTemplate(Template template, String name) throws SerialisationException {
 			throw new SerialisationException("can't serialise template '", name, "'");
@@ -412,22 +583,28 @@ public class DefaultConfigurationTest {
 
 	@Test(dependsOnMethods = "serialisersShouldNotBeNull")
 	public void serialisersOutsideSerialiserPackagesShouldNotBeFound() {
-		assert findSerialiserOfType(new DefaultConfiguration(), ExternalSerialiser.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findSerialiserOfType(configuration, ExternalSerialiser.class) == null;
 	}
 
 	@Test(dependsOnMethods = "serialisersShouldNotBeNull")
 	public void ignoredSerialisersShouldNotBeFound() {
-		assert findSerialiserOfType(new DefaultConfiguration(), IgnoredSerialiser.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findSerialiserOfType(configuration, IgnoredSerialiser.class) == null;
 	}
 
 	@Test(dependsOnMethods = "serialisersShouldNotBeNull")
 	public void serialisersInsideSerialiserPackagesShouldBeFound() {
-		assert findSerialiserOfType(new DefaultConfiguration(), TestSerialiser.class) != null;
+		configuration = new DefaultConfiguration();
+
+		assert findSerialiserOfType(configuration, TestSerialiser.class) != null;
 	}
 
 	@Test(dependsOnMethods = "serialisersInsideSerialiserPackagesShouldBeFound")
 	public void serialisersShouldBeNamedAfterTheirPackages() {
-		Configuration configuration = new DefaultConfiguration();
+		configuration = new DefaultConfiguration();
 
 		Map<String, Serialiser> serialisers = configuration.getSerialisers();
 		assert serialisers.containsKey("serialisers");
@@ -439,7 +616,9 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(SERIALISER_PACKAGES, getPackageName(ExternalSerialiser.class));
 
-		assert findSerialiserOfType(new DefaultConfiguration(parameters), ExternalSerialiser.class) != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findSerialiserOfType(configuration, ExternalSerialiser.class) != null;
 	}
 
 	@Test(dependsOnMethods = "serialisersShouldNotBeNull")
@@ -447,7 +626,9 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalSerialiser.class));
 
-		assert findSerialiserOfType(new DefaultConfiguration(parameters), ExternalSerialiser.class) != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findSerialiserOfType(configuration, ExternalSerialiser.class) != null;
 	}
 
 	@Test(dependsOnMethods = "serialiserPackagesShouldBeConfigurable")
@@ -455,18 +636,29 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(SERIALISER_PACKAGES, getPackageName(ExternalSerialiser.class));
 
-		Configuration configuration = new DefaultConfiguration(parameters);
-		Map<String, Serialiser> serialisers = configuration.getSerialisers();
+		configuration = new DefaultConfiguration(parameters);
 
+		Map<String, Serialiser> serialisers = configuration.getSerialisers();
 		assert serialisers.containsKey("external");
 		assert serialisers.get("external") == findSerialiserOfType(configuration, ExternalSerialiser.class);
 	}
 
 	@Test(dependsOnMethods = "serialisersInsideSerialiserPackagesShouldBeFound")
 	public void configurationShouldInitialiseSerialisers() {
-		DefaultConfiguration configuration = new DefaultConfiguration();
+		configuration = new DefaultConfiguration();
 
 		assert findSerialiserOfType(configuration, TestSerialiser.class).getConfiguration() == configuration;
+	}
+
+	@Test(dependsOnMethods = "configurationShouldInitialiseSerialisers")
+	public void configurationShouldDisableSerialisersWhenItIsClosed() {
+		Configuration configuration = new DefaultConfiguration();
+
+		TestSerialiser serialiser = findSerialiserOfType(configuration, TestSerialiser.class);
+
+		configuration.close();
+
+		assert serialiser.getConfiguration() == null;
 	}
 
 	private static <T extends Serialiser> T findSerialiserOfType(Configuration configuration, Class<T> serialiserType) {
@@ -486,11 +678,15 @@ public class DefaultConfigurationTest {
 	}
 
 	public void contextEnrichersShouldNotBeNull() {
-		assert new DefaultConfiguration().getContextEnrichers() != null;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getContextEnrichers() != null;
 	}
 
 	public static class ExternalContextEnricher implements ContextEnricher {
 		public void initialise(Configuration configuration) {}
+
+		public void disable() {}
 
 		public void beforeTemplate(Context context) {}
 
@@ -499,25 +695,41 @@ public class DefaultConfigurationTest {
 
 	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
 	public void contextEnrichersOutsideContextEnricherPackagesShouldNotBeFound() {
-		assert findContextEnricherOfType(new DefaultConfiguration(), ExternalContextEnricher.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findContextEnricherOfType(configuration, ExternalContextEnricher.class) == null;
 	}
 
 	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
 	public void ignoredContextEnrichersShouldNotBeFound() {
-		assert findContextEnricherOfType(new DefaultConfiguration(), IgnoredContextEnricher.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findContextEnricherOfType(configuration, IgnoredContextEnricher.class) == null;
 	}
 
 	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
 	public void contextEnrichersInsideContextEnricherPackagesShouldBeFound() {
-		assert findContextEnricherOfType(new DefaultConfiguration(), TestContextEnricher.class) != null;
+		configuration = new DefaultConfiguration();
+
+		assert findContextEnricherOfType(configuration, TestContextEnricher.class) != null;
 	}
 
 	@Test(dependsOnMethods = "contextEnrichersInsideContextEnricherPackagesShouldBeFound")
 	public void configurationShouldInitialiseContextEnrichers() {
+		configuration = new DefaultConfiguration();
+
+		assert findContextEnricherOfType(configuration, TestContextEnricher.class).getConfiguration() == configuration;
+	}
+
+	@Test(dependsOnMethods = "configurationShouldInitialiseContextEnrichers")
+	public void configurationShouldDisableContextEnrichersWhenItIsClosed() {
 		Configuration configuration = new DefaultConfiguration();
 
 		TestContextEnricher contextEnricher = findContextEnricherOfType(configuration, TestContextEnricher.class);
-		assert contextEnricher.getConfiguration() == configuration;
+
+		configuration.close();
+
+		assert contextEnricher.getConfiguration() == null;
 	}
 
 	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
@@ -526,7 +738,9 @@ public class DefaultConfigurationTest {
 		parameters.addParameter(CONTEXT_ENRICHER_PACKAGES,
 			ReflectionUtilities.getPackageName(ExternalContextEnricher.class));
 
-		assert findContextEnricherOfType(new DefaultConfiguration(parameters), ExternalContextEnricher.class) != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findContextEnricherOfType(configuration, ExternalContextEnricher.class) != null;
 	}
 
 	@Test(dependsOnMethods = "contextEnrichersShouldNotBeNull")
@@ -535,11 +749,13 @@ public class DefaultConfigurationTest {
 		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES,
 			ReflectionUtilities.getPackageName(ExternalContextEnricher.class));
 
-		assert findContextEnricherOfType(new DefaultConfiguration(parameters), ExternalContextEnricher.class) != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findContextEnricherOfType(configuration, ExternalContextEnricher.class) != null;
 	}
 
 	private static <T extends ContextEnricher> T findContextEnricherOfType(
-		Configuration configuration, Class<T> contextEnricherType) {
+			Configuration configuration, Class<T> contextEnricherType) {
 		Iterator<ContextEnricher> contextEnrichers = configuration.getContextEnrichers().iterator();
 		T contextEnricherOfRequestedType = null;
 
@@ -556,11 +772,15 @@ public class DefaultConfigurationTest {
 	}
 
 	public void expressionFactoriesShouldNotBeNull() {
-		assert new DefaultConfiguration().getExpressionFactories() != null;
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getExpressionFactories() != null;
 	}
 
 	public static class ExternalExpressionFactory implements ExpressionFactory {
 		public void initialise(Configuration configuration) {}
+
+		public void disable() {}
 
 		public List<ExpressionOccurrence> findExpressions(String text) {
 			return Collections.emptyList();
@@ -573,26 +793,44 @@ public class DefaultConfigurationTest {
 
 	@Test(dependsOnMethods = "expressionFactoriesShouldNotBeNull")
 	public void expressionFactoriesOutsideExpressionFactoryPackagesShouldNotBeFound() {
-		assert findExpressionFactoryOfType(new DefaultConfiguration(), ExternalExpressionFactory.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findExpressionFactoryOfType(configuration, ExternalExpressionFactory.class) == null;
 	}
 
 	@Test(dependsOnMethods = "expressionFactoriesShouldNotBeNull")
 	public void ignoredExpressionFactoriesShouldNotBeFound() {
-		assert findExpressionFactoryOfType(new DefaultConfiguration(), IgnoredExpressionFactory.class) == null;
+		configuration = new DefaultConfiguration();
+
+		assert findExpressionFactoryOfType(configuration, IgnoredExpressionFactory.class) == null;
 	}
 
 	@Test(dependsOnMethods = "expressionFactoriesShouldNotBeNull")
 	public void expressionFactoriesInsideExpressionFactoryPackagesShouldBeFound() {
-		assert findExpressionFactoryOfType(new DefaultConfiguration(), TestExpressionFactory.class) != null;
+		configuration = new DefaultConfiguration();
+
+		assert findExpressionFactoryOfType(configuration, TestExpressionFactory.class) != null;
 	}
 
 	@Test(dependsOnMethods = "expressionFactoriesInsideExpressionFactoryPackagesShouldBeFound")
 	public void configurationShouldInitialiseExpressionFactories() {
-		DefaultConfiguration configuration = new DefaultConfiguration();
+		configuration = new DefaultConfiguration();
 
 		TestExpressionFactory expressionFactory =
 			findExpressionFactoryOfType(configuration, TestExpressionFactory.class);
 		assert expressionFactory.getConfiguration() == configuration;
+	}
+
+	@Test(dependsOnMethods = "configurationShouldInitialiseExpressionFactories")
+	public void configurationShouldDisableExpressionFactoriesWhenItIsClosed() {
+		Configuration configuration = new DefaultConfiguration();
+
+		TestExpressionFactory expressionFactory =
+			findExpressionFactoryOfType(configuration, TestExpressionFactory.class);
+
+		configuration.close();
+
+		assert expressionFactory.getConfiguration() == null;
 	}
 
 	@Test(dependsOnMethods = "expressionFactoriesShouldNotBeNull")
@@ -600,9 +838,9 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(EXPRESSION_FACTORY_PACKAGES, getPackageName(ExternalExpressionFactory.class));
 
-		ExpressionFactory expressionFactory =
-			findExpressionFactoryOfType(new DefaultConfiguration(parameters), ExternalExpressionFactory.class);
-		assert expressionFactory != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findExpressionFactoryOfType(configuration, ExternalExpressionFactory.class) != null;
 	}
 
 	@Test(dependsOnMethods = "expressionFactoriesShouldNotBeNull")
@@ -610,9 +848,9 @@ public class DefaultConfigurationTest {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(CONFIGURATION_ELEMENT_PACKAGES, getPackageName(ExternalExpressionFactory.class));
 
-		ExpressionFactory expressionFactory =
-			findExpressionFactoryOfType(new DefaultConfiguration(parameters), ExternalExpressionFactory.class);
-		assert expressionFactory != null;
+		configuration = new DefaultConfiguration(parameters);
+
+		assert findExpressionFactoryOfType(configuration, ExternalExpressionFactory.class) != null;
 	}
 
 	private static <T extends ExpressionFactory> T findExpressionFactoryOfType(
@@ -630,5 +868,20 @@ public class DefaultConfigurationTest {
 		}
 
 		return expressionFactoryOfRequestedType;
+	}
+
+	@Test(expectedExceptions = ConfigurationException.class)
+	private void closingAlreadyClosedConfigurationShouldCauseException() {
+		Configuration configuration = new DefaultConfiguration();
+		configuration.close();
+		configuration.close();
+	}
+
+	@Test(expectedExceptions = ConfigurationException.class)
+	private void tryingToObtainConfigurationElementAfterClosingConfigurationShouldCauseException() {
+		Configuration configuration = new DefaultConfiguration();
+		configuration.close();
+
+		configuration.getCache();
 	}
 }

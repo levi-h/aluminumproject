@@ -50,6 +50,13 @@ public class TestLibrary extends AbstractLibrary {
 		this.configuration = configuration;
 	}
 
+	@Override
+	public void disable() {
+		super.disable();
+
+		configuration = null;
+	}
+
 	/**
 	 * Returns the injected configuration.
 	 *

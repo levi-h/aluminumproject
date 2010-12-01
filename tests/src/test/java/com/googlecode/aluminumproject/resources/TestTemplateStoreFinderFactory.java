@@ -35,6 +35,10 @@ public class TestTemplateStoreFinderFactory implements TemplateStoreFinderFactor
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this template store finder factory was initialised with.
 	 *

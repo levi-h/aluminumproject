@@ -211,4 +211,6 @@ public class TestConfiguration implements Configuration {
 	public void addExpressionFactory(ExpressionFactory expressionFactory) {
 		expressionFactories.add(expressionFactory);
 	}
+
+	public void close() {}
 }

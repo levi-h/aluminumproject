@@ -75,6 +75,17 @@ class FunctionDelegateFactory {
 	}
 
 	/**
+	 * Removes a configuration for which a function class has been created.
+	 *
+	 * @param configuration the configuration to remove
+	 */
+	public static void removeConfiguration(Configuration configuration) {
+		delegateRegistries.remove(configuration);
+
+		functionContexts.get().clear();
+	}
+
+	/**
 	 * Finds a delegate to a function.
 	 *
 	 * @param configuration the configuration to use

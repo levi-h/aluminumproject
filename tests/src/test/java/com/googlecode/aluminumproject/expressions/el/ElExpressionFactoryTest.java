@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.expressions.el;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
@@ -29,19 +30,6 @@ import org.testng.annotations.Test;
 @SuppressWarnings("all")
 @Test(groups = {"expressions", "expressions-el", "fast"})
 public class ElExpressionFactoryTest {
-	public void defaultConfigurationShouldFindElExpressionFactory() {
-		List<ExpressionFactory> expressionFactories = new DefaultConfiguration().getExpressionFactories();
-		assert expressionFactories != null;
-
-		int i = 0;
-
-		while ((i < expressionFactories.size()) && !(expressionFactories.get(i) instanceof ElExpressionFactory)) {
-			i++;
-		}
-
-		assert i < expressionFactories.size();
-	}
-
 	public void expressionStartingWithDollarSignShouldBeRecognised() {
 		List<ExpressionOccurrence> occurrences = createExpressionFactory().findExpressions("${a}");
 		assert occurrences != null;
@@ -107,7 +95,7 @@ public class ElExpressionFactoryTest {
 
 	private ExpressionFactory createExpressionFactory(ConfigurationParameters parameters) {
 		ExpressionFactory expressionFactory = new ElExpressionFactory();
-		expressionFactory.initialise(new DefaultConfiguration(parameters));
+		expressionFactory.initialise(new TestConfiguration(parameters));
 		return expressionFactory;
 	}
 }

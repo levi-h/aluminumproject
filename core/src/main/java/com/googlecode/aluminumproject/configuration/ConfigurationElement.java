@@ -16,16 +16,26 @@
 package com.googlecode.aluminumproject.configuration;
 
 /**
- * A part of a {@link Configuration}.
+ * A part of a {@link Configuration configuration}.
+ * <p>
+ * The methods of configuration elements are not meant to be called by objects other than the configurations that
+ * contain them.
  *
  * @author levi_h
  */
 public interface ConfigurationElement {
 	/**
-	 * Initialises this configuration element. This method should be invoked by a {@link Configuration configuration}.
+	 * Initialises this configuration element.
 	 *
 	 * @param configuration the configuration that this configuration element is part of
 	 * @throws ConfigurationException when this configuration element can't be initialised
 	 */
 	void initialise(Configuration configuration) throws ConfigurationException;
+
+	/**
+	 * Disables this configuration element.
+	 *
+	 * @throws ConfigurationException when this configuration element can't be disabled
+	 */
+	void disable() throws ConfigurationException;
 }

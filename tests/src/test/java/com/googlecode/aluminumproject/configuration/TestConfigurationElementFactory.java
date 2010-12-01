@@ -32,6 +32,10 @@ public class TestConfigurationElementFactory implements ConfigurationElementFact
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this configuration element factory was initialised with.
 	 *

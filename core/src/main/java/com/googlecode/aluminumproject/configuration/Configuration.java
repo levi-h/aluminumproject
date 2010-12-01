@@ -34,7 +34,12 @@ import java.util.Map;
  * Contains all dynamic parts of the {@link Aluminum template engine}.
  * <p>
  * A configuration consists of {@link ConfigurationElement configuration elements}. Upon creation, a configuration is
- * required to {@link ConfigurationElement#initialise(Configuration) initialise} the elements it consists of.
+ * required to {@link ConfigurationElement#initialise(Configuration) initialise} the elements it consists of. Similarly,
+ * when a configuration is {@link #close() closed}, it should {@link ConfigurationElement#disable() disable} its
+ * elements.
+ * <p>
+ * Trying to use a configuration or its configuration elements after it has been closed could result in strange
+ * behaviour.
  *
  * @author levi_h
  */
@@ -43,83 +48,103 @@ public interface Configuration {
 	 * Returns the parameters that this configuration was created with.
 	 *
 	 * @return this configuration's parameters
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	ConfigurationParameters getParameters();
+	ConfigurationParameters getParameters() throws ConfigurationException;
 
 	/**
 	 * Returns the configuration element factory.
 	 *
 	 * @return the configuration element factory to use
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	ConfigurationElementFactory getConfigurationElementFactory();
+	ConfigurationElementFactory getConfigurationElementFactory() throws ConfigurationException;
 
 	/**
 	 * Returns the converter registry.
 	 *
 	 * @return the converter registry to use
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	ConverterRegistry getConverterRegistry();
+	ConverterRegistry getConverterRegistry() throws ConfigurationException;
 
 	/**
 	 * Returns all libraries.
 	 *
 	 * @return a list with all configured libraries
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	List<Library> getLibraries();
+	List<Library> getLibraries() throws ConfigurationException;
 
 	/**
 	 * Returns the template element factory.
 	 *
 	 * @return the template element factory to use
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	TemplateElementFactory getTemplateElementFactory();
+	TemplateElementFactory getTemplateElementFactory() throws ConfigurationException;
 
 	/**
 	 * Returns the template finder factory.
 	 *
 	 * @return the template finder factory to use
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	TemplateFinderFactory getTemplateFinderFactory();
+	TemplateFinderFactory getTemplateFinderFactory() throws ConfigurationException;
 
 	/**
 	 * Returns all parsers that can be used to produce a template.
 	 *
 	 * @return a map with all of the configured parsers, keyed by their names
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	Map<String, Parser> getParsers();
+	Map<String, Parser> getParsers() throws ConfigurationException;
 
 	/**
 	 * Returns the template store finder factory.
 	 *
 	 * @return the template store finder factory to use
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	TemplateStoreFinderFactory getTemplateStoreFinderFactory();
+	TemplateStoreFinderFactory getTemplateStoreFinderFactory() throws ConfigurationException;
 
 	/**
 	 * Returns all serialisers that can be used to serialise a template.
 	 *
 	 * @return a map with all of the configured serialisers, with their names as keys
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	Map<String, Serialiser> getSerialisers();
+	Map<String, Serialiser> getSerialisers() throws ConfigurationException;
 
  	/**
 	 * Returns all context enrichers.
 	 *
 	 * @return a list with all of the configured context enrichers
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	List<ContextEnricher> getContextEnrichers();
+	List<ContextEnricher> getContextEnrichers() throws ConfigurationException;
 
 	/**
 	 * Returns all expression factories that will be used to recognise and create expressions.
 	 *
 	 * @return a list with all of the expression factories that can be used
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	List<ExpressionFactory> getExpressionFactories();
+	List<ExpressionFactory> getExpressionFactories() throws ConfigurationException;
 
 	/**
 	 * Returns the cache. A template cache is optional.
 	 *
 	 * @return the cache to use
+	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	Cache getCache();
+	Cache getCache() throws ConfigurationException;
+
+	/**
+	 * Closes this configuration.
+	 *
+	 * @throws ConfigurationException when something goes wrong while closing this configuration or when it already has
+	 *                                been closed
+	 */
+	void close() throws ConfigurationException;
 }

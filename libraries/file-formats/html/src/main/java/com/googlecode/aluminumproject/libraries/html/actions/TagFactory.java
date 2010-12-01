@@ -68,6 +68,8 @@ public class TagFactory implements ActionFactory {
 		information = new ActionInformation(name, parameterInformation, false);
 	}
 
+	public void disable() {}
+
 	public Library getLibrary() {
 		return library;
 	}

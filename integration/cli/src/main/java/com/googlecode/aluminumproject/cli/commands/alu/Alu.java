@@ -131,6 +131,14 @@ public class Alu extends Command {
 				errorStream.printf("The template '%s' can't be processed (%s).%n", template, exception.getMessage());
 
 				handleThrowable(exception, errorStream);
+			} finally {
+				try {
+					aluminum.stop();
+				} catch (AluminumException exception) {
+					errorStream.printf("The template engine can't be stopped.%n");
+
+					handleThrowable(exception, errorStream);
+				}
 			}
 		} else {
 			displayHelp(outputStream, errorStream);

@@ -175,6 +175,8 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
+	public void disable() {}
+
 	public void beforeTemplate(Context context) throws ContextException {
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT,
 			new GlobalisationContext(localeProvider, resourceBundleProvider, dateFormatProvider, numberFormatProvider));

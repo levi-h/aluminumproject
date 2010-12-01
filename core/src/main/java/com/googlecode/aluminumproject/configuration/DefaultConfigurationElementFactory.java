@@ -53,12 +53,12 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 	 * Creates a default configuration element factory.
 	 */
 	public DefaultConfigurationElementFactory() {
+		customisers = new LinkedList<ConfigurationElementCustomiser>();
+
 		logger = Logger.get(getClass());
 	}
 
 	public void initialise(Configuration configuration) throws ConfigurationException {
-		customisers = new LinkedList<ConfigurationElementCustomiser>();
-
 		Set<String> customiserPackages = new HashSet<String>();
 
 		ConfigurationParameters parameters = configuration.getParameters();
@@ -97,6 +97,10 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 		for (ConfigurationElementCustomiser customiser: customisers) {
 			customiser.initialise(configuration);
 		}
+	}
+
+	public void disable() {
+		customisers.clear();
 	}
 
 	/**

@@ -39,6 +39,10 @@ public class TestTemplateElementFactory implements TemplateElementFactory {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this template element factory was initialised with.
 	 *

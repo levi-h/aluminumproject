@@ -35,6 +35,10 @@ public class TestConfigurationElementCustomiser implements ConfigurationElementC
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this configuration element customiser was initialised with.
 	 *

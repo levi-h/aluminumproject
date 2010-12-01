@@ -79,6 +79,10 @@ public class ElExpressionFactory implements ExpressionFactory {
 		FunctionDelegateFactory.addConfiguration(configuration);
 	}
 
+	public void disable() {
+		FunctionDelegateFactory.removeConfiguration(configuration);
+	}
+
 	public List<ExpressionOccurrence> findExpressions(String text) {
 		List<ExpressionOccurrence> occurrences = new ArrayList<ExpressionOccurrence>();
 

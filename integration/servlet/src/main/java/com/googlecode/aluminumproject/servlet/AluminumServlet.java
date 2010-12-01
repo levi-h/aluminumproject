@@ -236,5 +236,12 @@ public class AluminumServlet extends HttpServlet {
 		return new ResponseWriter(getResponse());
 	}
 
-	private final static long serialVersionUID = 20090726L;
+	@Override
+	public void destroy() {
+		logger.debug("destroying aluminum servlet (", getServletConfig().getServletName(), ")");
+
+		aluminum.stop();
+	}
+
+	private final static long serialVersionUID = 20101201L;
 }

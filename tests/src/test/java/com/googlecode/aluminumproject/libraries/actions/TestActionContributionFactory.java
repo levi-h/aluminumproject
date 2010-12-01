@@ -41,6 +41,10 @@ public class TestActionContributionFactory implements ActionContributionFactory 
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this action contribution factory was initialised with.
 	 *

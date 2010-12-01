@@ -59,4 +59,13 @@ public class MemoryCacheTest {
 	public void findingUnknownTemplateShouldResultInNull() {
 		assert cache.findTemplate(new Cache.Key("unknown", null)) == null;
 	}
+
+	public void disablingCacheShouldRemoveStoredTemplates() {
+		Cache.Key key = new Cache.Key("test", null);
+
+		cache.storeTemplate(key, new TemplateBuilder().build());
+		cache.disable();
+
+		assert cache.findTemplate(key) == null;
+	}
 }

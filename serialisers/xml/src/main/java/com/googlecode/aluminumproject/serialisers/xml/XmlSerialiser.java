@@ -74,6 +74,8 @@ public class XmlSerialiser implements Serialiser {
 	 * Creates an XML serialiser.
 	 */
 	public XmlSerialiser() {
+		templateElementSerialisers = new HashMap<Class<? extends TemplateElement>, TemplateElementSerialiser<?>>();
+
 		logger = Logger.get(getClass());
 	}
 
@@ -81,8 +83,6 @@ public class XmlSerialiser implements Serialiser {
 		this.configuration = configuration;
 
 		createElementNameTranslator();
-
-		templateElementSerialisers = new HashMap<Class<? extends TemplateElement>, TemplateElementSerialiser<?>>();
 
 		logger.debug("adding template element serialisers");
 
@@ -127,6 +127,10 @@ public class XmlSerialiser implements Serialiser {
 			" for template element type ", templateElementType.getName());
 
 		templateElementSerialisers.put(templateElementType, templateElementSerialiser);
+	}
+
+	public void disable() {
+		templateElementSerialisers.clear();
 	}
 
 	public void serialiseTemplate(Template template, String name) throws SerialisationException {

@@ -37,6 +37,10 @@ public class TestConverterRegistry implements ConverterRegistry {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this converter registry was initialised with.
 	 *
