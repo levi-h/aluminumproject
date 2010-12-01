@@ -26,6 +26,7 @@ import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 @SuppressWarnings("all")
@@ -53,6 +54,11 @@ public abstract class LibraryTest {
 	}
 
 	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {}
+
+	@AfterMethod
+	public final void stopTemplateEngine() {
+		engine.stop();
+	}
 
 	protected final String processTemplate(String name) {
 		return processTemplate(name, new DefaultContext());

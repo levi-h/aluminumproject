@@ -54,7 +54,9 @@ public class FileSystemTemplateFinderFactory implements TemplateFinderFactory {
 		}
 	}
 
-	public ResourceFinder createTemplateFinder() throws ResourceException {
+	public void disable() {}
+
+	public ResourceFinder createTemplateFinder() {
 		FileSystemResourceFinder[] resourceFinders = new FileSystemResourceFinder[templateDirectories.length];
 
 		for (int i = 0; i < templateDirectories.length; i++) {

@@ -73,13 +73,13 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 	 * Creates a default converter registry.
 	 */
 	public DefaultConverterRegistry() {
+		converters = new HashSet<Converter<?>>();
+
 		logger = Logger.get(getClass());
 	}
 
 	public void initialise(Configuration configuration) throws ConfigurationException {
 		this.configuration = configuration;
-
-		converters = new HashSet<Converter<?>>();
 
 		injector = new Injector();
 		injector.addValueProvider(new Injector.ClassBasedValueProvider(configuration));
@@ -124,6 +124,10 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		for (Class<?> converterClass: converterClasses) {
 			registerConverter(configurationElementFactory.instantiate(converterClass.getName(), Converter.class));
 		}
+	}
+
+	public void disable() {
+		converters.clear();
 	}
 
 	public void registerConverter(Converter<?> converter) throws ConverterException {

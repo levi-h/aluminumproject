@@ -53,7 +53,9 @@ public class FileSystemTemplateStoreFinderFactory implements TemplateStoreFinder
 		}
 	}
 
-	public ResourceStoreFinder createTemplateStoreFinder() throws ResourceException {
+	public void disable() {}
+
+	public ResourceStoreFinder createTemplateStoreFinder() {
 		return new FileSystemResourceStoreFinder(new File(directory));
 	}
 

@@ -135,6 +135,8 @@ public class DefaultConfiguration implements Configuration {
 	private List<ContextEnricher> contextEnrichers;
 	private List<ExpressionFactory> expressionFactories;
 
+	private boolean open;
+
 	private final Logger logger;
 
 	/**
@@ -154,6 +156,8 @@ public class DefaultConfiguration implements Configuration {
 	 */
 	public DefaultConfiguration(ConfigurationParameters parameters) throws ConfigurationException {
 		this.parameters = parameters;
+
+		open = true;
 
 		logger = Logger.get(getClass());
 
@@ -444,52 +448,118 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	public ConfigurationParameters getParameters() {
+	public ConfigurationParameters getParameters() throws ConfigurationException {
+		checkOpen();
+
 		return parameters;
 	}
 
-	public ConfigurationElementFactory getConfigurationElementFactory() {
+	public ConfigurationElementFactory getConfigurationElementFactory() throws ConfigurationException {
+		checkOpen();
+
 		return configurationElementFactory;
 	}
 
-	public ConverterRegistry getConverterRegistry() {
+	public ConverterRegistry getConverterRegistry() throws ConfigurationException {
+		checkOpen();
+
 		return converterRegistry;
 	}
 
-	public TemplateElementFactory getTemplateElementFactory() {
+	public TemplateElementFactory getTemplateElementFactory() throws ConfigurationException {
+		checkOpen();
+
 		return templateElementFactory;
 	}
 
-	public TemplateFinderFactory getTemplateFinderFactory() {
+	public TemplateFinderFactory getTemplateFinderFactory() throws ConfigurationException {
+		checkOpen();
+
 		return templateFinderFactory;
 	}
 
-	public TemplateStoreFinderFactory getTemplateStoreFinderFactory() {
+	public TemplateStoreFinderFactory getTemplateStoreFinderFactory() throws ConfigurationException {
+		checkOpen();
+
 		return templateStoreFinderFactory;
 	}
 
-	public Cache getCache() {
+	public Cache getCache() throws ConfigurationException {
+		checkOpen();
+
 		return cache;
 	}
 
-	public List<Library> getLibraries() {
+	public List<Library> getLibraries() throws ConfigurationException {
+		checkOpen();
+
 		return Collections.unmodifiableList(libraries);
 	}
 
-	public Map<String, Parser> getParsers() {
+	public Map<String, Parser> getParsers() throws ConfigurationException {
+		checkOpen();
+
 		return Collections.unmodifiableMap(parsers);
 	}
 
-	public Map<String, Serialiser> getSerialisers() {
+	public Map<String, Serialiser> getSerialisers() throws ConfigurationException {
+		checkOpen();
+
 		return Collections.unmodifiableMap(serialisers);
 	}
 
-	public List<ContextEnricher> getContextEnrichers() {
+	public List<ContextEnricher> getContextEnrichers() throws ConfigurationException {
+		checkOpen();
+
 		return Collections.unmodifiableList(contextEnrichers);
 	}
 
-	public List<ExpressionFactory> getExpressionFactories() {
+	public List<ExpressionFactory> getExpressionFactories() throws ConfigurationException {
+		checkOpen();
+
 		return Collections.unmodifiableList(expressionFactories);
+	}
+
+	public void close() throws ConfigurationException {
+		checkOpen();
+
+		configurationElementFactory.disable();
+		converterRegistry.disable();
+		templateElementFactory.disable();
+		templateFinderFactory.disable();
+		templateStoreFinderFactory.disable();
+
+		if (cache != null) {
+			cache.disable();
+		}
+
+		for (Library library: libraries) {
+			library.disable();
+		}
+
+		for (Parser parser: parsers.values()) {
+			parser.disable();
+		}
+
+		for (Serialiser serialiser: serialisers.values()) {
+			serialiser.disable();
+		}
+
+		for (ContextEnricher contextEnricher: contextEnrichers) {
+			contextEnricher.disable();
+		}
+
+		for (ExpressionFactory expressionFactory: expressionFactories) {
+			expressionFactory.disable();
+		}
+
+		open = false;
+	}
+
+	private void checkOpen() throws ConfigurationException {
+		if (!open) {
+			throw new ConfigurationException("the configuration can't be used - it has been closed");
+		}
 	}
 
 	/**

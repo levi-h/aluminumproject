@@ -137,6 +137,8 @@ public class AluScriptParser implements Parser {
 		}
 	}
 
+	public void disable() {}
+
 	public Template parseTemplate(String name) throws ParseException {
 		String templateContents = readUrl(getTemplateUrl(name));
 		logger.debug("read template '", name, "': ", templateContents);

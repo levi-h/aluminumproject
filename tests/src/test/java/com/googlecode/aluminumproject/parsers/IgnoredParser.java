@@ -33,6 +33,8 @@ public class IgnoredParser implements Parser {
 
 	public void initialise(Configuration configuration) {}
 
+	public void disable() {}
+
 	public Template parseTemplate(String name) throws ParseException {
 		return null;
 	}

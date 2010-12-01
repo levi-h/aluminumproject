@@ -72,6 +72,8 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	 * Creates a default template element factory.
 	 */
 	public DefaultTemplateElementFactory() {
+		actionInterceptors = new LinkedList<ActionInterceptor>();
+
 		logger = Logger.get(getClass());
 	}
 
@@ -82,8 +84,6 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	}
 
 	private void createActionInterceptors() throws ConfigurationException {
-		actionInterceptors = new LinkedList<ActionInterceptor>();
-
 		Set<String> actionInterceptorPackages = new HashSet<String>();
 
 		ConfigurationParameters parameters = configuration.getParameters();
@@ -135,6 +135,10 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	 */
 	protected List<ActionInterceptor> getActionInterceptors() {
 		return actionInterceptors;
+	}
+
+	public void disable() {
+		actionInterceptors.clear();
 	}
 
 	public ActionElement createActionElement(ActionDescriptor actionDescriptor,

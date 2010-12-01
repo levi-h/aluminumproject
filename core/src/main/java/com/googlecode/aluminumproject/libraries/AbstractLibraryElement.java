@@ -59,6 +59,8 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 	 */
 	protected void addValueProviders(Injector injector) {}
 
+	public void disable() {}
+
 	/**
 	 * Returns the configuration that this library element was initialised with.
 	 *

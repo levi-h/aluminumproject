@@ -38,6 +38,10 @@ public class TestExpressionFactory implements ExpressionFactory {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this expression factory was initialised with.
 	 *

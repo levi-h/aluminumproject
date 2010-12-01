@@ -35,6 +35,10 @@ public class TestTemplateFinderFactory implements TemplateFinderFactory {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this template finder factory was initialised with.
 	 *

@@ -45,6 +45,10 @@ public class TestActionFactory implements ActionFactory {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this action factory was initialised with.
 	 *

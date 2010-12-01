@@ -49,7 +49,9 @@ public class ClassPathTemplateFinderFactory implements TemplateFinderFactory {
 		}
 	}
 
-	public ResourceFinder createTemplateFinder() throws ResourceException {
+	public void disable() {}
+
+	public ResourceFinder createTemplateFinder() {
 		return new ClassPathResourceFinder(templatePath);
 	}
 

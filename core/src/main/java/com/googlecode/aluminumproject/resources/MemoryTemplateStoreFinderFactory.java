@@ -44,7 +44,9 @@ public class MemoryTemplateStoreFinderFactory implements TemplateStoreFinderFact
 		templateStoreFinder = new MemoryResourceStoreFinder();
 	}
 
-	public ResourceStoreFinder createTemplateStoreFinder() throws ResourceException {
+	public void disable() {}
+
+	public ResourceStoreFinder createTemplateStoreFinder() {
 		return templateStoreFinder;
 	}
 }

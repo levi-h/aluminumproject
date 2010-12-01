@@ -35,6 +35,10 @@ public class TestSerialiser implements Serialiser {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this serialiser was initialised with.
 	 *

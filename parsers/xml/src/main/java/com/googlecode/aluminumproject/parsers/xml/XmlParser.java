@@ -93,6 +93,8 @@ public class XmlParser implements Parser {
 			configurationElementFactory.instantiate(templateNameTranslatorClassName, TemplateNameTranslator.class);
 	}
 
+	public void disable() {}
+
 	public Template parseTemplate(String name) throws ParseException {
 		XMLReader parser = createParser();
 		logger.debug("created XML parser");

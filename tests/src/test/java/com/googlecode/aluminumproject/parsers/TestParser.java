@@ -35,6 +35,10 @@ public class TestParser implements Parser {
 		this.configuration = configuration;
 	}
 
+	public void disable() {
+		configuration = null;
+	}
+
 	/**
 	 * Returns the configuration that this parser was initialised with.
 	 *

@@ -33,5 +33,7 @@ public class IgnoredSerialiser implements Serialiser {
 
 	public void initialise(Configuration configuration) {}
 
+	public void disable() {}
+
 	public void serialiseTemplate(Template template, String name) {}
 }

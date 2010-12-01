@@ -15,7 +15,8 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
-import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
+import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.expressions.ExpressionException;
@@ -38,7 +39,7 @@ public class ElExpressionTest {
 	@BeforeMethod
 	public void createExpressionFactoryAndContext() {
 		expressionFactory = new ElExpressionFactory();
-		expressionFactory.initialise(new DefaultConfiguration());
+		expressionFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
 
 		context = new DefaultContext();
 		context.setVariable("number", 10);
