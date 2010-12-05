@@ -1,0 +1,75 @@
+/*
+ * Copyright 2009-2010 Levi Hoogenberg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.googlecode.aluminumproject.libraries.actions;
+
+import com.googlecode.aluminumproject.libraries.Library;
+
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Provides information about an {@link Action}.
+ *
+ * @author levi_h
+ */
+public class ActionInformation {
+	private String name;
+
+	private List<ActionParameterInformation> parameterInformation;
+	private boolean dynamicallyParameterisable;
+
+	/**
+	 * Creates action information.
+	 *
+	 * @param name the name of the action
+	 * @param parameterInformation information about the parameters of the action
+	 * @param dynamicallyParameterisable whether the action supports dynamic parameters or not
+	 */
+	public ActionInformation(String name,
+			List<ActionParameterInformation> parameterInformation, boolean dynamicallyParameterisable) {
+		this.name = name;
+
+		this.parameterInformation = parameterInformation;
+		this.dynamicallyParameterisable = dynamicallyParameterisable;
+	}
+
+	/**
+	 * Returns the name of the action. It should be unique across a {@link Library library}.
+	 *
+	 * @return the action's name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns information about the parameters that the action accepts.
+	 *
+	 * @return information that describes the parameters of the action
+	 */
+	public List<ActionParameterInformation> getParameterInformation() {
+		return Collections.unmodifiableList(parameterInformation);
+	}
+
+	/**
+	 * Returns whether the action supports dynamic parameters or not.
+	 *
+	 * @return {@code true} if the action supports dynamic parameters or {@code false} if it doesn't
+	 */
+	public boolean isDynamicallyParameterisable() {
+		return dynamicallyParameterisable;
+	}
+}

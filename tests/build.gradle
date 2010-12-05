@@ -1,0 +1,50 @@
+/*
+ * Copyright 2009-2010 Levi Hoogenberg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+dependencies {
+	rootProject.subprojects.each {subproject ->
+		if (subproject != project) {
+			compile project(":${subproject.name}")
+		}
+	}
+
+	testCompile group: 'org.testng', name: 'testng', version: '5.14'
+
+	testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
+	testCompile group: 'ch.qos.logback', name: 'logback-core', version: '0.9.24'
+	testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.24'
+
+	testRuntime group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '3.2'
+
+	testRuntime group: 'org.javassist', name: 'javassist', version: '3.13.0-GA'
+	testCompile group: 'juel', name: 'juel', version: '2.2.1'
+
+	testRuntime group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+}
+
+test {
+    useTestNG() {
+		scanForTestClasses = false
+
+		suiteName = 'aluminum'
+		testName = 'aluminum'
+	}
+
+	include '**/*.class'
+	exclude ''
+}
+
+jar.enabled = false
