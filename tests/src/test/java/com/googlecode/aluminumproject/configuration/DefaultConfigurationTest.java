@@ -348,7 +348,7 @@ public class DefaultConfigurationTest {
 		public void disable() {}
 
 		public LibraryInformation getInformation() {
-			return new LibraryInformation("http://aluminumproject.googlecode.com/external", "test");
+			return new LibraryInformation("http://aluminumproject.googlecode.com/external", "ext", "test");
 		}
 
 		public List<ActionFactory> getActionFactories() {

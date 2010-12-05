@@ -20,7 +20,8 @@ package com.googlecode.aluminumproject.libraries;
  * <p>
  * An important piece of information is the library URL, which, together with the library version, should be globally
  * unique. The preferred way of making sure that a library URL is unique is by choosing a host name that is owned by the
- * library creator.
+ * library creator. When a library is used in a template, its URL is abbreviated - the library information indicates
+ * which abbreviation is preferred.
  * <p>
  * Another library information aspect is whether or not the library supports dynamic library elements.
  *
@@ -28,6 +29,7 @@ package com.googlecode.aluminumproject.libraries;
  */
 public class LibraryInformation {
 	private String url;
+	private String preferredUrlAbbreviation;
 	private String version;
 
 	private boolean dynamicActionsSupported;
@@ -38,24 +40,28 @@ public class LibraryInformation {
 	 * Creates information for a library that does not support dynamic library elements.
 	 *
 	 * @param url the URL that uniquely identifies the library
+	 * @param preferredUrlAbbreviation the preferred abbreviation for the library URL
 	 * @param version the version of the library
 	 */
-	public LibraryInformation(String url, String version) {
-		this(url, version, false, false, false);
+	public LibraryInformation(String url, String preferredUrlAbbreviation, String version) {
+		this(url, preferredUrlAbbreviation, version, false, false, false);
 	}
 
 	/**
 	 * Creates library information.
 	 *
 	 * @param url the URL that uniquely identifies the library
+	 * @param preferredUrlAbbreviation the preferred library URL abbreviation
 	 * @param version the version of the library
 	 * @param dynamicActionsSupported whether or not the library supports dynamic actions
 	 * @param dynamicActionContributionsSupported whether or not the library supports dynamic action contributions
 	 * @param dynamicFunctionsSupported whether or not the library supports dynamic functions
 	 */
-	public LibraryInformation(String url, String version, boolean dynamicActionsSupported,
-			boolean dynamicActionContributionsSupported, boolean dynamicFunctionsSupported) {
+	public LibraryInformation(String url, String preferredUrlAbbreviation, String version,
+			boolean dynamicActionsSupported, boolean dynamicActionContributionsSupported,
+			boolean dynamicFunctionsSupported) {
 		this.url = url;
+		this.preferredUrlAbbreviation = preferredUrlAbbreviation;
 		this.version = version;
 
 		this.dynamicActionsSupported = dynamicActionsSupported;
@@ -64,12 +70,21 @@ public class LibraryInformation {
 	}
 
 	/**
-	 * Returns the URL of the library.
+	 * Returns the URL of this library.
 	 *
 	 * @return the library URL
 	 */
 	public String getUrl() {
 		return url;
+	}
+
+	/**
+	 * Returns the preferred abbreviation of the URL of this library.
+	 *
+	 * @return the library URL's preferred abbreviation
+	 */
+	public String getPreferredUrlAbbreviation() {
+		return preferredUrlAbbreviation;
 	}
 
 	/**

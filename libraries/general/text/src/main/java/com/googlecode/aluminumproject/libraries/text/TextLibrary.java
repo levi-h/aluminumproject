@@ -37,7 +37,7 @@ public class TextLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/text";
 		String version = EnvironmentUtilities.getVersion();
 
-		information = new LibraryInformation(url, version);
+		information = new LibraryInformation(url, "t", version);
 	}
 
 	public LibraryInformation getInformation() {

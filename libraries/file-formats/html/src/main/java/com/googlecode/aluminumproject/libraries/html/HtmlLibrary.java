@@ -55,7 +55,7 @@ public class HtmlLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/html";
 		String version = EnvironmentUtilities.getVersion();
 
-		information = new LibraryInformation(url, version);
+		information = new LibraryInformation(url, "h", version);
 
 		addTagFactories();
 	}

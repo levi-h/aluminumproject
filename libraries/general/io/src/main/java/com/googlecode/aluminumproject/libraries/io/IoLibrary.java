@@ -37,7 +37,7 @@ public class IoLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/io";
 		String version = EnvironmentUtilities.getVersion();
 
-		information = new LibraryInformation(url, version);
+		information = new LibraryInformation(url, "io", version);
 	}
 
 	public LibraryInformation getInformation() {

@@ -37,7 +37,7 @@ public class CoreLibrary extends AbstractLibrary {
 		String url = "http://aluminumproject.googlecode.com/core";
 		String version = EnvironmentUtilities.getVersion();
 
-		information = new LibraryInformation(url, version);
+		information = new LibraryInformation(url, "c", version);
 	}
 
 	public LibraryInformation getInformation() {

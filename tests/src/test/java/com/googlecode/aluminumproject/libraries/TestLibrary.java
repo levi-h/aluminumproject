@@ -38,7 +38,10 @@ public class TestLibrary extends AbstractLibrary {
 	public TestLibrary() {
 		super(ReflectionUtilities.getPackageName(TestLibrary.class));
 
-		information = new LibraryInformation("http://aluminumproject.googlecode.com/test", "test", false, false, true);
+		String url = "http://aluminumproject.googlecode.com/test";
+		String version = "test";
+
+		information = new LibraryInformation(url, version, version, false, false, true);
 	}
 
 	@Override
