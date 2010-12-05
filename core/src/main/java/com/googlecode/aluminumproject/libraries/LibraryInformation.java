@@ -32,9 +32,9 @@ public class LibraryInformation {
 	private String preferredUrlAbbreviation;
 	private String version;
 
-	private boolean dynamicActionsSupported;
-	private boolean dynamicActionContributionsSupported;
-	private boolean dynamicFunctionsSupported;
+	private boolean supportingDynamicActions;
+	private boolean supportingDynamicActionContributions;
+	private boolean supportingDynamicFunctions;
 
 	/**
 	 * Creates information for a library that does not support dynamic library elements.
@@ -53,20 +53,20 @@ public class LibraryInformation {
 	 * @param url the URL that uniquely identifies the library
 	 * @param preferredUrlAbbreviation the preferred library URL abbreviation
 	 * @param version the version of the library
-	 * @param dynamicActionsSupported whether or not the library supports dynamic actions
-	 * @param dynamicActionContributionsSupported whether or not the library supports dynamic action contributions
-	 * @param dynamicFunctionsSupported whether or not the library supports dynamic functions
+	 * @param supportingDynamicActions whether or not the library supports dynamic actions
+	 * @param supportingDynamicActionContributions whether or not the library supports dynamic action contributions
+	 * @param supportingDynamicFunctions whether or not the library supports dynamic functions
 	 */
 	public LibraryInformation(String url, String preferredUrlAbbreviation, String version,
-			boolean dynamicActionsSupported, boolean dynamicActionContributionsSupported,
-			boolean dynamicFunctionsSupported) {
+			boolean supportingDynamicActions, boolean supportingDynamicActionContributions,
+			boolean supportingDynamicFunctions) {
 		this.url = url;
 		this.preferredUrlAbbreviation = preferredUrlAbbreviation;
 		this.version = version;
 
-		this.dynamicActionsSupported = dynamicActionsSupported;
-		this.dynamicActionContributionsSupported = dynamicActionContributionsSupported;
-		this.dynamicFunctionsSupported = dynamicFunctionsSupported;
+		this.supportingDynamicActions = supportingDynamicActions;
+		this.supportingDynamicActionContributions = supportingDynamicActionContributions;
+		this.supportingDynamicFunctions = supportingDynamicFunctions;
 	}
 
 	/**
@@ -112,17 +112,17 @@ public class LibraryInformation {
 	 *
 	 * @return {@code true} if dynamic actions are supported, {@code false} otherwise
 	 */
-	public boolean supportsDynamicActions() {
-		return dynamicActionsSupported;
+	public boolean isSupportingDynamicActions() {
+		return supportingDynamicActions;
 	}
 
 	/**
-	 * Returns whether this library suppors dynamic action contributions or not.
+	 * Returns whether this library supports dynamic action contributions or not.
 	 *
 	 * @return {@code true} if dynamic action contributions are supported, {@code false} otherwise
 	 */
-	public boolean supportsDynamicActionContributions() {
-		return dynamicActionContributionsSupported;
+	public boolean isSupportingDynamicActionContributions() {
+		return supportingDynamicActionContributions;
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class LibraryInformation {
 	 *
 	 * @return {@code true} if dynamic functions are supported, {@code false} otherwise
 	 */
-	public boolean supportsDynamicFunctions() {
-		return dynamicFunctionsSupported;
+	public boolean isSupportingDynamicFunctions() {
+		return supportingDynamicFunctions;
 	}
 }

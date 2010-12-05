@@ -114,7 +114,7 @@ class FunctionDelegateFactory {
 			if (functionFactory == null) {
 				Library library = ConfigurationUtilities.findLibrary(configuration, libraryUrl);
 
-				if ((library != null) && library.getInformation().supportsDynamicFunctions()) {
+				if ((library != null) && library.getInformation().isSupportingDynamicFunctions()) {
 					try {
 						functionFactory = library.getDynamicFunctionFactory(functionName);
 					} catch (LibraryException exception) {
