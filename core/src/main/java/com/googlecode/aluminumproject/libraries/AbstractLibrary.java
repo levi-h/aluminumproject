@@ -249,7 +249,7 @@ public abstract class AbstractLibrary implements Library {
 	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
 		LibraryInformation information = getInformation();
 
-		if (information.supportsDynamicActions()) {
+		if (information.isSupportingDynamicActions()) {
 			throw new LibraryException("dynamic action factories can't be created by the abstract library");
 		} else {
 			throw new LibraryException("library '", information.getUrl(), "' does not support dynamic actions");
@@ -259,7 +259,7 @@ public abstract class AbstractLibrary implements Library {
 	public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
 		LibraryInformation information = getInformation();
 
-		if (information.supportsDynamicActionContributions()) {
+		if (information.isSupportingDynamicActionContributions()) {
 			throw new LibraryException(
 				"dynamic action contribution factories can't be created by the abstract library");
 		} else {
@@ -271,7 +271,7 @@ public abstract class AbstractLibrary implements Library {
 	public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
 		LibraryInformation information = getInformation();
 
-		if (information.supportsDynamicFunctions()) {
+		if (information.isSupportingDynamicFunctions()) {
 			throw new LibraryException("dynamic function factories can't be created by the abstract library");
 		} else {
 			throw new LibraryException("library '", information.getUrl(), "' does not support dynamic functions");

@@ -292,7 +292,7 @@ public class AbstractLibraryTest {
 		public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
 			ActionFactory dynamicActionFactory;
 
-			if (information.supportsDynamicActions()) {
+			if (information.isSupportingDynamicActions()) {
 				dynamicActionFactory = new TestActionFactory();
 				initialiseLibraryElement(dynamicActionFactory);
 			} else {
@@ -305,7 +305,7 @@ public class AbstractLibraryTest {
 		public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
 			ActionContributionFactory dynamicActionContributionFactory;
 
-			if (information.supportsDynamicActionContributions()) {
+			if (information.isSupportingDynamicActionContributions()) {
 				dynamicActionContributionFactory = new TestActionContributionFactory();
 				initialiseLibraryElement(dynamicActionContributionFactory);
 			} else {
@@ -318,7 +318,7 @@ public class AbstractLibraryTest {
 		public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
 			FunctionFactory dynamicFunctionFactory;
 
-			if (information.supportsDynamicFunctions()) {
+			if (information.isSupportingDynamicFunctions()) {
 				dynamicFunctionFactory = new TestFunctionFactory();
 				initialiseLibraryElement(dynamicFunctionFactory);
 			} else {

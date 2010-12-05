@@ -229,7 +229,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		if (actionFactory == null) {
 			LibraryInformation libraryInformation = library.getInformation();
 
-			if (libraryInformation.supportsDynamicActions()) {
+			if (libraryInformation.isSupportingDynamicActions()) {
 				try {
 					actionFactory = library.getDynamicActionFactory(name);
 				} catch (LibraryException exception) {
@@ -271,7 +271,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		if (actionContributionFactory == null) {
 			LibraryInformation libraryInformation = library.getInformation();
 
-			if (libraryInformation.supportsDynamicActionContributions()) {
+			if (libraryInformation.isSupportingDynamicActionContributions()) {
 				try {
 					actionContributionFactory = library.getDynamicActionContributionFactory(name);
 				} catch (LibraryException exception) {

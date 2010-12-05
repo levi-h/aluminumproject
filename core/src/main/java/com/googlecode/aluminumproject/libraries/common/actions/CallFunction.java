@@ -105,7 +105,7 @@ public class CallFunction extends AbstractAction {
 		if (functionFactory == null) {
 			LibraryInformation libraryInformation = library.getInformation();
 
-			if (libraryInformation.supportsDynamicFunctions()) {
+			if (libraryInformation.isSupportingDynamicFunctions()) {
 				try {
 					functionFactory = library.getDynamicFunctionFactory(name);
 				} catch (LibraryException exception) {
