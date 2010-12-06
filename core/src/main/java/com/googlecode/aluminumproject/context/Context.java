@@ -32,7 +32,8 @@ import java.util.Set;
  * #ALUMINUM_IMPLICIT_OBJECT} that is a {@link Map Map&lt;String, Object&gt;}. This implicit object shouldn't be used
  * directly, but is meant for internal use only.
  * <p>
- * When a context supports it, it's possible to create one or more child contexts.
+ * When a context supports it, it's possible to create one or more child contexts. The parent of such a child context
+ * can be {@link #getParent() obtained}.
  *
  * @author levi_h
  */
@@ -169,6 +170,13 @@ public interface Context {
 	 * @throws ContextException when there's no implicit object with the given name
 	 */
 	Object removeImplicitObject(String name) throws ContextException;
+
+	/**
+	 * Returns the parent of this context.
+	 *
+	 * @return this context's parent, {@code null} if this context does not have a parent
+	 */
+	Context getParent();
 
 	/**
 	 * Creates a child context of this context.

@@ -301,6 +301,10 @@ public class AbstractContextTest {
 		context.removeImplicitObject("nonexistent");
 	}
 
+	public void normalContextShouldNotHaveParent() {
+		assert context.getParent() == null;
+	}
+
 	public void subcontextShouldBeCreatable() {
 		assert context.createSubcontext() != null;
 	}
