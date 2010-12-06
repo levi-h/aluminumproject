@@ -83,6 +83,22 @@ public class GlobalisationContextProviderTest {
 	}
 
 	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
+	public void globalisationContextShouldBeInheritedFromParentContext() {
+		initialiseGlobalisationContextProvider();
+
+		Context subcontext = context.createSubcontext();
+
+		globalisationContextProvider.beforeTemplate(context);
+		globalisationContextProvider.beforeTemplate(subcontext);
+
+		assert subcontext.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+
+		Object globalisationContextOfContext = context.getImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		Object globalisationContextOfSubcontext = subcontext.getImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		assert globalisationContextOfSubcontext == globalisationContextOfContext;
+	}
+
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
 	public void defaultLocaleProviderShouldProvideDefaultLocale() {
 		initialiseGlobalisationContextProvider();
 
