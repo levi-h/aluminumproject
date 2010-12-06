@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT;
+
 import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
@@ -30,9 +32,13 @@ import java.util.Locale;
 
 /**
  * Enriches the context with a {@link GlobalisationContext globalisation context}. Before each template, a globalisation
- * context is created and made available as an implicit object. It can be obtained by using a {@link
+ * context is made available as an implicit object. It can be obtained by using a {@link
  * GlobalisationContext#from(Context) utility method}. After the template has been processed, the implicit object is
  * removed again.
+ * <p>
+ * When a context has a parent context that contains a globalisation context, it is inherited by the subcontext. In any
+ * other case, a new globalisation context is created. The following paragraphs describe the elements of a new
+ * globalisation context.
  * <p>
  * The type of the locale provider that the globalisation context is created with can be configured with the {@value
  * #LOCALE_PROVIDER_CLASS} parameter. By default, a {@link ConstantLocaleProvider constant locale provider} will be
@@ -178,12 +184,23 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	public void disable() {}
 
 	public void beforeTemplate(Context context) throws ContextException {
-		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT,
-			new GlobalisationContext(localeProvider, resourceBundleProvider, dateFormatProvider, numberFormatProvider));
+		Context parentContext = context.getParent();
+
+		Object globalisationContext;
+
+		if ((parentContext != null) &&
+				parentContext.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT)) {
+			globalisationContext = parentContext.getImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		} else {
+			globalisationContext = new GlobalisationContext(
+				localeProvider, resourceBundleProvider, dateFormatProvider, numberFormatProvider);
+		}
+
+		context.addImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT, globalisationContext);
 	}
 
 	public void afterTemplate(Context context) throws ContextException {
-		context.removeImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		context.removeImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
 	}
 
 	/**
