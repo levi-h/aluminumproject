@@ -92,15 +92,6 @@ public abstract class AbstractContext implements Context {
 		getScope(TEMPLATE_SCOPE);
 	}
 
-	/**
-	 * Returns the parent of this context.
-	 *
-	 * @return this subcontext's parent
-	 */
-	protected AbstractContext getParent() {
-		return parent;
-	}
-
 	public Set<String> getScopeNames() {
 		Set<String> scopeNames = new HashSet<String>();
 
@@ -266,6 +257,10 @@ public abstract class AbstractContext implements Context {
 		} else {
 			throw new ContextException("can't find implicit object with name '", name, "' to remove");
 		}
+	}
+
+	public AbstractContext getParent() {
+		return parent;
 	}
 
 	public AbstractContext createSubcontext() throws ContextException {
