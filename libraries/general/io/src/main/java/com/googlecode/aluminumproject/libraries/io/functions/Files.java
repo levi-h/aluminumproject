@@ -141,7 +141,8 @@ public class Files {
 	}
 
 	/**
-	 * Creates a file and returns it.
+	 * Creates a file and returns it. All of the directories that lead to the parent directory of the file are created
+	 * when they don't exist.
 	 *
 	 * @param directory the directory in which to create the file
 	 * @param name the name of the new file
@@ -154,6 +155,12 @@ public class Files {
 
 		if (file.exists()) {
 			throw new IllegalArgumentException(String.format("file '%s' already exists", file.getAbsolutePath()));
+		}
+
+		File parentFile = file.getParentFile();
+
+		if (!parentFile.exists()) {
+			parentFile.mkdirs();
 		}
 
 		file.createNewFile();

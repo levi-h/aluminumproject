@@ -104,6 +104,18 @@ public class FilesTest extends IoLibraryTest {
 		file.deleteOnExit();
 	}
 
+	public void creatingNewFileShouldCreateNonexistentIntermediateDirectories() throws IOException {
+		File temporaryDirectory = Directories.temporaryDirectory();
+		File directory = new File(temporaryDirectory, generateUniqueName(temporaryDirectory));
+
+		assert !directory.exists();
+
+		Files.newFile(directory, "intermediate/aluminum");
+
+		assert directory.exists();
+		assert new File(directory, "intermediate").exists();
+	}
+
 	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void creatingExistingFileShouldCauseException() throws IOException {
 		File file = createTemporaryFile();
