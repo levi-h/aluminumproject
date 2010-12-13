@@ -27,17 +27,20 @@ import java.lang.reflect.Type;
 public class ActionContributionInformation {
 	private String name;
 
+	private String parameterNameWhenAction;
 	private Type parameterType;
 
 	/**
 	 * Creates action contribution information.
 	 *
 	 * @param name the name of the action contribution
+	 * @param parameterNameWhenAction the name of the action contribution's parameter when it is used as action
 	 * @param parameterType the type of the action contribution's parameter
 	 */
-	public ActionContributionInformation(String name, Type parameterType) {
+	public ActionContributionInformation(String name, String parameterNameWhenAction, Type parameterType) {
 		this.name = name;
 
+		this.parameterNameWhenAction = parameterNameWhenAction;
 		this.parameterType = parameterType;
 	}
 
@@ -48,6 +51,16 @@ public class ActionContributionInformation {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Returns the name of the parameter when the action contribution is used as an action. If the action contribution
+	 * is not usable as action, this method returns {@code null}.
+	 *
+	 * @return the name of the action contribution's parameter when it is used as an action
+	 */
+	public String getParameterNameWhenAction() {
+		return parameterNameWhenAction;
 	}
 
 	/**
