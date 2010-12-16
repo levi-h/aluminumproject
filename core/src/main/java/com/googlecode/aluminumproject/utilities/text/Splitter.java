@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +35,7 @@ import java.util.regex.Pattern;
  * create a splitter with an escape character and put the escape character in front of each character that should be
  * escaped. Another way to prevent tokens to be identified as separators is quoting them. To do so, create a splitter
  * with one or more {@link QuotationCharacters quotation characters} and surround the token text with the quotation
- * characters. Quotation characters may be nested.
+ * characters.
  *
  * @author levi_h
  */
@@ -116,7 +115,7 @@ public class Splitter {
 			String text, StringBuilder textBuffer, StringBuilder matchTextBuffer) throws UtilityException {
 		boolean escaping = false;
 
-		Stack<QuotationCharacters> quotationCharactersStack = new Stack<QuotationCharacters>();
+		QuotationCharacters quotationCharacters = null;
 
 		for (char character: text.toCharArray()) {
 			if (escaping) {
@@ -126,34 +125,29 @@ public class Splitter {
 				escaping = false;
 			} else if (character == escapeCharacter) {
 				escaping = true;
-			} else if (!quotationCharactersStack.isEmpty() &&
-					(character == quotationCharactersStack.peek().closingCharacter)) {
-				if (quotationCharactersStack.pop().keep) {
+			} else if (quotationCharacters == null) {
+				quotationCharacters = findQuotationCharacters(character);
+
+				if ((quotationCharacters == null) || quotationCharacters.keep) {
+					textBuffer.append(character);
+					matchTextBuffer.append((quotationCharacters == null) ? character : '\0');
+				}
+			} else {
+				if ((character != quotationCharacters.closingCharacter) || quotationCharacters.keep) {
 					textBuffer.append(character);
 					matchTextBuffer.append('\0');
 				}
-			} else {
-				QuotationCharacters quotationCharacters = findQuotationCharacters(character);
 
-				if (quotationCharacters == null) {
-					textBuffer.append(character);
-					matchTextBuffer.append(quotationCharactersStack.isEmpty() ? character : '\0');
-				} else {
-					quotationCharactersStack.push(quotationCharacters);
-
-					if (quotationCharacters.keep) {
-						textBuffer.append(character);
-						matchTextBuffer.append('\0');
-					}
+				if (character == quotationCharacters.closingCharacter) {
+					quotationCharacters = null;
 				}
 			}
 		}
 
 		if (escaping) {
 			throw new UtilityException("escape character ", escapeCharacter, " does not escape anything");
-		} else if (!quotationCharactersStack.isEmpty()) {
-			throw new UtilityException("quotation character ", quotationCharactersStack.peek().openingCharacter,
-				" is not closed");
+		} else if (quotationCharacters != null) {
+			throw new UtilityException("quotation character ", quotationCharacters.openingCharacter, " is not closed");
 		}
 	}
 
