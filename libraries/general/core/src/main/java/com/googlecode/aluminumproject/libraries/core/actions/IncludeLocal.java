@@ -15,8 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
@@ -46,6 +49,8 @@ import java.util.Map;
 public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 	private @Required String name;
 
+	private @Injected Configuration configuration;
+
 	/**
 	 * Creates an <em>include local</em> action.
 	 */
@@ -68,7 +73,15 @@ public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 				subcontext.setVariable(variableName, variableValue);
 			}
 
+			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
+				contextEnricher.beforeTemplate(subcontext);
+			}
+
 			((ActionBody) body).invoke(subcontext, writer);
+
+			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
+				contextEnricher.afterTemplate(subcontext);
+			}
 		} else {
 			throw new ActionException("can't include '", name, "' (", body, ")");
 		}
