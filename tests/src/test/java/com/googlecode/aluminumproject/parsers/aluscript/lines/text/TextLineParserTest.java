@@ -55,7 +55,7 @@ public class TextLineParserTest {
 	}
 
 	public void parsingLineWithExpressionShouldAddExpressionElementToContext() {
-		lineParser.parseLine("[expression]", context);
+		lineParser.parseLine("<<expression>>", context);
 
 		List<TemplateElement> templateElements = context.getTemplateElements();
 		assert templateElements.size() == 1;
@@ -67,7 +67,7 @@ public class TextLineParserTest {
 		"parsingLineWithExpressionShouldAddExpressionElementToContext"
 	})
 	public void parsingLineWithTextAndExpressionShouldAddTemplateElementsForBothToContext() {
-		lineParser.parseLine("text[expression]", context);
+		lineParser.parseLine("text<<expression>>", context);
 
 		List<TemplateElement> templateElements = context.getTemplateElements();
 		assert templateElements.size() == 2;
@@ -79,7 +79,7 @@ public class TextLineParserTest {
 	public void automaticNewlinesSettingShouldAddTextElementContainingNewlineToContext() {
 		context.getSettings().setAutomaticNewlines(true);
 
-		lineParser.parseLine("text[expression]text", context);
+		lineParser.parseLine("text<<expression>>text", context);
 
 		List<TemplateElement> templateElements = context.getTemplateElements();
 		assert templateElements.size() == 4;

@@ -21,6 +21,7 @@ import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.expressions.TestExpressionFactory;
 import com.googlecode.aluminumproject.expressions.el.ElExpressionFactory;
+import com.googlecode.aluminumproject.libraries.actions.CompoundActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ConstantActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ExpressionActionParameter;
 
@@ -56,11 +57,11 @@ public class ParserUtilitiesTest {
 	}
 
 	public void expressionShouldResultInExpressionActionParameter() {
-		assert ParserUtilities.createParameter("[name]", configuration) instanceof ExpressionActionParameter;
+		assert ParserUtilities.createParameter("<<name>>", configuration) instanceof ExpressionActionParameter;
 	}
 
-	public void multipleExpressionsShouldResultInConstantActionParameter() {
-		assert ParserUtilities.createParameter("[name][name]", configuration) instanceof ConstantActionParameter;
+	public void multipleExpressionsShouldResultInCompoundActionParameter() {
+		assert ParserUtilities.createParameter("<<name>><<name>>", configuration) instanceof CompoundActionParameter;
 	}
 
 	public void textWithoutExpressionsShouldResultInSingleExpressionOccurrenceWithoutExpressionFactory() {
@@ -79,28 +80,28 @@ public class ParserUtilitiesTest {
 
 	public void textWithExpressionsShouldResultInExpressionOccurrencesWithExpressionFactories() {
 		SortedMap<ExpressionOccurrence, ExpressionFactory> expressionOccurrencesWithExpressionFactories =
-			ParserUtilities.getExpressionOccurrences("[name] = ${name}", configuration);
+			ParserUtilities.getExpressionOccurrences("<<name>> = ${name}", configuration);
 		assert expressionOccurrencesWithExpressionFactories != null;
 
 		Set<ExpressionOccurrence> expressionOccurrences = expressionOccurrencesWithExpressionFactories.keySet();
 		assert expressionOccurrences != null;
 		assert expressionOccurrences.size() == 3;
 
-		ExpressionOccurrence testOccurrence = new ExpressionOccurrence(0, 6);
+		ExpressionOccurrence testOccurrence = new ExpressionOccurrence(0, 8);
 		assert expressionOccurrences.contains(testOccurrence);
 		assert expressionOccurrencesWithExpressionFactories.get(testOccurrence) instanceof TestExpressionFactory;
 
-		ExpressionOccurrence textOccurrence = new ExpressionOccurrence(6, 9);
+		ExpressionOccurrence textOccurrence = new ExpressionOccurrence(8, 11);
 		assert expressionOccurrences.contains(textOccurrence);
 		assert expressionOccurrencesWithExpressionFactories.get(textOccurrence) == null;
 
-		ExpressionOccurrence elOccurrence = new ExpressionOccurrence(9, 16);
+		ExpressionOccurrence elOccurrence = new ExpressionOccurrence(11, 18);
 		assert expressionOccurrences.contains(elOccurrence);
 		assert expressionOccurrencesWithExpressionFactories.get(elOccurrence) instanceof ElExpressionFactory;
 	}
 
 	@Test(expectedExceptions = UtilityException.class)
 	public void textWithOverlappingExpressionsShouldCauseException() {
-		ParserUtilities.getExpressionOccurrences("${person['name']}", configuration);
+		ParserUtilities.getExpressionOccurrences("${'<<text>>'}", configuration);
 	}
 }

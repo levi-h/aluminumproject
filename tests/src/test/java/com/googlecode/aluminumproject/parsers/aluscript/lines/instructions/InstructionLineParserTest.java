@@ -90,7 +90,7 @@ public class InstructionLineParserTest {
 
 	@Test(dependsOnMethods = "parsingLineWithInstructionThatContainsDotShouldAddActionElementToContext")
 	public void parsingActionLineWithParameterThatContainsDotShouldAddContributionToActionElement() {
-		lineParser.parseLine("@test.test(test.test: [test])", context);
+		lineParser.parseLine("@test.test(test.test: <<test>>)", context);
 
 		List<ActionContributionDescriptor> contributionDescriptors =
 			((ActionElement) context.getTemplateElements().get(0)).getContributionDescriptors();

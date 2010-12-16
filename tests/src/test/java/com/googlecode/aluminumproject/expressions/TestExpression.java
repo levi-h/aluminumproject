@@ -38,10 +38,10 @@ public class TestExpression implements Expression {
 	public Object evaluate(Context context) throws ExpressionException {
 		int length = value.length();
 
-		if ((length <= 2) || (value.charAt(0) != '[') || (value.charAt(length - 1) != ']')) {
-			throw new ExpressionException("test expressions should be in [this form]");
+		if ((length <= 4) || !value.substring(0, 2).equals("<<") || !value.substring(length - 2).equals(">>")) {
+			throw new ExpressionException("test expressions should be in <<this form>>");
 		} else {
-			String variableName = value.substring(1, length - 1);
+			String variableName = value.substring(2, length - 2);
 
 			try {
 				return context.findVariable(variableName);
