@@ -56,13 +56,13 @@ public class TestExpressionFactory implements ExpressionFactory {
 
 		int b = 0;
 
-		while ((b = text.indexOf('[', b)) >= 0) {
-			int e = text.indexOf(']', b);
+		while ((b = text.indexOf("<<", b)) >= 0) {
+			int e = text.indexOf(">>", b);
 
 			if (e > b) {
-				occurrences.add(new ExpressionOccurrence(b, b = e + 1));
+				occurrences.add(new ExpressionOccurrence(b, b = e + 2));
 			} else {
-				b++;
+				b += 2;
 			}
 		}
 

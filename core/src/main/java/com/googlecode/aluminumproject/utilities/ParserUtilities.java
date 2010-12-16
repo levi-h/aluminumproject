@@ -20,11 +20,13 @@ import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
+import com.googlecode.aluminumproject.libraries.actions.CompoundActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ConstantActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ExpressionActionParameter;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -38,8 +40,9 @@ public class ParserUtilities {
 	private ParserUtilities() {}
 
 	/**
-	 * Creates either an {@link ExpressionActionParameter expression} or a {@link ConstantActionParameter constant}
-	 * action parameter from a textual value, depending on whether the text consists of a single expression or not.
+	 * Creates either an {@link ExpressionActionParameter expression}, a {@link ConstantActionParameter constant}, or a
+	 * {@link CompoundActionParameter compound} action parameter from a textual value, depending on whether the text
+	 * contains expressions or not.
 	 *
 	 * @param value the textual parameter value
 	 * @param configuration the configuration that contains all expression factories
@@ -48,26 +51,41 @@ public class ParserUtilities {
 	public static ActionParameter createParameter(String value, Configuration configuration) {
 		ActionParameter parameter;
 
-		List<ExpressionFactory> expressionFactories = new ArrayList<ExpressionFactory>();
-
-		for (ExpressionFactory expressionFactory: configuration.getExpressionFactories()) {
-			List<ExpressionOccurrence> occurrences = expressionFactory.findExpressions(value);
-
-			if (occurrences.size() == 1) {
-				ExpressionOccurrence occurrence = occurrences.get(0);
-
-				if ((occurrence.getBeginIndex() == 0) && (occurrence.getEndIndex() == value.length())) {
-					expressionFactories.add(expressionFactory);
-				}
-			}
-		}
+		SortedMap<ExpressionOccurrence, ExpressionFactory> expressionOccurrences =
+			getExpressionOccurrences(value, configuration);
 
 		ConverterRegistry converterRegistry = configuration.getConverterRegistry();
 
-		if (expressionFactories.size() == 1) {
-			parameter = new ExpressionActionParameter(expressionFactories.get(0), value, converterRegistry);
+		if (expressionOccurrences.size() == 1) {
+			ExpressionFactory expressionFactory = expressionOccurrences.get(expressionOccurrences.firstKey());
+
+			if (expressionFactory == null) {
+				parameter = new ConstantActionParameter(value, converterRegistry);
+			} else {
+				parameter = new ExpressionActionParameter(expressionFactory, value, converterRegistry);
+			}
+		} else if ((expressionOccurrences.size() == 1) && (expressionOccurrences.firstKey().getBeginIndex() == 0) &&
+				(expressionOccurrences.firstKey().getEndIndex() == value.length())) {
+			ExpressionFactory expressionFactory = expressionOccurrences.get(expressionOccurrences.firstKey());
+
+			parameter = new ExpressionActionParameter(expressionFactory, value, converterRegistry);
 		} else {
-			parameter = new ConstantActionParameter(value, converterRegistry);
+			List<ActionParameter> parameters = new LinkedList<ActionParameter>();
+
+			for (Map.Entry<ExpressionOccurrence, ExpressionFactory> occurrence: expressionOccurrences.entrySet()) {
+				ExpressionOccurrence expressionOccurrence = occurrence.getKey();
+				ExpressionFactory expressionFactory = occurrence.getValue();
+
+				String text = value.substring(expressionOccurrence.getBeginIndex(), expressionOccurrence.getEndIndex());
+
+				if (expressionFactory == null) {
+					parameters.add(new ConstantActionParameter(text, converterRegistry));
+				} else {
+					parameters.add(new ExpressionActionParameter(expressionFactory, text, converterRegistry));
+				}
+			}
+
+			parameter = new CompoundActionParameter(parameters, converterRegistry);
 		}
 
 		return parameter;
