@@ -187,7 +187,11 @@ public abstract class AbstractContext implements Context {
 		}
 
 		if (scope == null) {
-			throw new ContextException("variable '", name, "' can't be found in any scope");
+			if (parent == null) {
+				throw new ContextException("variable '", name, "' can't be found in any scope");
+			} else {
+				return parent.findVariable(name);
+			}
 		} else {
 			return scope.getVariable(name);
 		}

@@ -223,6 +223,26 @@ public class AbstractContextTest {
 	}
 
 	@Test(dependsOnMethods = {
+		"variableShouldBeFindableInDefaultScope",
+		"subcontextShouldHaveParent"
+	})
+	public void variableShouldBeFindableInParentContext() {
+		context.setVariable(Context.TEMPLATE_SCOPE, "name", "value");
+
+		assert context.createSubcontext().findVariable("name").equals("value");
+	}
+
+	@Test(dependsOnMethods = "variableShouldBeFindableInParentContext")
+	public void findingVariableShouldPreferNearestAncestor() {
+		AbstractContext subcontext = context.createSubcontext();
+
+		context.setVariable(Context.TEMPLATE_SCOPE, "name", "context");
+		subcontext.setVariable(Context.TEMPLATE_SCOPE, "name", "subcontext");
+
+		assert subcontext.createSubcontext().findVariable("name").equals("subcontext");
+	}
+
+	@Test(dependsOnMethods = {
 		"scopeNamesShouldIncludeAddedScope",
 		"findingVariableShouldPreferScopeWithHigherPriority"
 	})
