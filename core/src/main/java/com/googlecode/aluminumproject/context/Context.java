@@ -33,7 +33,7 @@ import java.util.Set;
  * directly, but is meant for internal use only.
  * <p>
  * When a context supports it, it's possible to create one or more child contexts. The parent of such a child context
- * can be {@link #getParent() obtained}.
+ * can be {@link #getParent() obtained} and will be used when {@link #findVariable(String) finding variables}.
  *
  * @author levi_h
  */
@@ -128,11 +128,14 @@ public interface Context {
 
 	/**
 	 * Finds a variable across all scopes. When multiple scopes have a variable with the given name, it's up to the
-	 * context implementation which variable will be returned.
+	 * context implementation which variable will be returned. When none of the scopes in this context contain a
+	 * variable with the specified name and a parent context is available, the variable will be tried to be found in
+	 * that context.
 	 *
 	 * @param name the name of the variable to find
-	 * @return the value of a variable in one of the scopes with the given name
-	 * @throws ContextException when not a single scope contains a variable with the given name
+	 * @return the value of the variable with the given name
+	 * @throws ContextException when not a scope in either this context or one of its ancestor contexts contains a
+	 *                          variable with the given name
 	 */
 	Object findVariable(String name) throws ContextException;
 
