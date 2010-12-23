@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
+import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
@@ -31,21 +32,26 @@ import java.util.ResourceBundle;
  * Writes a localised resource from the current {@link GlobalisationContext globalisation context}'s {@link
  * ResourceBundleProvider resource bundle provider}'s {@link ResourceBundle resource bundle}.
  * <p>
- * If no resource can be found for a given key, the action will throw an exception. If this behaviour is not desired,
- * it's possible to indicate this by using the <em>allow missing key</em> parameter; in that case, the key will be
- * wrapped in two pairs of question marks and used as resource.
+ * If no resource can be found for a given key, the action will throw an exception. There are two ways to change this
+ * behaviour: either by providing a <em>default</em> resource or by using the <em>allow missing key</em> parameter,
+ * which will cause the key to be wrapped in two pairs of question marks and used as resource.
  *
  * @author levi_h
  */
 public class Localise extends AbstractAction {
 	private @Required String key;
 
+	@Named("default")
+	private Object defaultResource;
+
 	private boolean allowMissingKey;
 
 	/**
 	 * Creates a <em>localise</em> action.
 	 */
-	public Localise() {}
+	public Localise() {
+		defaultResource = NO_DEFAULT;
+	}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
 		Object resource;
@@ -56,6 +62,8 @@ public class Localise extends AbstractAction {
 
 		if (resourceBundle.containsKey(key)) {
 			resource = resourceBundle.getObject(key);
+		} else if (defaultResource != NO_DEFAULT) {
+			resource = defaultResource;
 		} else if (allowMissingKey) {
 			resource = String.format("??%s??", key);
 		} else {
@@ -66,4 +74,6 @@ public class Localise extends AbstractAction {
 
 		writer.write(resource);
 	}
+
+	private final static Object NO_DEFAULT = new Object();
 }
