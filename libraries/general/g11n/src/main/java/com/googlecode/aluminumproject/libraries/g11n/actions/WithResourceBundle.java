@@ -36,13 +36,17 @@ import java.util.Set;
 
 /**
  * Changes the {@link ResourceBundleProvider resource bundle provider} of the {@link GlobalisationContext globalisation
- * context} in which an action executes to a {@link NameBasedResourceBundleProvider name-based one} with the action
- * contribution's parameter value as base name for the resource bundle.
+ * context} in which an action is created and executes to a {@link NameBasedResourceBundleProvider name-based one} with
+ * the action contribution's parameter value as base name for the resource bundle.
  *
  * @author levi_h
  */
 @Typed("String")
 public class WithResourceBundle implements ActionContribution {
+	/**
+	 * Creates a <em>with resource bundle</em> action contribution.
+	 */
+	public WithResourceBundle() {}
 
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return true;
@@ -51,25 +55,33 @@ public class WithResourceBundle implements ActionContribution {
 	public void make(Context context, Writer writer,
 			final ActionParameter parameter, ActionContributionOptions options) {
 		options.addInterceptor(new ActionInterceptor() {
+			private ResourceBundleProvider resourceBundleProvider;
+
 			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.EXECUTION);
+				return EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION);
 			}
 
 			public void intercept(ActionContext actionContext) throws InterceptionException {
 				Context context = actionContext.getContext();
 				GlobalisationContext globalisationContext = GlobalisationContext.from(context);
 
-				ResourceBundleProvider resourceBundleProvider = globalisationContext.getResourceBundleProvider();
+				if (actionContext.getPhase() == ActionPhase.CREATION) {
+					resourceBundleProvider = globalisationContext.getResourceBundleProvider();
 
-				try {
-					globalisationContext.setResourceBundleProvider(
-						new NameBasedResourceBundleProvider(((String) parameter.getValue(String.class, context))));
+					try {
+						globalisationContext.setResourceBundleProvider(
+							new NameBasedResourceBundleProvider(((String) parameter.getValue(String.class, context))));
+					} catch (ActionException exception) {
+						throw new InterceptionException(exception, "can't determine base name for resource bundle");
+					}
 
 					actionContext.proceed();
-				} catch (ActionException exception) {
-					throw new InterceptionException(exception, "can't determine base name for resource bundle");
-				} finally {
-					globalisationContext.setResourceBundleProvider(resourceBundleProvider);
+				} else {
+					try {
+						actionContext.proceed();
+					} finally {
+						globalisationContext.setResourceBundleProvider(resourceBundleProvider);
+					}
 				}
 			}
 		});
