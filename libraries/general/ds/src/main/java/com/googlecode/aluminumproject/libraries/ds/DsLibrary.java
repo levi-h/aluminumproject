@@ -34,7 +34,7 @@ public class DsLibrary extends AbstractLibrary {
 	public DsLibrary() {
 		super(ReflectionUtilities.getPackageName(DsLibrary.class));
 
-		information = new LibraryInformation(URL, EnvironmentUtilities.getVersion());
+		information = new LibraryInformation(URL, "ds", EnvironmentUtilities.getVersion());
 	}
 
 	public LibraryInformation getInformation() {
