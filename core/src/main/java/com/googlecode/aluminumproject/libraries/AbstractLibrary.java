@@ -23,7 +23,9 @@ import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.ActionContributionInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
+import com.googlecode.aluminumproject.libraries.actions.ContributingActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.Function;
@@ -167,7 +169,19 @@ public abstract class AbstractLibrary implements Library {
 			logger.debug("creating default action contribution factory ",
 				"for action contribution class ", actionContributionClass.getName());
 
-			addActionContributionFactory(new DefaultActionContributionFactory(actionContributionClass));
+			DefaultActionContributionFactory actionContributionFactory =
+				new DefaultActionContributionFactory(actionContributionClass);
+
+			addActionContributionFactory(actionContributionFactory);
+
+			ActionContributionInformation actionContributionInformation = actionContributionFactory.getInformation();
+
+			if (actionContributionInformation.getParameterNameWhenAction() != null) {
+				logger.debug("creating contributing action factory ",
+					"for action contribution class ", actionContributionClass.getName());
+
+				addActionFactory(new ContributingActionFactory(actionContributionClass, actionContributionInformation));
+			}
 		}
 	}
 

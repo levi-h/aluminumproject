@@ -28,17 +28,27 @@ public class IfTest extends CoreLibraryTest {
 		Context context = new DefaultContext();
 		context.setVariable("value", 6);
 
-		String output = processTemplate("if", context);
-		assert output != null;
-		assert output.equals("executed");
+		assert processTemplate("if", context).equals("executed");
 	}
 
 	public void parameterWithConditionThatDoesNotMeetShouldSkipAction() {
 		Context context = new DefaultContext();
 		context.setVariable("value", 5);
 
-		String output = processTemplate("if", context);
-		assert output != null;
-		assert output.equals("");
+		assert processTemplate("if", context).equals("");
+	}
+
+	public void actionWithConditionThatMeetsShouldInvokeBody() {
+		Context context = new DefaultContext();
+		context.setVariable("value", 6);
+
+		assert processTemplate("if-as-action", context).equals("executed");
+	}
+
+	public void actionWithConditionThatDoesNotMeetShouldSkipBody() {
+		Context context = new DefaultContext();
+		context.setVariable("value", 5);
+
+		assert processTemplate("if-as-action", context).equals("");
 	}
 }

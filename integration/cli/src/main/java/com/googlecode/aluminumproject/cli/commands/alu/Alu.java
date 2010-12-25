@@ -28,15 +28,20 @@ import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.resources.FileSystemTemplateFinderFactory;
+import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
+import com.googlecode.aluminumproject.utilities.environment.PropertySetContainer;
 import com.googlecode.aluminumproject.writers.OutputStreamWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -52,10 +57,11 @@ import joptsimple.OptionSpec;
  * The name of the template has to be given as a parameter to the command. A {@link List list} that contains the other
  * arguments (if any) are made available as a context variable named {@value #ARGUMENTS_VARIABLE_NAME}.
  * <p>
- * The template engine will use a {@link DefaultConfiguration default configuration} with a single exception: the
- * template finder will be created by a {@link FileSystemTemplateFinderFactory file system template finder factory} that
- * looks for templates in the current directory and the <em>templates</em> directory inside the directory in which
- * Aluminum was installed.
+ * The template engine will use a {@link DefaultConfiguration default configuration} with configuration parameters which
+ * make sure that it's template finder will be created by a {@link FileSystemTemplateFinderFactory file system template
+ * finder factory} that looks for templates in the current directory and the <em>templates</em> directory inside the
+ * directory in which Aluminum was installed. Other configuration parameters may be specified in a properties file named
+ * {@code alu.properties}, located in {@code ~/.aluminum}, where {@code ~} stands for the user's home directory.
  *
  * @author levi_h
  */
@@ -101,20 +107,8 @@ public class Alu extends Command {
 			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws CommandException {
 		if (arguments.size() >= 1) {
 			ConfigurationParameters parameters = new ConfigurationParameters();
-			parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, FileSystemTemplateFinderFactory.class.getName());
-
-			String templateDirectories = System.getProperty("user.dir");
-
-			String aluminumHome = System.getenv("ALUMINUM_HOME");
-
-			if (aluminumHome == null) {
-				logger.debug("environment variable ALUMINUM_HOME is not set, ",
-					"templates will only be found in the current directory");
-			} else {
-				templateDirectories = String.format("%s, %s/templates", templateDirectories, aluminumHome);
-			}
-
-			parameters.addParameter(FileSystemTemplateFinderFactory.TEMPLATE_DIRECTORIES, templateDirectories);
+			addConfigurationParameters(parameters);
+			addCustomConfigurationParameters(parameters);
 
 			Aluminum aluminum = new Aluminum(new DefaultConfiguration(parameters));
 
@@ -142,6 +136,43 @@ public class Alu extends Command {
 			}
 		} else {
 			displayHelp(outputStream, errorStream);
+		}
+	}
+
+	private void addConfigurationParameters(ConfigurationParameters parameters) {
+		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, FileSystemTemplateFinderFactory.class.getName());
+
+		String templateDirectories = System.getProperty("user.dir");
+
+		String aluminumHome = System.getenv("ALUMINUM_HOME");
+
+		if (aluminumHome == null) {
+			logger.debug("environment variable ALUMINUM_HOME is not set, ",
+				"templates will only be found in the current directory");
+		} else {
+			templateDirectories = String.format("%s, %s/templates", templateDirectories, aluminumHome);
+		}
+
+		parameters.addParameter(FileSystemTemplateFinderFactory.TEMPLATE_DIRECTORIES, templateDirectories);
+	}
+
+	private void addCustomConfigurationParameters(ConfigurationParameters parameters) throws CommandException {
+		PropertySetContainer propertySetContainer = EnvironmentUtilities.getPropertySetContainer();
+
+		if (propertySetContainer.containsPropertySet("alu")) {
+			Properties configurationPropertySet;
+
+			try {
+				configurationPropertySet = propertySetContainer.readPropertySet("alu");
+			} catch (UtilityException exception) {
+				throw new CommandException(exception, "can't read configuration property set 'alu'");
+			}
+
+			for (Object key: Collections.list(configurationPropertySet.propertyNames())) {
+				String parameterName = (String) key;
+
+				parameters.addParameter(parameterName, configurationPropertySet.getProperty(parameterName));
+			}
 		}
 	}
 

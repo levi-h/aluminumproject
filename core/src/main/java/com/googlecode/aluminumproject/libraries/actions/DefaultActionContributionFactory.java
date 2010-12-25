@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.libraries.actions;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Typed;
+import com.googlecode.aluminumproject.annotations.UsableAsAction;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
@@ -75,6 +76,19 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 			name = StringUtilities.humanise(actionContributionClass.getSimpleName()).toLowerCase();
 		}
 
+		logger.debug("name of action contribution class ", actionContributionClass.getName(), ": '", name, "'");
+
+		String parameterNameWhenAction;
+
+		if (actionContributionClass.isAnnotationPresent(UsableAsAction.class)) {
+			parameterNameWhenAction = actionContributionClass.getAnnotation(UsableAsAction.class).parameterName();
+
+			logger.debug("action contribution with class ", actionContributionClass.getName(), " may be used as action",
+				" using parameter name '", parameterNameWhenAction, "'");
+		} else {
+			parameterNameWhenAction = null;
+		}
+
 		Type parameterType;
 
 		if (actionContributionClass.isAnnotationPresent(Typed.class)) {
@@ -82,6 +96,9 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 				String parameterTypeName = actionContributionClass.getAnnotation(Typed.class).value();
 
 				parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
+
+				logger.debug("parameter type of action contribution class ", actionContributionClass.getName(),
+					": ", parameterType);
 			} catch (UtilityException exception) {
 				throw new ConfigurationException(exception,
 					"can't get parameter type for action contribution class ", actionContributionClass.getName());
@@ -90,10 +107,7 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 			parameterType = Object.class;
 		}
 
-		logger.debug("using name '", name, "' and parameter type ", parameterType,
-			" for action contribution class ", actionContributionClass.getName());
-
-		information = new ActionContributionInformation(name, parameterType);
+		information = new ActionContributionInformation(name, parameterNameWhenAction, parameterType);
 	}
 
 	public ActionContributionInformation getInformation() {

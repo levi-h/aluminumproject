@@ -62,6 +62,11 @@ public class LocalisedParameterTest extends GlobalisationLibraryTest {
 		assert processTemplate("localised-parameter-with-numeric-type").equals("01234");
 	}
 
+	public void customResourceBundleAndLocaleShouldBeUsed() {
+		String output = processTemplate("localised-parameter-with-custom-resource-bundle-and-locale");
+		assert output.equals("een krachtige en flexibele sjabloonverwerker");
+	}
+
 	@Test(expectedExceptions = TemplateException.class)
 	public void missingKeyShouldCauseException() {
 		processTemplate("localised-parameter-with-missing-key");

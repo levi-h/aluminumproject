@@ -16,6 +16,10 @@
 package com.googlecode.aluminumproject.cli.commands.alu;
 
 import com.googlecode.aluminumproject.cli.AbstractCommandTest;
+import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
+
+import java.util.Properties;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -77,7 +81,17 @@ public class AluTest extends AbstractCommandTest {
 		String[] output = executeCommand(alu, "-p", "xlm", "hello.xml");
 		assert output[0].equals("");
 		assert output[1].equals("The template 'hello.xml' can't be processed (unknown parser: xlm).");
-		assert output[0].equals("");
-		assert output[0].equals("");
+	}
+
+	@Test(dependsOnMethods = "aluScriptParserShouldBeDefaultParser")
+	public void templateEngineShouldBeConfigurableUsingPropertySet() {
+		Properties configurationPropertySet = new Properties();
+		configurationPropertySet.setProperty(AluScriptParser.TEMPLATE_EXTENSION, "alu");
+
+		EnvironmentUtilities.getPropertySetContainer().writePropertySet("alu", configurationPropertySet);
+
+		String[] output = executeCommand(alu, "hello");
+		assert output[0].equals("Hello!");
+		assert output[1].equals("");
 	}
 }

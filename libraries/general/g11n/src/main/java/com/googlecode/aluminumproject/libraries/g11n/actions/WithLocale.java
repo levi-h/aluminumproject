@@ -36,11 +36,12 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Changes the locale of the {@link GlobalisationContext globalisation context} in which an action executes.
+ * Changes the locale of the {@link GlobalisationContext globalisation context} in which an action is created and
+ * executes.
  *
  * @author levi_h
  */
-@Typed("java.util.Locale")
+@Typed("Locale")
 public class WithLocale implements ActionContribution {
 	/**
 	 * Creates a <em>with locale</em> action contribution.
@@ -54,25 +55,33 @@ public class WithLocale implements ActionContribution {
 	public void make(Context context, Writer writer,
 			final ActionParameter parameter, ActionContributionOptions options) {
 		options.addInterceptor(new ActionInterceptor() {
+			private LocaleProvider localeProvider;
+
 			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.EXECUTION);
+				return EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION);
 			}
 
 			public void intercept(ActionContext actionContext) throws InterceptionException {
 				Context context = actionContext.getContext();
 				GlobalisationContext globalisationContext = GlobalisationContext.from(context);
 
-				LocaleProvider localeProvider = globalisationContext.getLocaleProvider();
+				if (actionContext.getPhase() == ActionPhase.CREATION) {
+					localeProvider = globalisationContext.getLocaleProvider();
 
-				try {
-					globalisationContext.setLocaleProvider(
-						new ConstantLocaleProvider(((Locale) parameter.getValue(Locale.class, context))));
+					try {
+						globalisationContext.setLocaleProvider(
+							new ConstantLocaleProvider(((Locale) parameter.getValue(Locale.class, context))));
+					} catch (ActionException exception) {
+						throw new InterceptionException(exception, "can't determine locale");
+					}
 
 					actionContext.proceed();
-				} catch (ActionException exception) {
-					throw new InterceptionException(exception, "can't determine locale");
-				} finally {
-					globalisationContext.setLocaleProvider(localeProvider);
+				} else {
+					try {
+						actionContext.proceed();
+					} finally {
+						globalisationContext.setLocaleProvider(localeProvider);
+					}
 				}
 			}
 		});
