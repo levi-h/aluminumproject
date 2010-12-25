@@ -35,6 +35,8 @@ rootProject.name = 'aluminum'
 	'xml-parser': 'parsers/xml',
 	'xml-serialiser': 'serialisers/xml',
 
+	'aludoc': 'tools/aludoc',
+
 	'tests': 'tests'
 ].each {moduleName, moduleDir ->
 	def module = "${rootProject.name}-${moduleName}"
