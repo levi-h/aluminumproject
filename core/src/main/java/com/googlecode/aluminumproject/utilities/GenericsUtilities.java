@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -183,14 +184,80 @@ public class GenericsUtilities {
 	}
 
 	/**
+	 * Returns the name of a {@link Type type}.
+	 *
+	 * @param type the type to return the name of
+	 * @param defaultPackages the packages that do not need to be included in the name
+	 * @return the name of the given type
+	 */
+	public static String getName(Type type, String... defaultPackages) {
+		String name;
+
+		if (type instanceof Class) {
+			Class<?> classType = (Class<?>) type;
+
+			if (classType.isArray()) {
+				name = String.format("%s[]", getName(classType.getComponentType(), defaultPackages));
+			} else {
+				Package typePackage = classType.getPackage();
+
+				name = ((typePackage != null) && Arrays.asList(defaultPackages).contains(typePackage.getName()))
+					? classType.getSimpleName() : classType.getName();
+			}
+		} else if (type instanceof GenericArrayType) {
+			name = String.format("%s[]", getName(((GenericArrayType) type).getGenericComponentType(), defaultPackages));
+		} else if (type instanceof WildcardType) {
+			WildcardType wildcardType = (WildcardType) type;
+
+			StringBuilder nameBuilder = new StringBuilder("?");
+
+			Type[] lowerBounds = wildcardType.getLowerBounds();
+
+			if (lowerBounds.length > 0) {
+				nameBuilder.append(" super ").append(getName(lowerBounds[0], defaultPackages));
+			} else {
+				Type[] upperBounds = wildcardType.getUpperBounds();
+
+				if (!((upperBounds.length == 1) && (upperBounds[0] == Object.class))) {
+					for (Type upperBound: upperBounds) {
+						nameBuilder.append(" ");
+						nameBuilder.append(nameBuilder.length() == 2 ? "extends" : "&");
+						nameBuilder.append(" ").append(getName(upperBound, defaultPackages));
+					}
+				}
+			}
+
+			name = nameBuilder.toString();
+		} else if (type instanceof ParameterizedType) {
+			ParameterizedType parameterizedType = (ParameterizedType) type;
+
+			StringBuilder nameBuilder = new StringBuilder(getName(parameterizedType.getRawType(), defaultPackages));
+
+			Type[] typeArguments = parameterizedType.getActualTypeArguments();
+
+			for (int i = 0; i < typeArguments.length; i++) {
+				nameBuilder.append((i == 0) ? "<" : ", ");
+				nameBuilder.append(getName(typeArguments[i], defaultPackages));
+			}
+
+			name = nameBuilder.append(">").toString();
+		} else {
+			name = type.toString();
+		}
+
+		return name;
+	}
+
+	/**
 	 * Finds or creates a {@link Type type}, based on its name. The following types are supported:
 	 * <ul>
 	 * <li>Primitive types ({@code int}, {@code boolean});
 	 * <li>{@link Class Classes} ({@code java.lang.Object});
+	 * <li>{@link GenericArrayType Generic array types} ({@code java.util.List<java.lang.String>[]});
 	 * <li>{@link ParameterizedType Parameterised types} ({@code java.util.List<java.lang.String>}, {@code
 	 *     java.util.Map<java.lang.String, java.lang.Integer>});
 	 * <li>{@link WildcardType Wildcard types} ({@code ?}, {@code ? super java.lang.Long}, {@code ? extends
-	 *     java.lang.Number}; but not {@code ? extends java.lang.Number & java.io.Serializable}).
+	 *     java.lang.Number}, {@code ? extends java.lang.Number & java.io.Serializable}).
 	 * </ul>
 	 * Class names are expected to be fully qualified, unless their packages are contained in the {@code
 	 * defaultPackages} parameter.
@@ -210,6 +277,8 @@ public class GenericsUtilities {
 
 		if (name.startsWith("?")) {
 			type = createWildcardType(name, defaultPackages);
+		} else if (name.endsWith("[]")) {
+			type = createGenericArrayType(name, defaultPackages);
 		} else if (name.contains("<")) {
 			type = createParameterisedType(name, defaultPackages);
 		} else if (allowPrimitive && PRIMITIVE_TYPES.containsKey(name)) {
@@ -221,48 +290,80 @@ public class GenericsUtilities {
 		return type;
 	}
 
+	private static Type createGenericArrayType(String name, String... defaultPackages) throws UtilityException {
+		Type componentType = getType(name.substring(0, name.length() - 2), defaultPackages);
+
+		if (componentType instanceof Class) {
+			throw new UtilityException("can't create class with component type ", componentType);
+		} else {
+			return new GenericArrayTypeImpl(componentType);
+		}
+	}
+
+	private static class GenericArrayTypeImpl implements GenericArrayType {
+		private Type genericComponentType;
+
+		public GenericArrayTypeImpl(Type genericComponentType) {
+			this.genericComponentType = genericComponentType;
+		}
+
+		public Type getGenericComponentType() {
+			return genericComponentType;
+		}
+	}
+
 	private static WildcardType createWildcardType(String name, String... defaultPackages) throws UtilityException {
 		Matcher matcher = WILDCARD_TYPE_PATTERN.matcher(name);
 
 		if (matcher.matches()) {
-			Type boundingType;
+			Type[] boundingTypes;
 			boolean upperBound;
 
 			if (matcher.group(1) == null) {
-				boundingType = Object.class;
+				boundingTypes = new Type[] {
+					Object.class
+				};
 				upperBound = true;
 			} else {
-				boundingType = getType(matcher.group(2), false, defaultPackages);
+				String[] boundingTypesAsText = matcher.group(2).split("\\s*&\\s*");
+				boundingTypes = new Type[boundingTypesAsText.length];
+
+				for (int i = 0; i < boundingTypesAsText.length; i++) {
+					boundingTypes[i] = getType(boundingTypesAsText[i], false, defaultPackages);
+				}
+
 				upperBound = matcher.group(1).equals("extends");
 			}
 
-			return new WildcardTypeImpl(boundingType, upperBound);
+			return new WildcardTypeImpl(boundingTypes, upperBound);
 		} else {
 			throw new UtilityException("can't create wildcard type with name '", name, "'");
 		}
 	}
 
 	private static class WildcardTypeImpl implements WildcardType {
-		private Type boundingType;
+		private Type[] bounds;
 		private boolean upperBound;
 
-		public WildcardTypeImpl(Type boundingType, boolean upperBound) {
-			this.boundingType = boundingType;
+		public WildcardTypeImpl(Type[] bounds, boolean upperBound) {
+			this.bounds = bounds;
 			this.upperBound = upperBound;
 		}
 
 		public Type[] getLowerBounds() {
-			return upperBound ? new Type[0] : getBounds();
+			return upperBound ? new Type[0] : copyBounds();
 		}
 
 		public Type[] getUpperBounds() {
-			return upperBound ? getBounds() : new Type[0];
+			return upperBound ? copyBounds() : new Type[0];
 		}
 
-		private Type[] getBounds() {
-			return new Type[] {
-				boundingType
-			};
+		private Type[] copyBounds() {
+			Type[] copiedBounds = new Type[bounds.length];
+
+			System.arraycopy(bounds, 0, copiedBounds, 0, bounds.length);
+
+			return copiedBounds;
 		}
 	}
 
