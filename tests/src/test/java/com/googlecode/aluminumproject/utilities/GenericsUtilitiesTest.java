@@ -15,9 +15,12 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
+import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getName;
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getType;
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getTypeArgument;
 
+import java.io.Serializable;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
@@ -94,6 +97,78 @@ public class GenericsUtilitiesTest {
 		getTypeArgument(Interface.class, Interface.class, 0);
 	}
 
+	public void nameOfClassShouldBeObtainable() {
+		String name = getName(String.class);
+		assert name != null;
+		assert name.equals("java.lang.String");
+	}
+
+	public void nameOfArrayShouldBeObtainable() {
+		String name = getName(Object[][].class);
+		assert name != null;
+		assert name.equals("java.lang.Object[][]");
+	}
+
+	@Test(dependsOnMethods = "genericArrayTypeShouldBeCreatable")
+	public void nameOfGenericArrayShouldBeObtainable() {
+		String name = getName(getType("java.util.List<java.lang.String>[]"), "java.lang", "java.util");
+		assert name != null;
+		assert name.equals("List<String>[]");
+	}
+
+	public void nameOfPrimitiveTypeShouldBeObtainable() {
+		String name = getName(Integer.TYPE);
+		assert name != null;
+		assert name.equals("int");
+	}
+
+	@Test(dependsOnMethods = "wildcardTypeWithoutBoundsShouldBeCreatable")
+	public void nameOfWildcardTypeWithoutBoundsShouldBeObtainable() {
+		String name = getName(getType("?"));
+		assert name != null;
+		assert name.equals("?");
+	}
+
+	public void nameOfWildcardTypeWithSingleUpperBoundShouldBeObtainable() {
+		String name = getName(getType("? extends java.lang.Number"), "java.lang");
+		assert name != null;
+		assert name.equals("? extends Number");
+	}
+
+	@Test(dependsOnMethods = "wildcardTypeWithMultipleUpperBoundsShouldBeCreatable")
+	public void nameOfWildcardTypeWithMultipleUpperBoundsShouldBeObtainable() {
+		String name = getName(getType("? extends java.lang.Number & java.io.Serializable"), "java.lang");
+		assert name != null;
+		assert name.equals("? extends Number & java.io.Serializable");
+	}
+
+	@Test(dependsOnMethods = "wildcardTypeWithLowerBoundShouldBeCreatable")
+	public void nameOfWildcardTypeWithLowerBoundsShouldBeObtainable() {
+		String name = getName(getType("? super java.lang.Boolean"));
+		assert name != null;
+		assert name.equals("? super java.lang.Boolean");
+	}
+
+	@Test(dependsOnMethods = "parameterisedTypeWithSingleParameterShouldBeCreatable")
+	public void nameOfParameterisedTypeWithSingleParameterShouldBeObtainable() {
+		String name = getName(getType("java.util.Collection<java.lang.Integer>"));
+		assert name != null;
+		assert name.equals("java.util.Collection<java.lang.Integer>");
+	}
+
+	@Test(dependsOnMethods = "parameterisedTypeWithMultipleParametersShouldBeCreatable")
+	public void nameOfParameterisedTypeWithMultipleParametersShouldBeObtainable() {
+		String name = getName(getType("java.util.Map<java.lang.String, java.lang.Integer>"));
+		assert name != null;
+		assert name.equals("java.util.Map<java.lang.String, java.lang.Integer>");
+	}
+
+	public void genericArrayTypeShouldBeCreatable() {
+		Type type = getType("java.lang.Comparable<?>[]");
+		assert type instanceof GenericArrayType;
+		assert ((GenericArrayType) type).getGenericComponentType() instanceof ParameterizedType;
+	}
+
 	public void wildcardTypeWithoutBoundsShouldBeCreatable() {
 		Type type = getType("?");
 		assert type instanceof WildcardType;
@@ -110,7 +185,7 @@ public class GenericsUtilitiesTest {
 		assert upperBounds[0] == Object.class;
 	}
 
-	public void wildcardTypeWithUpperBoundShouldBeCreatable() {
+	public void wildcardTypeWithSingleUpperBoundShouldBeCreatable() {
 		Type type = getType("? extends java.lang.Number");
 		assert type instanceof WildcardType;
 
@@ -124,6 +199,23 @@ public class GenericsUtilitiesTest {
 		assert upperBounds != null;
 		assert upperBounds.length == 1;
 		assert upperBounds[0] == Number.class;
+	}
+
+	public void wildcardTypeWithMultipleUpperBoundsShouldBeCreatable() {
+		Type type = getType("? extends java.lang.Comparable & java.io.Serializable");
+		assert type instanceof WildcardType;
+
+		WildcardType wildcardType = (WildcardType) type;
+
+		Type[] lowerBounds = wildcardType.getLowerBounds();
+		assert lowerBounds != null;
+		assert lowerBounds.length == 0;
+
+		Type[] upperBounds = wildcardType.getUpperBounds();
+		assert upperBounds != null;
+		assert upperBounds.length == 2;
+		assert upperBounds[0] == Comparable.class;
+		assert upperBounds[1] == Serializable.class;
 	}
 
 	public void wildcardTypeWithLowerBoundShouldBeCreatable() {
