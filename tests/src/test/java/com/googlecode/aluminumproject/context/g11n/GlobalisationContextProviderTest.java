@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -49,11 +51,25 @@ public class GlobalisationContextProviderTest {
 
 	private Context context;
 
+	private Locale defaultLocale;
+
 	@BeforeMethod
 	public void createGlobalisationContextProviderAndContext() {
 		globalisationContextProvider = new GlobalisationContextProvider();
 
 		context = new DefaultContext();
+	}
+
+	@BeforeClass
+	public void changeDefaultLocale() {
+		defaultLocale = Locale.getDefault();
+
+		Locale.setDefault(Locale.ENGLISH);
+	}
+
+	@AfterClass
+	public void restoreDefaultLocale() {
+		Locale.setDefault(defaultLocale);
 	}
 
 	private void initialiseGlobalisationContextProvider() {

@@ -23,10 +23,12 @@ import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.AnnotatedActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.ContributingActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.IgnoredAction;
 import com.googlecode.aluminumproject.libraries.actions.TestAction;
 import com.googlecode.aluminumproject.libraries.actions.TestActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.TestActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.TestActionContributionThatIsUsableAsAction;
 import com.googlecode.aluminumproject.libraries.actions.TestActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.libraries.functions.TestFunctionFactory;
@@ -40,7 +42,7 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"core", "fast"})
-public class AbstractLibraryTest {
+public class AbstractLibraryTest { // TODO action contributions that are usable as actions -> action factory
 	public void usingPackagesThatDoNotContainActionsShouldResultInEmptyListOfActionFactories() {
 		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(String.class));
 
@@ -73,6 +75,15 @@ public class AbstractLibraryTest {
 		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(IgnoredAction.class));
 
 		assert getActionFactory(library.getActionFactories(), "ignored action") == null;
+	}
+
+	public void usingPackagesThatContainActionContributionsThatAreUsableAsActionsShouldResultInFactoryPerAction() {
+		Library library = createLibrary(false, false,
+			ReflectionUtilities.getPackageName(TestActionContributionThatIsUsableAsAction.class));
+
+		ActionFactory actionFactory =
+			getActionFactory(library.getActionFactories(), "test action contribution that is usable as action");
+		assert actionFactory instanceof ContributingActionFactory;
 	}
 
 	private ActionFactory getActionFactory(List<ActionFactory> actionFactories, String actionName) {
