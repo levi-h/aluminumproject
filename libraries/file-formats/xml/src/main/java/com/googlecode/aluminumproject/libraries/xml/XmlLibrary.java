@@ -43,10 +43,7 @@ public class XmlLibrary extends AbstractLibrary {
 	public XmlLibrary() {
 		super(ReflectionUtilities.getPackageName(XmlLibrary.class));
 
-		String url = "http://aluminumproject.googlecode.com/xml";
-		String version = EnvironmentUtilities.getVersion();
-
-		information = new LibraryInformation(url, "x", version, true, true, false);
+		information = new LibraryInformation(URL, "x", EnvironmentUtilities.getVersion(), true, true, false);
 	}
 
 	public LibraryInformation getInformation() {
@@ -67,4 +64,7 @@ public class XmlLibrary extends AbstractLibrary {
 		initialiseLibraryElement(actionContributionFactory);
 		return actionContributionFactory;
 	}
+
+	/** The URL of the XML library: {@value}. */
+	public final static String URL = "http://aluminumproject.googlecode.com/xml";
 }

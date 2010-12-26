@@ -52,10 +52,7 @@ public class HtmlLibrary extends AbstractLibrary {
 	public void initialise(Configuration configuration) throws ConfigurationException {
 		super.initialise(configuration);
 
-		String url = "http://aluminumproject.googlecode.com/html";
-		String version = EnvironmentUtilities.getVersion();
-
-		information = new LibraryInformation(url, "h", version);
+		information = new LibraryInformation(URL, "h", EnvironmentUtilities.getVersion());
 
 		addTagFactories();
 	}
@@ -114,4 +111,6 @@ public class HtmlLibrary extends AbstractLibrary {
 		return information;
 	}
 
+	/** The URL of the HTML library: {@value}. */
+	public final static String URL = "http://aluminumproject.googlecode.com/html";
 }

@@ -34,13 +34,13 @@ public class TextLibrary extends AbstractLibrary {
 	public TextLibrary() {
 		super(ReflectionUtilities.getPackageName(TextLibrary.class));
 
-		String url = "http://aluminumproject.googlecode.com/text";
-		String version = EnvironmentUtilities.getVersion();
-
-		information = new LibraryInformation(url, "t", version);
+		information = new LibraryInformation(URL, "t", EnvironmentUtilities.getVersion());
 	}
 
 	public LibraryInformation getInformation() {
 		return information;
 	}
+
+	/** The URL of the text library: {@value}. */
+	public final static String URL = "http://aluminumproject.googlecode.com/text";
 }

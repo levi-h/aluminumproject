@@ -34,13 +34,13 @@ public class IoLibrary extends AbstractLibrary {
 	public IoLibrary() {
 		super(ReflectionUtilities.getPackageName(IoLibrary.class));
 
-		String url = "http://aluminumproject.googlecode.com/io";
-		String version = EnvironmentUtilities.getVersion();
-
-		information = new LibraryInformation(url, "io", version);
+		information = new LibraryInformation(URL, "io", EnvironmentUtilities.getVersion());
 	}
 
 	public LibraryInformation getInformation() {
 		return information;
 	}
+
+	/** The URL of the I/O library: {@value}. */
+	public final static String URL = "http://aluminumproject.googlecode.com/io";
 }
