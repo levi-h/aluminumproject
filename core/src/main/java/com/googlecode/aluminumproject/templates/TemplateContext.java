@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.templates;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.libraries.actions.Action;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.LinkedList;
 import java.util.List;

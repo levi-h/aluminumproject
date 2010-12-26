@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
@@ -26,6 +25,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;

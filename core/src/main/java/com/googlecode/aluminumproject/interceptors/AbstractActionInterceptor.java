@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.interceptors;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.templates.ActionPhase;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.cache;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.templates.Template;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.HashMap;
 import java.util.Map;

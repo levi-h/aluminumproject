@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.serialisers.xml;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
 import com.googlecode.aluminumproject.templates.ExpressionElement;
 import com.googlecode.aluminumproject.templates.Template;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.io.PrintWriter;
 

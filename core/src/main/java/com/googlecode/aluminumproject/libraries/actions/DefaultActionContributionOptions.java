@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionSkipper;
 import com.googlecode.aluminumproject.templates.ActionContext;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.HashMap;
 import java.util.LinkedList;

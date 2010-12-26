@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.utilities.Injector;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
  * Reduces the effort it takes to implement subinterfaces of {@link LibraryElement the library element interface}.

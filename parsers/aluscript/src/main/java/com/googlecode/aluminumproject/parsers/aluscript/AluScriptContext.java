@@ -15,13 +15,13 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateBuilder;
 import com.googlecode.aluminumproject.templates.TemplateElement;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.HashMap;
 import java.util.List;

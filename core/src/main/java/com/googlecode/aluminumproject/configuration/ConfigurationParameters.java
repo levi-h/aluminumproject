@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
-import com.googlecode.aluminumproject.Logger;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

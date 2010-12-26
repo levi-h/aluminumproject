@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.writers;
 
-import com.googlecode.aluminumproject.Logger;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
  * Convenience superclass for writers.
