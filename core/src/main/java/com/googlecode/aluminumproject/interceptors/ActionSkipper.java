@@ -19,23 +19,18 @@ import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 /**
  * Skips both the {@link ActionPhase#CREATION creation} and {@link ActionPhase#EXECUTION execution} of an intercepted
  * {@link Action action}.
  *
  * @author levi_h
  */
-public class ActionSkipper implements ActionInterceptor {
+public class ActionSkipper extends AbstractActionInterceptor {
 	/**
 	 * Creates an action skipper.
 	 */
-	public ActionSkipper() {}
-
-	public Set<ActionPhase> getPhases() {
-		return EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION);
+	public ActionSkipper() {
+		super(ActionPhase.CREATION, ActionPhase.EXECUTION);
 	}
 
 	public void intercept(ActionContext actionContext) {}

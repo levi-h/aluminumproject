@@ -18,17 +18,12 @@ package com.googlecode.aluminumproject.interceptors;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 /**
  * An action interceptor that can be used in tests.
  *
  * @author levi_h
  */
-public class TestActionInterceptor implements ActionInterceptor {
-	private Set<ActionPhase> phases;
-
+public class TestActionInterceptor extends AbstractActionInterceptor {
 	/**
 	 * Creates a test action interceptor that intercepts all possible action phases.
 	 */
@@ -42,15 +37,7 @@ public class TestActionInterceptor implements ActionInterceptor {
 	 * @param phases the action phases to intercept
 	 */
 	public TestActionInterceptor(ActionPhase... phases) {
-		this.phases = EnumSet.noneOf(ActionPhase.class);
-
-		for (ActionPhase phase: phases) {
-			this.phases.add(phase);
-		}
-	}
-
-	public Set<ActionPhase> getPhases() {
-		return phases;
+		super(phases);
 	}
 
 	public void intercept(ActionContext actionContext) throws InterceptionException {

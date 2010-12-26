@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
@@ -28,9 +28,6 @@ import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * Sets the text of an {@link Element element}.
@@ -56,15 +53,13 @@ public class Text implements ActionContribution {
 		options.addInterceptor(new TextSetter(text));
 	}
 
-	private class TextSetter implements ActionInterceptor {
+	private class TextSetter extends AbstractActionInterceptor {
 		private String text;
 
 		public TextSetter(String text) {
-			this.text = text;
-		}
+			super(ActionPhase.CREATION);
 
-		public Set<ActionPhase> getPhases() {
-			return EnumSet.of(ActionPhase.CREATION);
+			this.text = text;
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {

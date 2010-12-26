@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
@@ -206,11 +207,7 @@ public class DefaultActionContextTest {
 	public void addingInterceptorForPastPhaseShouldCauseException() {
 		actionContext.setPhase(ActionPhase.EXECUTION);
 
-		actionContext.addInterceptor(new ActionInterceptor() {
-			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION);
-			}
-
+		actionContext.addInterceptor(new AbstractActionInterceptor(ActionPhase.CREATION, ActionPhase.EXECUTION) {
 			public void intercept(ActionContext actionContext) {}
 		});
 	}
@@ -227,11 +224,7 @@ public class DefaultActionContextTest {
 
 	@Test(dependsOnMethods = {"interceptorsShouldBeAddable", "phaseShouldBeChangeable"})
 	public void proceedingActionContextShouldRunNextInterceptor() {
-		actionContext.addInterceptor(new ActionInterceptor() {
-			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.EXECUTION);
-			}
-
+		actionContext.addInterceptor(new AbstractActionInterceptor(ActionPhase.EXECUTION) {
 			public void intercept(ActionContext actionContext) throws InterceptionException {
 				actionContext.getContext().setVariable("run", true);
 

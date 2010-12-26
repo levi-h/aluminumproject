@@ -18,7 +18,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
@@ -30,9 +30,6 @@ import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * Adds a namespace to an {@link AbstractElement element}.
@@ -60,17 +57,15 @@ public class Namespace implements ActionContribution {
 		options.addInterceptor(new NamespaceAdder(prefix, url));
 	}
 
-	private static class NamespaceAdder implements ActionInterceptor {
+	private static class NamespaceAdder extends AbstractActionInterceptor {
 		private String prefix;
 		private String url;
 
 		public NamespaceAdder(String prefix, String url) {
+			super(ActionPhase.CREATION);
+
 			this.prefix = prefix;
 			this.url = url;
-		}
-
-		public Set<ActionPhase> getPhases() {
-			return EnumSet.of(ActionPhase.CREATION);
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {

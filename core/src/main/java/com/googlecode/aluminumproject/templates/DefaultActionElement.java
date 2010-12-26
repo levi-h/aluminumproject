@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.templates;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
@@ -39,7 +39,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * The default {@link ActionElement action element} implementation.
@@ -129,15 +128,9 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		}
 	}
 
-	private static class ContributionInterceptor implements ActionInterceptor {
-		private final Logger logger;
-
+	private static class ContributionInterceptor extends AbstractActionInterceptor {
 		public ContributionInterceptor() {
-			logger = Logger.get(getClass());
-		}
-
-		public Set<ActionPhase> getPhases() {
-			return Collections.singleton(ActionPhase.CONTRIBUTION);
+			super(ActionPhase.CONTRIBUTION);
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {
@@ -190,21 +183,15 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		}
 	}
 
-	private static class CreationInterceptor implements ActionInterceptor {
+	private static class CreationInterceptor extends AbstractActionInterceptor {
 		private Template template;
 		private TemplateContext templateContext;
 
-		private final Logger logger;
-
 		public CreationInterceptor(Template template, TemplateContext templateContext) {
+			super(ActionPhase.CREATION);
+
 			this.template = template;
 			this.templateContext = templateContext;
-
-			logger = Logger.get(getClass());
-		}
-
-		public Set<ActionPhase> getPhases() {
-			return Collections.singleton(ActionPhase.CREATION);
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {
@@ -263,19 +250,13 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		}
 	}
 
-	private static class ExecutionInterceptor implements ActionInterceptor {
+	private static class ExecutionInterceptor extends AbstractActionInterceptor {
 		private TemplateContext templateContext;
 
-		private final Logger logger;
-
 		public ExecutionInterceptor(TemplateContext templateContext) {
+			super(ActionPhase.EXECUTION);
+
 			this.templateContext = templateContext;
-
-			logger = Logger.get(getClass());
-		}
-
-		public Set<ActionPhase> getPhases() {
-			return Collections.singleton(ActionPhase.EXECUTION);
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {

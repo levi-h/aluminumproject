@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.libraries.text.actions;
 
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
@@ -29,9 +29,6 @@ import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.ToggleableWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * Mutes or unmutes the output of the action that it contributes to by replacing its writer with a {@link
@@ -57,11 +54,7 @@ public class Mute implements ActionContribution {
 			throws ActionException {
 		final boolean mute = ((Boolean) parameter.getValue(Boolean.TYPE, context)).booleanValue();
 
-		options.addInterceptor(new ActionInterceptor() {
-			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.EXECUTION);
-			}
-
+		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.EXECUTION) {
 			public void intercept(ActionContext actionContext) throws InterceptionException {
 				Writer originalWriter = actionContext.getWriter();
 
