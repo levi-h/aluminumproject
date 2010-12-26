@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.templates;
 
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
@@ -33,6 +32,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactor
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;

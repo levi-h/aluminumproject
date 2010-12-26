@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines;
 
-import com.googlecode.aluminumproject.Logger;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
  * Abstract superclass of line parsers.

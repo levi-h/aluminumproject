@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject;
+package com.googlecode.aluminumproject.utilities;
 
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public class Logger {
 	private org.slf4j.Logger logger;
 
-	private Logger (org.slf4j.Logger logger) {
+	private Logger(org.slf4j.Logger logger) {
 		this.logger = logger;
 	}
 

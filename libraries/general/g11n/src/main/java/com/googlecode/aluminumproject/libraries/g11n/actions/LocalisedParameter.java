@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
@@ -29,6 +28,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.Type;

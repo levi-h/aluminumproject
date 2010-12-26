@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
@@ -28,6 +27,7 @@ import com.googlecode.aluminumproject.libraries.functions.FunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.FunctionException;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 
 import java.lang.reflect.Method;

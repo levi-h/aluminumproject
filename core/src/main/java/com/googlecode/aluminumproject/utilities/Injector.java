@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.utilities.finders.FieldFinder;
 

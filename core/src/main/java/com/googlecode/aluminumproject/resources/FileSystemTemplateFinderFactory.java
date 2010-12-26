@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.resources;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.resources.CompoundResourceFinder;
 import com.googlecode.aluminumproject.utilities.resources.FileSystemResourceFinder;
 import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;

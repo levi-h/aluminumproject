@@ -17,9 +17,9 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getTypeArgument;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.ListWriter;

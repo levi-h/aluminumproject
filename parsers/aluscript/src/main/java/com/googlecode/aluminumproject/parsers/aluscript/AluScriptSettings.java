@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.NewlineInstruction;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
  * Settings for AluScript templates.

@@ -19,7 +19,6 @@ import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPa
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.instantiate;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.isAbstract;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.cache.Cache;
@@ -36,6 +35,7 @@ import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;

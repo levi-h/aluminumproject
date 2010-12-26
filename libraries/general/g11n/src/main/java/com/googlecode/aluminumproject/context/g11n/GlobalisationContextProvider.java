@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.context.g11n;
 
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
@@ -26,6 +25,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.utilities.GlobalisationUtilities;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.util.Locale;

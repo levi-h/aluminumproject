@@ -17,13 +17,13 @@ package com.googlecode.aluminumproject.servlet;
 
 import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.servlet.context.ServletContext;
 import com.googlecode.aluminumproject.servlet.writers.ResponseWriter;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;

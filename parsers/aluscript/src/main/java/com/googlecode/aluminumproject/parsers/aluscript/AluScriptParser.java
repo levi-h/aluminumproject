@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
@@ -32,6 +31,7 @@ import com.googlecode.aluminumproject.parsers.aluscript.lines.instructions.Instr
 import com.googlecode.aluminumproject.parsers.aluscript.lines.text.TextLineParser;
 import com.googlecode.aluminumproject.resources.ResourceException;
 import com.googlecode.aluminumproject.templates.Template;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.io.ByteArrayOutputStream;

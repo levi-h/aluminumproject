@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.resources;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.resources.MemoryResourceStoreFinder;
 import com.googlecode.aluminumproject.utilities.resources.ResourceStoreFinder;
 

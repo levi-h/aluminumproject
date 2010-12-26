@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.templates;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.cache.Cache;
 import com.googlecode.aluminumproject.cache.CacheException;
 import com.googlecode.aluminumproject.configuration.Configuration;
@@ -23,6 +22,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.parsers.Parser;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.Writer;
 

@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
@@ -23,6 +22,7 @@ import com.googlecode.aluminumproject.expressions.Expression;
 import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;

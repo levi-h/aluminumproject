@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
