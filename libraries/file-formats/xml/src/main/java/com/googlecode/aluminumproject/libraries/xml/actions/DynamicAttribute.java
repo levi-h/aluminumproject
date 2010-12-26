@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
@@ -29,9 +29,6 @@ import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * Adds an attribute to an {@link DynamicElement element}. The library URL abbreviation will be used as namespace
@@ -61,19 +58,17 @@ public class DynamicAttribute implements ActionContribution {
 		options.addInterceptor(new AttributeAdder(prefix, name, value));
 	}
 
-	private class AttributeAdder implements ActionInterceptor {
+	private class AttributeAdder extends AbstractActionInterceptor {
 		private String prefix;
 		private String name;
 		private String value;
 
 		public AttributeAdder(String prefix, String name, String value) {
+			super(ActionPhase.CREATION);
+
 			this.prefix = prefix;
 			this.name = name;
 			this.value = value;
-		}
-
-		public Set<ActionPhase> getPhases() {
-			return EnumSet.of(ActionPhase.CREATION);
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {

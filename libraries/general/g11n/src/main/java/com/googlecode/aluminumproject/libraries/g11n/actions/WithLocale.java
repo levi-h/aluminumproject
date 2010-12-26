@@ -20,7 +20,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.ConstantLocaleProvider;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.LocaleProvider;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
@@ -31,9 +31,7 @@ import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
 
-import java.util.EnumSet;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Changes the locale of the {@link GlobalisationContext globalisation context} in which an action is created and
@@ -54,12 +52,8 @@ public class WithLocale implements ActionContribution {
 
 	public void make(Context context, Writer writer,
 			final ActionParameter parameter, ActionContributionOptions options) {
-		options.addInterceptor(new ActionInterceptor() {
+		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.CREATION, ActionPhase.EXECUTION) {
 			private LocaleProvider localeProvider;
-
-			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION);
-			}
 
 			public void intercept(ActionContext actionContext) throws InterceptionException {
 				Context context = actionContext.getContext();

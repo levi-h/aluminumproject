@@ -20,7 +20,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NameBasedResourceBundleProvider;
 import com.googlecode.aluminumproject.context.g11n.ResourceBundleProvider;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
@@ -30,9 +30,6 @@ import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * Changes the {@link ResourceBundleProvider resource bundle provider} of the {@link GlobalisationContext globalisation
@@ -54,12 +51,8 @@ public class WithResourceBundle implements ActionContribution {
 
 	public void make(Context context, Writer writer,
 			final ActionParameter parameter, ActionContributionOptions options) {
-		options.addInterceptor(new ActionInterceptor() {
+		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.CREATION, ActionPhase.EXECUTION) {
 			private ResourceBundleProvider resourceBundleProvider;
-
-			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.CREATION, ActionPhase.EXECUTION);
-			}
 
 			public void intercept(ActionContext actionContext) throws InterceptionException {
 				Context context = actionContext.getContext();

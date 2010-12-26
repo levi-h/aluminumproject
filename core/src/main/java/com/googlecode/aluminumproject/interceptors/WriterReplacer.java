@@ -24,9 +24,6 @@ import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 /**
  * An {@link ActionInterceptor action interceptor} that will replace the {@link Writer writer} that will be used by the
  * {@link Action action} that it contributes to. If the new writer is not a decorative writer, then it will be closed
@@ -34,14 +31,12 @@ import java.util.Set;
  *
  * @author levi_h
  */
-public abstract class WriterReplacer implements ActionInterceptor {
+public abstract class WriterReplacer extends AbstractActionInterceptor {
 	/**
 	 * Creates a writer replacer.
 	 */
-	public WriterReplacer() {}
-
-	public Set<ActionPhase> getPhases() {
-		return EnumSet.of(ActionPhase.EXECUTION);
+	public WriterReplacer() {
+		super(ActionPhase.EXECUTION);
 	}
 
 	public void intercept(ActionContext actionContext)

@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.Logger;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
@@ -34,11 +33,9 @@ import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.ListWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 
-import java.util.EnumSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Contains two action contributions that can be used to capture the output of an action and store it in a context
@@ -73,19 +70,13 @@ public class Variable {
 		}
 	}
 
-	private static class NameInterceptor implements ActionInterceptor {
+	private static class NameInterceptor extends AbstractActionInterceptor {
 		private String name;
 
-		private final Logger logger;
-
 		public NameInterceptor(String name) {
+			super(ActionPhase.EXECUTION);
+
 			this.name = name;
-
-			logger = Logger.get(Variable.class);
-		}
-
-		public Set<ActionPhase> getPhases() {
-			return EnumSet.of(ActionPhase.EXECUTION);
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {
@@ -176,15 +167,13 @@ public class Variable {
 		}
 	}
 
-	private static class ScopeInterceptor implements ActionInterceptor {
+	private static class ScopeInterceptor extends AbstractActionInterceptor {
 		private String scope;
 
 		public ScopeInterceptor(String scope) {
-			this.scope = scope;
-		}
+			super(ActionPhase.EXECUTION);
 
-		public Set<ActionPhase> getPhases() {
-			return EnumSet.of(ActionPhase.EXECUTION);
+			this.scope = scope;
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {

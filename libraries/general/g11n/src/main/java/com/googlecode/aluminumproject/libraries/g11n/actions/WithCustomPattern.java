@@ -23,7 +23,7 @@ import com.googlecode.aluminumproject.context.g11n.DateFormatType;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatProvider;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatType;
-import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
@@ -41,9 +41,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.EnumSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.TimeZone;
 
 /**
@@ -74,11 +72,7 @@ public class WithCustomPattern implements ActionContribution {
 
 	public void make(Context context, Writer writer,
 			final ActionParameter parameter, ActionContributionOptions options) {
-		options.addInterceptor(new ActionInterceptor() {
-			public Set<ActionPhase> getPhases() {
-				return EnumSet.of(ActionPhase.EXECUTION);
-			}
-
+		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.EXECUTION) {
 			public void intercept(ActionContext actionContext) throws InterceptionException {
 				Context context = actionContext.getContext();
 				GlobalisationContext globalisationContext = GlobalisationContext.from(context);
