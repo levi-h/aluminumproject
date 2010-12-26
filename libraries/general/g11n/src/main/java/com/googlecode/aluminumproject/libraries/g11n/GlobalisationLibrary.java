@@ -37,10 +37,7 @@ public class GlobalisationLibrary extends AbstractLibrary {
 	public GlobalisationLibrary() {
 		super(ReflectionUtilities.getPackageName(GlobalisationLibrary.class));
 
-		String url = "http://aluminumproject.googlecode.com/g11n";
-		String version = EnvironmentUtilities.getVersion();
-
-		information = new LibraryInformation(url, "g", version, false, true, false);
+		information = new LibraryInformation(URL, "g", EnvironmentUtilities.getVersion(), false, true, false);
 	}
 
 	public LibraryInformation getInformation() {
@@ -54,4 +51,7 @@ public class GlobalisationLibrary extends AbstractLibrary {
 		initialiseLibraryElement(actionContributionFactory);
 		return actionContributionFactory;
 	}
+
+	/** The globalisation library URL: {@value}. */
+	public final static String URL = "http://aluminumproject.googlecode.com/g11n";
 }

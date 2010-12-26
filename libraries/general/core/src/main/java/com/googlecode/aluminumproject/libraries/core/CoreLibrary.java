@@ -34,13 +34,13 @@ public class CoreLibrary extends AbstractLibrary {
 	public CoreLibrary() {
 		super(ReflectionUtilities.getPackageName(CoreLibrary.class));
 
-		String url = "http://aluminumproject.googlecode.com/core";
-		String version = EnvironmentUtilities.getVersion();
-
-		information = new LibraryInformation(url, "c", version);
+		information = new LibraryInformation(URL, "c", EnvironmentUtilities.getVersion());
 	}
 
 	public LibraryInformation getInformation() {
 		return information;
 	}
+
+	/** The URL of the core library: {@value}. */
+	public final static String URL = "http://aluminumproject.googlecode.com/core";
 }

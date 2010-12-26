@@ -21,6 +21,7 @@ import com.googlecode.aluminumproject.libraries.actions.TestActionContributionFa
 import com.googlecode.aluminumproject.libraries.functions.Add;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
+import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
 /**
  * A library that can be used in tests.
@@ -38,10 +39,7 @@ public class TestLibrary extends AbstractLibrary {
 	public TestLibrary() {
 		super(ReflectionUtilities.getPackageName(TestLibrary.class));
 
-		String url = "http://aluminumproject.googlecode.com/test";
-		String version = "test";
-
-		information = new LibraryInformation(url, version, version, false, false, true);
+		information = new LibraryInformation(URL, "test", EnvironmentUtilities.getVersion(), false, false, true);
 	}
 
 	@Override
@@ -87,4 +85,7 @@ public class TestLibrary extends AbstractLibrary {
 
 		return dynamicFunctionFactory;
 	}
+
+	/** The test library URL: {@value}. */
+	public final static String URL = "http://aluminumproject.googlecode.com/test";
 }
