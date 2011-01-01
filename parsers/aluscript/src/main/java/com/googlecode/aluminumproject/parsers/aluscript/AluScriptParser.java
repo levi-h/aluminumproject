@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,10 @@ import com.googlecode.aluminumproject.parsers.aluscript.lines.text.TextLineParse
 import com.googlecode.aluminumproject.resources.ResourceException;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -140,7 +138,7 @@ public class AluScriptParser implements Parser {
 	public void disable() {}
 
 	public Template parseTemplate(String name) throws ParseException {
-		String templateContents = readUrl(getTemplateUrl(name));
+		String templateContents = readStream(name, getTemplateStream(name));
 		logger.debug("read template '", name, "': ", templateContents);
 
 		AluScriptContext context = new AluScriptContext(configuration, settings, instructions);
@@ -156,23 +154,20 @@ public class AluScriptParser implements Parser {
 		return context.getTemplate();
 	}
 
-	private URL getTemplateUrl(String name) throws ParseException {
+	private InputStream getTemplateStream(String name) throws ParseException {
 		if (templateExtension != null) {
 			name = String.format("%s.%s", name, templateExtension);
 		}
 
 		try {
-			return configuration.getTemplateFinderFactory().createTemplateFinder().find(name);
+			return configuration.getTemplateFinder().find(name);
 		} catch (ResourceException exception) {
-			throw new ParseException(exception, "can't create template finder");
-		} catch (UtilityException exception) {
 			throw new ParseException(exception, "can't find template");
 		}
 	}
 
-	private String readUrl(URL templateUrl) throws ParseException {
+	private String readStream(String name, InputStream in) throws ParseException {
 		try {
-			InputStream in = templateUrl.openStream();
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 			try {
@@ -188,7 +183,7 @@ public class AluScriptParser implements Parser {
 
 			return out.toString();
 		} catch (IOException exception) {
-			throw new ParseException(exception, "can't read template URL '", templateUrl, "'");
+			throw new ParseException(exception, "can't read template '", name, "'");
 		}
 	}
 

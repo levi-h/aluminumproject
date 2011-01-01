@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.resources.ClassPathResourceFinder;
-import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;
+import com.googlecode.aluminumproject.configuration.ConfigurationException;
+
+import java.io.InputStream;
 
 /**
- * Creates resource finders that look for templates in the class path.
+ * Looks for templates in the class path.
  * <p>
  * By default, templates will be looked for in the root of the class path, but this template path can be configured
  * using the {@value #TEMPLATE_PATH} parameter. A template path is separated by slashes, but does not start with a
@@ -29,19 +29,18 @@ import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;
  *
  * @author levi_h
  */
-public class ClassPathTemplateFinderFactory implements TemplateFinderFactory {
+public class ClassPathTemplateFinder extends AbstractTemplateFinder {
 	private String templatePath;
 
-	private final Logger logger;
-
 	/**
-	 * Creates a class path template finder factory.
+	 * Creates a class path template finder.
 	 */
-	public ClassPathTemplateFinderFactory() {
-		logger = Logger.get(getClass());
-	}
+	public ClassPathTemplateFinder() {}
 
-	public void initialise(Configuration configuration) {
+	@Override
+	public void initialise(Configuration configuration) throws ConfigurationException {
+		super.initialise(configuration);
+
 		templatePath = configuration.getParameters().getValue(TEMPLATE_PATH, null);
 
 		if (templatePath != null) {
@@ -49,12 +48,22 @@ public class ClassPathTemplateFinderFactory implements TemplateFinderFactory {
 		}
 	}
 
-	public void disable() {}
+	public InputStream find(String name) throws ResourceException {
+		String fullName = (templatePath == null) ? name : String.format("%s/%s", templatePath, name);
 
-	public ResourceFinder createTemplateFinder() {
-		return new ClassPathResourceFinder(templatePath);
+		logger.debug("trying to find template '", fullName, "'");
+
+		InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fullName);
+
+		if (stream == null) {
+			throw new ResourceException("can't find template '", fullName, "'");
+		}
+
+		logger.debug("found template '", fullName, "' in class path");
+
+		return stream;
 	}
 
 	/** The name of the configuration parameter that contains the path in which templates will be looked for. */
-	public final static String TEMPLATE_PATH = "template_finder_factory.class_path.template_path";
+	public final static String TEMPLATE_PATH = "template_finder.class_path.template_path";
 }

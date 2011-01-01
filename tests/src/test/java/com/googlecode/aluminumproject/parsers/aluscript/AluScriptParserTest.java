@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package com.googlecode.aluminumproject.parsers.aluscript;
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.AUTOMATIC_NEWLINES;
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.TEMPLATE_EXTENSION;
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.TEMPLATE_NAME_TRANSLATOR_CLASS;
-import static com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory.TEMPLATE_PATH;
+import static com.googlecode.aluminumproject.resources.ClassPathTemplateFinder.TEMPLATE_PATH;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.parsers.UpperCaseTemplateNameTranslator;
-import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
+import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
+import com.googlecode.aluminumproject.resources.TemplateFinder;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateElement;
@@ -113,9 +113,9 @@ public class AluScriptParserTest {
 		templateElementFactory.initialise(configuration);
 		configuration.setTemplateElementFactory(templateElementFactory);
 
-		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
-		templateFinderFactory.initialise(configuration);
-		configuration.setTemplateFinderFactory(templateFinderFactory);
+		TemplateFinder templateFinder = new ClassPathTemplateFinder();
+		templateFinder.initialise(configuration);
+		configuration.setTemplateFinder(templateFinder);
 
 		AluScriptParser parser = new AluScriptParser();
 		parser.initialise(configuration);

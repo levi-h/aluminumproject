@@ -18,8 +18,8 @@ package com.googlecode.aluminumproject.resources;
 import com.googlecode.aluminumproject.AluminumException;
 
 /**
- * Thrown by {@link TemplateFinderFactory template finder factories} and {@link TemplateStoreFinderFactory template
- * store finder factories} when they can't create a finder.
+ * Thrown by {@link TemplateFinder template finders} and {@link TemplateStoreFinder template store finders} when they
+ * can't create a stream.
  *
  * @author levi_h
  */
@@ -44,5 +44,5 @@ public class ResourceException extends AluminumException {
 	}
 
 
-	private final static long serialVersionUID = 20090829L;
+	private final static long serialVersionUID = 20110101L;
 }

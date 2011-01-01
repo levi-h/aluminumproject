@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.parsers.xml.XmlParser;
-import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
+import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
+import com.googlecode.aluminumproject.resources.TemplateFinder;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.StringWriter;
@@ -134,14 +134,14 @@ public class TemplateProcessorTest {
 
 	public void contextEnrichersShouldBeInvoked() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, "templates");
+		parameters.addParameter(ClassPathTemplateFinder.TEMPLATE_PATH, "templates");
 		parameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
 
 		TestConfiguration configuration = new TestConfiguration(parameters);
 
-		TemplateFinderFactory templateFinderFactory = new ClassPathTemplateFinderFactory();
-		templateFinderFactory.initialise(configuration);
-		configuration.setTemplateFinderFactory(templateFinderFactory);
+		TemplateFinder templateFinder = new ClassPathTemplateFinder();
+		templateFinder.initialise(configuration);
+		configuration.setTemplateFinder(templateFinder);
 
 		Parser parser = new XmlParser();
 		parser.initialise(configuration);

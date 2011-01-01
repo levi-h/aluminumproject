@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.parsers.Parser;
-import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
+import com.googlecode.aluminumproject.resources.TemplateFinder;
+import com.googlecode.aluminumproject.resources.TemplateStoreFinder;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
 
@@ -85,12 +85,12 @@ public interface Configuration {
 	TemplateElementFactory getTemplateElementFactory() throws ConfigurationException;
 
 	/**
-	 * Returns the template finder factory.
+	 * Returns the template finder.
 	 *
-	 * @return the template finder factory to use
+	 * @return the template finder to use
 	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	TemplateFinderFactory getTemplateFinderFactory() throws ConfigurationException;
+	TemplateFinder getTemplateFinder() throws ConfigurationException;
 
 	/**
 	 * Returns all parsers that can be used to produce a template.
@@ -101,12 +101,12 @@ public interface Configuration {
 	Map<String, Parser> getParsers() throws ConfigurationException;
 
 	/**
-	 * Returns the template store finder factory.
+	 * Returns the template store finder.
 	 *
-	 * @return the template store finder factory to use
+	 * @return the template store finder to use
 	 * @throws ConfigurationException when this configuration has been closed
 	 */
-	TemplateStoreFinderFactory getTemplateStoreFinderFactory() throws ConfigurationException;
+	TemplateStoreFinder getTemplateStoreFinder() throws ConfigurationException;
 
 	/**
 	 * Returns all serialisers that can be used to serialise a template.

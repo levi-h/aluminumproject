@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ConstantActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ExpressionActionParameter;
 import com.googlecode.aluminumproject.libraries.core.CoreLibrary;
-import com.googlecode.aluminumproject.resources.MemoryTemplateStoreFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
+import com.googlecode.aluminumproject.resources.InMemoryTemplateStoreFinder;
+import com.googlecode.aluminumproject.resources.TemplateStoreFinder;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
@@ -37,7 +37,6 @@ import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.TemplateBuilder;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
-import com.googlecode.aluminumproject.utilities.resources.MemoryResourceStoreFinder;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -273,9 +272,9 @@ public class XmlSerialiserTest {
 		testLibrary.initialise(configuration);
 		configuration.addLibrary(testLibrary);
 
-		TemplateStoreFinderFactory templateStoreFinderFactory = new MemoryTemplateStoreFinderFactory();
-		templateStoreFinderFactory.initialise(configuration);
-		configuration.setTemplateStoreFinderFactory(templateStoreFinderFactory);
+		TemplateStoreFinder templateStoreFinder = new InMemoryTemplateStoreFinder();
+		templateStoreFinder.initialise(configuration);
+		configuration.setTemplateStoreFinder(templateStoreFinder);
 
 		Serialiser serialiser = new XmlSerialiser();
 		serialiser.initialise(configuration);
@@ -295,11 +294,11 @@ public class XmlSerialiserTest {
 	private String getTemplateText() {
 		configuration.getSerialisers().get("xml").serialiseTemplate(templateBuilder.build(), "template");
 
-		MemoryResourceStoreFinder templateStoreFinder =
-			(MemoryResourceStoreFinder) configuration.getTemplateStoreFinderFactory().createTemplateStoreFinder();
+		InMemoryTemplateStoreFinder templateStoreFinder =
+			(InMemoryTemplateStoreFinder) configuration.getTemplateStoreFinder();
 
-		String templateText = new String(templateStoreFinder.getResource("template"));
-		templateStoreFinder.removeResource("template");
+		String templateText = new String(templateStoreFinder.get("template"));
+		templateStoreFinder.remove("template");
 
 		return templateText;
 	}

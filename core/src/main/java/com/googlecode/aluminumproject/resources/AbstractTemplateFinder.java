@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,26 @@
  */
 package com.googlecode.aluminumproject.resources;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationElement;
-import com.googlecode.aluminumproject.parsers.Parser;
-import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;
+import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
- * Creates {@link ResourceFinder resource finders} that are used by {@link Parser parsers} to find a template by name.
+ * Abstract superclass that simplifies implementing the {@link TemplateFinder template finder interface}.
  *
  * @author levi_h
  */
-public interface TemplateFinderFactory extends ConfigurationElement {
+public abstract class AbstractTemplateFinder implements TemplateFinder {
+	/** The logger to use. */
+	protected final Logger logger;
+
 	/**
-	 * Creates a template finder.
-	 *
-	 * @return the new template finder
-	 * @throws ResourceException when the template finder can't be created
+	 * Creates an abstract template finder.
 	 */
-	ResourceFinder createTemplateFinder() throws ResourceException;
+	protected AbstractTemplateFinder() {
+		logger = Logger.get(getClass());
+	}
+
+	public void initialise(Configuration configuration) {}
+
+	public void disable() {}
 }

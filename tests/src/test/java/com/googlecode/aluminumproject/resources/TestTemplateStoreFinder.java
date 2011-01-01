@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,21 @@
 package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.utilities.resources.ResourceStoreFinder;
+
+import java.io.OutputStream;
 
 /**
- * A template store finder factory that can be used in tests.
+ * A template store finder that can be used in tests.
  *
  * @author levi_h
  */
-public class TestTemplateStoreFinderFactory implements TemplateStoreFinderFactory {
+public class TestTemplateStoreFinder implements TemplateStoreFinder {
 	private Configuration configuration;
 
 	/**
-	 * Creates a test template store finder factory.
+	 * Creates a test template store finder.
 	 */
-	public TestTemplateStoreFinderFactory() {}
+	public TestTemplateStoreFinder() {}
 
 	public void initialise(Configuration configuration) {
 		this.configuration = configuration;
@@ -40,15 +41,15 @@ public class TestTemplateStoreFinderFactory implements TemplateStoreFinderFactor
 	}
 
 	/**
-	 * Returns the configuration that this template store finder factory was initialised with.
+	 * Returns the configuration that this template store finder was initialised with.
 	 *
-	 * @return this template store finder factory's configuration
+	 * @return this template store finder's configuration
 	 */
 	public Configuration getConfiguration() {
 		return configuration;
 	}
 
-	public ResourceStoreFinder createTemplateStoreFinder() {
+	public OutputStream find(String name) {
 		return null;
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.PARSER_PACKAGES;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.SERIALISER_PACKAGES;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_ELEMENT_FACTORY_CLASS;
-import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_FINDER_FACTORY_CLASS;
-import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_STORE_FINDER_FACTORY_CLASS;
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_FINDER_CLASS;
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_STORE_FINDER_CLASS;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
 import com.googlecode.aluminumproject.annotations.Named;
@@ -55,11 +55,10 @@ import com.googlecode.aluminumproject.parsers.IgnoredParser;
 import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.parsers.TestParser;
-import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.MemoryTemplateStoreFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
-import com.googlecode.aluminumproject.resources.TestTemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.TestTemplateStoreFinderFactory;
+import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
+import com.googlecode.aluminumproject.resources.InMemoryTemplateStoreFinder;
+import com.googlecode.aluminumproject.resources.TestTemplateFinder;
+import com.googlecode.aluminumproject.resources.TestTemplateStoreFinder;
 import com.googlecode.aluminumproject.serialisers.IgnoredSerialiser;
 import com.googlecode.aluminumproject.serialisers.SerialisationException;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
@@ -214,88 +213,82 @@ public class DefaultConfigurationTest {
 		assert templateElementFactory.getConfiguration() == null;
 	}
 
-	public void templateFinderFactoryShouldDefaultToClassPathTemplateFinderFactory() {
+	public void templateFinderShouldDefaultToClassPathTemplateFinder() {
 		configuration = new DefaultConfiguration();
 
-		assert configuration.getTemplateFinderFactory() instanceof ClassPathTemplateFinderFactory;
+		assert configuration.getTemplateFinder() instanceof ClassPathTemplateFinder;
 	}
 
-	public void templateFinderFactoryShouldBeConfigurable() {
+	public void templateFinderShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, TestTemplateFinderFactory.class.getName());
+		parameters.addParameter(TEMPLATE_FINDER_CLASS, TestTemplateFinder.class.getName());
 
 		configuration = new DefaultConfiguration(parameters);
 
-		assert configuration.getTemplateFinderFactory() instanceof TestTemplateFinderFactory;
+		assert configuration.getTemplateFinder() instanceof TestTemplateFinder;
 	}
 
-	@Test(dependsOnMethods = "templateFinderFactoryShouldBeConfigurable")
-	public void configurationShouldInitialiseTemplateFinderFactory() {
+	@Test(dependsOnMethods = "templateFinderShouldBeConfigurable")
+	public void configurationShouldInitialiseTemplateFinder() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, TestTemplateFinderFactory.class.getName());
+		parameters.addParameter(TEMPLATE_FINDER_CLASS, TestTemplateFinder.class.getName());
 
 		configuration = new DefaultConfiguration(parameters);
 
-		TestTemplateFinderFactory templateFinderFactory =
-			(TestTemplateFinderFactory) configuration.getTemplateFinderFactory();
-		assert templateFinderFactory.getConfiguration() == configuration;
+		assert ((TestTemplateFinder) configuration.getTemplateFinder()).getConfiguration() == configuration;
 	}
 
-	@Test(dependsOnMethods = "configurationShouldInitialiseTemplateFinderFactory")
-	public void configurationShouldDisableTemplateFinderFactoryWhenItIsClosed() {
+	@Test(dependsOnMethods = "configurationShouldInitialiseTemplateFinder")
+	public void configurationShouldDisableTemplateFinderWhenItIsClosed() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, TestTemplateFinderFactory.class.getName());
+		parameters.addParameter(TEMPLATE_FINDER_CLASS, TestTemplateFinder.class.getName());
 
 		Configuration configuration = new DefaultConfiguration(parameters);
 
-		TestTemplateFinderFactory templateFinderFactory =
-			(TestTemplateFinderFactory) configuration.getTemplateFinderFactory();
+		TestTemplateFinder templateFinder = (TestTemplateFinder) configuration.getTemplateFinder();
 
 		configuration.close();
 
-		assert templateFinderFactory.getConfiguration() == null;
+		assert templateFinder.getConfiguration() == null;
 	}
 
-	public void templateStoreFinderFactoryShouldDefaultToMemoryTemplateStoreFinderFactory() {
+	public void templateStoreFinderShouldDefaultToInMemoryTemplateStoreFinder() {
 		configuration = new DefaultConfiguration();
 
-		assert configuration.getTemplateStoreFinderFactory() instanceof MemoryTemplateStoreFinderFactory;
+		assert configuration.getTemplateStoreFinder() instanceof InMemoryTemplateStoreFinder;
 	}
 
-	public void templateStoreFinderFactoryShouldBeConfigurable() {
+	public void templateStoreFinderShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(TEMPLATE_STORE_FINDER_FACTORY_CLASS, TestTemplateStoreFinderFactory.class.getName());
+		parameters.addParameter(TEMPLATE_STORE_FINDER_CLASS, TestTemplateStoreFinder.class.getName());
 
 		configuration = new DefaultConfiguration(parameters);
 
-		assert configuration.getTemplateStoreFinderFactory() instanceof TestTemplateStoreFinderFactory;
+		assert configuration.getTemplateStoreFinder() instanceof TestTemplateStoreFinder;
 	}
 
-	@Test(dependsOnMethods = "templateStoreFinderFactoryShouldBeConfigurable")
-	public void configurationShouldInitialiseTemplateStoreFinderFactory() {
+	@Test(dependsOnMethods = "templateStoreFinderShouldBeConfigurable")
+	public void configurationShouldInitialiseTemplateStoreFinder() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(TEMPLATE_STORE_FINDER_FACTORY_CLASS, TestTemplateStoreFinderFactory.class.getName());
+		parameters.addParameter(TEMPLATE_STORE_FINDER_CLASS, TestTemplateStoreFinder.class.getName());
 
 		configuration = new DefaultConfiguration(parameters);
 
-		TestTemplateStoreFinderFactory templateStoreFinderFactory =
-			(TestTemplateStoreFinderFactory) configuration.getTemplateStoreFinderFactory();
-		assert templateStoreFinderFactory.getConfiguration() == configuration;
+		assert ((TestTemplateStoreFinder) configuration.getTemplateStoreFinder()).getConfiguration() == configuration;
 	}
 
-	@Test(dependsOnMethods = "configurationShouldInitialiseTemplateStoreFinderFactory")
-	public void configurationShouldDisableTemplateStoreFinderFactoryWhenItIsClosed() {
+	@Test(dependsOnMethods = "configurationShouldInitialiseTemplateStoreFinder")
+	public void configurationShouldDisableTemplateStoreFinderWhenItIsClosed() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
-		parameters.addParameter(TEMPLATE_STORE_FINDER_FACTORY_CLASS, TestTemplateStoreFinderFactory.class.getName());
+		parameters.addParameter(TEMPLATE_STORE_FINDER_CLASS, TestTemplateStoreFinder.class.getName());
 
 		Configuration configuration = new DefaultConfiguration(parameters);
 
-		TestTemplateStoreFinderFactory templateStoreFinderFactory =
-			(TestTemplateStoreFinderFactory) configuration.getTemplateStoreFinderFactory();
+		TestTemplateStoreFinder templateStoreFinder = (TestTemplateStoreFinder) configuration.getTemplateStoreFinder();
 
 		configuration.close();
 
-		assert templateStoreFinderFactory.getConfiguration() == null;
+		assert templateStoreFinder.getConfiguration() == null;
 	}
 
 	public void cacheShouldDefaultToNull() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.cli.commands.alu;
 
-import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_FINDER_FACTORY_CLASS;
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_FINDER_CLASS;
 import static com.googlecode.aluminumproject.context.Context.TEMPLATE_SCOPE;
 
 import com.googlecode.aluminumproject.Aluminum;
@@ -27,7 +27,7 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.resources.FileSystemTemplateFinderFactory;
+import com.googlecode.aluminumproject.resources.FileSystemTemplateFinder;
 import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.environment.PropertySetContainer;
@@ -58,10 +58,10 @@ import joptsimple.OptionSpec;
  * arguments (if any) are made available as a context variable named {@value #ARGUMENTS_VARIABLE_NAME}.
  * <p>
  * The template engine will use a {@link DefaultConfiguration default configuration} with configuration parameters which
- * make sure that it's template finder will be created by a {@link FileSystemTemplateFinderFactory file system template
- * finder factory} that looks for templates in the current directory and the <em>templates</em> directory inside the
- * directory in which Aluminum was installed. Other configuration parameters may be specified in a properties file named
- * {@code alu.properties}, located in {@code ~/.aluminum}, where {@code ~} stands for the user's home directory.
+ * make sure that it's template finder will be created by a {@link FileSystemTemplateFinder file system template finder}
+ * that looks for templates in the current directory and the <em>templates</em> directory inside the directory in which
+ * Aluminum was installed. Other configuration parameters may be specified in a properties file named {@code
+ * alu.properties}, located in {@code ~/.aluminum}, where {@code ~} stands for the user's home directory.
  *
  * @author levi_h
  */
@@ -140,7 +140,7 @@ public class Alu extends Command {
 	}
 
 	private void addConfigurationParameters(ConfigurationParameters parameters) {
-		parameters.addParameter(TEMPLATE_FINDER_FACTORY_CLASS, FileSystemTemplateFinderFactory.class.getName());
+		parameters.addParameter(TEMPLATE_FINDER_CLASS, FileSystemTemplateFinder.class.getName());
 
 		String templateDirectories = System.getProperty("user.dir");
 
@@ -153,7 +153,7 @@ public class Alu extends Command {
 			templateDirectories = String.format("%s, %s/templates", templateDirectories, aluminumHome);
 		}
 
-		parameters.addParameter(FileSystemTemplateFinderFactory.TEMPLATE_DIRECTORIES, templateDirectories);
+		parameters.addParameter(FileSystemTemplateFinder.TEMPLATE_DIRECTORIES, templateDirectories);
 	}
 
 	private void addCustomConfigurationParameters(ConfigurationParameters parameters) throws CommandException {

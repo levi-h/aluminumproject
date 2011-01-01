@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,21 @@ package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
-import com.googlecode.aluminumproject.utilities.resources.ResourceStoreFinder;
+
+import java.io.OutputStream;
 
 /**
- * Creates {@link ResourceStoreFinder resource store finders} that are used by {@link Serialiser serialisers} to find a
- * location to store a template.
+ * Used by a {@link Serialiser serialiser} to find a location to store a template.
  *
  * @author levi_h
  */
-public interface TemplateStoreFinderFactory extends ConfigurationElement {
+public interface TemplateStoreFinder extends ConfigurationElement {
 	/**
-	 * Creates a template store finder.
+	 * Finds an output stream for a template with a certain name.
 	 *
-	 * @return the new template store finder
-	 * @throws ResourceException when the template store finder can't be created
+	 * @param name the name of the template to find an output stream for
+	 * @return an output stream where the template can be written to
+	 * @throws ResourceException when no output stream can be found for the template
 	 */
-	ResourceStoreFinder createTemplateStoreFinder() throws ResourceException;
+	OutputStream find(String name) throws ResourceException;
 }
