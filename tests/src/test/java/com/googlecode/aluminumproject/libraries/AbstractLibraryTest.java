@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"core", "fast"})
-public class AbstractLibraryTest { // TODO action contributions that are usable as actions -> action factory
+public class AbstractLibraryTest {
 	public void usingPackagesThatDoNotContainActionsShouldResultInEmptyListOfActionFactories() {
 		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(String.class));
 
