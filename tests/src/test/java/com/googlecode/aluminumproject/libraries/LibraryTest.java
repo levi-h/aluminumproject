@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 import com.googlecode.aluminumproject.parsers.xml.XmlParser;
-import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
+import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 
@@ -44,7 +44,7 @@ public abstract class LibraryTest {
 	@BeforeMethod
 	public final void createTemplateEngine() {
 		ConfigurationParameters configurationParameters = new ConfigurationParameters();
-		configurationParameters.addParameter(ClassPathTemplateFinderFactory.TEMPLATE_PATH, templatePath);
+		configurationParameters.addParameter(ClassPathTemplateFinder.TEMPLATE_PATH, templatePath);
 		configurationParameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
 		configurationParameters.addParameter(AluScriptParser.TEMPLATE_EXTENSION, "alu");
 

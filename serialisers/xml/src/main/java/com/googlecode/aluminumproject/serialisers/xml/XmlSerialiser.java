@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TextElement;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -137,10 +136,8 @@ public class XmlSerialiser implements Serialiser {
 		OutputStream out;
 
 		try {
-			out = configuration.getTemplateStoreFinderFactory().createTemplateStoreFinder().find(name);
+			out = configuration.getTemplateStoreFinder().find(name);
 		} catch (ResourceException exception) {
-			throw new SerialisationException(exception, "can't create template store finder");
-		} catch (UtilityException exception) {
 			throw new SerialisationException(exception, "can't find a place to store template with name '", name, "'");
 		}
 

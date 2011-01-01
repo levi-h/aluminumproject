@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@ import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.parsers.Parser;
-import com.googlecode.aluminumproject.resources.ClassPathTemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.MemoryTemplateStoreFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
+import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
+import com.googlecode.aluminumproject.resources.InMemoryTemplateStoreFinder;
+import com.googlecode.aluminumproject.resources.TemplateFinder;
+import com.googlecode.aluminumproject.resources.TemplateStoreFinder;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
@@ -66,10 +66,10 @@ import java.util.Set;
  * #TEMPLATE_ELEMENT_FACTORY_CLASS} as name is present, its value will be used as template element factory class name.
  * If the parameter is not given, a {@link DefaultTemplateElementFactory default template element factory} will be used.
  * <p>
- * The default template finder factory and template store finder factory are a {@link ClassPathTemplateFinderFactory
- * class path template finder factory} and an {@link MemoryTemplateStoreFinderFactory in-memory template store finder
- * factory}, respectively; other implementations can be configured through the {@value #TEMPLATE_FINDER_FACTORY_CLASS}
- * and {@value #TEMPLATE_STORE_FINDER_FACTORY_CLASS} parameters.
+ * The default template finder and template store finder are a {@link ClassPathTemplateFinder class path template
+ * finder} and an {@link InMemoryTemplateStoreFinder in-memory template store finder}, respectively; other
+ * implementations can be configured through the {@value #TEMPLATE_FINDER_CLASS} and {@value
+ * #TEMPLATE_STORE_FINDER_CLASS} parameters.
  * <p>
  * For the cache, the configuration will look for a parameter with the name {@value #CACHE_CLASS}. If the parameter
  * exists, its value will be interpreted as the class name of the cache. If the parameter does not exist, no cache will
@@ -126,8 +126,8 @@ public class DefaultConfiguration implements Configuration {
 	private ConfigurationElementFactory configurationElementFactory;
 	private ConverterRegistry converterRegistry;
 	private TemplateElementFactory templateElementFactory;
-	private TemplateFinderFactory templateFinderFactory;
-	private TemplateStoreFinderFactory templateStoreFinderFactory;
+	private TemplateFinder templateFinder;
+	private TemplateStoreFinder templateStoreFinder;
 	private Cache cache;
 	private List<Library> libraries;
 	private Map<String, Parser> parsers;
@@ -166,8 +166,8 @@ public class DefaultConfiguration implements Configuration {
 
 		createConverterRegistry();
 		createTemplateElementFactory();
-		createTemplateFinderFactory();
-		createTemplateStoreFinderFactory();
+		createTemplateFinder();
+		createTemplateStoreFinder();
 		createCache();
 		createLibraries();
 		createParsers();
@@ -212,24 +212,23 @@ public class DefaultConfiguration implements Configuration {
 			configurationElementFactory.instantiate(templateElementFactoryClassName, TemplateElementFactory.class);
 	}
 
-	private void createTemplateFinderFactory() {
-		String templateFinderFactoryClassName =
-			parameters.getValue(TEMPLATE_FINDER_FACTORY_CLASS, ClassPathTemplateFinderFactory.class.getName());
+	private void createTemplateFinder() {
+		String templateFinderClassName =
+			parameters.getValue(TEMPLATE_FINDER_CLASS, ClassPathTemplateFinder.class.getName());
 
-		logger.debug("creating template finder factory of type ", templateFinderFactoryClassName);
+		logger.debug("creating template finder of type ", templateFinderClassName);
 
-		templateFinderFactory =
-			configurationElementFactory.instantiate(templateFinderFactoryClassName, TemplateFinderFactory.class);
+		templateFinder = configurationElementFactory.instantiate(templateFinderClassName, TemplateFinder.class);
 	}
 
-	private void createTemplateStoreFinderFactory() {
-		String templateStoreFinderFactoryClassName =
-			parameters.getValue(TEMPLATE_STORE_FINDER_FACTORY_CLASS, MemoryTemplateStoreFinderFactory.class.getName());
+	private void createTemplateStoreFinder() {
+		String templateStoreFinderClassName =
+			parameters.getValue(TEMPLATE_STORE_FINDER_CLASS, InMemoryTemplateStoreFinder.class.getName());
 
-		logger.debug("creating template store finder factory of type ", templateStoreFinderFactoryClassName);
+		logger.debug("creating template store finder of type ", templateStoreFinderClassName);
 
-		templateStoreFinderFactory = configurationElementFactory.instantiate(
-			templateStoreFinderFactoryClassName, TemplateStoreFinderFactory.class);
+		templateStoreFinder =
+			configurationElementFactory.instantiate(templateStoreFinderClassName, TemplateStoreFinder.class);
 	}
 
 	private void createCache() {
@@ -420,8 +419,8 @@ public class DefaultConfiguration implements Configuration {
 	private void initialise() throws ConfigurationException {
 		converterRegistry.initialise(this);
 		templateElementFactory.initialise(this);
-		templateFinderFactory.initialise(this);
-		templateStoreFinderFactory.initialise(this);
+		templateFinder.initialise(this);
+		templateStoreFinder.initialise(this);
 
 		if (cache != null) {
 			cache.initialise(this);
@@ -472,16 +471,16 @@ public class DefaultConfiguration implements Configuration {
 		return templateElementFactory;
 	}
 
-	public TemplateFinderFactory getTemplateFinderFactory() throws ConfigurationException {
+	public TemplateFinder getTemplateFinder() throws ConfigurationException {
 		checkOpen();
 
-		return templateFinderFactory;
+		return templateFinder;
 	}
 
-	public TemplateStoreFinderFactory getTemplateStoreFinderFactory() throws ConfigurationException {
+	public TemplateStoreFinder getTemplateStoreFinder() throws ConfigurationException {
 		checkOpen();
 
-		return templateStoreFinderFactory;
+		return templateStoreFinder;
 	}
 
 	public Cache getCache() throws ConfigurationException {
@@ -526,8 +525,8 @@ public class DefaultConfiguration implements Configuration {
 		configurationElementFactory.disable();
 		converterRegistry.disable();
 		templateElementFactory.disable();
-		templateFinderFactory.disable();
-		templateStoreFinderFactory.disable();
+		templateFinder.disable();
+		templateStoreFinder.disable();
 
 		if (cache != null) {
 			cache.disable();
@@ -574,14 +573,11 @@ public class DefaultConfiguration implements Configuration {
 	/** The name of the configuration parameter that contains the class name of the template element factory to use. */
 	public final static String TEMPLATE_ELEMENT_FACTORY_CLASS = "configuration.default.template_element_factory.class";
 
-	/** The name of the configuration parameter that contains the class name of the template finder factory to use. */
-	public final static String TEMPLATE_FINDER_FACTORY_CLASS = "configuration.default.template_finder_factory.class";
+	/** The name of the configuration parameter that contains the class name of the template finder to use. */
+	public final static String TEMPLATE_FINDER_CLASS = "configuration.default.template_finder.class";
 
-	/**
-	 * The name of the configuration parameter that contains the class name of the template store finder factory to use.
-	 */
-	public final static String TEMPLATE_STORE_FINDER_FACTORY_CLASS =
-		"configuration.default.template_store_finder_factory.class";
+	/** The name of the configuration parameter that contains the class name of the template store finder to use. */
+	public final static String TEMPLATE_STORE_FINDER_CLASS = "configuration.default.template_store_finder.class";
 
 	/** The name of the configuration parameter that contains the class name of the cache to use. */
 	public final static String CACHE_CLASS = "configuration.default.cache.class";

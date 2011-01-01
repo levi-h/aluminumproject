@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,33 +17,29 @@ package com.googlecode.aluminumproject.resources;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.resources.CompoundResourceFinder;
-import com.googlecode.aluminumproject.utilities.resources.FileSystemResourceFinder;
-import com.googlecode.aluminumproject.utilities.resources.ResourceFinder;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
- * Creates resource finders that locate templates on the file system.
+ * Uses the file system to find templates.
  * <p>
- * The directories that contain the templates can be configured using the {@value #TEMPLATE_DIRECTORIES} parameter. At
- * least one directory should be provided.
+ * The directories that are expected to contain templates can be configured using the {@value #TEMPLATE_DIRECTORIES}
+ * parameter. At least one directory should be provided.
  *
  * @author levi_h
  */
-public class FileSystemTemplateFinderFactory implements TemplateFinderFactory {
+public class FileSystemTemplateFinder extends AbstractTemplateFinder {
 	private String[] templateDirectories;
 
-	private final Logger logger;
-
 	/**
-	 * Creates a file system template finder factory.
+	 * Creates a file system template finder.
 	 */
-	public FileSystemTemplateFinderFactory() {
-		logger = Logger.get(getClass());
-	}
+	public FileSystemTemplateFinder() {}
 
+	@Override
 	public void initialise(Configuration configuration) throws ConfigurationException {
 		templateDirectories = configuration.getParameters().getValues(TEMPLATE_DIRECTORIES);
 
@@ -54,21 +50,35 @@ public class FileSystemTemplateFinderFactory implements TemplateFinderFactory {
 		}
 	}
 
-	public void disable() {}
+	public InputStream find(String name) throws ResourceException {
+		InputStream stream = null;
 
-	public ResourceFinder createTemplateFinder() {
-		FileSystemResourceFinder[] resourceFinders = new FileSystemResourceFinder[templateDirectories.length];
+		for (String directory: templateDirectories) {
+			logger.debug("trying to find template '", name, "' in directory '", directory, "'");
 
-		for (int i = 0; i < templateDirectories.length; i++) {
-			resourceFinders[i] = new FileSystemResourceFinder(new File(templateDirectories[i]));
+			File file = new File(directory, name);
+
+			if (file.exists()) {
+				logger.debug("found template '", name, "': ", file.getAbsolutePath());
+
+				try {
+					stream = new FileInputStream(file);
+				} catch (FileNotFoundException exception) {
+					throw new ResourceException("can't create file input stream for template '", name, "'");
+				}
+			}
 		}
 
-		return (resourceFinders.length == 1) ? resourceFinders[0] : new CompoundResourceFinder(resourceFinders);
+		if (stream == null) {
+			throw new ResourceException("can't find template '", name, "' in ", templateDirectories);
+		} else {
+			return stream;
+		}
 	}
 
 	/**
 	 * The name of the configuration parameter that holds a comma-separated list of directories that can contain
 	 * templates.
 	 */
-	public final static String TEMPLATE_DIRECTORIES = "template_finder_factory.file_system.template_directories";
+	public final static String TEMPLATE_DIRECTORIES = "template_finder.file_system.template_directories";
 }

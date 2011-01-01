@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,9 @@ import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.resources.ResourceException;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -103,10 +102,10 @@ public class XmlParser implements Parser {
 		parser.setContentHandler(templateHandler);
 		logger.debug("using template handler ", templateHandler);
 
-		URL templateUrl = findTemplateUrl(name);
-		logger.debug("found template '", name, "': ", templateUrl);
+		InputStream templateStream = findTemplateStream(name);
+		logger.debug("found template '", name, "'");
 
-		parse(name, parser, templateUrl);
+		parse(name, parser, templateStream);
 		logger.debug("parsed template '", name, "'");
 
 		Template template = templateHandler.getTemplate();
@@ -132,27 +131,21 @@ public class XmlParser implements Parser {
 		return parser;
 	}
 
-	private URL findTemplateUrl(String name) throws ParseException {
+	private InputStream findTemplateStream(String name) throws ParseException {
 		if (templateExtension != null) {
 			name = String.format("%s.%s", name, templateExtension);
 		}
 
-		URL templateUrl;
-
 		try {
-			templateUrl = configuration.getTemplateFinderFactory().createTemplateFinder().find(name);
+			return configuration.getTemplateFinder().find(name);
 		} catch (ResourceException exception) {
-			throw new ParseException(exception, "can't create template finder");
-		} catch (UtilityException exception) {
-			throw new ParseException(exception, "can't find template");
+			throw new ParseException(exception, "can't find template '", name, "'");
 		}
-
-		return templateUrl;
 	}
 
-	private void parse(String name, XMLReader parser, URL templateUrl) throws ParseException {
+	private void parse(String name, XMLReader parser, InputStream templateStream) throws ParseException {
 		try {
-			parser.parse(new InputSource(templateUrl.openStream()));
+			parser.parse(new InputSource(templateStream));
 		} catch (IOException exception) {
 			throw new ParseException(exception, "can't parse template '", name, "'");
 		} catch (SAXException exception) {

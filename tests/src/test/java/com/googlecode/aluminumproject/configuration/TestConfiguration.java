@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.parsers.Parser;
-import com.googlecode.aluminumproject.resources.TemplateFinderFactory;
-import com.googlecode.aluminumproject.resources.TemplateStoreFinderFactory;
+import com.googlecode.aluminumproject.resources.TemplateFinder;
+import com.googlecode.aluminumproject.resources.TemplateStoreFinder;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
 
@@ -44,8 +44,8 @@ public class TestConfiguration implements Configuration {
 	private ConfigurationElementFactory configurationElementFactory;
 	private ConverterRegistry converterRegistry;
 	private TemplateElementFactory templateElementFactory;
-	private TemplateFinderFactory templateFinderFactory;
-	private TemplateStoreFinderFactory templateStoreFinderFactory;
+	private TemplateFinder templateFinder;
+	private TemplateStoreFinder templateStoreFinder;
 	private Cache cache;
 
 	private List<Library> libraries;
@@ -106,30 +106,30 @@ public class TestConfiguration implements Configuration {
 		this.templateElementFactory = templateElementFactory;
 	}
 
-	public TemplateFinderFactory getTemplateFinderFactory() {
-		return templateFinderFactory;
+	public TemplateFinder getTemplateFinder() {
+		return templateFinder;
 	}
 
 	/**
-	 * Sets the template finder factory.
+	 * Sets the template finder.
 	 *
-	 * @param templateFinderFactory the template finder factory to use
+	 * @param templateFinder the template finder to use
 	 */
-	public void setTemplateFinderFactory(TemplateFinderFactory templateFinderFactory) {
-		this.templateFinderFactory = templateFinderFactory;
+	public void setTemplateFinder(TemplateFinder templateFinder) {
+		this.templateFinder = templateFinder;
 	}
 
-	public TemplateStoreFinderFactory getTemplateStoreFinderFactory() {
-		return templateStoreFinderFactory;
+	public TemplateStoreFinder getTemplateStoreFinder() {
+		return templateStoreFinder;
 	}
 
 	/**
-	 * Sets the template store finder factory.
+	 * Sets the template store finder.
 	 *
-	 * @param templateStoreFinderFactory the template store finder factory to use
+	 * @param templateStoreFinder the template store finder to use
 	 */
-	public void setTemplateStoreFinderFactory(TemplateStoreFinderFactory templateStoreFinderFactory) {
-		this.templateStoreFinderFactory = templateStoreFinderFactory;
+	public void setTemplateStoreFinder(TemplateStoreFinder templateStoreFinder) {
+		this.templateStoreFinder = templateStoreFinder;
 	}
 
 	public Cache getCache() {
