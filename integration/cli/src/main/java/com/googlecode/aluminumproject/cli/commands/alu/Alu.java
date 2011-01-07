@@ -23,9 +23,11 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.cli.Command;
 import com.googlecode.aluminumproject.cli.CommandException;
 import com.googlecode.aluminumproject.cli.OptionEffect;
+import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.resources.FileSystemTemplateFinder;
 import com.googlecode.aluminumproject.utilities.UtilityException;
@@ -110,12 +112,23 @@ public class Alu extends Command {
 			addConfigurationParameters(parameters);
 			addCustomConfigurationParameters(parameters);
 
-			Aluminum aluminum = new Aluminum(new DefaultConfiguration(parameters));
+			Aluminum aluminum;
+
+			try {
+				aluminum = new Aluminum(new DefaultConfiguration(parameters));
+			} catch (ConfigurationException exception) {
+				throw new CommandException(exception, "can't create template engine");
+			}
 
 			String template = arguments.get(0);
 
 			Context context = new DefaultContext();
-			context.setVariable(TEMPLATE_SCOPE, ARGUMENTS_VARIABLE_NAME, arguments.subList(1, arguments.size()));
+
+			try {
+				context.setVariable(TEMPLATE_SCOPE, ARGUMENTS_VARIABLE_NAME, arguments.subList(1, arguments.size()));
+			} catch (ContextException exception) {
+				throw new CommandException(exception, "can't add arguments");
+			}
 
 			Writer writer = new TextWriter(new OutputStreamWriter(outputStream), true);
 
@@ -139,9 +152,7 @@ public class Alu extends Command {
 		}
 	}
 
-	private void addConfigurationParameters(ConfigurationParameters parameters) {
-		parameters.addParameter(TEMPLATE_FINDER_CLASS, FileSystemTemplateFinder.class.getName());
-
+	private void addConfigurationParameters(ConfigurationParameters parameters) throws CommandException {
 		String templateDirectories = System.getProperty("user.dir");
 
 		String aluminumHome = System.getenv("ALUMINUM_HOME");
@@ -153,7 +164,12 @@ public class Alu extends Command {
 			templateDirectories = String.format("%s, %s/templates", templateDirectories, aluminumHome);
 		}
 
-		parameters.addParameter(FileSystemTemplateFinder.TEMPLATE_DIRECTORIES, templateDirectories);
+		try {
+			parameters.addParameter(TEMPLATE_FINDER_CLASS, FileSystemTemplateFinder.class.getName());
+			parameters.addParameter(FileSystemTemplateFinder.TEMPLATE_DIRECTORIES, templateDirectories);
+		} catch (ConfigurationException exception) {
+			throw new CommandException(exception, "can't add default configuration parameters");
+		}
 	}
 
 	private void addCustomConfigurationParameters(ConfigurationParameters parameters) throws CommandException {
@@ -171,7 +187,11 @@ public class Alu extends Command {
 			for (Object key: Collections.list(configurationPropertySet.propertyNames())) {
 				String parameterName = (String) key;
 
-				parameters.addParameter(parameterName, configurationPropertySet.getProperty(parameterName));
+				try {
+					parameters.addParameter(parameterName, configurationPropertySet.getProperty(parameterName));
+				} catch (ConfigurationException exception) {
+					throw new CommandException(exception, "can't add configuration parameter '", parameterName, "'");
+				}
 			}
 		}
 	}

@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.servlet;
 import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
@@ -232,7 +233,7 @@ public class AluminumServlet extends HttpServlet {
 	 * @return the writer to use
 	 * @throws WriterException when the writer can't be created
 	 */
-	protected Writer createWriter() {
+	protected Writer createWriter() throws WriterException {
 		return new ResponseWriter(getResponse());
 	}
 
@@ -240,8 +241,12 @@ public class AluminumServlet extends HttpServlet {
 	public void destroy() {
 		logger.debug("destroying aluminum servlet (", getServletConfig().getServletName(), ")");
 
-		aluminum.stop();
+		try {
+			aluminum.stop();
+		} catch (ConfigurationException exception) {
+			throw new RuntimeException("can't stop template engine", exception);
+		}
 	}
 
-	private final static long serialVersionUID = 20101201L;
+	private final static long serialVersionUID = 20110105L;
 }
