@@ -1,0 +1,43 @@
+# Copyright 2010 Levi Hoogenberg
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+@library (aludoc: http://aluminumproject.googlecode.com/aludoc)
+@library (c: http://aluminumproject.googlecode.com/core)
+@library (g: http://aluminumproject.googlecode.com/g11n)
+@library (h: http://aluminumproject.googlecode.com/html)
+@library (t: http://aluminumproject.googlecode.com/text)
+
+@c.set variable (name: pageLocation, value: '${aludoc:actionContributionPage(actionContributionFactory)}')
+@c.set variable (name: libraryMessages, value: aludoc/${actionContributionFactory.library.information.preferredUrlAbbreviation})
+
+@c.include (name: aludoc/html/page.alu, pageTitle: ${actionContributionFactory.information.name})
+	@c.block (name: navigation)
+		@c.include (name: aludoc/html/library_elements.alu, library: ${actionContributionFactory.library})
+
+	@c.block (name: main)
+		@g.localise (key: '${t:replace(actionContributionFactory.information.name, " ", "_")}.description', allow missing key: true, g.with resource bundle: ${libraryMessages})
+
+		@h.h2
+			@g.localise (key: block.summary)
+
+		@h.dl
+			@h.dt
+				@g.localise (key: action_contribution.name)
+			@h.dd
+				${actionContributionFactory.information.name}
+
+			@h.dt
+				@g.localise (key: action_contribution.parameter_type)
+			@h.dd
+				${aludoc:formatType(actionContributionFactory.information.parameterType)}
