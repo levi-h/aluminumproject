@@ -57,6 +57,13 @@ subprojects {
 	rootProject.evaluationDependsOn name
 }
 
+task createAluDocs(type: JavaExec, visible: false, dependsOn: subprojects*.build) {
+	main = 'com.googlecode.aluminumproject.cli.commands.aludoc.AluDoc'
+	args = ['--location', new File(project.buildDir, 'docs/aludoc').path]
+
+	classpath = files(project('aluminum-tests').configurations.runtime.resolve())
+}
+
 task createApiDocs(type: Javadoc, visible: false)  {
 	destinationDir = new File(project.buildDir, 'docs/api')
 
@@ -85,7 +92,9 @@ task createApiDocs(type: Javadoc, visible: false)  {
 	}
 }
 
-task createDistribution(type: Zip, dependsOn: [createApiDocs] + subprojects*.build) {
+task createDocs(dependsOn: [createAluDocs, createApiDocs])
+
+task createDistribution(type: Zip, dependsOn: createDocs) {
 	destinationDir = new File(rootProject.buildDir, 'distributions')
 
 	baseName = rootProject.name
