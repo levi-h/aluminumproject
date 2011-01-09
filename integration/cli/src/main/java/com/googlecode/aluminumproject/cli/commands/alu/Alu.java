@@ -135,7 +135,7 @@ public class Alu extends Command {
 				}
 			}
 		} else {
-			displayHelp(outputStream, errorStream);
+			displayHelp(outputStream);
 		}
 	}
 
