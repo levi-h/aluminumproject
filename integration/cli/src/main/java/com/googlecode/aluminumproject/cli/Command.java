@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,7 +171,7 @@ public abstract class Command {
 			initialiseLogging(outputStream);
 
 			if (displayHelp) {
-				displayHelp(outputStream, errorStream);
+				displayHelp(outputStream);
 			} else {
 				execute(outputStream, errorStream, options.nonOptionArguments());
 			}
@@ -235,9 +235,9 @@ public abstract class Command {
 	 * Displays a help message.
 	 *
 	 * @param outputStream the output stream to print the help message to
-	 * @param errorStream the output stream to use when the help message can't be displayed
+	 * @throws CommandException when the help message can't be displayed
 	 */
-	protected void displayHelp(PrintStream outputStream, PrintStream errorStream) {
+	protected void displayHelp(PrintStream outputStream) throws CommandException {
 		Map<String, String> helpInformation = getHelpInformation();
 
 		print(helpInformation.get("name"), outputStream);
@@ -249,9 +249,7 @@ public abstract class Command {
 		try {
 			optionParser.printHelpOn(outputStream);
 		} catch (IOException exception) {
-			outputStream.println("The options can't be displayed.");
-
-			handleThrowable(exception, errorStream);
+			throw new CommandException(exception, "The options can't be displayed.");
 		}
 	}
 
