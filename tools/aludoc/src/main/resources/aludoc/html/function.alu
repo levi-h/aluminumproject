@@ -1,0 +1,65 @@
+# Copyright 2010 Levi Hoogenberg
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+@library (aludoc: http://aluminumproject.googlecode.com/aludoc)
+@library (c: http://aluminumproject.googlecode.com/core)
+@library (g: http://aluminumproject.googlecode.com/g11n)
+@library (h: http://aluminumproject.googlecode.com/html)
+@library (t: http://aluminumproject.googlecode.com/text)
+
+@c.set variable (name: pageLocation, value: '${aludoc:functionPage(functionFactory)}')
+@c.set variable (name: libraryMessages, value: aludoc/${functionFactory.library.information.preferredUrlAbbreviation})
+
+@c.include (name: aludoc/html/page.alu, pageTitle: ${functionFactory.information.name})
+	@c.block (name: navigation)
+		@c.include (name: aludoc/html/library_elements.alu, library: ${functionFactory.library})
+
+	@c.block (name: main)
+		@g.localise (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.description', allow missing key: true, g.with resource bundle: ${libraryMessages})
+
+		@h.h2
+			@g.localise (key: block.summary)
+
+		@h.dl
+			@h.dt
+				@g.localise (key: function.name)
+			@h.dd
+				${functionFactory.information.name}
+
+			@h.dt
+				@g.localise (key: function.result_type)
+			@h.dd
+				${aludoc:formatType(functionFactory.information.resultType)}
+
+		@c.template (c.unless: ${empty functionFactory.information.argumentInformation})
+			@h.h2
+				@g.localise (key: block.function_arguments)
+
+			@h.table
+				@h.tr
+					@h.th (class: normal)
+						@g.localise (key: function_argument.name)
+					@h.th (class: normal)
+						@g.localise (key: function_argument.type)
+					@h.th
+						@g.localise (key: function_argument.description)
+
+				@c.each (elements: ${functionFactory.information.argumentInformation}, element name: argumentInformation)
+					@h.tr
+						@h.td
+							${empty argumentInformation.name ? '-' : argumentInformation}
+						@h.td
+							${aludoc:formatType(argumentInformation.type)}
+						@h.td
+							@g.localise (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.${t:replace(argumentInformation.name, " ", "_")}.description', default: -, g.with resource bundle: ${libraryMessages})

@@ -1,0 +1,30 @@
+# Copyright 2010 Levi Hoogenberg
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+@library (c: http://aluminumproject.googlecode.com/core)
+
+@c.include (name: aludoc/html/style-sheet.alu)
+@c.include (name: aludoc/html/home.alu)
+
+@c.each (elements: ${libraries}, element name: library)
+	@c.include (name: aludoc/html/library.alu)
+
+	@c.each (elements: ${library.actionFactories}, element name: actionFactory)
+		@c.include (name: aludoc/html/action.alu)
+
+	@c.each (elements: ${library.actionContributionFactories}, element name: actionContributionFactory)
+		@c.include (name: aludoc/html/action_contribution.alu)
+
+	@c.each (elements: ${library.functionFactories}, element name: functionFactory)
+		@c.include (name: aludoc/html/function.alu)

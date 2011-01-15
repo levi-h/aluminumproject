@@ -1,0 +1,56 @@
+# Copyright 2010 Levi Hoogenberg
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+@library (aludoc: http://aluminumproject.googlecode.com/aludoc)
+@library (c: http://aluminumproject.googlecode.com/core)
+@library (g: http://aluminumproject.googlecode.com/g11n)
+@library (h: http://aluminumproject.googlecode.com/html)
+
+@c.set variable (name: libraryMessages, value: aludoc/${library.information.preferredUrlAbbreviation})
+@c.set variable (name: libraryName)
+	@g.localise (key: name, g.with resource bundle: ${libraryMessages})
+@c.set variable (name: pageLocation, value: '${aludoc:libraryPage(library)}')
+
+@c.include (name: aludoc/html/page.alu, pageTitle: ${libraryName})
+	@c.block (name: navigation)
+		@c.include (name: aludoc/html/library_elements.alu)
+
+	@c.block (name: main)
+		@g.localise (key: description, allow missing key: true, g.with resource bundle: ${libraryMessages})
+
+		@h.h2
+			@g.localise (key: block.summary)
+
+		@h.dl
+			@c.template (name: text row)
+				@h.dt
+					@g.localise (key: ${key})
+				@h.dd
+					${text}
+
+			@c.template (name: boolean row)
+				@h.dt
+					@g.localise (key: ${key})
+				@h.dd
+					@g.localise (key: label.yes, c.if: ${condition})
+					@g.localise (key: label.no, c.unless: ${condition})
+
+			@c.include local (name: text row, key: library.name, text: ${libraryName})
+			@c.include local (name: text row, key: library.version, text: ${library.information.version})
+			@c.include local (name: text row, key: library.url, text: ${library.information.url})
+			@c.include local (name: text row, key: library.versioned_url, text: ${library.information.versionedUrl})
+			@c.include local (name: text row, key: library.preferred_url_abbreviation, text: ${library.information.preferredUrlAbbreviation})
+			@c.include local (name: boolean row, key: library.dynamic_actions, condition: ${library.information.supportingDynamicActions})
+			@c.include local (name: boolean row, key: library.dynamic_action_contributions, condition: ${library.information.supportingDynamicActionContributions})
+			@c.include local (name: boolean row, key: library.dynamic_functions, condition: ${library.information.supportingDynamicFunctions})
