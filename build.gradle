@@ -35,6 +35,7 @@ subprojects {
 	repositories {
 		mavenCentral()
 
+		mavenRepo(urls: 'http://download.java.net/maven/2')
 		mavenRepo(urls: 'http://repository.jboss.org/nexus/content/groups/public-jboss/')
 	}
 
@@ -61,7 +62,7 @@ task createAluDocs(type: JavaExec, visible: false, dependsOn: subprojects*.build
 	main = 'com.googlecode.aluminumproject.cli.commands.aludoc.AluDoc'
 	args = ['--location', new File(project.buildDir, 'docs/aludoc').path]
 
-	classpath = files(project('aluminum-tests').configurations.runtime.resolve())
+	classpath = project('aluminum-tests').configurations.runtime
 }
 
 task createApiDocs(type: Javadoc, visible: false)  {

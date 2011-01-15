@@ -29,6 +29,7 @@ rootProject.name = 'aluminum'
 	'g11n-library': 'libraries/general/g11n',
 	'html-library': 'libraries/file-formats/html',
 	'io-library': 'libraries/general/io',
+	'mail-library': 'libraries/communication/mail',
 	'text-library': 'libraries/general/text',
 	'xml-library': 'libraries/file-formats/xml',
 
