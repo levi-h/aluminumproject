@@ -1,4 +1,5 @@
+bin$
 build$
-(^|/)\..*
+(^|/)\.
 ^tests/test-output
 ^tests/temp-testng-customsuite.xml$
