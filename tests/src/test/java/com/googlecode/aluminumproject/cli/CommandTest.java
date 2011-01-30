@@ -31,55 +31,68 @@ public class CommandTest extends AbstractCommandTest {
 	}
 
 	public void debugStatementsShouldNotBePrintedByDefault() {
-		String[] output = executeCommand(command);
-		assert output[0].equals("");
-		assert output[1].equals("");
+		Execution execution = executeCommand(command);
+		assert execution.wasSuccessful();
+		assert !execution.hadOutput();
+		assert !execution.hadErrors();
 	}
 
 	public void supplyingDebugOptionShouldCauseDebugStatementsToBePrinted() {
-		String[] output = executeCommand(command, "--debug");
-		assert output[0].equals("DEBUG: executing test command");
-		assert output[1].equals("");
+		Execution execution = executeCommand(command, "--debug");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals("DEBUG: executing test command");
+		assert !execution.hadErrors();
 	}
 
 	public void supplyingHelpOptionShouldDisplayHelpMessage() {
-		String[] output = executeCommand(command, "--help");
-		assert output[0].equals(getHelpMessage(false, false, false));
-		assert output[1].equals("");
+		Execution execution = executeCommand(command, "--help");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals(getHelpMessage(false, false, false));
+		assert !execution.hadErrors();
 	}
 
 	@Test(dependsOnMethods = "supplyingHelpOptionShouldDisplayHelpMessage")
 	public void supplyingShortenedHelpOptionShouldDisplayHelpMessage() {
-		String[] output = executeCommand(command, "-h");
-		assert output[0].equals(getHelpMessage(false, false, false));
-		assert output[1].equals("");
+		Execution execution = executeCommand(command, "-h");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals(getHelpMessage(false, false, false));
+		assert !execution.hadErrors();
 	}
 
 	@Test(dependsOnMethods = "supplyingHelpOptionShouldDisplayHelpMessage")
 	public void helpMessageShouldIncludeName() {
 		command.getHelpInformation().put("name", "test");
 
-		String[] output = executeCommand(command, "-h");
-		assert output[0].equals(getHelpMessage(true, false, false));
-		assert output[1].equals("");
+		Execution execution = executeCommand(command, "-h");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals(getHelpMessage(true, false, false));
+		assert !execution.hadErrors();
 	}
 
 	@Test(dependsOnMethods = "supplyingHelpOptionShouldDisplayHelpMessage")
 	public void helpMessageShouldIncludeDescription() {
 		command.getHelpInformation().put("description", "A test command.");
 
-		String[] output = executeCommand(command, "-h");
-		assert output[0].equals(getHelpMessage(false, true, false));
-		assert output[1].equals("");
+		Execution execution = executeCommand(command, "-h");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals(getHelpMessage(false, true, false));
+		assert !execution.hadErrors();
 	}
 
 	@Test(dependsOnMethods = "supplyingHelpOptionShouldDisplayHelpMessage")
 	public void helpMessageShouldIncludeUsage() {
 		command.getHelpInformation().put("usage", "Usage: test [options]");
 
-		String[] output = executeCommand(command, "-h");
-		assert output[0].equals(getHelpMessage(false, false, true));
-		assert output[1].equals("");
+		Execution execution = executeCommand(command, "-h");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals(getHelpMessage(false, false, true));
+		assert !execution.hadErrors();
 	}
 
 	@Test(dependsOnMethods = {
@@ -92,9 +105,11 @@ public class CommandTest extends AbstractCommandTest {
 		command.getHelpInformation().put("description", "A test command.");
 		command.getHelpInformation().put("usage", "Usage: test [options]");
 
-		String[] output = executeCommand(command, "-h");
-		assert output[0].equals(getHelpMessage(true, true, true));
-		assert output[1].equals("");
+		Execution execution = executeCommand(command, "-h");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals(getHelpMessage(true, true, true));
+		assert !execution.hadErrors();
 	}
 
 	private String getHelpMessage(boolean includeName, boolean includeDescription, boolean includeUsage) {
@@ -131,17 +146,29 @@ public class CommandTest extends AbstractCommandTest {
 	public void stackTracesShouldBeHiddenByDefault() {
 		command.setArgumentRequired(true);
 
-		String[] output = executeCommand(command);
-		assert output[0].equals("");
-		assert output[1].equals("No arguments were supplied.");
+		Execution execution = executeCommand(command);
+		assert !execution.wasSuccessful();
+		assert !execution.hadOutput();
+		assert execution.hadErrors();
+		assert execution.getErrors().equals("no arguments were supplied");
 	}
 
 	public void supplyingStackTraceOptionShouldPrintStackTraces() {
 		command.setArgumentRequired(true);
 
-		String[] output = executeCommand(command, "--print-stack-traces");
-		assert output[0].equals("");
-		assert output[1].startsWith("No arguments were supplied.");
-		assert output[1].contains("IllegalStateException");
+		Execution execution = executeCommand(command, "--print-stack-traces");
+		assert !execution.wasSuccessful();
+		assert !execution.hadOutput();
+		assert execution.hadErrors();
+		assert execution.getErrors().startsWith("no arguments were supplied");
+		assert execution.getErrors().contains("IllegalStateException");
+	}
+
+	public void supplyingUnrecognisedOptionShouldResultInErrorMessage() {
+		Execution execution = executeCommand(command, "--nonexistent");
+		assert !execution.wasSuccessful();
+		assert !execution.hadOutput();
+		assert execution.hadErrors();
+		assert execution.getErrors().equals("'nonexistent' is not a recognized option");
 	}
 }

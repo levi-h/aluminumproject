@@ -52,7 +52,7 @@ public class AluDoc extends Command {
 	/**
 	 * Creates an <em>aludoc</em> command.
 	 */
-	public AluDoc() {
+	AluDoc() {
 		location = new File(".");
 
 		excludes = new LinkedList<String>();
@@ -117,9 +117,9 @@ public class AluDoc extends Command {
 	/**
 	 * Executes the <em>aludoc</em> command.
 	 *
-	 * @param arguments the command-line parameters
+	 * @param parameters the command-line parameters
 	 */
-	public static void main(String... arguments) {
-		new AluDoc().execute(System.out, System.err, arguments);
+	public static void main(String... parameters) {
+		System.exit(new AluDoc().execute(System.out, System.err, parameters));
 	}
 }
