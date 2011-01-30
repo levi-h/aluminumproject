@@ -1,4 +1,4 @@
-# Copyright 2010 Levi Hoogenberg
+# Copyright 2010-2011 Levi Hoogenberg
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,14 +19,13 @@
 @library (t: http://aluminumproject.googlecode.com/text)
 
 @c.set variable (name: pageLocation, value: '${aludoc:functionPage(functionFactory)}')
-@c.set variable (name: libraryMessages, value: aludoc/${functionFactory.library.information.preferredUrlAbbreviation})
 
 @c.include (name: aludoc/html/page.alu, pageTitle: ${functionFactory.information.name})
 	@c.block (name: navigation)
 		@c.include (name: aludoc/html/library_elements.alu, library: ${functionFactory.library})
 
 	@c.block (name: main)
-		@g.localise (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.description', allow missing key: true, g.with resource bundle: ${libraryMessages})
+		@aludoc.translate (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.description', library: ${functionFactory.library})
 
 		@h.h2
 			@g.localise (key: block.summary)
@@ -62,4 +61,4 @@
 						@h.td
 							${aludoc:formatType(argumentInformation.type)}
 						@h.td
-							@g.localise (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.${t:replace(argumentInformation.name, " ", "_")}.description', default: -, g.with resource bundle: ${libraryMessages})
+							@aludoc.translate (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.${t:replace(argumentInformation.name, " ", "_")}.description', library: ${functionFactory.library})
