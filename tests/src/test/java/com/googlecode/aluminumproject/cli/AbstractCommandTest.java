@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,31 +59,92 @@ public abstract class AbstractCommandTest {
 	 *
 	 * @param command the command to execute
 	 * @param options the options to execute the command with
-	 * @return an array of length two containing the contents of the output stream and the error stream, respectively
+	 * @return information about the execution
 	 */
-	protected final String[] executeCommand(Command command, String... options) {
+	protected final Execution executeCommand(Command command, String... options) {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
 
-		command.execute(new PrintStream(outputStream), new PrintStream(errorStream), options);
+		int status = command.execute(new PrintStream(outputStream), new PrintStream(errorStream), options);
 
-		return new String[] {
-			getContents(outputStream),
-			getContents(errorStream)
-		};
+		return new Execution(status, outputStream, errorStream);
 	}
 
-	private String getContents(ByteArrayOutputStream out) {
-		StringBuilder contentsBuilder = new StringBuilder();
+	/**
+	 * Provides information about the execution of a command.
+	 *
+	 * @author levi_h
+	 */
+	protected class Execution {
+		private int status;
 
-		for (String line: new String(out.toByteArray()).split("\n")) {
-			if (contentsBuilder.length() > 0) {
-				contentsBuilder.append("\n");
-			}
+		private String output;
+		private String errors;
 
-			contentsBuilder.append(line.trim());
+		private Execution(int status, ByteArrayOutputStream outputStream, ByteArrayOutputStream errorStream) {
+			this.status = status;
+
+			output = getContents(outputStream);
+			errors = getContents(errorStream);
 		}
 
-		return contentsBuilder.toString();
+		private String getContents(ByteArrayOutputStream stream) {
+			StringBuilder contentsBuilder = new StringBuilder();
+
+			for (String line: new String(stream.toByteArray()).split("\n")) {
+				if (contentsBuilder.length() > 0) {
+					contentsBuilder.append("\n");
+				}
+
+				contentsBuilder.append(line.trim());
+			}
+
+			return (contentsBuilder.length() == 0) ? null : contentsBuilder.toString();
+		}
+
+		/**
+		 * Determines whether the command was executed successfully.
+		 *
+		 * @return {@code true} if the command completed successfully, {@code false} if it didn't
+		 */
+		public boolean wasSuccessful() {
+			return status == 0;
+		}
+
+		/**
+		 * Determines whether the command had any output.
+		 *
+		 * @return {@code true} if the output stream had any contents, {@code false} if it didn't
+		 */
+		public boolean hadOutput() {
+			return output != null;
+		}
+
+		/**
+		 * Returns the contents of the output stream.
+		 *
+		 * @return all of the command's output (possibly {@code null})
+		 */
+		public String getOutput() {
+			return output;
+		}
+
+		/**
+		 * Determines whether the command had any errors.
+		 *
+		 * @return {@code true} if the error stream contained anything, {@code false} if it didn't
+		 */
+		public boolean hadErrors() {
+			return errors != null;
+		}
+
+		/**
+		 * Returns the contents of the error stream.
+		 *
+		 * @return all of the command's errors (might be {@code null})
+		 */
+		public String getErrors() {
+			return errors;
+		}
 	}
 }

@@ -73,7 +73,7 @@ public class Alu extends Command {
 	/**
 	 * Creates an <em>alu</em> command.
 	 */
-	public Alu() {
+	Alu() {
 		parser = DEFAULT_PARSER_NAME;
 
 		addOptions();
@@ -135,16 +135,13 @@ public class Alu extends Command {
 			try {
 				aluminum.processTemplate(template, parser, context, writer);
 			} catch (AluminumException exception) {
-				errorStream.printf("The template '%s' can't be processed (%s).%n", template, exception.getMessage());
-
-				handleThrowable(exception, errorStream);
+				throw new CommandException(exception,
+					"can't process template '", template, "' (", exception.getMessage(), ")");
 			} finally {
 				try {
 					aluminum.stop();
 				} catch (AluminumException exception) {
-					errorStream.printf("The template engine can't be stopped.%n");
-
-					handleThrowable(exception, errorStream);
+					throw new CommandException(exception, "can't stop the template engine");
 				}
 			}
 		} else {
@@ -208,9 +205,9 @@ public class Alu extends Command {
 	/**
 	 * Executes the <em>alu</em> command.
 	 *
-	 * @param arguments the command-line parameters
+	 * @param parameters the command-line parameters
 	 */
-	public static void main(String... arguments) {
-		new Alu().execute(System.out, System.err, arguments);
+	public static void main(String... parameters) {
+		System.exit(new Alu().execute(System.out, System.err, parameters));
 	}
 }

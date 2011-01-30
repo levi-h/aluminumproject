@@ -153,10 +153,13 @@ public abstract class Command {
 	 * @param outputStream the stream to write output to
 	 * @param errorStream the stream to write errors to
 	 * @param parameters the command-line parameters
+	 * @return the termination status of this command: zero if its execution was successful, nonzero if it wasn't
 	 */
-	public final void execute(PrintStream outputStream, PrintStream errorStream, String... parameters) {
+	public final int execute(PrintStream outputStream, PrintStream errorStream, String... parameters) {
+		int status;
+
 		try {
-			OptionSet options = getOptionParser().parse(parameters);
+			OptionSet options  = getOptionParser().parse(parameters);
 
 			for (Map.Entry<OptionSpec<?>, OptionEffect<?>> entry: optionEffects.entrySet()) {
 				OptionSpec<Object> option = Utilities.typed(entry.getKey());
@@ -175,13 +178,23 @@ public abstract class Command {
 			} else {
 				execute(outputStream, errorStream, options.nonOptionArguments());
 			}
+
+			status = 0;
 		} catch (OptionException exception) {
-			errorStream.printf("%s.%n", exception.getMessage());
+			errorStream.println(exception.getMessage().toLowerCase());
+
+			status = -1;
 		} catch (CommandException exception) {
 			errorStream.println(exception.getMessage());
 
-			handleThrowable(exception.getCause(), errorStream);
+			if (printStackTraces) {
+				exception.getCause().printStackTrace(errorStream);
+			}
+
+			status = -1;
 		}
+
+		return status;
 	}
 
 	/**
@@ -273,18 +286,6 @@ public abstract class Command {
 		if (information != null) {
 			outputStream.println(information);
 			outputStream.println();
-		}
-	}
-
-	/**
-	 * Handles a throwable by printing its stack trace when the option to do so was supplied.
-	 *
-	 * @param throwable the throwable to handle (may be {@code null})
-	 * @param errorStream the error stream to use
-	 */
-	protected void handleThrowable(Throwable throwable, PrintStream errorStream) {
-		if ((throwable != null) && printStackTraces) {
-			throwable.printStackTrace(errorStream);
 		}
 	}
 }
