@@ -57,7 +57,7 @@
 				@c.each (elements: ${functionFactory.information.argumentInformation}, element name: argumentInformation)
 					@h.tr
 						@h.td
-							${empty argumentInformation.name ? '-' : argumentInformation}
+							${empty argumentInformation.name ? '-' : argumentInformation.name}
 						@h.td
 							${aludoc:formatType(argumentInformation.type)}
 						@h.td
