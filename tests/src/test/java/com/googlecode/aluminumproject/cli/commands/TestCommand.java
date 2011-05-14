@@ -61,7 +61,7 @@ public class TestCommand extends Command {
 		logger.debug("executing test command");
 
 		if (argumentRequired && arguments.isEmpty()) {
-			throw new CommandException(new IllegalStateException(), "No arguments were supplied.");
+			throw new CommandException(new IllegalStateException(), "no arguments were supplied");
 		}
 	}
 }

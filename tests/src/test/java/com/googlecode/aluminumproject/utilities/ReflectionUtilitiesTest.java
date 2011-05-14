@@ -162,6 +162,26 @@ public class ReflectionUtilitiesTest {
 		assert property.equals("ReflectionUtilitiesTest");
 	}
 
+	@Test(expectedExceptions = UtilityException.class)
+	public void gettingNestedPropertyWithWrongTypeShouldCauseException() {
+		ReflectionUtilities.getNestedProperty(10, Integer.class, "class.name");
+	}
+
+	@Test(dependsOnMethods = "gettingUnknownPropertyShouldCauseException", expectedExceptions = UtilityException.class)
+	public void exceptionInChainWhileGettingNestedPropertyShouldBePropagated() {
+		ReflectionUtilities.getNestedProperty("", Object.class, "class.count");
+	}
+
+	public void gettingNestedPropertyShouldGiveCorrectValue() {
+		String nestedProperty = ReflectionUtilities.getNestedProperty(10, String.class, "class.simpleName");
+		assert nestedProperty != null;
+		assert nestedProperty.equals("Integer");
+	}
+
+	public void encounteringNullInChainWhileGettingNestedPropertyShouldResultInNull() {
+		assert ReflectionUtilities.getNestedProperty(getClass(), String.class, "declaringClass.name")== null;
+	}
+
 	public void settersShouldBeRecognisedAsSuch() throws NoSuchMethodException {
 		assert ReflectionUtilities.isSetter(Thread.class.getMethod("setPriority", Integer.TYPE));
 	}

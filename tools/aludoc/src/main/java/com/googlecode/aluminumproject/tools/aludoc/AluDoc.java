@@ -24,7 +24,6 @@ import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.libraries.aludoc.AluDocLibrary;
 import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.tools.ToolException;
@@ -78,7 +77,7 @@ public class AluDoc {
 		configurationParameters.put(GlobalisationContextProvider.RESOURCE_BUNDLE_BASE_NAME, "aludoc/messages");
 
 		excludedLibraryUrls = new LinkedList<String>();
-		excludedLibraryUrls.add(AluDocLibrary.URL);
+		excludedLibraryUrls.add("http://aluminumproject.googlecode.com/aludoc");
 	}
 
 	/**

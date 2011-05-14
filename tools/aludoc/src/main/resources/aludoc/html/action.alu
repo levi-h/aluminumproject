@@ -1,4 +1,4 @@
-# Copyright 2010 Levi Hoogenberg
+# Copyright 2010-2011 Levi Hoogenberg
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,14 +19,13 @@
 @library (t: http://aluminumproject.googlecode.com/text)
 
 @c.set variable (name: pageLocation, value: '${aludoc:actionPage(actionFactory)}')
-@c.set variable (name: libraryMessages, value: aludoc/${actionFactory.library.information.preferredUrlAbbreviation})
 
 @c.include (name: aludoc/html/page.alu, pageTitle: ${actionFactory.information.name})
 	@c.block (name: navigation)
 		@c.include (name: aludoc/html/library_elements.alu, library: ${actionFactory.library})
 
 	@c.block (name: main)
-		@g.localise (key: '${t:replace(actionFactory.information.name, " ", "_")}.description', allow missing key: true, g.with resource bundle: ${libraryMessages})
+		@aludoc.translate (key: '${t:replace(actionFactory.information.name, " ", "_")}.description', library: ${actionFactory.library})
 
 		@h.h2
 			@g.localise (key: block.summary)
@@ -68,4 +67,4 @@
 							@g.localise (key: label.yes, c.if: ${parameterInformation.required})
 							@g.localise (key: label.no, c.unless: ${parameterInformation.required})
 						@h.td
-							@g.localise (key: '${t:replace(actionFactory.information.name, " ", "_")}.${t:replace(parameterInformation.name, " ", "_")}.description', default: -, g.with resource bundle: ${libraryMessages})
+							@aludoc.translate (library: ${actionFactory.library}, key: '${t:replace(actionFactory.information.name, " ", "_")}.${t:replace(parameterInformation.name, " ", "_")}.description')
