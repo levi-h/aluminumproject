@@ -36,17 +36,18 @@ public class ReflectionUtilities {
 	 * @param <T> the type of the new bean
 	 * @param beanClassName the name of the class to instantiate
 	 * @param type the type of the bean class (can be a supertype of the actual bean class)
+	 * @param loader the class loader to use
 	 * @return a new instance of the class with the given name, cast to the given type
 	 * @throws UtilityException when no class with the given name can be found, when the bean class is not assignable to
 	 *                          the specified type, or when the bean class can't be initialised
 	 */
-	public static <T> T instantiate(String beanClassName, Class<T> type) throws UtilityException {
+	public static <T> T instantiate(String beanClassName, Class<T> type, ClassLoader loader) throws UtilityException {
 		Class<?> beanClass;
 
 		try {
-			beanClass = Class.forName(beanClassName);
+			beanClass = loader.loadClass(beanClassName);
 		} catch (ClassNotFoundException exception) {
-			throw new UtilityException(exception, "can't find bean class");
+			throw new UtilityException(exception, "can't find bean class '", beanClassName, "'");
 		}
 
 		if (type.isAssignableFrom(beanClass)) {

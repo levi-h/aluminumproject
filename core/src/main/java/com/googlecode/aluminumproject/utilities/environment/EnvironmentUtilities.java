@@ -64,12 +64,14 @@ public class EnvironmentUtilities {
 	static {
 		Logger logger = Logger.get(EnvironmentUtilities.class);
 
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
 		Properties environment = new Properties();
 
 		try {
 			logger.debug("loading aluminum.properties");
 
-			environment.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("aluminum.properties"));
+			environment.load(classLoader.getResourceAsStream("aluminum.properties"));
 		} catch (IOException exception) {
 			logger.warn(exception, "can't read aluminum.properties");
 
@@ -82,7 +84,7 @@ public class EnvironmentUtilities {
 			String propertySetContainerClassName = environment.getProperty("property_set_container");
 
 			propertySetContainer =
-				ReflectionUtilities.instantiate(propertySetContainerClassName, PropertySetContainer.class);
+				ReflectionUtilities.instantiate(propertySetContainerClassName, PropertySetContainer.class, classLoader);
 		} catch (UtilityException exception) {
 			logger.warn(exception, "can't create property set container");
 
@@ -92,7 +94,7 @@ public class EnvironmentUtilities {
 		try {
 			String webClientClassName = environment.getProperty("web_client");
 
-			webClient = ReflectionUtilities.instantiate(webClientClassName, WebClient.class);
+			webClient = ReflectionUtilities.instantiate(webClientClassName, WebClient.class, classLoader);
 		} catch (UtilityException exception) {
 			logger.warn(exception, "can't create web client");
 

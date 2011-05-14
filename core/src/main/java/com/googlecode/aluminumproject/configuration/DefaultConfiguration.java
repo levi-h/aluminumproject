@@ -185,8 +185,10 @@ public class DefaultConfiguration implements Configuration {
 		logger.debug("creating configuration element factory of type ", configurationElementFactoryClassName);
 
 		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
 			configurationElementFactory =
-				instantiate(configurationElementFactoryClassName, ConfigurationElementFactory.class);
+				instantiate(configurationElementFactoryClassName, ConfigurationElementFactory.class, classLoader);
 		} catch (UtilityException exception) {
 			throw new ConfigurationException(exception, "can't create configuration element factory");
 		}
