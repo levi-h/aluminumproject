@@ -23,32 +23,53 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javassist.ClassPool;
+import javassist.Loader;
+
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"utilities", "fast"})
 public class ReflectionUtilitiesTest {
+	private ClassLoader contextClassLoader;
+
+	@BeforeMethod
+	public void getContextClassLoader() {
+		contextClassLoader = Thread.currentThread().getContextClassLoader();
+	}
+
 	public void instantiationShouldWorkWithActualType() {
-		Map<?, ?> map = ReflectionUtilities.instantiate("java.util.HashMap", HashMap.class);
+		Map<?, ?> map = ReflectionUtilities.instantiate("java.util.HashMap", HashMap.class, contextClassLoader);
 		assert map != null;
 		assert map instanceof HashMap;
 	}
 
 	@Test(dependsOnMethods = "instantiationShouldWorkWithActualType")
 	public void instantiationShouldWorkWithSupertype() {
-		Map<?, ?> map = ReflectionUtilities.instantiate("java.util.HashMap", Map.class);
+		Map<?, ?> map = ReflectionUtilities.instantiate("java.util.HashMap", Map.class, contextClassLoader);
 		assert map != null;
 		assert map instanceof HashMap;
 	}
 
+	public void instantiationShouldWorkWithCustomClassLoader() {
+		ClassLoader classLoader = new Loader(ClassPool.getDefault());
+
+		ClassPool.getDefault().makeClass("com.googlecode.aluminumproject.Test");
+
+		Object test = ReflectionUtilities.instantiate("com.googlecode.aluminumproject.Test", Object.class, classLoader);
+		assert test != null;
+		assert test.getClass().getClassLoader() == classLoader;
+	}
+
 	@Test(expectedExceptions = UtilityException.class)
 	public void instantiatingNonexistingClassShouldFail() {
-		ReflectionUtilities.instantiate("Nonexisting", Object.class);
+		ReflectionUtilities.instantiate("Nonexisting", Object.class, contextClassLoader);
 	}
 
 	@Test(expectedExceptions = UtilityException.class)
 	public void instantiationWithUnassignableTypeShouldFail() {
-		ReflectionUtilities.instantiate("java.util.HashMap", Collection.class);
+		ReflectionUtilities.instantiate("java.util.HashMap", Collection.class, contextClassLoader);
 	}
 
 	@Test(expectedExceptions = UtilityException.class)

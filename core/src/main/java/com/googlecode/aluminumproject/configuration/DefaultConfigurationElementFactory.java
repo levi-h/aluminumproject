@@ -118,7 +118,7 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 		T object;
 
 		try {
-			object = ReflectionUtilities.instantiate(className, type);
+			object = ReflectionUtilities.instantiate(className, type, Thread.currentThread().getContextClassLoader());
 		} catch (UtilityException exception) {
 			throw new ConfigurationException(exception,
 				"can't instantiate ", className, " from configuration element factory");
