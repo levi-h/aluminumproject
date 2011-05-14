@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ public class FileSystemPropertySetContainerTest {
 		dependsOnMethods = "containerShouldNotContainNonexistentPropertySets",
 		expectedExceptions = UtilityException.class
 	)
-	public void tryingToReadNonexistentPropertySetShouldThrowException() {
+	public void tryingToReadNonexistentPropertySetShouldCauseException() {
 		container.readPropertySet("unknown");
 	}
 
@@ -83,7 +83,7 @@ public class FileSystemPropertySetContainerTest {
 	@Test(dependsOnMethods = "writingNewPropertySetShouldMakeItAvailable")
 	public void writtenPropertySetShouldBeReadable() {
 		Properties ages = new Properties();
-		ages.setProperty("levi", "28");
+		ages.setProperty("levi", "28"); // good old days
 
 		emptyContainer.writePropertySet("ages", ages);
 
@@ -92,5 +92,25 @@ public class FileSystemPropertySetContainerTest {
 		String age = ages.getProperty("levi");
 		assert age != null;
 		assert age.equals("28");
+	}
+
+	@Test(dependsOnMethods = "writingNewPropertySetShouldMakeItAvailable")
+	public void writtenPropertySetShouldBeRemovable() {
+		Properties romanNumerals = new Properties();
+		romanNumerals.setProperty("1", "I");
+		romanNumerals.setProperty("2", "II");
+		romanNumerals.setProperty("3", "III");
+		romanNumerals.setProperty("4", "IV");
+		romanNumerals.setProperty("5", "V");
+
+		emptyContainer.writePropertySet("roman-numerals", romanNumerals);
+
+		emptyContainer.removePropertySet("roman-numerals");
+		assert !emptyContainer.containsPropertySet("roman-numerals");
+	}
+
+	@Test(dependsOnMethods = "writingNewPropertySetShouldMakeItAvailable", expectedExceptions = UtilityException.class)
+	public void tryingToRemoveNonexistentPropertySetShouldCauseException() {
+		emptyContainer.removePropertySet("unknown");
 	}
 }

@@ -30,6 +30,7 @@ import javax.mail.MessagingException;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.MimeMessage;
 
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -49,6 +50,11 @@ public class SendTest extends MailLibraryTest {
 		sessionPropertySet.setProperty("mail.smtp.port", "3025");
 
 		EnvironmentUtilities.getPropertySetContainer().writePropertySet("mail", sessionPropertySet);
+	}
+
+	@AfterClass
+	public void removeSessionPropertySet() {
+		EnvironmentUtilities.getPropertySetContainer().removePropertySet("mail");
 	}
 
 	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
