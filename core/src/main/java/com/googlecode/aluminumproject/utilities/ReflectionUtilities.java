@@ -257,11 +257,50 @@ public class ReflectionUtilities {
 				getter.setAccessible(true);
 			}
 
+			Object property;
+
 			try {
-				return propertyType.cast(getter.invoke(bean));
+				property = getter.invoke(bean);
 			} catch (Exception exception) {
 				throw new UtilityException(exception, "can't invoke getter of property '", propertyName, "' on ", bean);
 			}
+
+			try {
+				return propertyType.cast(property);
+			} catch (ClassCastException exception) {
+				throw new UtilityException(exception, "can't cast ", property, " to ", propertyType);
+			}
+		}
+	}
+
+	/**
+	 * Reads a (possibly nested) property value from a bean.
+	 *
+	 * @param <T> the type of the last property in the chain
+	 * @param bean the first bean in the chain
+	 * @param propertyType the expected type of the property
+	 * @param propertyPath the path to the property
+	 * @return the value of the property
+	 * @throws UtilityException when the property is of a different type than was expected, when of the properties is
+	 *                          write-only, or when something goes wrong while getting the value
+	 */
+	public static <T> T getNestedProperty(
+			Object bean, Class<T> propertyType, String propertyPath) throws UtilityException {
+		Object value = bean;
+
+		String[] propertyNames = propertyPath.split("\\.");
+		int i = 0;
+
+		while ((value != null) && (i < propertyNames.length)) {
+			value = getProperty(value, Object.class, propertyNames[i]);
+
+			i++;
+		}
+
+		try {
+			return propertyType.cast(value);
+		} catch (ClassCastException exception) {
+			throw new UtilityException(exception, "can't cast ", value, " to ", propertyType);
 		}
 	}
 

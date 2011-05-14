@@ -1,4 +1,4 @@
-# Copyright 2010 Levi Hoogenberg
+# Copyright 2010-2011 Levi Hoogenberg
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,32 +14,39 @@
 
 @library (aludoc: http://aluminumproject.googlecode.com/aludoc)
 @library (c: http://aluminumproject.googlecode.com/core)
+@library (ds: http://aluminumproject.googlecode.com/ds)
 @library (g: http://aluminumproject.googlecode.com/g11n)
 @library (h: http://aluminumproject.googlecode.com/html)
 
-@c.template (c.unless: ${empty library.actionFactories})
+@c.set variable (name: comparator, value: "${ds:byProperty('information.name')}")
+
+@ds.sort (elements: ${library.actionFactories}, comparator: ${comparator}, c.variable name: actionFactories)
+@ds.sort (elements: ${library.actionContributionFactories}, comparator: ${comparator}, c.variable name: actionContributionFactories)
+@ds.sort (elements: ${library.functionFactories}, comparator: ${comparator}, c.variable name: functionFactories)
+
+@c.template (c.unless: ${empty actionFactories})
 	@h.h3
 		@g.localise (key: block.actions)
 
-	@c.each (element name: actionFactory, elements: ${library.actionFactories})
+	@c.each (element name: actionFactory, elements: ${actionFactories})
 		@h.a (href: '${aludoc:relativeLocation(pageLocation, aludoc:actionPage(actionFactory))}')
 			${actionFactory.information.name}
 		@h.br (c.unless: ${loop.last})
 
-@c.template (c.unless: ${empty library.actionContributionFactories})
+@c.template (c.unless: ${empty actionContributionFactories})
 	@h.h3
 		@g.localise (key: block.action_contributions)
 
-	@c.each (element name: actionContributionFactory, elements: ${library.actionContributionFactories})
+	@c.each (element name: actionContributionFactory, elements: ${actionContributionFactories})
 		@h.a (href: '${aludoc:relativeLocation(pageLocation, aludoc:actionContributionPage(actionContributionFactory))}')
 			${actionContributionFactory.information.name}
 		@h.br (c.unless: ${loop.last})
 
-@c.template (c.unless: ${empty library.functionFactories})
+@c.template (c.unless: ${empty functionFactories})
 	@h.h3
 		@g.localise (key: block.functions)
 
-	@c.each (element name: functionFactory, elements: ${library.functionFactories})
+	@c.each (element name: functionFactory, elements: ${functionFactories})
 		@h.a (href: '${aludoc:relativeLocation(pageLocation, aludoc:functionPage(functionFactory))}')
 			${functionFactory.information.name}
 		@h.br (c.unless: ${loop.last})

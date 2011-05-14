@@ -52,35 +52,45 @@ public class AluTest extends AbstractCommandTest {
 	}
 
 	public void supplyingTemplateShouldHaveItProcessed() {
-		String[] output = executeCommand(alu, "-p", "aluscript", "hello.alu");
-		assert output[0].equals("Hello!");
-		assert output[1].equals("");
+		Execution execution = executeCommand(alu, "-p", "aluscript", "hello.alu");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals("Hello!");
+		assert !execution.hadErrors();
 	}
 
 	@Test(dependsOnMethods = "supplyingTemplateShouldHaveItProcessed")
 	public void aluScriptParserShouldBeDefaultParser() {
-		String[] output = executeCommand(alu, "hello.alu");
-		assert output[0].equals("Hello!");
-		assert output[1].equals("");
+		Execution execution = executeCommand(alu, "hello.alu");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals("Hello!");
+		assert !execution.hadErrors();
 	}
 
 	@Test(dependsOnMethods = "supplyingTemplateShouldHaveItProcessed")
 	public void argumentsShouldBeAvailableInContextVariable() {
-		String[] output = executeCommand(alu, "hello-with-arguments.alu", "birds", "flowers");
-		assert output[0].equals("Hello, birds!\nHello, flowers!");
-		assert output[1].equals("");
+		Execution execution = executeCommand(alu, "hello-with-arguments.alu", "birds", "flowers");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals("Hello, birds!\nHello, flowers!");
+		assert !execution.hadErrors();
 	}
 
 	public void notSupplyingTemplateShouldResultInHelpMessage() {
-		String[] output = executeCommand(alu);
-		assert output[0].contains("Usage: alu [options] [template file] [arguments]");
-		assert output[1].equals("");
+		Execution execution = executeCommand(alu);
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().contains("Usage: alu [options] [template file] [arguments]");
+		assert !execution.hadErrors();
 	}
 
 	public void supplyingNonexistentParserShouldResultInErrorMessage() {
-		String[] output = executeCommand(alu, "-p", "xlm", "hello.xml");
-		assert output[0].equals("");
-		assert output[1].equals("The template 'hello.xml' can't be processed (unknown parser: xlm).");
+		Execution execution = executeCommand(alu, "-p", "xlm", "hello.xml");
+		assert !execution.wasSuccessful();
+		assert !execution.hadOutput();
+		assert execution.hadErrors();
+		assert execution.getErrors().equals("can't process template 'hello.xml' (unknown parser: xlm)");
 	}
 
 	@Test(dependsOnMethods = "aluScriptParserShouldBeDefaultParser")
@@ -90,8 +100,10 @@ public class AluTest extends AbstractCommandTest {
 
 		EnvironmentUtilities.getPropertySetContainer().writePropertySet("alu", configurationPropertySet);
 
-		String[] output = executeCommand(alu, "hello");
-		assert output[0].equals("Hello!");
-		assert output[1].equals("");
+		Execution execution = executeCommand(alu, "hello");
+		assert execution.wasSuccessful();
+		assert execution.hadOutput();
+		assert execution.getOutput().equals("Hello!");
+		assert !execution.hadErrors();
 	}
 }

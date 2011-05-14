@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -72,9 +73,9 @@ public class Aluminum {
 	/**
 	 * Stops this template engine.
 	 *
-	 * @throws AluminumException when this template engine can't be stopped
+	 * @throws ConfigurationException when this template engine can't be stopped
 	 */
-	public void stop() throws AluminumException {
+	public void stop() throws ConfigurationException {
 		configuration.close();
 	}
 }

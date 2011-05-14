@@ -1,4 +1,4 @@
-# Copyright 2010 Levi Hoogenberg
+# Copyright 2010-2011 Levi Hoogenberg
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 @library (g: http://aluminumproject.googlecode.com/g11n)
 @library (h: http://aluminumproject.googlecode.com/html)
 
-@c.set variable (name: libraryMessages, value: aludoc/${library.information.preferredUrlAbbreviation})
 @c.set variable (name: libraryName)
-	@g.localise (key: name, g.with resource bundle: ${libraryMessages})
+	@aludoc.translate (key: name, library: ${library})
 @c.set variable (name: pageLocation, value: '${aludoc:libraryPage(library)}')
 
 @c.include (name: aludoc/html/page.alu, pageTitle: ${libraryName})
@@ -27,7 +26,7 @@
 		@c.include (name: aludoc/html/library_elements.alu)
 
 	@c.block (name: main)
-		@g.localise (key: description, allow missing key: true, g.with resource bundle: ${libraryMessages})
+		@aludoc.translate (key: description, library: ${library})
 
 		@h.h2
 			@g.localise (key: block.summary)

@@ -19,14 +19,13 @@
 @library (t: http://aluminumproject.googlecode.com/text)
 
 @c.set variable (name: pageLocation, value: '${aludoc:actionContributionPage(actionContributionFactory)}')
-@c.set variable (name: libraryMessages, value: aludoc/${actionContributionFactory.library.information.preferredUrlAbbreviation})
 
 @c.include (name: aludoc/html/page.alu, pageTitle: ${actionContributionFactory.information.name})
 	@c.block (name: navigation)
 		@c.include (name: aludoc/html/library_elements.alu, library: ${actionContributionFactory.library})
 
 	@c.block (name: main)
-		@g.localise (key: '${t:replace(actionContributionFactory.information.name, " ", "_")}.description', allow missing key: true, g.with resource bundle: ${libraryMessages})
+		@aludoc.translate (key: '${t:replace(actionContributionFactory.information.name, " ", "_")}.description', library: ${actionContributionFactory.library})
 
 		@h.h2
 			@g.localise (key: block.summary)
