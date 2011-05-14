@@ -99,6 +99,16 @@ public class FileSystemPropertySetContainer implements PropertySetContainer {
 		}
 	}
 
+	public void removePropertySet(String name) throws UtilityException {
+		File propertyFile = getPropertyFile(name);
+
+		if (!propertyFile.exists()) {
+			throw new UtilityException("can't find property set '", name, "' to remove");
+		} else if (!propertyFile.delete()) {
+			throw new UtilityException("can't remove property set '", name, "'");
+		}
+	}
+
 	private File getPropertyFile(String name) {
 		return new File(location, String.format("%s.properties", name));
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,4 +56,12 @@ public interface PropertySetContainer {
 	 * @throws UtilityException when the property set can't be written
 	 */
 	void writePropertySet(String name, Properties propertySet) throws UtilityException;
+
+	/**
+	 * Removes a property set.
+	 *
+	 * @param name the name of the property set to remove
+	 * @throws UtilityException if this property set container does not contain a property set with the given name
+	 */
+	void removePropertySet(String name) throws UtilityException;
 }

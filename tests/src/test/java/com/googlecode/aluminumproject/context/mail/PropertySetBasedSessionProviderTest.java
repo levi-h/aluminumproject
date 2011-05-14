@@ -21,15 +21,21 @@ import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities
 
 import java.util.Properties;
 
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"libraries", "libraries-mail", "fast"})
 public class PropertySetBasedSessionProviderTest {
-	@BeforeClass
+	@BeforeMethod
 	public void addPropertySet() {
 		EnvironmentUtilities.getPropertySetContainer().writePropertySet("mail", new Properties());
+	}
+
+	@AfterMethod
+	public void removePropertySet() {
+		EnvironmentUtilities.getPropertySetContainer().removePropertySet("mail");
 	}
 
 	public void sessionProviderShouldBeCreatableUsingExistingPropertySetName() {

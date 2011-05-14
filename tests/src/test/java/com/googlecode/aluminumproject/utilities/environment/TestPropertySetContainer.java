@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,5 +52,13 @@ public class TestPropertySetContainer implements PropertySetContainer {
 
 	public void writePropertySet(String name, Properties propertySet) {
 		propertySets.put(name, propertySet);
+	}
+
+	public void removePropertySet(String name) throws UtilityException {
+		if (propertySets.containsKey(name)) {
+			propertySets.remove(name);
+		} else {
+			throw new UtilityException("can't remove property set '", name, "', since it does not exist");
+		}
 	}
 }

@@ -21,12 +21,13 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
+import com.googlecode.aluminumproject.utilities.environment.PropertySetContainer;
 
 import java.util.Properties;
 
 import javax.mail.Session;
 
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -35,18 +36,28 @@ import org.testng.annotations.Test;
 public class MailContextProviderTest {
 	private Context context;
 
-	@BeforeClass
-	public void createMailPropertySets() {
-		EnvironmentUtilities.getPropertySetContainer().writePropertySet("mail", new Properties());
-
-		Properties debugPropertySet = new Properties();
-		debugPropertySet.setProperty("mail.debug", "true");
-		EnvironmentUtilities.getPropertySetContainer().writePropertySet("mail-debug", debugPropertySet);
-	}
-
 	@BeforeMethod
 	public void createContext() {
 		context = new DefaultContext();
+	}
+
+	@BeforeMethod
+	public void createMailPropertySets() {
+		PropertySetContainer propertySetContainer = EnvironmentUtilities.getPropertySetContainer();
+
+		Properties propertySet = new Properties();
+		propertySetContainer.writePropertySet("mail", propertySet);
+
+		Properties debugPropertySet = propertySet;
+		debugPropertySet.setProperty("mail.debug", "true");
+		propertySetContainer.writePropertySet("mail-debug", debugPropertySet);
+	}
+
+	@AfterMethod
+	public void removeMailPropertySets() {
+		PropertySetContainer propertySetContainer = EnvironmentUtilities.getPropertySetContainer();
+		propertySetContainer.removePropertySet("mail");
+		propertySetContainer.removePropertySet("mail-debug");
 	}
 
 	public void mailContextWithoutSessionProviderShouldNotBeProvided() {

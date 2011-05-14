@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,10 +100,14 @@ public class AluTest extends AbstractCommandTest {
 
 		EnvironmentUtilities.getPropertySetContainer().writePropertySet("alu", configurationPropertySet);
 
-		Execution execution = executeCommand(alu, "hello");
-		assert execution.wasSuccessful();
-		assert execution.hadOutput();
-		assert execution.getOutput().equals("Hello!");
-		assert !execution.hadErrors();
+		try {
+			Execution execution = executeCommand(alu, "hello");
+			assert execution.wasSuccessful();
+			assert execution.hadOutput();
+			assert execution.getOutput().equals("Hello!");
+			assert !execution.hadErrors();
+		} finally {
+			EnvironmentUtilities.getPropertySetContainer().removePropertySet("alu");
+		}
 	}
 }
