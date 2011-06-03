@@ -60,6 +60,10 @@ public class Aluminum {
 		try {
 			try {
 				templateProcessor.processTemplate(name, parser, context, writer);
+			} catch (RuntimeException exception) {
+				writer.clear();
+
+				throw exception;
 			} finally {
 				writer.close();
 			}
