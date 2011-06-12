@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class TextFunctions {
 	private TextFunctions() {}
 
 	/**
-	 * Replaces all occurrences of {@code original} in {@code text} with {@code replacement}.
+	 * Replaces all occurrences of {@code target} in {@code text} with {@code replacement}.
 	 *
 	 * @param text the original text
 	 * @param target the text to replace
@@ -58,7 +58,7 @@ public class TextFunctions {
 	 * @param text the text to turn into lower case
 	 * @return the lower-cased text
 	 */
-	public static String lowerCase(String text) {
+	public static String lowerCase(@Named("text") String text) {
 		return (text == null) ? text : text.toLowerCase();
 	}
 
@@ -68,7 +68,7 @@ public class TextFunctions {
 	 * @param text the text to turn into upper case
 	 * @return the upper-cased text
 	 */
-	public static String upperCase(String text) {
+	public static String upperCase(@Named("text") String text) {
 		return (text == null) ? text : text.toUpperCase();
 	}
 }

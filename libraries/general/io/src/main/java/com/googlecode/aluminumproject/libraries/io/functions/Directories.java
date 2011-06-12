@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.libraries.io.functions;
 
 import com.googlecode.aluminumproject.annotations.FunctionClass;
+import com.googlecode.aluminumproject.annotations.Named;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +66,8 @@ public class Directories {
 	 * @throws IllegalArgumentException when a file with the given name already exists in the specified directory
 	 * @throws IOException when the directory can't be created
 	 */
-	public static File newDirectory(File directory, String name) throws IllegalArgumentException, IOException {
+	public static File newDirectory(@Named("directory") File directory, @Named("name") String name)
+			throws IllegalArgumentException, IOException {
 		File newDirectory = new File(directory, name);
 
 		if (newDirectory.exists()) {

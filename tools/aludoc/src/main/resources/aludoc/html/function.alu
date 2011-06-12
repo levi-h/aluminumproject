@@ -61,4 +61,4 @@
 						@h.td
 							${aludoc:formatType(argumentInformation.type)}
 						@h.td
-							@aludoc.translate (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.${t:replace(argumentInformation.name, " ", "_")}.description', library: ${functionFactory.library})
+							@aludoc.translate (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.${t:replace(t:lowerCase(t:humanise(argumentInformation.name)), " ", "_")}.description', library: ${functionFactory.library})

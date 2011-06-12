@@ -25,7 +25,12 @@
 		@c.include (name: aludoc/html/library_elements.alu, library: ${actionContributionFactory.library})
 
 	@c.block (name: main)
-		@aludoc.translate (key: '${t:replace(actionContributionFactory.information.name, " ", "_")}.description', library: ${actionContributionFactory.library})
+		@c.convert (value: false, type: boolean, c.variable name: libraryHasActionWithSameName)
+
+		@c.each (elements: ${actionContributionFactory.library.actionFactories}, element name: actionFactory)
+			@c.set variable (name: libraryHasActionWithSameName, value: '${libraryHasActionWithSameName or (actionFactory.information.name eq actionContributionFactory.information.name)}', scope: template)
+
+		@aludoc.translate (key: '${t:replace(actionContributionFactory.information.name, " ", "_")}.${libraryHasActionWithSameName ? "contribution_" : ""}description', library: ${actionContributionFactory.library})
 
 		@h.h2
 			@g.localise (key: block.summary)

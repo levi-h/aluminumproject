@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.libraries.io.functions;
 
 import com.googlecode.aluminumproject.annotations.FunctionClass;
+import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.writers.FileWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -36,7 +37,7 @@ public class Writers {
 	 * @param target the file to write to
 	 * @return the new file writer
 	 */
-	public static Writer fileWriter(File target) {
+	public static Writer fileWriter(@Named("target") File target) {
 		return new FileWriter(target, false);
 	}
 
@@ -46,7 +47,7 @@ public class Writers {
 	 * @param target the file to write to
 	 * @return the new file writer
 	 */
-	public static Writer appendingFileWriter(File target) {
+	public static Writer appendingFileWriter(@Named("target") File target) {
 		return new FileWriter(target, true);
 	}
 }
