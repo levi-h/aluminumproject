@@ -17,7 +17,8 @@
 dependencies {
 	compile project(':aluminum-core')
 
-	compile group: 'javax.mail', name: 'mail', version: '1.4.3', transitive: false
+	apiDocs group: 'javax.mail', name: 'mail', version: '1.4.3', transitive: false
 }
 
+apiDocUrls = ['http://download.oracle.com/javaee/5/api/']
 packagesToExcludeFromApiDocs = ['com.googlecode.aluminumproject.libraries.mail']
