@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.libraries.io.functions;
 
 import com.googlecode.aluminumproject.annotations.FunctionClass;
+import com.googlecode.aluminumproject.annotations.Named;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -61,7 +62,7 @@ public class FileFilters {
 	 * @param pattern the regular expression that the files' names should match
 	 * @return the new file filter
 	 */
-	public static FileFilter filesNamedLike(final String pattern) {
+	public static FileFilter filesNamedLike(final @Named("pattern") String pattern) {
 		return new FileFilter() {
 			public boolean accept(File file) {
 				return file.getName().matches(pattern);
@@ -75,7 +76,7 @@ public class FileFilters {
 	 * @param extension the extension that the files should have
 	 * @return the new file filter
 	 */
-	public static FileFilter filesWithExtension(final String extension) {
+	public static FileFilter filesWithExtension(final @Named("extension") String extension) {
 		return new FileFilter() {
 			public boolean accept(File file) {
 				return Files.extension(file).equalsIgnoreCase(extension);

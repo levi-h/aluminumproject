@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.mail.actions;
 
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
@@ -45,7 +46,7 @@ public class Send extends AbstractAction {
 	private Address from;
 	private @Required String subject;
 
-	private Map<RecipientType, List<Address>> recipients;
+	private @Ignored Map<RecipientType, List<Address>> recipients;
 
 	/**
 	 * Creates a <em>send</em> action.
