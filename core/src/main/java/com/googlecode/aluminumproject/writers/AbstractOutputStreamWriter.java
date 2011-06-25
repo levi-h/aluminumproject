@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,6 +111,16 @@ public abstract class AbstractOutputStreamWriter extends AbstractWriter {
 	public void close() throws WriterException {
 		super.close();
 
+		closeOutputStream();
+	}
+
+	/**
+	 * Closes the output stream. This method can be overridden by subclasses that want to keep their output streams
+	 * open.
+	 *
+	 * @throws WriterException when the output stream can't be closed
+	 */
+	protected void closeOutputStream() throws WriterException {
 		try {
 			getOutputStream().close();
 		} catch (IOException exception) {
