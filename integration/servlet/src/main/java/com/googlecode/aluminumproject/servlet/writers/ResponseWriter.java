@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,4 +55,7 @@ public class ResponseWriter extends AbstractOutputStreamWriter {
 
 		response.resetBuffer();
 	}
+
+	@Override
+	protected void closeOutputStream() {}
 }
