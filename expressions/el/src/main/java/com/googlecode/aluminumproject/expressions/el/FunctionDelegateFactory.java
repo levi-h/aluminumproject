@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtNewMethod;
+import javassist.LoaderClassPath;
 
 /**
  * Creates {@link Method delegates} that call {@link Function functions}. These delegates are needed since the {@link
@@ -62,7 +63,7 @@ import javassist.CtNewMethod;
  *
  * @author levi_h
  */
-class FunctionDelegateFactory {
+public class FunctionDelegateFactory {
 	private FunctionDelegateFactory() {}
 
 	/**
@@ -151,7 +152,7 @@ class FunctionDelegateFactory {
 	 * @return the function result
 	 * @throws FunctionException when the function can't be created
 	 */
-	static Object callFunction(String key, Object[] parameters) throws FunctionException {
+	public static Object callFunction(String key, Object[] parameters) throws FunctionException {
 		FunctionContext functionContext = null;
 
 		Queue<FunctionContext> functionContexts = FunctionDelegateFactory.functionContexts.get();
@@ -233,7 +234,10 @@ class FunctionDelegateFactory {
 				functionFactories = new HashMap<String, FunctionFactory>();
 				delegateIndices = new HashMap<String, Integer>();
 
-				CtClass ctFunctions = ClassPool.getDefault().makeClass(
+				ClassPool classPool = new ClassPool();
+				classPool.appendClassPath(new LoaderClassPath(Thread.currentThread().getContextClassLoader()));
+
+				CtClass ctFunctions = classPool.makeClass(
 					String.format("com.googlecode.aluminumproject.expressions.el.Delegates%d", classIndex));
 
 				int delegateIndex = 0;

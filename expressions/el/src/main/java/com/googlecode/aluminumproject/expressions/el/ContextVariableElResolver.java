@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class ContextVariableElResolver extends ELResolver {
 
 		if (handles(context, base, property)) {
 			try {
-				value = ((ElContext) context).getContext().findVariable((String) property);
+				value = ((ElContext) context.getContext(ElContext.class)).getContext().findVariable((String) property);
 
 				context.setPropertyResolved(true);
 			} catch (ContextException exception) {
@@ -93,6 +93,7 @@ public class ContextVariableElResolver extends ELResolver {
 	}
 
 	private boolean handles(ELContext context, Object base, Object property) {
-		return (context instanceof ElContext) && (base == null) && (property instanceof String);
+		return (context.getContext(ElContext.class) instanceof ElContext) &&
+			(base == null) && (property instanceof String);
 	}
 }

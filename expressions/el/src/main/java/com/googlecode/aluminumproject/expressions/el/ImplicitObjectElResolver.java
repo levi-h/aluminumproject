@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class ImplicitObjectElResolver extends ELResolver {
 		Object value = null;
 
 		if (handles(elContext, base, property)) {
-			Context context = ((ElContext) elContext).getContext();
+			Context context = ((ElContext) elContext.getContext(ElContext.class)).getContext();
 			String name = (String) property;
 
 			if (context.getImplicitObjectNames().contains(name)) {
@@ -98,6 +98,7 @@ public class ImplicitObjectElResolver extends ELResolver {
 	}
 
 	private boolean handles(ELContext elContext, Object base, Object property) {
-		return (elContext instanceof ElContext) && (base == null) && (property instanceof String);
+		return (elContext.getContext(ElContext.class) instanceof ElContext) &&
+			(base == null) && (property instanceof String);
 	}
 }
