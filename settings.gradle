@@ -30,6 +30,7 @@ rootProject.name = 'aluminum'
 	'html-library': 'libraries/file-formats/html',
 	'io-library': 'libraries/general/io',
 	'mail-library': 'libraries/communication/mail',
+	'scripting-library': 'libraries/general/scripting',
 	'text-library': 'libraries/general/text',
 	'xml-library': 'libraries/file-formats/xml',
 
