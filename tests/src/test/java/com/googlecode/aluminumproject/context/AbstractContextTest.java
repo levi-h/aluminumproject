@@ -15,6 +15,9 @@
  */
 package com.googlecode.aluminumproject.context;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,6 +67,14 @@ public class AbstractContextTest {
 		assert scopeNames.size() == 2;
 		assert scopeNames.contains(Context.TEMPLATE_SCOPE);
 		assert scopeNames.contains(TestContext.BLOCK_SCOPE);
+	}
+
+	@Test(dependsOnMethods = "scopeNamesShouldIncludeAllScopes")
+	public void scopeNamesShouldBeOrdered() {
+		List<String> scopeNames = new LinkedList<String>(context.getScopeNames());
+		List<String> orderedScopeNames = Arrays.asList(TestContext.BLOCK_SCOPE, Context.TEMPLATE_SCOPE);
+
+		assert scopeNames.equals(orderedScopeNames);
 	}
 
 	public static final String NEW_SCOPE = "new";
