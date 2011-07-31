@@ -17,9 +17,9 @@ package com.googlecode.aluminumproject.context;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -93,7 +93,7 @@ public abstract class AbstractContext implements Context {
 	}
 
 	public Set<String> getScopeNames() {
-		Set<String> scopeNames = new HashSet<String>();
+		Set<String> scopeNames = new LinkedHashSet<String>();
 
 		for (Scope scope: scopes) {
 			scopeNames.add(scope.getName());

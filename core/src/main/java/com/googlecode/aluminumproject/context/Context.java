@@ -39,7 +39,7 @@ import java.util.Set;
  */
 public interface Context {
 	/**
-	 * Returns all scope names.
+	 * Returns all scope names, ordered by priority (from highest to lowest).
 	 *
 	 * @return a set that contains the names of all scopes in this context
 	 */
