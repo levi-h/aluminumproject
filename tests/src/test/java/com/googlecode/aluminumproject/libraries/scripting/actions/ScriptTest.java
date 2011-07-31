@@ -43,7 +43,33 @@ public class ScriptTest extends ScriptingLibraryTest {
 
 		String output = processTemplate("script-with-variable", context);
 		assert output != null;
-		assert output.equals("Hello!"): output;
+		assert output.equals("Hello!");
+	}
+
+	@Test(dependsOnMethods = "textShouldBeWritable")
+	public void implicitObjectsShouldBeAvailable() {
+		Context context = new DefaultContext();
+
+		String englishScope = context.addScope("english", true);
+		context.setVariable(englishScope, "greeting", "Hello!");
+
+		String spanishScope = context.addScope("spanish", true);
+		context.setVariable(spanishScope, "greeting", "Hola!");
+
+		String output = processTemplate("script-with-variable-from-implicit-object", context);
+		assert output != null;
+		assert output.equals("Hello!");
+	}
+
+	public void contextVariablesShouldBeChangeableFromScript() {
+		Context context = new DefaultContext();
+		context.setVariable("greeting", "Hi!");
+
+		processTemplate("script-with-updated-variable", context);
+
+		Object variable = context.getVariable(Context.TEMPLATE_SCOPE, "greeting");
+		assert variable != null;
+		assert variable.equals("Hello!");
 	}
 
 	public void newScriptVariablesShouldBeAddedToContext() {
@@ -56,5 +82,12 @@ public class ScriptTest extends ScriptingLibraryTest {
 		Object variable = context.getVariable(Context.TEMPLATE_SCOPE, "greeting");
 		assert variable != null;
 		assert variable.equals("Hello!");
+	}
+
+	@Test(dependsOnMethods = "textShouldBeWritable")
+	public void functionsShouldBeInvocable() {
+		String output = processTemplate("script-with-function");
+		assert output != null;
+		assert output.trim().equals("Hello!");
 	}
 }

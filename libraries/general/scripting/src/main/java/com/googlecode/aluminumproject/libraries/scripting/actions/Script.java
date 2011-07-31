@@ -24,8 +24,12 @@ import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
@@ -86,14 +90,42 @@ public class Script extends AbstractAction {
 	}
 
 	private void synchroniseVariables(Context context, Bindings bindings) throws ContextException {
-		for (String name: context.getVariableNames(Context.TEMPLATE_SCOPE)) {
-			bindings.put(name, context.getVariable(Context.TEMPLATE_SCOPE, name));
+		List<String> scopes = new ArrayList<String>(context.getScopeNames());
+		Collections.reverse(scopes);
+
+		for (String scope: scopes) {
+			for (String name: context.getVariableNames(scope)) {
+				bindings.put(name, context.getVariable(scope, name));
+			}
+		}
+
+		for (String implicitObject: context.getImplicitObjectNames()) {
+			bindings.put(implicitObject, context.getImplicitObject(implicitObject));
 		}
 	}
 
-	private void synchroniseVariables(Bindings bindings, Context context) {
-		for (String name: bindings.keySet()) {
-			context.setVariable(name, bindings.get(name));
+	private void synchroniseVariables(Bindings bindings, Context context) throws ContextException {
+		Set<String> scriptVariables = bindings.keySet();
+
+		for (String name: scriptVariables) {
+			if (!context.getImplicitObjectNames().contains(name)) {
+				Iterator<String> itScopes = context.getScopeNames().iterator();
+				String scope = null;
+
+				while ((scope == null) && itScopes.hasNext()) {
+					scope = itScopes.next();
+
+					if (!context.getVariableNames(scope).contains(name)) {
+						scope = null;
+					}
+				}
+
+				if (scope == null) {
+					context.setVariable(name, bindings.get(name));
+				} else {
+					context.setVariable(scope, name, bindings.get(name));
+				}
+			}
 		}
 	}
 }
