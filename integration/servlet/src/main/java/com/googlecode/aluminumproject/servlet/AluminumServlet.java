@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,13 @@
  */
 package com.googlecode.aluminumproject.servlet;
 
+import java.util.Enumeration;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
@@ -23,18 +30,11 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.servlet.context.ServletContext;
-import com.googlecode.aluminumproject.servlet.writers.ResponseWriter;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
+import com.googlecode.aluminumproject.writers.ResponseWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
-
-import java.util.Enumeration;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * A servlet that uses Aluminum to serve web content.
@@ -248,5 +248,5 @@ public class AluminumServlet extends HttpServlet {
 		}
 	}
 
-	private final static long serialVersionUID = 20110105L;
+	private final static long serialVersionUID = 20111020L;
 }

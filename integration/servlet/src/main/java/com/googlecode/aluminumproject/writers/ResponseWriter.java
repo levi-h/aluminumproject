@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.servlet.writers;
+package com.googlecode.aluminumproject.writers;
 
 import com.googlecode.aluminumproject.writers.AbstractOutputStreamWriter;
 import com.googlecode.aluminumproject.writers.WriterException;
