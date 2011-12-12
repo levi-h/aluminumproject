@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class ByteArrayToStringConverterTest {
 	public void emptyByteArrayShouldBeConvertedToEmptyString() {
 		Object convertedValue = converter.convert(new byte[0], String.class, context);
 		assert convertedValue instanceof String;
-		assert ((String) convertedValue).isEmpty();
+		assert ((String) convertedValue).equals("");
 	}
 
 	public void byteArrayShouldBeConvertedToCorrespondingString() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 /**
@@ -99,7 +100,7 @@ public class LocalisedParameter implements ActionContribution {
 				throw new ActionException(exception, "can't obtain resource bundle");
 			}
 
-			if (resourceBundle.containsKey(key)) {
+			if (Collections.list(resourceBundle.getKeys()).contains(key)) {
 				Object resource = resourceBundle.getObject(key);
 
 				try {

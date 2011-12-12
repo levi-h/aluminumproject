@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public class LocaleBasedNumberFormatProvider implements NumberFormatProvider {
 			numberFormat = NumberFormat.getPercentInstance(locale);
 		} else if (type == NumberFormatType.CUSTOM) {
 			try {
-				numberFormat = new DecimalFormat(customPattern, DecimalFormatSymbols.getInstance(locale));
+				numberFormat = new DecimalFormat(customPattern, new DecimalFormatSymbols(locale));
 			} catch (IllegalArgumentException exception) {
 				throw new ContextException(exception,
 					"can't create custom number format with pattern '", customPattern, "'");

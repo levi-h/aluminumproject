@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Iterator;
-import java.util.NavigableMap;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -101,7 +101,7 @@ public class Each extends AbstractAction {
 	private static class ElementProvider {
 		private Iterator<?> iterator;
 
-		private NavigableMap<Integer, Object> elements;
+		private SortedMap<Integer, Object> elements;
 
 		private int index;
 		private int count;
@@ -117,9 +117,9 @@ public class Each extends AbstractAction {
 		}
 
 		public Object getNextElement() {
-			index++;
-
 			Object element = (elements == null) ? iterator.next() : elements.remove(index);
+
+			index++;
 
 			return element;
 		}
@@ -136,10 +136,10 @@ public class Each extends AbstractAction {
 					int i = index;
 
 					while (iterator.hasNext()) {
-						elements.put(i, iterator.next());
+						elements.put(i++, iterator.next());
 					}
 
-					count = elements.lastEntry().getKey() + 1;
+					count = i;
 				} else {
 					count = index;
 				}

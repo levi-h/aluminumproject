@@ -15,6 +15,15 @@
  */
 package com.googlecode.aluminumproject.converters.ds;
 
+import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.converters.Converter;
+import com.googlecode.aluminumproject.converters.ConverterException;
+import com.googlecode.aluminumproject.converters.ConverterRegistry;
+import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.utilities.text.Splitter;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -24,15 +33,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import com.googlecode.aluminumproject.annotations.Injected;
-import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
-import com.googlecode.aluminumproject.converters.ConverterRegistry;
-import com.googlecode.aluminumproject.utilities.UtilityException;
-import com.googlecode.aluminumproject.utilities.text.Splitter;
 
 /**
  * Converts strings to {@link Map maps}. The expected format is {@code [a: 1, b: 2]}.
@@ -114,7 +114,6 @@ public class StringToMapConverter implements Converter<String> {
 			expectedSeparatorPatterns = Collections.singleton(OPENING_BRACKET);
 		}
 
-		@Override
 		public void process(String token, String separator, String separatorPattern) throws UtilityException {
 			if (expectedSeparatorPatterns.contains(separatorPattern)) {
 				if (separatorPattern == null) {
