@@ -25,6 +25,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -76,6 +77,6 @@ public class Translate extends AbstractAction {
 				" for locale ", locale);
 		}
 
-		return messageBundle.containsKey(key) ? messageBundle.getString(key) : null;
+		return Collections.list(messageBundle.getKeys()).contains(key) ? messageBundle.getString(key) : null;
 	}
 }

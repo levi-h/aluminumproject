@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ import java.util.Map;
 		if (!open) {
 			String bodyText = getBodyText(context, writer).trim();
 
-			if (!bodyText.isEmpty()) {
+			if (bodyText.length() > 0) {
 				writer.write(bodyText);
 			}
 

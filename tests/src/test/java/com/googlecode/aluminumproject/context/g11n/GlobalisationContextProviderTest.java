@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -181,7 +182,7 @@ public class GlobalisationContextProviderTest {
 
 		ResourceBundle resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
 		assert resourceBundle != null;
-		assert resourceBundle.containsKey("aluminum");
+		assert Collections.list(resourceBundle.getKeys()).contains("aluminum");
 		assert resourceBundle.getString("aluminum").equals("a powerful and flexible template engine");
 	}
 
@@ -196,7 +197,7 @@ public class GlobalisationContextProviderTest {
 
 		ResourceBundle resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
 		assert resourceBundle != null;
-		assert resourceBundle.containsKey("rivoli");
+		assert Collections.list(resourceBundle.getKeys()).contains("rivoli");
 		assert resourceBundle.getString("rivoli").equals("the framework that makes generating reports fun");
 	}
 
@@ -217,7 +218,7 @@ public class GlobalisationContextProviderTest {
 
 		ResourceBundle resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
 		assert resourceBundle != null;
-		assert resourceBundle.containsKey("aluminum");
+		assert Collections.list(resourceBundle.getKeys()).contains("aluminum");
 		assert resourceBundle.getString("aluminum").equals("a powerful and flexible template engine");
 	}
 

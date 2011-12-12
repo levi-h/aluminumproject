@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ public class NameBasedResourceBundleProviderTest {
 	public void propertyResourceBundlesShouldBeProvided() {
 		ResourceBundle resourceBundle = new NameBasedResourceBundleProvider("aluminum").provide(context);
 		assert resourceBundle != null;
-		assert resourceBundle.containsKey("version");
+		assert Collections.list(resourceBundle.getKeys()).contains("version");
 		assert resourceBundle.getString("version").equals("test");
 	}
 
@@ -102,7 +102,7 @@ public class NameBasedResourceBundleProviderTest {
 		ResourceBundle resourceBundle =
 			new NameBasedResourceBundleProvider(EuropeanCapitalCities.class.getName()).provide(context);
 		assert resourceBundle != null;
-		assert resourceBundle.containsKey("France");
+		assert Collections.list(resourceBundle.getKeys()).contains("France");
 		assert resourceBundle.getString("France").equals("Paris");
 	}
 
