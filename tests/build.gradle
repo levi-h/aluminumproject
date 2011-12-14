@@ -31,14 +31,9 @@ dependencies {
 
 test {
     useTestNG() {
-		scanForTestClasses = false
-
 		suiteName = 'aluminum'
 		testName = 'aluminum'
 	}
-
-	include '**/*.class'
-	exclude ''
 }
 
 jar.enabled = false
