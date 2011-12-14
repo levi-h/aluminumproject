@@ -17,7 +17,7 @@
 dependencies {
 	compile project(':aluminum-core')
 
-	apiDocs group: 'javax.mail', name: 'mail', version: '1.4.3', transitive: false
+	distribution group: 'javax.mail', name: 'mail', version: '1.4.4'
 }
 
 apiDocUrls = ['http://download.oracle.com/javaee/5/api/']
