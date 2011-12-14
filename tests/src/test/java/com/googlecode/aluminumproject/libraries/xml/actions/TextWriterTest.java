@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.xml.XmlLibraryTest;
 import com.googlecode.aluminumproject.templates.TemplateException;
 
@@ -32,8 +34,19 @@ public class TextWriterTest extends XmlLibraryTest {
 		));
 	}
 
+	public void nonTextShouldBeConverted() {
+		assert processTemplate("non-text").equals(createXml(
+			"<document>",
+			"    <page>1</page>",
+			"</document>"
+		));
+	}
+
 	@Test(expectedExceptions = TemplateException.class)
-	public void writingNonStringsShouldCauseException() {
-		processTemplate("non-text");
+	public void writingNullShouldCauseException() {
+		Context context = new DefaultContext();
+		context.setVariable("pageNumber", null);
+
+		processTemplate("null-text", context);
 	}
 }

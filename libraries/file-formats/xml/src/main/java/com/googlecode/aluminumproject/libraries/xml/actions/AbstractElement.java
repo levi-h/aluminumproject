@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -47,6 +48,8 @@ import nu.xom.Text;
 abstract class AbstractElement extends AbstractAction {
 	/** This action's action descriptor. */
 	protected @Injected ActionDescriptor descriptor;
+
+	private @Injected Configuration configuration;
 
 	private @Ignored Map<String, String> namespaces;
 
@@ -170,7 +173,7 @@ abstract class AbstractElement extends AbstractAction {
 		Element element = createElement();
 		addNamespaceDeclarations(element);
 
-		getBody().invoke(context, new TextWriter(this));
+		getBody().invoke(context, new TextWriter(this, configuration.getConverterRegistry()));
 
 		addAttributes(element);
 
