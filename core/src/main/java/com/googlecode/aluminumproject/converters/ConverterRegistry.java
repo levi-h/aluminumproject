@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.converters;
 
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
-import com.googlecode.aluminumproject.context.Context;
 
 import java.lang.reflect.Type;
 
@@ -54,11 +53,10 @@ public interface ConverterRegistry extends ConfigurationElement {
 	 * @param <S> the source type
 	 * @param value the value to convert (may be {@code null})
 	 * @param targetType the type that the value should be converted into
-	 * @param context the context in which the conversion takes place
 	 * @return the converted value
 	 * @throws ConverterException when no converter can be found for the source type or when something goes wrong while
 	 *                            converting the value
 	 *
 	 */
-	<S> Object convert(S value, Type targetType, Context context) throws ConverterException;
+	<S> Object convert(S value, Type targetType) throws ConverterException;
 }

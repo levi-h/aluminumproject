@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 
 		getBody().invoke(context, new NullWriter());
 
-		writer.write(type.format(formatString, parameters, configuration.getConverterRegistry(), context));
+		writer.write(type.format(formatString, parameters, configuration.getConverterRegistry()));
 	}
 
 	/**
@@ -101,10 +101,9 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		 */
 		INTERPOLATION {
 			@Override
-			String format(String formatString, List<Parameter> parameters,
-					ConverterRegistry converterRegistry, Context context) throws ActionException {
-				Interpolator interpolator =
-					new Interpolator(getNamedParameters(parameters, converterRegistry, context));
+			String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
+					throws ActionException {
+				Interpolator interpolator = new Interpolator(getNamedParameters(parameters, converterRegistry));
 
 				try {
 					new Splitter(Arrays.asList("\\{", "\\}"), '\\').split(formatString, interpolator);
@@ -165,8 +164,8 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		 */
 		MESSAGE_FORMAT {
 			@Override
-			public String format(String formatString, List<Parameter> parameters,
-					ConverterRegistry converterRegistry, Context context) throws ActionException {
+			public String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
+					throws ActionException {
 				try {
 					return MessageFormat.format(formatString, getPositionalParameters(parameters).toArray());
 				} catch (IllegalArgumentException exception) {
@@ -182,8 +181,8 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		 */
 		PRINTF {
 			@Override
-			public String format(String formatString, List<Parameter> parameters,
-					ConverterRegistry converterRegistry, Context context) throws ActionException {
+			public String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
+					throws ActionException {
 				try {
 					return String.format(formatString, getPositionalParameters(parameters).toArray());
 				} catch (IllegalFormatException exception) {
@@ -192,8 +191,8 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 			}
 		};
 
-		private static Map<String, String> getNamedParameters(List<Parameter> parameters,
-				ConverterRegistry converterRegistry, Context context) throws ActionException {
+		private static Map<String, String> getNamedParameters(
+				List<Parameter> parameters, ConverterRegistry converterRegistry) throws ActionException {
 			Map<String, String> namedParameters = new HashMap<String, String>();
 
 			for (Parameter parameter: parameters) {
@@ -207,7 +206,7 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 					String value;
 
 					try {
-						value = (String) converterRegistry.convert(parameter.value, String.class, context);
+						value = (String) converterRegistry.convert(parameter.value, String.class);
 					} catch (ConverterException exception) {
 						throw new ActionException(exception, "can't convert parameter");
 					}
@@ -239,12 +238,11 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		 * @param formatString the string to format
 		 * @param parameters the parameters to use
 		 * @param converterRegistry the converter registry to use
-		 * @param context the current context
 		 * @return the formatted string
 		 * @throws ActionException when the string can't be formatted
 		 */
-		abstract String format(String formatString, List<Parameter> parameters,
-				ConverterRegistry converterRegistry, Context context) throws ActionException;
+		abstract String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
+			throws ActionException;
 	}
 
 	private static class Parameter {

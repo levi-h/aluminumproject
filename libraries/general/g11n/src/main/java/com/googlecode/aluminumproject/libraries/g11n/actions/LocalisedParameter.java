@@ -104,7 +104,7 @@ public class LocalisedParameter implements ActionContribution {
 				Object resource = resourceBundle.getObject(key);
 
 				try {
-					return converterRegistry.convert(resource, type, context);
+					return converterRegistry.convert(resource, type);
 				} catch (ConverterException exception) {
 					throw new ActionException(exception, "can't convert localised resource ", resource, " into ", type);
 				}

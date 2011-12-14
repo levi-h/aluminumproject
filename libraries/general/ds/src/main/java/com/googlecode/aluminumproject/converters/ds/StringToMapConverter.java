@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.converters.ds;
 
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
@@ -59,7 +58,7 @@ public class StringToMapConverter implements Converter<String> {
 		return targetTypeIsInterface || targetTypeIsParameterisedInterface;
 	}
 
-	public Object convert(String value, Type targetType, Context context) throws ConverterException {
+	public Object convert(String value, Type targetType) throws ConverterException {
 		if (!supportsTargetType(targetType)) {
 			throw new ConverterException("expected map as target type, not ", targetType);
 		}
@@ -82,8 +81,8 @@ public class StringToMapConverter implements Converter<String> {
 		}
 
 		for (Map.Entry<String, String> entry: getEntries(value)) {
-			map.put(converterRegistry.convert(entry.getKey(), keyType, context),
-				converterRegistry.convert(entry.getValue(), valueType, context));
+			map.put(converterRegistry.convert(entry.getKey(), keyType),
+				converterRegistry.convert(entry.getValue(), valueType));
 		}
 
 		return map;

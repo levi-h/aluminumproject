@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
@@ -31,7 +30,7 @@ public class ByteArrayToStringConverter extends ClassBasedConverter<byte[], Stri
 	public ByteArrayToStringConverter() {}
 
 	@Override
-	protected String convert(byte[] value, Context context) {
+	protected String convert(byte[] value) {
 		return new String(value);
 	}
 }

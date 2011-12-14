@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
@@ -36,7 +35,7 @@ public class StringToTypeConverter extends ClassBasedConverter<String, Type> {
 	public StringToTypeConverter() {}
 
 	@Override
-	protected Type convert(String value, Context context) throws ConverterException {
+	protected Type convert(String value) throws ConverterException {
 		try {
 			return GenericsUtilities.getType(value, "java.lang", "java.util");
 		} catch (UtilityException exception) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.converters;
-
-import com.googlecode.aluminumproject.context.Context;
 
 import java.lang.reflect.Type;
 
@@ -56,10 +54,9 @@ public interface Converter<S> {
 	 *
 	 * @param value the value to convert
 	 * @param targetType the type to convert the value into
-	 * @param context the context in which the conversion takes place
 	 * @return the converted value
 	 * @throws ConverterException when the given target type is not supported or when something goes wrong while
 	 *                            converting the value
 	 */
-	Object convert(S value, Type targetType, Context context) throws ConverterException;
+	Object convert(S value, Type targetType) throws ConverterException;
 }

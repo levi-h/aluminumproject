@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,13 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.configuration.TestConfiguration;
+import com.googlecode.aluminumproject.converters.ds.StringToMapConverter;
+import com.googlecode.aluminumproject.utilities.GenericsUtilities;
+import com.googlecode.aluminumproject.utilities.Injector;
+import com.googlecode.aluminumproject.utilities.Utilities;
+
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
@@ -23,24 +30,13 @@ import java.util.Map;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.TestConfiguration;
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.converters.ds.StringToMapConverter;
-import com.googlecode.aluminumproject.utilities.GenericsUtilities;
-import com.googlecode.aluminumproject.utilities.Injector;
-import com.googlecode.aluminumproject.utilities.Utilities;
-
-@SuppressWarnings("javadoc")
+@SuppressWarnings("all")
 @Test(groups = {"libraries", "libraries-ds", "fast"})
 public class StringToMapConverterTest {
 	private Converter<String> converter;
 
-	private Context context;
-
 	@BeforeMethod
-	public void createConverterAndContext() {
+	public void createConverter() {
 		TestConfiguration configuration = new TestConfiguration(new ConfigurationParameters());
 		configuration.setConverterRegistry(new DefaultConverterRegistry());
 		configuration.getConverterRegistry().initialise(configuration);
@@ -50,8 +46,6 @@ public class StringToMapConverterTest {
 		Injector injector = new Injector();
 		injector.addValueProvider(new Injector.ClassBasedValueProvider(configuration));
 		injector.inject(converter);
-
-		context = new DefaultContext();
 	}
 
 	public void untypedMapShouldBeSupportedAsTargetType() {
@@ -64,19 +58,19 @@ public class StringToMapConverterTest {
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertToUnsupportedTypeShouldCauseException() {
-		converter.convert("[a: 1]", List.class, context);
+		converter.convert("[a: 1]", List.class);
 	}
 
 	@Test(dependsOnMethods = "untypedMapShouldBeSupportedAsTargetType")
 	public void untypedEmptyMapShouldBeConvertible() {
-		Object convertedValue = converter.convert("[]", Map.class, context);
+		Object convertedValue = converter.convert("[]", Map.class);
 		assert convertedValue instanceof Map;
 		assert convertedValue.equals(Collections.emptyMap());
 	}
 
 	@Test(dependsOnMethods = "untypedMapShouldBeSupportedAsTargetType")
 	public void untypedMapShouldBeConvertible() {
-		Object convertedValue = converter.convert("[a: 1, b: 2]", Map.class, context);
+		Object convertedValue = converter.convert("[a: 1, b: 2]", Map.class);
 		assert convertedValue instanceof Map;
 
 		Map<?, ?> map = (Map<?, ?>) convertedValue;
@@ -91,7 +85,7 @@ public class StringToMapConverterTest {
 	public void typedMapShouldBeConvertible() {
 		Type targetType = GenericsUtilities.getType("java.util.Map<String, Integer>", "java.lang");
 
-		Object convertedValue = converter.convert("[a: 1, b: 2]", targetType, context);
+		Object convertedValue = converter.convert("[a: 1, b: 2]", targetType);
 		assert convertedValue instanceof Map;
 
 		Map<String, Integer> map = Utilities.typed(convertedValue);
@@ -104,6 +98,6 @@ public class StringToMapConverterTest {
 
 	@Test(dependsOnMethods = "untypedMapShouldBeSupportedAsTargetType", expectedExceptions = ConverterException.class)
 	public void tryingToConvertMapWithIllegalFormatShouldCauseException() {
-		converter.convert("a: 1, b: 2", Map.class, context);
+		converter.convert("a: 1, b: 2", Map.class);
 	}
 }

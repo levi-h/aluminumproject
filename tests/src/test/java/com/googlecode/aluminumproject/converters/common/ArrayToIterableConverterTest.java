@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -30,13 +28,9 @@ import org.testng.annotations.Test;
 public class ArrayToIterableConverterTest {
 	private Converter<Object> converter;
 
-	private Context context;
-
 	@BeforeMethod
 	public void createConverter() {
 		converter = new ArrayToIterableConverter();
-
-		context = new DefaultContext();
 	}
 
 	public void converterShouldBeAbleToHandleArrays() {
@@ -52,7 +46,7 @@ public class ArrayToIterableConverterTest {
 	}
 
 	public void arraysShouldBeConvertible() {
-		Object iterable = converter.convert(new String[] {"a", "b"}, Iterable.class, context);
+		Object iterable = converter.convert(new String[] {"a", "b"}, Iterable.class);
 		assert iterable instanceof Iterable;
 
 		Iterator<?> iterator = ((Iterable<?>) iterable).iterator();
@@ -74,7 +68,7 @@ public class ArrayToIterableConverterTest {
 	}
 
 	public void primitiveArraysShouldBeConvertible() {
-		Object convertedValue = converter.convert(new int[] {1, 0}, Iterable.class, context);
+		Object convertedValue = converter.convert(new int[] {1, 0}, Iterable.class);
 		assert convertedValue instanceof Iterable;
 
 		Iterator<?> iterator = ((Iterable<?>) convertedValue).iterator();
@@ -97,6 +91,6 @@ public class ArrayToIterableConverterTest {
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertNonArrayShouldCauseException() {
-		converter.convert("1, 2, 3", Iterable.class, context);
+		converter.convert("1, 2, 3", Iterable.class);
 	}
 }

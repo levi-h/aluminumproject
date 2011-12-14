@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class ExpressionActionParameter implements ActionParameter {
 
 	public Object getValue(Type type, Context context) throws ActionException {
 		try {
-			return converterRegistry.convert(expressionFactory.create(text, context).evaluate(context), type, context);
+			return converterRegistry.convert(expressionFactory.create(text, context).evaluate(context), type);
 		} catch (ExpressionException exception) {
 			throw new ActionException(exception, "can't evaluate expression");
 		} catch (ConverterException exception) {

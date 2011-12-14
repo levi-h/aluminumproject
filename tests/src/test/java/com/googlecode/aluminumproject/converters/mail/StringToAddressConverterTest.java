@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.mail;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -30,17 +28,13 @@ import org.testng.annotations.Test;
 public class StringToAddressConverterTest {
 	private Converter<String> converter;
 
-	private Context context;
-
 	@BeforeMethod
-	public void createConverterAndContext() {
+	public void createConverter() {
 		converter = new StringToAddressConverter();
-
-		context = new DefaultContext();
 	}
 
 	public void simpleAddressShouldBeConvertible() {
-		Address address = (Address) converter.convert("aluminum@aluminum", Address.class, context);
+		Address address = (Address) converter.convert("aluminum@aluminum", Address.class);
 		assert address != null;
 
 		String textualRepresentation = address.toString();
@@ -50,7 +44,7 @@ public class StringToAddressConverterTest {
 
 	public void addressWithPersonalNameShouldBeConvertible() {
 		Address address =
-			(Address) converter.convert("Aluminum <aluminum@aluminum>", Address.class, context);
+			(Address) converter.convert("Aluminum <aluminum@aluminum>", Address.class);
 		assert address != null;
 
 		String textualRepresentation = address.toString();
@@ -60,6 +54,6 @@ public class StringToAddressConverterTest {
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertInvalidAddressShouldCauseException() {
-		converter.convert("aluminum", Address.class, context);
+		converter.convert("aluminum", Address.class);
 	}
 }

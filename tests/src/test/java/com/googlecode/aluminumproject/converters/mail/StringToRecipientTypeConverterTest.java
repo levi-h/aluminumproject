@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.mail;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -30,39 +28,35 @@ import org.testng.annotations.Test;
 public class StringToRecipientTypeConverterTest {
 	private Converter<String> converter;
 
-	private Context context;
-
 	@BeforeMethod
-	public void createConverterAndContext() {
+	public void createConverter() {
 		converter = new StringToRecipientTypeConverter();
-
-		context = new DefaultContext();
 	}
 
 	public void toTypeShouldBeConvertible() {
-		assert converter.convert("to", RecipientType.class, context) == RecipientType.TO;
+		assert converter.convert("to", RecipientType.class) == RecipientType.TO;
 	}
 
 	public void carbonCopyTypeShouldBeConvertible() {
-		assert converter.convert("cc", RecipientType.class, context) == RecipientType.CC;
+		assert converter.convert("cc", RecipientType.class) == RecipientType.CC;
 	}
 
 	public void blindCarbonCopyTypeShouldBeConvertible() {
-		assert converter.convert("bcc", RecipientType.class, context) == RecipientType.BCC;
+		assert converter.convert("bcc", RecipientType.class) == RecipientType.BCC;
 	}
 
 	public void newsgroupsTypeShouldBeConvertible() {
-		Object recipientType = converter.convert("newsgroups", RecipientType.class, context);
+		Object recipientType = converter.convert("newsgroups", RecipientType.class);
 		assert recipientType == javax.mail.internet.MimeMessage.RecipientType.NEWSGROUPS;
 	}
 
 	@Test(dependsOnMethods = "toTypeShouldBeConvertible")
 	public void converterShouldBeCaseInsensitive() {
-		assert converter.convert("TO", RecipientType.class, context) == RecipientType.TO;
+		assert converter.convert("TO", RecipientType.class) == RecipientType.TO;
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertUnknownTypeShouldCauseException() {
-		converter.convert("copy", RecipientType.class, context);
+		converter.convert("copy", RecipientType.class);
 	}
 }

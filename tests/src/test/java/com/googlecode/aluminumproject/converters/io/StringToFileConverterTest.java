@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -30,23 +28,19 @@ import org.testng.annotations.Test;
 public class StringToFileConverterTest {
 	private Converter<String> converter;
 
-	private Context context;
-
 	@BeforeMethod
-	public void createConverterAndContext() {
+	public void createConverter() {
 		converter = new StringToFileConverter();
-
-		context = new DefaultContext();
 	}
 
 	public void existingPathShouldResultInExistingFile() {
-		Object convertedValue = converter.convert(System.getProperty("user.home"), File.class, context);
+		Object convertedValue = converter.convert(System.getProperty("user.home"), File.class);
 		assert convertedValue instanceof File;
 		assert ((File) convertedValue).exists();
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void tryingToConvertUnknownPathShouldCauseException() {
-		converter.convert("** nonexistent **", File.class, context);
+		converter.convert("** nonexistent **", File.class);
 	}
 }

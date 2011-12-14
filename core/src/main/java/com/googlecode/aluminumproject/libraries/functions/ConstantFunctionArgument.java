@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class ConstantFunctionArgument implements FunctionArgument {
 
 	public Object getValue(Type type, Context context) throws FunctionException {
 		try {
-			return converterRegistry.convert(value, type, context);
+			return converterRegistry.convert(value, type);
 		} catch (ConverterException exception) {
 			throw new FunctionException(exception, "can't convert argument value");
 		}

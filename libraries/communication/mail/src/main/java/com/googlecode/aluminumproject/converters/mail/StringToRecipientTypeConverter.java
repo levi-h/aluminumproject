@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.mail;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -45,7 +44,7 @@ public class StringToRecipientTypeConverter extends ClassBasedConverter<String, 
 	}
 
 	@Override
-	protected RecipientType convert(String value, Context context) throws ConverterException {
+	protected RecipientType convert(String value) throws ConverterException {
 		RecipientType recipientType = recipientTypes.get(value.toLowerCase());
 
 		if (recipientType == null) {

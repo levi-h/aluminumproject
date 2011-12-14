@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.converters.common;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
@@ -65,18 +64,18 @@ public class NumberToNumberConverter implements Converter<Number> {
 		return converters.containsKey(targetType);
 	}
 
-	public Object convert(Number value, Type targetType, Context context) throws ConverterException {
+	public Object convert(Number value, Type targetType) throws ConverterException {
 		if (!supportsTargetType(targetType)) {
 			throw new ConverterException(targetType, " is not a supported target type");
 		}
 
-		return converters.get(targetType).convert(value, targetType, context);
+		return converters.get(targetType).convert(value, targetType);
 	}
 
 	@Ignored
 	private static class NumberToByteConverter extends ClassBasedConverter<Number, Byte> {
 		@Override
-		protected Byte convert(Number value, Context context) {
+		protected Byte convert(Number value) {
 			return Byte.valueOf(value.byteValue());
 		}
 	}
@@ -84,7 +83,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	@Ignored
 	private static class NumberToShortConverter extends ClassBasedConverter<Number, Short> {
 		@Override
-		protected Short convert(Number value, Context context) {
+		protected Short convert(Number value) {
 			return Short.valueOf(value.shortValue());
 		}
 	}
@@ -92,7 +91,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	@Ignored
 	private static class NumberToIntegerConverter extends ClassBasedConverter<Number, Integer> {
 		@Override
-		protected Integer convert(Number value, Context context) {
+		protected Integer convert(Number value) {
 			return Integer.valueOf(value.intValue());
 		}
 	}
@@ -100,7 +99,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	@Ignored
 	private static class NumberToLongConverter extends ClassBasedConverter<Number, Long> {
 		@Override
-		protected Long convert(Number value, Context context) {
+		protected Long convert(Number value) {
 			return Long.valueOf(value.longValue());
 		}
 	}
@@ -108,7 +107,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	@Ignored
 	private static class NumberToFloatConverter extends ClassBasedConverter<Number, Float> {
 		@Override
-		protected Float convert(Number value, Context context) {
+		protected Float convert(Number value) {
 			return Float.valueOf(value.floatValue());
 		}
 	}
@@ -116,7 +115,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	@Ignored
 	private static class NumberToDoubleConverter extends ClassBasedConverter<Number, Double> {
 		@Override
-		protected Double convert(Number value, Context context) {
+		protected Double convert(Number value) {
 			return Double.valueOf(value.doubleValue());
 		}
 	}
@@ -124,7 +123,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	@Ignored
 	private static class NumberToBigIntegerConverter extends ClassBasedConverter<Number, BigInteger> {
 		@Override
-		protected BigInteger convert(Number value, Context context) {
+		protected BigInteger convert(Number value) {
 			return BigInteger.valueOf(value.longValue());
 		}
 	}
@@ -132,7 +131,7 @@ public class NumberToNumberConverter implements Converter<Number> {
 	@Ignored
 	private static class NumberToBigDecimalConverter extends ClassBasedConverter<Number, BigDecimal> {
 		@Override
-		protected BigDecimal convert(Number value, Context context) {
+		protected BigDecimal convert(Number value) {
 			return BigDecimal.valueOf(value.doubleValue());
 		}
 	}
