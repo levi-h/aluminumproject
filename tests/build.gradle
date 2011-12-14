@@ -20,24 +20,13 @@ targetCompatibility = 1.6
 dependencies {
 	rootProject.subprojects.each {subproject ->
 		if (subproject != project) {
-			compile project(":${subproject.name}")
+			testCompile project(":${subproject.name}")
 		}
 	}
 
-	testCompile group: 'org.testng', name: 'testng', version: '5.14'
-
-	testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
-	testCompile group: 'ch.qos.logback', name: 'logback-core', version: '0.9.24'
-	testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.24'
-
-	testRuntime group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '3.2'
-
-	testRuntime group: 'org.javassist', name: 'javassist', version: '3.13.0-GA'
-	testCompile group: 'juel', name: 'juel', version: '2.2.1'
+	testCompile group: 'org.testng', name: 'testng', version: '6.2'
 
 	testCompile group: 'com.icegreen', name: 'greenmail', version: '1.3', transitive: false
-
-	testRuntime group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 }
 
 test {
