@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.converters;
 
 import com.googlecode.aluminumproject.annotations.Ignored;
-import com.googlecode.aluminumproject.context.Context;
 
 /**
  * A converter that will be ignored when adding registering all converters in a package.
@@ -31,7 +30,7 @@ public class IgnoredConverter extends ClassBasedConverter<String, String> {
 	public IgnoredConverter() {}
 
 	@Override
-	protected String convert(String value, Context context) {
+	protected String convert(String value) {
 		return new StringBuilder(value).reverse().toString();
 	}
 }

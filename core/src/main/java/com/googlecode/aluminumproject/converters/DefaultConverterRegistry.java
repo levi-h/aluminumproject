@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.Logger;
@@ -206,7 +205,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		}
 	}
 
-	public <S> Object convert(S value, Type targetType, Context context) throws ConverterException {
+	public <S> Object convert(S value, Type targetType) throws ConverterException {
 		Object convertedValue;
 
 		if (value == null) {
@@ -227,7 +226,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 			} else {
 				Class<S> sourceType = Utilities.typed(value.getClass());
 
-				convertedValue = getConverter(sourceType, targetType).convert(value, targetType, context);
+				convertedValue = getConverter(sourceType, targetType).convert(value, targetType);
 			}
 		}
 

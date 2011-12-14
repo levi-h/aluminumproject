@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.converters.ds;
 
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
@@ -55,7 +54,7 @@ public class StringToListConverter implements Converter<String> {
 		return targetTypeIsInterface || targetTypeIsParameterisedInterface;
 	}
 
-	public Object convert(String value, Type targetType, Context context) throws ConverterException {
+	public Object convert(String value, Type targetType) throws ConverterException {
 		if (!supportsTargetType(targetType)) {
 			throw new ConverterException("expected list as target type, not ", targetType);
 		}
@@ -68,7 +67,7 @@ public class StringToListConverter implements Converter<String> {
 			? Object.class : ((ParameterizedType) targetType).getActualTypeArguments()[0];
 
 		for (String element: getElements(value)) {
-			list.add(converterRegistry.convert(element, elementType, context));
+			list.add(converterRegistry.convert(element, elementType));
 		}
 
 		return list;

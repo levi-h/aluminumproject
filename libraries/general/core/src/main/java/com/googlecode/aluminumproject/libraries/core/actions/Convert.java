@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class Convert extends AbstractAction {
 		try {
 			logger.debug("trying to convert ", value, " into ", type);
 
-			writer.write(configuration.getConverterRegistry().convert(value, type, context));
+			writer.write(configuration.getConverterRegistry().convert(value, type));
 		} catch (ConverterException exception) {
 			throw new ActionException(exception, "can't convert value");
 		}

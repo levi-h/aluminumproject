@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -42,7 +41,7 @@ public class StringToEnumConverter implements Converter<String> {
 		return (targetType instanceof Class) && ((Class<?>) targetType).isEnum();
 	}
 
-	public Object convert(String value, Type targetType, Context context) throws ConverterException {
+	public Object convert(String value, Type targetType) throws ConverterException {
 		if (!supportsTargetType(targetType)) {
 			throw new ConverterException("expected enum target type, not ", targetType);
 		}

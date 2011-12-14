@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 
 import org.testng.annotations.BeforeMethod;
@@ -27,23 +25,19 @@ import org.testng.annotations.Test;
 public class ObjectToStringConverterTest {
 	private Converter<Object> converter;
 
-	private Context context;
-
 	@BeforeMethod
-	public void createConverterAndContext() {
+	public void createConverter() {
 		converter = new ObjectToStringConverter();
-
-		context = new DefaultContext();
 	}
 
 	public void objectsShouldBeConvertible() {
 		Object convertedValue;
 
-		convertedValue = converter.convert(true, String.class, context);
+		convertedValue = converter.convert(true, String.class);
 		assert convertedValue instanceof String;
 		assert convertedValue.equals("true");
 
-		convertedValue = converter.convert(3, String.class, context);
+		convertedValue = converter.convert(3, String.class);
 		assert convertedValue instanceof String;
 		assert convertedValue.equals("3");
 	}

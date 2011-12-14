@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.googlecode.aluminumproject.converters;
 
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.context.Context;
 
 /**
  * A converter that can be used in tests.
@@ -42,7 +41,7 @@ public class TestConverter extends ClassBasedConverter<Float, CharSequence> {
 	}
 
 	@Override
-	protected CharSequence convert(Float value, Context context) {
+	protected CharSequence convert(Float value) {
 		return value.toString();
 	}
 }

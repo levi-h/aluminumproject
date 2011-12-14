@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.mail;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -35,7 +34,7 @@ public class StringToAddressConverter extends ClassBasedConverter<String, Addres
 	public StringToAddressConverter() {}
 
 	@Override
-	protected Address convert(String value, Context context) throws ConverterException {
+	protected Address convert(String value) throws ConverterException {
 		try {
 			return new InternetAddress(value, true);
 		} catch (AddressException exception) {

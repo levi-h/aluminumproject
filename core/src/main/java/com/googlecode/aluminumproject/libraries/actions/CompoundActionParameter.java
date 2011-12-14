@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class CompoundActionParameter implements ActionParameter {
 		}
 
 		try {
-			return converterRegistry.convert(valueBuilder.toString(), type, context);
+			return converterRegistry.convert(valueBuilder.toString(), type);
 		} catch (ConverterException exception) {
 			throw new ActionException(exception, "can't convert compound parameter value");
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.g11n;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.utilities.GlobalisationUtilities;
@@ -36,7 +35,7 @@ public class StringToLocaleConverter extends ClassBasedConverter<String, Locale>
 	public StringToLocaleConverter() {}
 
 	@Override
-	protected Locale convert(String value, Context context) throws ConverterException {
+	protected Locale convert(String value) throws ConverterException {
 		try {
 			return GlobalisationUtilities.convertLocale(value);
 		} catch (UtilityException exception) {

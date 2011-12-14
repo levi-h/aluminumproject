@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
@@ -49,21 +48,20 @@ public abstract class ClassBasedConverter<S, T> implements Converter<S> {
 			ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType).isAssignableFrom(this.targetType);
 	}
 
-	public Object convert(S value, Type targetType, Context context) throws ConverterException {
+	public Object convert(S value, Type targetType) throws ConverterException {
 		if (supportsTargetType(targetType)) {
-			return convert(value, context);
+			return convert(value);
 		} else {
 			throw new ConverterException("expected ", this.targetType.getName()," as target type, not ", targetType);
 		}
 	}
 
 	/**
-	 * Template method that will be invoked by the {@link #convert(Object, Type, Context) convert method}.
+	 * Template method that will be invoked by the {@link #convert(Object, Type) convert method}.
 	 *
 	 * @param value the value to convert
-	 * @param context the context of the conversion
 	 * @return the converted value
 	 * @throws ConverterException when the value can't be converted to the target type
 	 */
-	protected abstract T convert(S value, Context context) throws ConverterException;
+	protected abstract T convert(S value) throws ConverterException;
 }

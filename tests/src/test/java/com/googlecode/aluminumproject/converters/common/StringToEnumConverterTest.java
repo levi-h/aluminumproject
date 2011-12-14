@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 import com.googlecode.aluminumproject.converters.ConverterException;
 
@@ -30,13 +28,9 @@ import org.testng.annotations.Test;
 public class StringToEnumConverterTest {
 	private Converter<String> converter;
 
-	private Context context;
-
 	@BeforeMethod
-	public void createConverterAndContext() {
+	public void createConverter() {
 		converter = new StringToEnumConverter();
-
-		context = new DefaultContext();
 	}
 
 	public void converterShouldSupportEnumTargetTypes() {
@@ -50,25 +44,25 @@ public class StringToEnumConverterTest {
 	}
 
 	public void literalNamesShouldBeConverted() {
-		assert converter.convert("FIELD", ElementType.class, context) == ElementType.FIELD;
-		assert converter.convert("NEW", Thread.State.class, context) == Thread.State.NEW;
+		assert converter.convert("FIELD", ElementType.class) == ElementType.FIELD;
+		assert converter.convert("NEW", Thread.State.class) == Thread.State.NEW;
 	}
 
 	@Test(dependsOnMethods = "literalNamesShouldBeConverted")
 	public void conversionShouldBeCaseInsensitive() {
-		assert converter.convert("field", ElementType.class, context) == ElementType.FIELD;
-		assert converter.convert("new", Thread.State.class, context) == Thread.State.NEW;
+		assert converter.convert("field", ElementType.class) == ElementType.FIELD;
+		assert converter.convert("new", Thread.State.class) == Thread.State.NEW;
 	}
 
 	@Test(dependsOnMethods = "conversionShouldBeCaseInsensitive")
 	public void underscoresShouldBeReplaceableWithSpaces() {
-		assert converter.convert("annotation type", ElementType.class, context) == ElementType.ANNOTATION_TYPE;
+		assert converter.convert("annotation type", ElementType.class) == ElementType.ANNOTATION_TYPE;
 	}
 
 	@Test(dependsOnMethods = "conversionShouldBeCaseInsensitive")
 	public void conversionShouldPreferExactMatches() {
-		assert converter.convert("A", Letter.class, context) == Letter.A;
-		assert converter.convert("b", Letter.class, context) == Letter.b;
+		assert converter.convert("A", Letter.class) == Letter.A;
+		assert converter.convert("b", Letter.class) == Letter.b;
 	}
 
 	private static enum Letter {
@@ -77,11 +71,11 @@ public class StringToEnumConverterTest {
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void convertingNonexistingNameShouldCauseException() {
-		converter.convert("INTERFACE", ElementType.class, context);
+		converter.convert("INTERFACE", ElementType.class);
 	}
 
 	@Test(expectedExceptions = ConverterException.class)
 	public void supplyingUnsupportedTargetTypeShouldCauseException() {
-		converter.convert("NAME", Enum.class, context);
+		converter.convert("NAME", Enum.class);
 	}
 }

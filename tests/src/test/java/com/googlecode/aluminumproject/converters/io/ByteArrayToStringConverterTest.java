@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.converters.Converter;
 
 import org.testng.annotations.BeforeMethod;
@@ -27,23 +25,19 @@ import org.testng.annotations.Test;
 public class ByteArrayToStringConverterTest {
 	private Converter<byte[]> converter;
 
-	private Context context;
-
 	@BeforeMethod
-	public void createConverterAndContext() {
+	public void createConverter() {
 		converter = new ByteArrayToStringConverter();
-
-		context = new DefaultContext();
 	}
 
 	public void emptyByteArrayShouldBeConvertedToEmptyString() {
-		Object convertedValue = converter.convert(new byte[0], String.class, context);
+		Object convertedValue = converter.convert(new byte[0], String.class);
 		assert convertedValue instanceof String;
 		assert ((String) convertedValue).equals("");
 	}
 
 	public void byteArrayShouldBeConvertedToCorrespondingString() {
-		Object convertedValue = converter.convert("text".getBytes(), String.class, context);
+		Object convertedValue = converter.convert("text".getBytes(), String.class);
 		assert convertedValue instanceof String;
 		assert convertedValue.equals("text");
 	}
