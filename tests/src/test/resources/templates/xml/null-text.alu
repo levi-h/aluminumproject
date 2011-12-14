@@ -17,4 +17,4 @@
 @xml.format
 	@xml.document
 		@xml.page
-			${1}
+			${pageNumber}
