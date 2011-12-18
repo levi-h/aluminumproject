@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,38 +15,15 @@
  */
 package com.googlecode.aluminumproject.templates;
 
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.writers.Writer;
-
 import java.util.List;
 
 /**
  * A template. It consists of a tree of {@link TemplateElement template elements}. A template should be stateless; all
- * information regarding the processing of a template is kept in a {@link TemplateContext template context}.
- * <p>
- * Each time a template processes one of its children, it should keep the {@link Context#ALUMINUM_IMPLICIT_OBJECT
- * internal implicit object} in the {@link Context context} up to date. At the very least, it should provide the
- * following information:
- * <ul>
- * <li>The current template (i.e. itself) under key {@value #TEMPLATE_KEY};
- * <li>The template context under key {@value #TEMPLATE_CONTEXT_KEY}.
- * </ul>
+ * information regarding the processing of a template is kept in {@link TemplateInformation template information}.
  *
  * @author levi_h
  */
 public interface Template {
-	/**
-	 * Processes the children of a template context's current template element. If the template context does not have a
-	 * current template element, the elements at the root of this template will be processed.
-	 *
-	 * @param templateContext the context that contains the current template element
-	 * @param context the context to process the template elements in
-	 * @param writer the writer to use for the template elements
-	 * @throws TemplateException when one of the template elements can't be processed
-	 */
-	public void processChildren(
-		TemplateContext templateContext, Context context, Writer writer) throws TemplateException;
-
 	/**
 	 * Finds the parent of a certain template element.
 	 *
@@ -64,10 +41,4 @@ public interface Template {
 	 * @throws TemplateException when this template does not contain the given template element
 	 */
 	List<TemplateElement> getChildren(TemplateElement templateElement) throws TemplateException;
-
-	/** The key that is used to store the current template under in the {@link Context context}'s implicit map. */
-	public final static String TEMPLATE_KEY = "template";
-
-	/** The key under which the template context should be stored in the {@link Context context}'s implicit map. */
-	public final static String TEMPLATE_CONTEXT_KEY = "template.context";
 }

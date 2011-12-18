@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,10 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParam
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
+import com.googlecode.aluminumproject.libraries.core.actions.Blocks.Block;
+import com.googlecode.aluminumproject.libraries.core.actions.Blocks.BlockContents;
+import com.googlecode.aluminumproject.templates.TemplateException;
+import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
@@ -60,9 +64,18 @@ public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 		Object body = context.getVariable(Context.TEMPLATE_SCOPE, name);
 
 		if (body instanceof ActionBody) {
+			getBody().invoke(context, new NullWriter());
+
 			Context subcontext = context.createSubcontext();
 
-			getBody().invoke(subcontext, new NullWriter());
+			try {
+				TemplateInformation templateInformation = TemplateInformation.from(context);
+
+				TemplateInformation.from(subcontext).setTemplate(
+					templateInformation.getTemplate(), templateInformation.getName(), templateInformation.getParser());
+			} catch (TemplateException exception) {
+				throw new ActionException(exception, "can't copy template information");
+			}
 
 			for (Map.Entry<String, ActionParameter> variable: getDynamicParameters().entrySet()) {
 				String variableName = variable.getKey();

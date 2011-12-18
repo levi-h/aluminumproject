@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -26,8 +27,10 @@ import java.util.Map;
  *
  * @author levi_h
  */
-public class DefaultTextElement extends AbstractTemplateElement implements TextElement {
+public class DefaultTextElement implements TextElement {
 	private String text;
+
+	private Map<String, String> libraryUrlAbbreviations;
 
 	/**
 	 * Creates a default text element.
@@ -36,21 +39,29 @@ public class DefaultTextElement extends AbstractTemplateElement implements TextE
 	 * @param libraryUrlAbbreviations the text element's library URL abbreviations
 	 */
 	public DefaultTextElement(String text, Map<String, String> libraryUrlAbbreviations) {
-		super(libraryUrlAbbreviations);
-
 		this.text = text;
+
+		this.libraryUrlAbbreviations = libraryUrlAbbreviations;
+	}
+
+	public Map<String, String> getLibraryUrlAbbreviations() {
+		return Collections.unmodifiableMap(libraryUrlAbbreviations);
 	}
 
 	public String getText() {
 		return text;
 	}
 
-	public void process(Template template, TemplateContext templateContext, Context context, Writer writer)
-			throws TemplateException {
+	public void process(Context context, Writer writer) throws TemplateException {
+		TemplateInformation templateInformation = TemplateInformation.from(context);
+		templateInformation.addTemplateElement(this);
+
 		try {
 			writer.write(text);
 		} catch (WriterException exception) {
 			throw new TemplateException(exception, "can't write text '", text, "'");
 		}
+
+		templateInformation.removeCurrentTemplateElement();
 	}
 }

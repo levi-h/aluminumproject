@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.context;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,9 +27,7 @@ import java.util.Set;
  * A context can have a number of implicit objects, which are not scoped. Implicit objects can be {@link
  * #addImplicitObject(String, Object) added} and {@link #removeImplicitObject(String) removed} freely, although their
  * names should not start with {@value #RESERVED_IMPLICIT_OBJECT_NAME_PREFIX}. Subclasses can further restrict the names
- * that may be used for implicit names. All contexts should have an implicit object named {@value
- * #ALUMINUM_IMPLICIT_OBJECT} that is a {@link Map Map&lt;String, Object&gt;}. This implicit object shouldn't be used
- * directly, but is meant for internal use only.
+ * that may be used for implicit names.
  * <p>
  * When a context supports it, it's possible to create one or more child contexts. The parent of such a child context
  * can be {@link #getParent() obtained} and will be used when {@link #findVariable(String) finding variables}.
@@ -194,7 +191,4 @@ public interface Context {
 
 	/** The prefix of names of implicit objects that are reserved for internal use: {@value}. */
 	String RESERVED_IMPLICIT_OBJECT_NAME_PREFIX = "aluminum";
-
-	/** The name of the implicit object that's used internally. */
-	String ALUMINUM_IMPLICIT_OBJECT = RESERVED_IMPLICIT_OBJECT_NAME_PREFIX + ".aluminum";
 }

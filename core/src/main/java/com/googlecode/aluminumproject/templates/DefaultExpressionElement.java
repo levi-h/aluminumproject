@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -29,9 +30,11 @@ import java.util.Map;
  *
  * @author levi_h
  */
-public class DefaultExpressionElement extends AbstractTemplateElement implements ExpressionElement {
+public class DefaultExpressionElement implements ExpressionElement {
 	private ExpressionFactory expressionFactory;
 	private String text;
+
+	private Map<String, String> libraryUrlAbbreviations;
 
 	private final Logger logger;
 
@@ -44,20 +47,26 @@ public class DefaultExpressionElement extends AbstractTemplateElement implements
 	 */
 	public DefaultExpressionElement(ExpressionFactory expressionFactory, String text,
 			Map<String, String> libraryUrlAbbreviations) {
-		super(libraryUrlAbbreviations);
-
 		this.expressionFactory = expressionFactory;
 		this.text = text;
 
+		this.libraryUrlAbbreviations = libraryUrlAbbreviations;
+
 		logger = Logger.get(getClass());
+	}
+
+	public Map<String, String> getLibraryUrlAbbreviations() {
+		return Collections.unmodifiableMap(libraryUrlAbbreviations);
 	}
 
 	public String getText() {
 		return text;
 	}
 
-	public void process(Template template, TemplateContext templateContext, Context context, Writer writer)
-			throws TemplateException {
+	public void process(Context context, Writer writer) throws TemplateException {
+		TemplateInformation templateInformation = TemplateInformation.from(context);
+		templateInformation.addTemplateElement(this);
+
 		try {
 			logger.debug("creating expression '", text, "' using ", expressionFactory);
 
@@ -71,5 +80,7 @@ public class DefaultExpressionElement extends AbstractTemplateElement implements
 		} catch (WriterException exception) {
 			throw new TemplateException(exception, "can't write expression result");
 		}
+
+		templateInformation.removeCurrentTemplateElement();
 	}
 }

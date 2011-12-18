@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,11 @@ import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
+import com.googlecode.aluminumproject.libraries.core.actions.Blocks.Block;
+import com.googlecode.aluminumproject.libraries.core.actions.Blocks.BlockContents;
 import com.googlecode.aluminumproject.templates.TemplateException;
+import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
-import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
@@ -57,18 +59,19 @@ public class Include extends AbstractDynamicallyParameterisableAction {
 	public Include() {}
 
 	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+		getBody().invoke(context, new NullWriter());
+
 		String parser = this.parser;
 
 		if (parser == null) {
-			Map<String, Object> templateInformation =
-				Utilities.typed(context.getImplicitObject(Context.ALUMINUM_IMPLICIT_OBJECT));
-
-			parser = (String) templateInformation.get(TemplateProcessor.TEMPLATE_PARSER);
+			try {
+				parser = TemplateInformation.from(context).getParser();
+			} catch (TemplateException exception) {
+				throw new ActionException(exception, "can't obtain parser");
+			}
 		}
 
 		Context subcontext = context.createSubcontext();
-
-		getBody().invoke(subcontext, new NullWriter());
 
 		for (Map.Entry<String, ActionParameter> variable: getDynamicParameters().entrySet()) {
 			String variableName = variable.getKey();

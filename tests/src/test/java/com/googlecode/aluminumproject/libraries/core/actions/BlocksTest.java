@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
-import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.core.CoreLibraryTest;
 import com.googlecode.aluminumproject.templates.TemplateException;
 
@@ -23,7 +22,7 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"libraries", "libraries-core", "slow"})
-public class BlockTest extends CoreLibraryTest {
+public class BlocksTest extends CoreLibraryTest {
 	public void blockShouldBeAvailableWithinSameTemplate() {
 		String output = processTemplate("block");
 		assert output != null;
@@ -47,7 +46,7 @@ public class BlockTest extends CoreLibraryTest {
 		processTemplate("block-duplication");
 	}
 
-	public void no_block_default() {
+	public void blockContentsShouldFallBackToBodyContentsIfNoBlockCanBeFound() {
 		String output = processTemplate("block-contents");
 		assert output != null;
 		assert output.equals("default");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.templates;
-
-import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -188,33 +184,6 @@ public class TemplateBuilder {
 		 */
 		public BuiltTemplate(TemplateElements templateElements) {
 			this.templateElements = templateElements;
-		}
-
-		public void processChildren(
-				TemplateContext templateContext, Context context, Writer writer) throws TemplateException {
-			for (TemplateElement templateElement: getChildren(templateContext.getCurrentTemplateElement())) {
-				templateContext.addTemplateElement(templateElement);
-
-				Map<String, Object> internalInformation =
-					Utilities.typed(context.getImplicitObject(Context.ALUMINUM_IMPLICIT_OBJECT));
-				Object previousTemplate = internalInformation.put(TEMPLATE_KEY, this);
-				Object previousTemplateContext = internalInformation.put(TEMPLATE_CONTEXT_KEY, templateContext);
-
-				templateElement.process(this, templateContext, context, writer);
-
-				restoreValue(internalInformation, TEMPLATE_KEY, previousTemplate);
-				restoreValue(internalInformation, TEMPLATE_CONTEXT_KEY, previousTemplateContext);
-
-				templateContext.removeCurrentTemplateElement();
-			}
-		}
-
-		private void restoreValue(Map<String, Object> internalInformation, String key, Object previousValue) {
-			if (previousValue == null) {
-				internalInformation.remove(key);
-			} else {
-				internalInformation.put(key, previousValue);
-			}
 		}
 
 		public TemplateElement getParent(TemplateElement templateElement) throws TemplateException {

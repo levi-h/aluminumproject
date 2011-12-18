@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.context;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -83,7 +82,6 @@ public abstract class AbstractContext implements Context {
 		this.scopes = new LinkedList<Scope>();
 
 		implicitObjects = new LinkedHashMap<String, Object>();
-		implicitObjects.put(ALUMINUM_IMPLICIT_OBJECT, new HashMap<String, Object>());
 
 		for (Scope scope: scopes) {
 			addScope(scope);

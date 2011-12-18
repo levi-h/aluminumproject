@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.googlecode.aluminumproject.expressions.el;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.EXPRESSION_FACTORY_PACKAGES;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.LIBRARY_PACKAGES;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
-import static com.googlecode.aluminumproject.utilities.Utilities.typed;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
@@ -27,9 +26,8 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
-import com.googlecode.aluminumproject.templates.AbstractTemplateElement;
-import com.googlecode.aluminumproject.templates.Template;
-import com.googlecode.aluminumproject.templates.TemplateContext;
+import com.googlecode.aluminumproject.templates.TemplateElement;
+import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -57,19 +55,19 @@ public class FunctionMapperTest {
 
 		Context context = new DefaultContext();
 
-		Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
+		final Map<String, String> libraryUrlAbbreviations = new HashMap<String, String>();
 
 		LibraryInformation testLibraryInformation = new TestLibrary().getInformation();
 		libraryUrlAbbreviations.put("test", testLibraryInformation.getUrl());
 		libraryUrlAbbreviations.put("versionedTest", testLibraryInformation.getVersionedUrl());
 
-		TemplateContext templateContext = new TemplateContext();
-		templateContext.addTemplateElement(new AbstractTemplateElement(libraryUrlAbbreviations) {
-			public void process(Template template, TemplateContext templateContext, Context context, Writer writer) {}
-		});
+		TemplateInformation.from(context).addTemplateElement(new TemplateElement() {
+			public Map<String, String> getLibraryUrlAbbreviations() {
+				return libraryUrlAbbreviations;
+			}
 
-		Map<String, Object> internalInformation = typed(context.getImplicitObject(Context.ALUMINUM_IMPLICIT_OBJECT));
-		internalInformation.put(Template.TEMPLATE_CONTEXT_KEY, templateContext);
+			public void process(Context context, Writer writer) {}
+		});
 
 		functionMapper = new FunctionMapper(context, configuration);
 	}
