@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public class LocaleBasedDateFormatProviderTest {
 			new GlobalisationContext(localeProvider, null, dateFormatProvider, null);
 
 		context = new DefaultContext();
-		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT, globalisationContext);
+		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT, globalisationContext);
 
 		date = new Date(2713500000L);
 	}

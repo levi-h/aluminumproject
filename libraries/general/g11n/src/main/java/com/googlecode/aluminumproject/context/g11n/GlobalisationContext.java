@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,13 +129,13 @@ public class GlobalisationContext {
 	 * @throws ContextException when the given context does not contain a globalisation context
 	 */
 	public static GlobalisationContext from(Context context) throws ContextException {
-		return (GlobalisationContext) context.getImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		return (GlobalisationContext) context.getImplicitObject(GLOBALISATION_CONTEXT);
 	}
 
 	/**
 	 * The name that the {@link GlobalisationContextProvider globalisation context provider} uses for the globalisation
 	 * context implicit object: {@value}.
 	 */
-	public final static String GLOBALISATION_CONTEXT_IMPLICIT_OBJECT =
+	public final static String GLOBALISATION_CONTEXT =
 		Context.RESERVED_IMPLICIT_OBJECT_NAME_PREFIX + ".library.g11n.globalisation_context";
 }

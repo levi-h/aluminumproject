@@ -63,7 +63,7 @@ public class MailContextProviderTest {
 	public void mailContextWithoutSessionProviderShouldNotBeProvided() {
 		createMailContextProvider(new ConfigurationParameters()).beforeTemplate(context);
 
-		assert !context.getImplicitObjectNames().contains(MailContext.MAIL_CONTEXT_IMPLICIT_OBJECT);
+		assert !context.getImplicitObjectNames().contains(MailContext.MAIL_CONTEXT);
 	}
 
 	public void mailContextWithSessionProviderShouldBeProvided() {
@@ -72,7 +72,7 @@ public class MailContextProviderTest {
 
 		createMailContextProvider(parameters).beforeTemplate(context);
 
-		assert context.getImplicitObjectNames().contains(MailContext.MAIL_CONTEXT_IMPLICIT_OBJECT);
+		assert context.getImplicitObjectNames().contains(MailContext.MAIL_CONTEXT);
 	}
 
 	public static class DefaultSessionProvider implements SessionProvider {

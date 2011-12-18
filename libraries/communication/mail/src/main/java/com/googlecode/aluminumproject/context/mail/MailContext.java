@@ -64,13 +64,13 @@ public class MailContext {
 	 * @throws ContextException when the context does not contain a mail context implicit object
 	 */
 	public static MailContext from(Context context) throws ContextException {
-		return (MailContext) context.getImplicitObject(MAIL_CONTEXT_IMPLICIT_OBJECT);
+		return (MailContext) context.getImplicitObject(MAIL_CONTEXT);
 	}
 
 	/**
 	 * The name of the implicit object that is created by the {@link MailContextProvider mail context provider}:
 	 * {@value}.
 	 */
-	public final static String MAIL_CONTEXT_IMPLICIT_OBJECT =
+	public final static String MAIL_CONTEXT =
 		Context.RESERVED_IMPLICIT_OBJECT_NAME_PREFIX + ".library.mail.mail_context";
 }
