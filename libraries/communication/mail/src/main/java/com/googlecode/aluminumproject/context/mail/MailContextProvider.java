@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.context.mail;
 
-import static com.googlecode.aluminumproject.context.mail.MailContext.MAIL_CONTEXT_IMPLICIT_OBJECT;
+import static com.googlecode.aluminumproject.context.mail.MailContext.MAIL_CONTEXT;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
@@ -84,20 +84,20 @@ public class MailContextProvider implements ContextEnricher {
 	public void beforeTemplate(Context context) throws ContextException {
 		Context parentContext = context.getParent();
 
-		if ((parentContext != null) && parentContext.getImplicitObjectNames().contains(MAIL_CONTEXT_IMPLICIT_OBJECT)) {
+		if ((parentContext != null) && parentContext.getImplicitObjectNames().contains(MAIL_CONTEXT)) {
 			logger.debug("inheriting mail context from parent");
 
-			context.addImplicitObject(MAIL_CONTEXT_IMPLICIT_OBJECT, MailContext.from(parentContext));
+			context.addImplicitObject(MAIL_CONTEXT, MailContext.from(parentContext));
 		} else if (sessionProvider != null) {
 			logger.debug("enriching context with new mail context");
 
-			context.addImplicitObject(MAIL_CONTEXT_IMPLICIT_OBJECT, new MailContext(sessionProvider));
+			context.addImplicitObject(MAIL_CONTEXT, new MailContext(sessionProvider));
 		}
 	}
 
 	public void afterTemplate(Context context) throws ContextException {
 		if (sessionProvider != null) {
-			context.removeImplicitObject(MAIL_CONTEXT_IMPLICIT_OBJECT);
+			context.removeImplicitObject(MAIL_CONTEXT);
 		}
 	}
 

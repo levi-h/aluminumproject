@@ -43,7 +43,7 @@ public class NameBasedResourceBundleProviderTest {
 			new GlobalisationContext(localeProvider, resourceBundleProvider, null, null);
 
 		context = new DefaultContext();
-		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT, globalisationContext);
+		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT, globalisationContext);
 	}
 
 	public void propertyResourceBundlesShouldBeProvided() {

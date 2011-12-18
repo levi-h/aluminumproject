@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
-import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
@@ -188,19 +188,18 @@ public class GlobalisationContextProvider implements ContextEnricher {
 
 		Object globalisationContext;
 
-		if ((parentContext != null) &&
-				parentContext.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT)) {
-			globalisationContext = parentContext.getImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		if ((parentContext != null) && parentContext.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT)) {
+			globalisationContext = parentContext.getImplicitObject(GLOBALISATION_CONTEXT);
 		} else {
 			globalisationContext = new GlobalisationContext(
 				localeProvider, resourceBundleProvider, dateFormatProvider, numberFormatProvider);
 		}
 
-		context.addImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT, globalisationContext);
+		context.addImplicitObject(GLOBALISATION_CONTEXT, globalisationContext);
 	}
 
 	public void afterTemplate(Context context) throws ContextException {
-		context.removeImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		context.removeImplicitObject(GLOBALISATION_CONTEXT);
 	}
 
 	/**

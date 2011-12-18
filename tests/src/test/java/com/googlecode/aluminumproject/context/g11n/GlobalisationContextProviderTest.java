@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
-import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT_IMPLICIT_OBJECT;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.DATE_FORMAT_CUSTOM_PATTERN;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.DATE_FORMAT_PROVIDER_CLASS;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.LOCALE;
@@ -86,7 +86,7 @@ public class GlobalisationContextProviderTest {
 
 		globalisationContextProvider.beforeTemplate(context);
 
-		assert context.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		assert context.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT);
 	}
 
 	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
@@ -96,7 +96,7 @@ public class GlobalisationContextProviderTest {
 		globalisationContextProvider.beforeTemplate(context);
 		globalisationContextProvider.afterTemplate(context);
 
-		assert !context.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		assert !context.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT);
 	}
 
 	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
@@ -108,10 +108,10 @@ public class GlobalisationContextProviderTest {
 		globalisationContextProvider.beforeTemplate(context);
 		globalisationContextProvider.beforeTemplate(subcontext);
 
-		assert subcontext.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		assert subcontext.getImplicitObjectNames().contains(GLOBALISATION_CONTEXT);
 
-		Object globalisationContextOfContext = context.getImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
-		Object globalisationContextOfSubcontext = subcontext.getImplicitObject(GLOBALISATION_CONTEXT_IMPLICIT_OBJECT);
+		Object globalisationContextOfContext = context.getImplicitObject(GLOBALISATION_CONTEXT);
+		Object globalisationContextOfSubcontext = subcontext.getImplicitObject(GLOBALISATION_CONTEXT);
 		assert globalisationContextOfSubcontext == globalisationContextOfContext;
 	}
 
