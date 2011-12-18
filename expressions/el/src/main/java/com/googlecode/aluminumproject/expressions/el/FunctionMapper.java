@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,9 @@ package com.googlecode.aluminumproject.expressions.el;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.functions.Function;
-import com.googlecode.aluminumproject.templates.Template;
-import com.googlecode.aluminumproject.templates.TemplateContext;
+import com.googlecode.aluminumproject.templates.TemplateException;
+import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.Utilities;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -55,24 +54,22 @@ public class FunctionMapper extends javax.el.FunctionMapper {
 	public Method resolveFunction(String prefix, String localName) {
 		logger.debug("resolving function with prefix '", prefix, "' and name '", localName, "'");
 
-		Map<String, ?> templateInformation =
-			Utilities.typed(context.getImplicitObject(Context.ALUMINUM_IMPLICIT_OBJECT));
-		TemplateContext templateContext = (TemplateContext) templateInformation.get(Template.TEMPLATE_CONTEXT_KEY);
+		Method delegate = null;
 
-		Map<String, String> libraryUrlAbbreviations =
-			templateContext.getCurrentTemplateElement().getLibraryUrlAbbreviations();
+		try {
+			Map<String, String> libraryUrlAbbreviations =
+				TemplateInformation.from(context).getCurrentTemplateElement().getLibraryUrlAbbreviations();
 
-		Method delegate;
+			if (libraryUrlAbbreviations.containsKey(prefix)) {
+				String libraryUrl = libraryUrlAbbreviations.get(prefix);
 
-		if (libraryUrlAbbreviations.containsKey(prefix)) {
-			String libraryUrl = libraryUrlAbbreviations.get(prefix);
-
-			delegate = FunctionDelegateFactory.findDelegate(configuration, libraryUrl, localName, context);
-		} else {
-			logger.warn("prefix '", prefix, "' is no library URL abbreviation ",
-				"(valid abbreviations are ", libraryUrlAbbreviations, ")");
-
-			delegate = null;
+				delegate = FunctionDelegateFactory.findDelegate(configuration, libraryUrl, localName, context);
+			} else {
+				logger.warn("prefix '", prefix, "' is no library URL abbreviation ",
+					"(valid abbreviations are ", libraryUrlAbbreviations, ")");
+			}
+		} catch (TemplateException exception) {
+			logger.warn(exception, "can't obtain template information");
 		}
 
 		return delegate;

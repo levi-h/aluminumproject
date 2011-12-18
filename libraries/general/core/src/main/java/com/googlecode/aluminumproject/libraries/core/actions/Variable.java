@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -192,15 +192,13 @@ public class Variable {
 	}
 
 	private static Map<Action, String> getScopes(Context context) {
-		Map<String, Object> internalInformation =
-			Utilities.typed(context.getImplicitObject(Context.ALUMINUM_IMPLICIT_OBJECT));
-
-		if (!internalInformation.containsKey(SCOPES)) {
-			internalInformation.put(SCOPES, new IdentityHashMap<Action, String>());
+		if (!context.getImplicitObjectNames().contains(SCOPES)) {
+			context.addImplicitObject(SCOPES, new IdentityHashMap<Action, String>());
 		}
 
-		return Utilities.<Map<Action, String>>typed(internalInformation.get(SCOPES));
+		return Utilities.typed(context.getImplicitObject(SCOPES));
 	}
 
-	private final static String SCOPES = "libraries.core.variable.scopes";
+	private final static String SCOPES =
+		Context.RESERVED_IMPLICIT_OBJECT_NAME_PREFIX + ".libraries.core.variable.scopes";
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Map;
@@ -31,12 +30,6 @@ import java.util.Map;
 /**
  * Processes a single {@link Template template}.
  * <p>
- * During the processing of a template, the template information in the {@link Context context} (the {@link
- * Context#ALUMINUM_IMPLICIT_OBJECT internal implicit object}) contains the following information:
- * <ul>
- * <li>The name of the template (under key {@value #TEMPLATE_NAME});
- * <li>The name of the parser that was used for the template (with the key {@value #TEMPLATE_PARSER}).
- * </ul>
  * All configured {@link ContextEnricher context enrichers} are given the opportunity to change the context before and
  * after the template is processed.
  *
@@ -78,11 +71,7 @@ public class TemplateProcessor {
 			storeTemplateInCache(name, parser, template);
 		}
 
-		Map<String, Object> templateInformation =
-			Utilities.typed(context.getImplicitObject(Context.ALUMINUM_IMPLICIT_OBJECT));
-
-		templateInformation.put(TEMPLATE_NAME, name);
-		templateInformation.put(TEMPLATE_PARSER, parser);
+		TemplateInformation.from(context).setTemplate(template, name, parser);
 
 		try {
 			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
@@ -92,7 +81,9 @@ public class TemplateProcessor {
 			throw new TemplateException(exception, "can't enrich context");
 		}
 
-		template.processChildren(new TemplateContext(), context, writer);
+		for (TemplateElement templateElement: template.getChildren(null)) {
+			templateElement.process(context, writer);
+		}
 
 		try {
 			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
@@ -101,9 +92,6 @@ public class TemplateProcessor {
 		} catch (ContextException exception) {
 			throw new TemplateException(exception, "can't enrich context");
 		}
-
-		templateInformation.remove(TEMPLATE_NAME);
-		templateInformation.remove(TEMPLATE_PARSER);
 
 		logger.debug("finished processing template '", name, "'");
 	}
@@ -157,15 +145,4 @@ public class TemplateProcessor {
 			throw new TemplateException("unknown parser: ", parser);
 		}
 	}
-
-	/**
-	 * The key that is used when storing the name of the current template in the {@link Context context}'s implicit map.
-	 */
-	public final static String TEMPLATE_NAME = "template.name";
-
-	/**
-	 * The key in the {@link Context context}'s implicit map under which is stored which parser was used for the current
-	 * template.
-	 */
-	public final static String TEMPLATE_PARSER = "template.parser";
 }

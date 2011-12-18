@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,14 +35,12 @@ public interface TemplateElement {
 	Map<String, String> getLibraryUrlAbbreviations();
 
 	/**
-	 * Processes this template element.
+	 * Processes this template element, keeping the current template element in the {@link TemplateInformation template
+	 * information} up to date.
 	 *
-	 * @param template the current template
-	 * @param templateContext the template's context
 	 * @param context the context to use
 	 * @param writer the writer to use
 	 * @throws TemplateException when something goes wrong while processing this template element
 	 */
-	void process(
-		Template template, TemplateContext templateContext, Context context, Writer writer) throws TemplateException;
+	void process(Context context, Writer writer) throws TemplateException;
 }

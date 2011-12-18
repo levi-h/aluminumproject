@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -264,13 +264,6 @@ public class AbstractContextTest {
 		context.setVariable(NEW_SCOPE, "priority", "high");
 
 		assert context.findVariable("priority").equals("high");
-	}
-
-	public void aluminumImplicitObjectShouldBeAvailable() {
-		Set<String> names = context.getImplicitObjectNames();
-		assert names != null;
-		assert names.contains(Context.ALUMINUM_IMPLICIT_OBJECT);
-		assert context.getImplicitObject(Context.ALUMINUM_IMPLICIT_OBJECT) instanceof Map;
 	}
 
 	public void scopesShouldBeAvailableAsImplicitObjects() {

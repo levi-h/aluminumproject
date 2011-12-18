@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionOptions;
 import com.googlecode.aluminumproject.utilities.Injector;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.Injector.ClassBasedValueProvider;
+import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.WriterException;
 
@@ -45,7 +45,7 @@ import java.util.Map;
  *
  * @author levi_h
  */
-public class DefaultActionElement extends AbstractTemplateElement implements ActionElement {
+public class DefaultActionElement implements ActionElement {
 	private Configuration configuration;
 
 	private ActionDescriptor actionDescriptor;
@@ -55,6 +55,8 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	private Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories;
 
 	private List<ActionInterceptor> actionInterceptors;
+
+	private Map<String, String> libraryUrlAbbreviations;
 
 	/**
 	 * Creates a default action element.
@@ -71,8 +73,6 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 			ActionDescriptor actionDescriptor, ActionFactory actionFactory, Map<String, ActionParameter> parameters,
 			Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories,
 			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations) {
-		super(libraryUrlAbbreviations);
-
 		this.configuration = configuration;
 
 		this.actionDescriptor = actionDescriptor;
@@ -82,6 +82,12 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		this.actionContributionFactories = actionContributionFactories;
 
 		this.actionInterceptors = actionInterceptors;
+
+		this.libraryUrlAbbreviations = libraryUrlAbbreviations;
+	}
+
+	public Map<String, String> getLibraryUrlAbbreviations() {
+		return Collections.unmodifiableMap(libraryUrlAbbreviations);
 	}
 
 	public ActionDescriptor getDescriptor() {
@@ -96,8 +102,10 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		return new LinkedList<ActionContributionDescriptor>(actionContributionFactories.keySet());
 	}
 
-	public void process(Template template, TemplateContext templateContext, Context context, Writer writer)
-			throws TemplateException {
+	public void process(Context context, Writer writer) throws TemplateException {
+		TemplateInformation templateInformation = TemplateInformation.from(context);
+		templateInformation.addTemplateElement(this);
+
 		DefaultActionContext actionContext =
 			new DefaultActionContext(configuration, actionDescriptor, actionFactory, context, writer);
 
@@ -110,8 +118,8 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 		}
 
 		actionContext.addInterceptor(new ContributionInterceptor());
-		actionContext.addInterceptor(new CreationInterceptor(template, templateContext));
-		actionContext.addInterceptor(new ExecutionInterceptor(templateContext));
+		actionContext.addInterceptor(new CreationInterceptor());
+		actionContext.addInterceptor(new ExecutionInterceptor());
 
 		for (ActionInterceptor actionInterceptor: actionInterceptors) {
 			actionContext.addInterceptor(actionInterceptor);
@@ -126,6 +134,8 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 				throw new TemplateException(exception, "can't process action element");
 			}
 		}
+
+		templateInformation.removeCurrentTemplateElement();
 	}
 
 	private static class ContributionInterceptor extends AbstractActionInterceptor {
@@ -184,14 +194,8 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	}
 
 	private static class CreationInterceptor extends AbstractActionInterceptor {
-		private Template template;
-		private TemplateContext templateContext;
-
-		public CreationInterceptor(Template template, TemplateContext templateContext) {
+		public CreationInterceptor() {
 			super(ActionPhase.CREATION);
-
-			this.template = template;
-			this.templateContext = templateContext;
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {
@@ -216,8 +220,17 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 					throw new InterceptionException(exception, "can't inject action");
 				}
 
-				action.setParent(templateContext.getCurrentAction());
-				action.setBody(new TemplateBody(template, templateContext));
+				TemplateInformation templateInformation;
+
+				try {
+					templateInformation = TemplateInformation.from(actionContext.getContext());
+				} catch (TemplateException exception) {
+					throw new InterceptionException(exception, "can't obtain template information");
+				}
+
+				action.setParent(templateInformation.getCurrentAction());
+				action.setBody(new TemplateBody(
+					templateInformation.getTemplate(), templateInformation.getCurrentTemplateElement()));
 
 				actionContext.setAction(action);
 
@@ -229,20 +242,22 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 
 		private static class TemplateBody implements ActionBody {
 			private Template template;
-			private TemplateContext templateContext;
+			private TemplateElement currentTemplateElement;
 
-			public TemplateBody(Template template, TemplateContext templateContext) {
+			public TemplateBody(Template template, TemplateElement currentTemplateElement) {
 				this.template = template;
-				this.templateContext = templateContext;
+				this.currentTemplateElement = currentTemplateElement;
 			}
 
 			public ActionBody copy() {
-				return new TemplateBody(template, new TemplateContext(templateContext));
+				return new TemplateBody(template, currentTemplateElement);
 			}
 
 			public void invoke(Context context, Writer writer) throws ActionException {
 				try {
-					template.processChildren(templateContext, context, writer);
+					for (TemplateElement templateElement: template.getChildren(currentTemplateElement)) {
+						templateElement.process(context, writer);
+					}
 				} catch (TemplateException exception) {
 					throw new ActionException(exception, "can't process body");
 				}
@@ -251,12 +266,8 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 	}
 
 	private static class ExecutionInterceptor extends AbstractActionInterceptor {
-		private TemplateContext templateContext;
-
-		public ExecutionInterceptor(TemplateContext templateContext) {
+		public ExecutionInterceptor() {
 			super(ActionPhase.EXECUTION);
-
-			this.templateContext = templateContext;
 		}
 
 		public void intercept(ActionContext actionContext) throws InterceptionException {
@@ -264,7 +275,15 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 
 			logger.debug("executing action ", action);
 
-			templateContext.addAction(action);
+			TemplateInformation templateInformation;
+
+			try {
+				templateInformation = TemplateInformation.from(actionContext.getContext());
+			} catch (TemplateException exception) {
+				throw new InterceptionException(exception, "can't obtain template information");
+			}
+
+			templateInformation.addAction(action);
 
 			try {
 				action.execute(actionContext.getContext(), actionContext.getWriter());
@@ -275,7 +294,7 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 			} catch (WriterException exception) {
 				throw new InterceptionException(exception, "can't execute action");
 			} finally {
-				templateContext.removeCurrentAction();
+				templateInformation.removeCurrentAction();
 			}
 
 			actionContext.proceed();

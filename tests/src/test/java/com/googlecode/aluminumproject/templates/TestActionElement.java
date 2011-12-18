@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,5 +63,5 @@ public class TestActionElement implements ActionElement {
 		return Collections.emptyList();
 	}
 
-	public void process(Template template, TemplateContext templateContext, Context context, Writer writer) {}
+	public void process(Context context, Writer writer) {}
 }
