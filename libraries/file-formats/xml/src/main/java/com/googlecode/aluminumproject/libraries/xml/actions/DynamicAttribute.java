@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
@@ -50,7 +49,7 @@ public class DynamicAttribute implements ActionContribution {
 	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
-			throws ActionException {
+			throws AluminumException {
 		String prefix = descriptor.getLibraryUrlAbbreviation();
 		String name = descriptor.getName();
 		String value = (String) descriptor.getParameter().getValue(String.class, context);
@@ -71,7 +70,7 @@ public class DynamicAttribute implements ActionContribution {
 			this.value = value;
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			actionContext.proceed();
 
 			((AbstractElement) actionContext.getAction()).addAttribute(prefix, name, value);

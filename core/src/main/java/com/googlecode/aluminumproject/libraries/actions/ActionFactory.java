@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.LibraryElement;
 
@@ -39,7 +40,7 @@ public interface ActionFactory extends LibraryElement {
 	 * @param parameters the parameters for the action
 	 * @param context the context in which the action will execute
 	 * @return the new action
-	 * @throws ActionException when the action can't be created
+	 * @throws AluminumException when the action can't be created
 	 */
-	Action create(Map<String, ActionParameter> parameters, Context context) throws ActionException;
+	Action create(Map<String, ActionParameter> parameters, Context context) throws AluminumException;
 }

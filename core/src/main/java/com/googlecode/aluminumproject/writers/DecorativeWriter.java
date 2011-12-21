@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * A writer that decorates another writer.
@@ -32,7 +34,7 @@ public interface DecorativeWriter extends Writer {
 	 * {@link #flush() Flushes} this writer and replaces the underlying writer.
 	 *
 	 * @param writer the underlying writer to use
-	 * @throws WriterException when this writer is closed or when the underlying writer can't be replaced
+	 * @throws AluminumException when this writer is closed or when the underlying writer can't be replaced
 	 */
-	void setWriter(Writer writer) throws WriterException;
+	void setWriter(Writer writer) throws AluminumException;
 }

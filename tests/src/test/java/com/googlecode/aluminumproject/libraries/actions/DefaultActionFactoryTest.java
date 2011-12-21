@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
@@ -143,7 +144,7 @@ public class DefaultActionFactoryTest {
 		unannotatedActionFactory.create(Collections.<String, ActionParameter>emptyMap(), context);
 	}
 
-	@Test(expectedExceptions = ActionException.class,
+	@Test(expectedExceptions = AluminumException.class,
 		dependsOnMethods = "annotatedParameterShouldTakeBeingRequiredFromAnnotationAttribute")
 	public void omittingRequiredParametersShouldCauseException() {
 		annotatedActionFactory.create(Collections.<String, ActionParameter>emptyMap(), context);
@@ -173,7 +174,7 @@ public class DefaultActionFactoryTest {
 		assert annotatedActionFactory.create(parameters, context) instanceof AnnotatedAction;
 	}
 
-	@Test(expectedExceptions = ActionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void supplyingSuperfluousParametersShouldCauseException() {
 		Map<String, ActionParameter> parameters =
 			Collections.<String, ActionParameter>singletonMap("superfluous", new TestActionParameter("true"));

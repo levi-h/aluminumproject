@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * Writes text to an underlying writer while preserving only a number of contiguous characters of a certain type.
@@ -56,7 +58,7 @@ public class PreserveWhitespaceWriter extends AbstractDecorativeWriter {
 		this.amount = amount;
 	}
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 
 		if (object instanceof String) {
@@ -80,7 +82,7 @@ public class PreserveWhitespaceWriter extends AbstractDecorativeWriter {
 		}
 	}
 
-	private void writeCharacter(char character) {
+	private void writeCharacter(char character) throws AluminumException {
 		getWriter().write(String.valueOf(character));
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.context;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 
 /**
@@ -30,15 +31,15 @@ public interface ContextEnricher extends ConfigurationElement {
 	 * Invoked before a template is being processed.
 	 *
 	 * @param context the context in which the template will be processed
-	 * @throws ContextException when something goes wrong while working with the context
+	 * @throws AluminumException when something goes wrong while working with the context
 	 */
-	void beforeTemplate(Context context) throws ContextException;
+	void beforeTemplate(Context context) throws AluminumException;
 
 	/**
 	 * Invoked after a template is being processed.
 	 *
 	 * @param context the context in which the template was processed
-	 * @throws ContextException when something goes wrong while working with the context
+	 * @throws AluminumException when something goes wrong while working with the context
 	 */
-	void afterTemplate(Context context) throws ContextException;
+	void afterTemplate(Context context) throws AluminumException;
 }

@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.writers;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -118,7 +120,7 @@ public class AbstractOutputStreamWriterTest {
 			return outputStream;
 		}
 
-		protected void closeOutputStream() throws WriterException {
+		protected void closeOutputStream() throws AluminumException {
 			if (close) {
 				super.closeOutputStream();
 			}

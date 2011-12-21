@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.resources;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 
@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 @SuppressWarnings("all")
 @Test(groups = {"core", "fast"})
 public class FileSystemTemplateStoreFinderTest {
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void omittingTemplateDirectoryShouldCauseException() {
 		TemplateStoreFinder templateStoreFinder = new FileSystemTemplateStoreFinder();
 		templateStoreFinder.initialise(new TestConfiguration(new ConfigurationParameters()));
@@ -45,7 +45,7 @@ public class FileSystemTemplateStoreFinderTest {
 		stream.close();
 	}
 
-	@Test(expectedExceptions = ResourceException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToFindUnavailableLocationForTemplateShouldCauseException() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(FileSystemTemplateStoreFinder.TEMPLATE_DIRECTORY,

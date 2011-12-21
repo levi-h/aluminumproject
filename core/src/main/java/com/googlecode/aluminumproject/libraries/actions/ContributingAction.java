@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,19 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionSkipper;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -71,7 +66,7 @@ public class ContributingAction extends AbstractAction {
 		this.parameter = parameter;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		ActionContribution actionContribution = createActionContribution();
 		injectFields(actionContribution);
 
@@ -79,48 +74,31 @@ public class ContributingAction extends AbstractAction {
 		makeContribution(actionContribution, context, writer);
 	}
 
-	private ActionContribution createActionContribution() throws ActionException {
-		try {
-			ConfigurationElementFactory configurationElementFactory = configuration.getConfigurationElementFactory();
-
-			return configurationElementFactory.instantiate(actionContributionClass.getName(), ActionContribution.class);
-		} catch (ConfigurationException exception) {
-			throw new ActionException(exception, "can't create action contribution");
-		}
+	private ActionContribution createActionContribution() throws AluminumException {
+		return configuration.getConfigurationElementFactory().instantiate(
+			actionContributionClass.getName(), ActionContribution.class);
 	}
 
-	private void injectFields(ActionContribution actionContribution) throws ActionException {
+	private void injectFields(ActionContribution actionContribution) throws AluminumException {
 		ActionContributionDescriptor actionContributionDescriptor = new ActionContributionDescriptor(
 			actionDescriptor.getLibraryUrlAbbreviation(), actionDescriptor.getName(), parameter);
 
-		try {
-			Injector injector = new Injector();
-			injector.addValueProvider(new Injector.ClassBasedValueProvider(configuration));
-			injector.addValueProvider(new Injector.ClassBasedValueProvider(actionContributionDescriptor));
-			injector.inject(actionContribution);
-		} catch (UtilityException exception) {
-			throw new ActionException(exception, "can't inject information into action contribution");
-		}
+		Injector injector = new Injector();
+		injector.addValueProvider(new Injector.ClassBasedValueProvider(configuration));
+		injector.addValueProvider(new Injector.ClassBasedValueProvider(actionContributionDescriptor));
+		injector.inject(actionContribution);
 	}
 
-	private void makeContribution(ActionContribution actionContribution, Context context, Writer writer)
-			throws ActionException, ContextException {
+	private void makeContribution(
+			ActionContribution actionContribution, Context context, Writer writer) throws AluminumException {
 		ActionContext actionContext = new ContributingActionContext(context, writer);
 		actionContext.addInterceptor(new ActionInterceptor() {
 			public Set<ActionPhase> getPhases() {
 				return EnumSet.of(ActionPhase.EXECUTION);
 			}
 
-			public void intercept(ActionContext actionContext) throws InterceptionException {
-				try {
-					getBody().invoke(actionContext.getContext(), actionContext.getWriter());
-				} catch (ActionException exception) {
-					throw new InterceptionException(exception, "can't invoke contributing action body");
-				} catch (ContextException exception) {
-					throw new InterceptionException(exception, "can't invoke contributing action body");
-				} catch (WriterException exception) {
-					throw new InterceptionException(exception, "can't invoke contributing action body");
-				}
+			public void intercept(ActionContext actionContext) throws AluminumException {
+				getBody().invoke(actionContext.getContext(), actionContext.getWriter());
 			}
 		});
 
@@ -196,8 +174,8 @@ public class ContributingAction extends AbstractAction {
 			return Collections.singletonMap(parameterName, parameter);
 		}
 
-		public void addParameter(String name, ActionParameter parameter) throws ActionException {
-			throw new ActionException("can't add parameters to a contributing action context");
+		public void addParameter(String name, ActionParameter parameter) throws AluminumException {
+			throw new AluminumException("can't add parameters to a contributing action context");
 		}
 
 		public Map<ActionContributionDescriptor, ActionContributionFactory> getActionContributionFactories() {
@@ -205,22 +183,22 @@ public class ContributingAction extends AbstractAction {
 		}
 
 		public void addActionContribution(ActionContributionDescriptor descriptor,
-				ActionContributionFactory contributionFactory) throws ActionException {
-			throw new ActionException("can't add action contributions to a contribution action context");
+				ActionContributionFactory contributionFactory) throws AluminumException {
+			throw new AluminumException("can't add action contributions to a contribution action context");
 		}
 
 		public Action getAction() {
 			return ContributingAction.this;
 		}
 
-		public void setAction(Action action) throws ActionException {
-			throw new ActionException("can't set the action of a contribution action context");
+		public void setAction(Action action) throws AluminumException {
+			throw new AluminumException("can't set the action of a contribution action context");
 		}
 
-		public void addInterceptor(ActionInterceptor interceptor) throws ActionException {
+		public void addInterceptor(ActionInterceptor interceptor) throws AluminumException {
 			if (!interceptor.getPhases().contains(ActionPhase.EXECUTION)) {
-				throw new ActionException("only action interceptors that intercept the execution phase ",
-					"can be added to a contribution action context");
+				throw new AluminumException("only action interceptors that intercept the execution phase",
+					" can be added to a contribution action context");
 			}
 
 			logger.debug("adding interceptor ", interceptor);
@@ -232,7 +210,7 @@ public class ContributingAction extends AbstractAction {
 			return ActionPhase.EXECUTION;
 		}
 
-		public void proceed() throws InterceptionException {
+		public void proceed() throws AluminumException {
 			if (!interceptors.isEmpty()) {
 				ActionInterceptor interceptor = interceptors.pop();
 

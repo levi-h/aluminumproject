@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.expressions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
@@ -43,7 +44,7 @@ public class IgnoredExpressionFactory implements ExpressionFactory {
 		return Collections.emptyList();
 	}
 
-	public Expression create(String value, Context context) throws ExpressionException {
-		throw new ExpressionException("can't create expression");
+	public Expression create(String value, Context context) throws AluminumException {
+		throw new AluminumException("can't create expression");
 	}
 }

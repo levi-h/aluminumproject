@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
 import java.lang.reflect.Type;
@@ -49,11 +49,7 @@ public class ConstantActionParameter implements ActionParameter {
 		return text;
 	}
 
-	public Object getValue(Type type, Context context) throws ActionException {
-		try {
-			return converterRegistry.convert(text, type);
-		} catch (ConverterException exception) {
-			throw new ActionException(exception, "can't convert parameter value");
-		}
+	public Object getValue(Type type, Context context) throws AluminumException {
+		return converterRegistry.convert(text, type);
 	}
 }

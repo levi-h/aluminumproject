@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 
@@ -81,7 +80,7 @@ public class ElExpressionFactoryTest {
 		assert createExpressionFactory().create("${a}", new DefaultContext()) != null;
 	}
 
-	@Test(dependsOnMethods = "recognisedExpressionShouldBeCreatable", expectedExceptions = ExpressionException.class)
+	@Test(dependsOnMethods = "recognisedExpressionShouldBeCreatable", expectedExceptions = AluminumException.class)
 	public void expressionFactoryPropertiesShouldBeConfigurable() {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 		parameters.addParameter(ElExpressionFactory.EXPRESSION_FACTORY_PROPERTIES, "javax.el.methodInvocations: false");

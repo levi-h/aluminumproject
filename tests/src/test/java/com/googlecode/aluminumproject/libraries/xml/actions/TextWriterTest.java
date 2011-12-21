@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.xml.XmlLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import org.testng.annotations.Test;
 
@@ -42,7 +42,7 @@ public class TextWriterTest extends XmlLibraryTest {
 		));
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void writingNullShouldCauseException() {
 		Context context = new DefaultContext();
 		context.setVariable("pageNumber", null);

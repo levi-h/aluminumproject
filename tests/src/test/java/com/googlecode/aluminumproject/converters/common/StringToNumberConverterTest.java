@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -90,7 +90,7 @@ public class StringToNumberConverterTest {
 		assert convertedValue.equals(BigDecimal.valueOf(12345.6789D));
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertInvalidStringShouldCauseException() {
 		converter.convert("one", Integer.class);
 	}

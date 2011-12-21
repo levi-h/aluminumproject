@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.text.TextLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import org.testng.annotations.Test;
 
@@ -32,7 +32,7 @@ public class FormatTest extends TextLibraryTest {
 		assert processTemplate("format-with-dynamic-parameters").equals("mango and lemon");
 	}
 
-	@Test(dependsOnMethods = "dynamicParametersShouldBeSupported", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "dynamicParametersShouldBeSupported", expectedExceptions = AluminumException.class)
 	public void usingParameterNameMoreThanOnceShouldCauseException() {
 		processTemplate("format-with-duplicate-parameter-names");
 	}
@@ -41,7 +41,7 @@ public class FormatTest extends TextLibraryTest {
 		assert processTemplate("format-with-interpolation-type").equals("a yellow banana");
 	}
 
-	@Test(dependsOnMethods = "usingInterpolationTypeShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "usingInterpolationTypeShouldBePossible", expectedExceptions = AluminumException.class)
 	public void tryingIllegalFormatWithInterpolationTypeShouldCauseException() {
 		processTemplate("format-with-interpolation-type-illegal");
 	}
@@ -50,7 +50,7 @@ public class FormatTest extends TextLibraryTest {
 		assert processTemplate("format-with-printf-type").equals("apple");
 	}
 
-	@Test(dependsOnMethods = "usingPrintfTypeShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "usingPrintfTypeShouldBePossible", expectedExceptions = AluminumException.class)
 	public void tryingIllegalFormatWithPrintfTypeShouldCauseException() {
 		processTemplate("format-with-printf-type-illegal");
 	}
@@ -59,17 +59,17 @@ public class FormatTest extends TextLibraryTest {
 		assert processTemplate("format-with-message-format-type").equals("grape");
 	}
 
-	@Test(dependsOnMethods = "usingMessageFormatTypeShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "usingMessageFormatTypeShouldBePossible", expectedExceptions = AluminumException.class)
 	public void tryingIllegalFormatWithMessageFormatTypeTypeShouldCauseException() {
 		processTemplate("format-with-message-format-type-illegal");
 	}
 
-	@Test(dependsOnMethods = "usingPrintfTypeShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "usingPrintfTypeShouldBePossible", expectedExceptions = AluminumException.class)
 	public void namingParameterWhenItIsNotRequiredShouldCauseException() {
 		processTemplate("format-with-unneeded-named-parameter");
 	}
 
-	@Test(dependsOnMethods = "defaultFormatTypeShouldBeInterpolation", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "defaultFormatTypeShouldBeInterpolation", expectedExceptions = AluminumException.class)
 	public void notNamingParameterWhenItIsRequiredShouldCauseException() {
 		processTemplate("format-with-missing-named-parameter");
 	}

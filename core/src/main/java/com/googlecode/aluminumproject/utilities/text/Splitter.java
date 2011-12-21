@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.text;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -99,10 +99,10 @@ public class Splitter {
 	 *
 	 * @param text the text to split
 	 * @param tokenProcessor the token processor to notify of each token that can be found
-	 * @throws UtilityException when the text to split ends with an escape character, when it contains an unclosed quote
-	 *                          character, or when the token processor can't process one of the tokens
+	 * @throws AluminumException when the text to split ends with an escape character, when it contains an unclosed
+	 *                           quote character, or when the token processor can't process one of the tokens
 	 */
-	public void split(String text, TokenProcessor tokenProcessor) throws UtilityException {
+	public void split(String text, TokenProcessor tokenProcessor) throws AluminumException {
 		StringBuilder textBuffer = new StringBuilder();
 		StringBuilder matchTextBuffer = new StringBuilder();
 
@@ -112,7 +112,7 @@ public class Splitter {
 	}
 
 	private void fillBuffers(
-			String text, StringBuilder textBuffer, StringBuilder matchTextBuffer) throws UtilityException {
+			String text, StringBuilder textBuffer, StringBuilder matchTextBuffer) throws AluminumException {
 		boolean escaping = false;
 
 		QuotationCharacters quotationCharacters = null;
@@ -145,9 +145,9 @@ public class Splitter {
 		}
 
 		if (escaping) {
-			throw new UtilityException("escape character ", escapeCharacter, " does not escape anything");
+			throw new AluminumException("escape character ", escapeCharacter, " does not escape anything");
 		} else if (quotationCharacters != null) {
-			throw new UtilityException("quotation character ", quotationCharacters.openingCharacter, " is not closed");
+			throw new AluminumException("quotation character ", quotationCharacters.openingCharacter, " is not closed");
 		}
 	}
 
@@ -185,7 +185,7 @@ public class Splitter {
 	}
 
 	private void processTokens(
-			StringBuilder buffer, List<Match> matches, TokenProcessor tokenProcessor) throws UtilityException {
+			StringBuilder buffer, List<Match> matches, TokenProcessor tokenProcessor) throws AluminumException {
 		Match match;
 		int offset = 0;
 
@@ -285,8 +285,8 @@ public class Splitter {
 		 * @param separator the separator that was found (the empty string in case of the last token)
 		 * @param separatorPattern the pattern that matches the separator that was found ({@code null} for the last
 		 *                         token)
-		 * @throws UtilityException when the token can't be processed (e.g. when the separator order is unexpected)
+		 * @throws AluminumException when the token can't be processed (e.g. when the separator order is unexpected)
 		 */
-		void process(String token, String separator, String separatorPattern) throws UtilityException;
+		void process(String token, String separator, String separatorPattern) throws AluminumException;
 	}
 }

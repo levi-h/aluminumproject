@@ -17,16 +17,14 @@ package com.googlecode.aluminumproject.context.g11n;
 
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContext.GLOBALISATION_CONTEXT;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextEnricher;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.utilities.GlobalisationUtilities;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.util.Locale;
 
@@ -77,14 +75,14 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		createLocaleProvider(configuration);
 		createResourceBundleProvider(configuration);
 		createDateFormatProvider(configuration);
 		createNumberFormatProvider(configuration);
 	}
 
-	private void createLocaleProvider(Configuration configuration) throws ConfigurationException {
+	private void createLocaleProvider(Configuration configuration) throws AluminumException {
 		ConfigurationParameters parameters = configuration.getParameters();
 
 		String localeProviderClassName = parameters.getValue(LOCALE_PROVIDER_CLASS, null);
@@ -103,11 +101,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 			} else {
 				logger.debug("using configured locale '", configuredLocale, "'");
 
-				try {
-					locale = GlobalisationUtilities.convertLocale(configuredLocale);
-				} catch (UtilityException exception) {
-					throw new ConfigurationException(exception, "can't use configured locale");
-				}
+				locale = GlobalisationUtilities.convertLocale(configuredLocale);
 			}
 
 			localeProvider = new ConstantLocaleProvider(locale);
@@ -120,7 +114,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
-	private void createResourceBundleProvider(Configuration configuration) throws ConfigurationException {
+	private void createResourceBundleProvider(Configuration configuration) throws AluminumException {
 		ConfigurationParameters parameters = configuration.getParameters();
 
 		String resourceBundleProviderClassName = parameters.getValue(RESOURCE_BUNDLE_PROVIDER_CLASS, null);
@@ -140,7 +134,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
-	private void createDateFormatProvider(Configuration configuration) throws ConfigurationException {
+	private void createDateFormatProvider(Configuration configuration) throws AluminumException {
 		ConfigurationParameters parameters = configuration.getParameters();
 
 		String dateFormatProviderClassName = parameters.getValue(DATE_FORMAT_PROVIDER_CLASS, null);
@@ -160,7 +154,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		}
 	}
 
-	private void createNumberFormatProvider(Configuration configuration) throws ConfigurationException {
+	private void createNumberFormatProvider(Configuration configuration) throws AluminumException {
 		ConfigurationParameters parameters = configuration.getParameters();
 
 		String numberFormatProviderClassName = parameters.getValue(NUMBER_FORMAT_PROVIDER_CLASS, null);
@@ -183,7 +177,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 
 	public void disable() {}
 
-	public void beforeTemplate(Context context) throws ContextException {
+	public void beforeTemplate(Context context) throws AluminumException {
 		Context parentContext = context.getParent();
 
 		Object globalisationContext;
@@ -198,7 +192,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		context.addImplicitObject(GLOBALISATION_CONTEXT, globalisationContext);
 	}
 
-	public void afterTemplate(Context context) throws ContextException {
+	public void afterTemplate(Context context) throws AluminumException {
 		context.removeImplicitObject(GLOBALISATION_CONTEXT);
 	}
 

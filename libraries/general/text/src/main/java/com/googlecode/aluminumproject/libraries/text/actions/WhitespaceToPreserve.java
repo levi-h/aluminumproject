@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,19 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter;
-import com.googlecode.aluminumproject.writers.Writer;
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;
+import com.googlecode.aluminumproject.writers.Writer;
 
 /**
  * Abstract superclass of action contributions that replace the current writer with a {@link PreserveWhitespaceWriter
@@ -57,8 +56,8 @@ public abstract class WhitespaceToPreserve implements ActionContribution {
 		return true;
 	}
 
-	public void make(Context context, Writer writer,
-			ActionParameter parameter, ActionContributionOptions options) throws ActionException, ContextException {
+	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
+			throws AluminumException {
 		final int amount = ((Integer) parameter.getValue(Integer.TYPE, context)).intValue();
 
 		logger.debug("preserving ", amount, " ", type.name().toLowerCase(), (amount == 1) ? "" : "s");

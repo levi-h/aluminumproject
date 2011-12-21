@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +59,7 @@ public class Select extends AbstractAction {
 		context = new HashMap<String, String>();
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		getBody().invoke(context, new NullWriter());
 
 		List<?> results = element.select(expression, this.context);
@@ -84,13 +82,13 @@ public class Select extends AbstractAction {
 		 */
 		public Namespace() {}
 
-		public void execute(Context context, Writer writer) throws ActionException {
+		public void execute(Context context, Writer writer) throws AluminumException {
 			Select select = findAncestorOfType(Select.class);
 
 			if (select == null) {
-				throw new ActionException("namespace actions may only be used inside select actions");
+				throw new AluminumException("namespace actions may only be used inside select actions");
 			} else if (select.context.containsKey(prefix)) {
-				throw new ActionException("duplicate namespace prefix: '", prefix, "'");
+				throw new AluminumException("duplicate namespace prefix: '", prefix, "'");
 			} else {
 				select.context.put(prefix, url);
 			}

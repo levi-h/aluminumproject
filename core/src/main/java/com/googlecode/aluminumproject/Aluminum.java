@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject;
 
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -77,9 +76,9 @@ public class Aluminum {
 	/**
 	 * Stops this template engine.
 	 *
-	 * @throws ConfigurationException when this template engine can't be stopped
+	 * @throws AluminumException when this template engine can't be stopped
 	 */
-	public void stop() throws ConfigurationException {
+	public void stop() throws AluminumException {
 		configuration.close();
 	}
 }

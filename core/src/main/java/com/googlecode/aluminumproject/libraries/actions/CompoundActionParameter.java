@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
 import java.lang.reflect.Type;
@@ -62,17 +62,13 @@ public class CompoundActionParameter implements ActionParameter {
 		return textBuilder.toString();
 	}
 
-	public Object getValue(Type type, Context context) throws ActionException {
+	public Object getValue(Type type, Context context) throws AluminumException {
 		StringBuilder valueBuilder = new StringBuilder();
 
 		for (ActionParameter parameter: parameters) {
 			valueBuilder.append(parameter.getValue(String.class, context));
 		}
 
-		try {
-			return converterRegistry.convert(valueBuilder.toString(), type);
-		} catch (ConverterException exception) {
-			throw new ActionException(exception, "can't convert compound parameter value");
-		}
+		return converterRegistry.convert(valueBuilder.toString(), type);
 	}
 }

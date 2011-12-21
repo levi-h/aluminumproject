@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
 import com.googlecode.aluminumproject.templates.ActionElement;
@@ -60,10 +61,10 @@ public class AluScriptContext {
 	 * @param configuration the configuration of the parser
 	 * @param settings the template settings
 	 * @param instructions all available instructions
-	 * @throws AluScriptException when the instructions contain duplicates
+	 * @throws AluminumException when the instructions contain duplicates
 	 */
-	public AluScriptContext(Configuration configuration, AluScriptSettings settings,
-			List<Instruction> instructions) throws AluScriptException {
+	public AluScriptContext(Configuration configuration, AluScriptSettings settings, List<Instruction> instructions)
+			throws AluminumException {
 		logger = Logger.get(getClass());
 
 		this.configuration = configuration;
@@ -99,11 +100,11 @@ public class AluScriptContext {
 		return settings;
 	}
 
-	private void addInstruction(Instruction instruction) throws AluScriptException {
+	private void addInstruction(Instruction instruction) throws AluminumException {
 		String name = instruction.getName();
 
 		if (instructions.containsKey(name)) {
-			throw new AluScriptException("duplicate instruction name (", name, ")");
+			throw new AluminumException("duplicate instruction name (", name, ")");
 		} else {
 			logger.debug("adding instruction (", name, ")");
 
@@ -116,13 +117,13 @@ public class AluScriptContext {
 	 *
 	 * @param name the name of the instruction to find
 	 * @return the instruction with the given name
-	 * @throws AluScriptException when no instruction with the given name can be found
+	 * @throws AluminumException when no instruction with the given name can be found
 	 */
-	public Instruction findInstruction(String name) throws AluScriptException {
+	public Instruction findInstruction(String name) throws AluminumException {
 		if (instructions.containsKey(name)) {
 			return instructions.get(name);
 		} else {
-			throw new AluScriptException("can't find instruction named '", name, "'");
+			throw new AluminumException("can't find instruction named '", name, "'");
 		}
 	}
 
@@ -130,8 +131,9 @@ public class AluScriptContext {
 	 * Adds a template element at the current nesting level.
 	 *
 	 * @param templateElement the template element to add
+	 * @throws AluminumException when the template element can't be added
 	 */
-	public void addTemplateElement(TemplateElement templateElement) {
+	public void addTemplateElement(TemplateElement templateElement) throws AluminumException {
 		logger.debug("adding template element ", templateElement, " at level ", level);
 
 		templateBuilder.addTemplateElement(templateElement);
@@ -156,11 +158,11 @@ public class AluScriptContext {
 	 * Sets the current nesting level. It should not exceed the current nesting level with more than one.
 	 *
 	 * @param level the nesting level to use
-	 * @throws AluScriptException when the given nesting level is too deep
+	 * @throws AluminumException when the given nesting level is too deep
 	 */
-	public void setLevel(int level) throws AluScriptException {
+	public void setLevel(int level) throws AluminumException {
 		if (level > this.level) {
-			throw new AluScriptException("unexpected nesting level (", level, "), expected ", this.level, " or less");
+			throw new AluminumException("unexpected nesting level (", level, "), expected ", this.level, " or less");
 		} else if (level < this.level) {
 			while (this.level > level) {
 				templateBuilder.restoreCurrentTemplateElement();
@@ -177,14 +179,14 @@ public class AluScriptContext {
 	 *
 	 * @param abbreviation the abbreviation of the library URL to add
 	 * @param libraryUrl the library URL to add
-	 * @throws AluScriptException when a library with the given abbreviation has already been added for the current
-	 *                            nesting level
+	 * @throws AluminumException when a library with the given abbreviation has already been added for the current
+	 *                           nesting level
 	 */
-	public void addLibraryUrlAbbreviation(String abbreviation, String libraryUrl) throws AluScriptException {
+	public void addLibraryUrlAbbreviation(String abbreviation, String libraryUrl) throws AluminumException {
 		Map<String, String> libraryUrlAbbreviations = getOrCreateLibraryUrlAbbreviations(level);
 
 		if (libraryUrlAbbreviations.containsKey(abbreviation)) {
-			throw new AluScriptException("duplicate library URL (", abbreviation, ": ", libraryUrl, ")");
+			throw new AluminumException("duplicate library URL (", abbreviation, ": ", libraryUrl, ")");
 		} else {
 			logger.debug("adding library URL at level ", level, " (", abbreviation, ": ", libraryUrl, ")");
 
@@ -219,8 +221,9 @@ public class AluScriptContext {
 	 * Builds and returns the template.
 	 *
 	 * @return the built template
+	 * @throws AluminumException when the template can't be built
 	 */
-	public Template getTemplate() {
+	public Template getTemplate() throws AluminumException {
 		setLevel(0);
 
 		return templateBuilder.build();

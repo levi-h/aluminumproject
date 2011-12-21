@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.io.File;
 import java.util.Properties;
@@ -67,7 +67,7 @@ public class FileSystemPropertySetContainerTest {
 
 	@Test(
 		dependsOnMethods = "containerShouldNotContainNonexistentPropertySets",
-		expectedExceptions = UtilityException.class
+		expectedExceptions = AluminumException.class
 	)
 	public void tryingToReadNonexistentPropertySetShouldCauseException() {
 		container.readPropertySet("unknown");
@@ -109,7 +109,7 @@ public class FileSystemPropertySetContainerTest {
 		assert !emptyContainer.containsPropertySet("roman-numerals");
 	}
 
-	@Test(dependsOnMethods = "writingNewPropertySetShouldMakeItAvailable", expectedExceptions = UtilityException.class)
+	@Test(dependsOnMethods = "writingNewPropertySetShouldMakeItAvailable", expectedExceptions = AluminumException.class)
 	public void tryingToRemoveNonexistentPropertySetShouldCauseException() {
 		emptyContainer.removePropertySet("unknown");
 	}

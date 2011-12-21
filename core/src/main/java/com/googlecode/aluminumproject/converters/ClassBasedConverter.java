@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
@@ -48,11 +49,11 @@ public abstract class ClassBasedConverter<S, T> implements Converter<S> {
 			ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType).isAssignableFrom(this.targetType);
 	}
 
-	public Object convert(S value, Type targetType) throws ConverterException {
+	public Object convert(S value, Type targetType) throws AluminumException {
 		if (supportsTargetType(targetType)) {
 			return convert(value);
 		} else {
-			throw new ConverterException("expected ", this.targetType.getName()," as target type, not ", targetType);
+			throw new AluminumException("expected ", this.targetType.getName()," as target type, not ", targetType);
 		}
 	}
 
@@ -61,7 +62,7 @@ public abstract class ClassBasedConverter<S, T> implements Converter<S> {
 	 *
 	 * @param value the value to convert
 	 * @return the converted value
-	 * @throws ConverterException when the value can't be converted to the target type
+	 * @throws AluminumException when the value can't be converted to the target type
 	 */
-	protected abstract T convert(S value) throws ConverterException;
+	protected abstract T convert(S value) throws AluminumException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,11 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.instructions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.ActionInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.AbstractLineParser;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.text.Splitter;
 import com.googlecode.aluminumproject.utilities.text.Splitter.QuotationCharacters;
 
@@ -55,23 +54,19 @@ public class InstructionLineParser extends AbstractLineParser {
 		return removeIndentation(line).startsWith("@");
 	}
 
-	public void parseLine(String line, AluScriptContext context) throws AluScriptException {
+	public void parseLine(String line, AluScriptContext context) throws AluminumException {
 		context.setLevel(getLevel(line));
 
 		line = removeIndentation(line);
 
 		InstructionTokenProcessor processor = new InstructionTokenProcessor();
 
-		try {
-			List<String> separatorPatterns = processor.getSeparatorPatterns();
-			char escapeCharacter = '\\';
-			List<QuotationCharacters> quotationCharacters =
-				Arrays.asList(new QuotationCharacters('\'', '\'', false), new QuotationCharacters('"', '"', false));
+		List<String> separatorPatterns = processor.getSeparatorPatterns();
+		char escapeCharacter = '\\';
+		List<QuotationCharacters> quotationCharacters =
+			Arrays.asList(new QuotationCharacters('\'', '\'', false), new QuotationCharacters('"', '"', false));
 
-			new Splitter(separatorPatterns, escapeCharacter, quotationCharacters).split(line, processor);
-		} catch (UtilityException exception) {
-			throw new AluScriptException(exception, "can't parse instruction line '", line, "'");
-		}
+		new Splitter(separatorPatterns, escapeCharacter, quotationCharacters).split(line, processor);
 
 		Instruction instruction = findInstruction(context,
 			processor.getInstruction().getNamePrefix(), processor.getInstruction().getName());
@@ -82,7 +77,8 @@ public class InstructionLineParser extends AbstractLineParser {
 		instruction.execute(parameters, context);
 	}
 
-	private Instruction findInstruction(AluScriptContext context, String namePrefix, String name) {
+	private Instruction findInstruction(
+			AluScriptContext context, String namePrefix, String name) throws AluminumException {
 		Instruction instruction;
 
 		if (namePrefix == null) {
@@ -95,7 +91,7 @@ public class InstructionLineParser extends AbstractLineParser {
 	}
 
 	private Map<String, String> convertParameters(
-			List<InstructionParameter> instructionParameters) throws AluScriptException {
+			List<InstructionParameter> instructionParameters) throws AluminumException {
 		Map<String, String> parameters = new HashMap<String, String>();
 
 		for (InstructionParameter instructionParameter: instructionParameters) {
@@ -107,7 +103,7 @@ public class InstructionLineParser extends AbstractLineParser {
 			}
 
 			if (parameters.containsKey(name)) {
-				throw new AluScriptException("duplicate parameter (", name, ")");
+				throw new AluminumException("duplicate parameter (", name, ")");
 			} else {
 				parameters.put(name, instructionParameter.getValue());
 			}

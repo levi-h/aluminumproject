@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -40,7 +41,7 @@ public interface TemplateElement {
 	 *
 	 * @param context the context to use
 	 * @param writer the writer to use
-	 * @throws TemplateException when something goes wrong while processing this template element
+	 * @throws AluminumException when something goes wrong while processing this template element
 	 */
-	void process(Context context, Writer writer) throws TemplateException;
+	void process(Context context, Writer writer) throws AluminumException;
 }

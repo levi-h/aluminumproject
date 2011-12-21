@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.FunctionClass;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
@@ -33,10 +33,9 @@ import com.googlecode.aluminumproject.libraries.functions.StaticMethodInvokingFu
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.MethodFinder;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.MethodFinder.MethodFilter;
+import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.lang.reflect.Method;
@@ -94,7 +93,7 @@ public abstract class AbstractLibrary implements Library {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		logger.debug("finding actions, action contributions, and functions in packages '", packageNames, "'");
@@ -105,32 +104,26 @@ public abstract class AbstractLibrary implements Library {
 		findFunctions();
 	}
 
-	private void findActions() throws ConfigurationException {
+	private void findActions() throws AluminumException {
 		findActions(packageNames);
 	}
 
 	/**
 	 * Adds all of the actions from the {@code com.googlecode.aluminumproject.libraries.common.actions} package.
 	 *
-	 * @throws ConfigurationException when one of the common actions can't be configured
+	 * @throws AluminumException when one of the common actions can't be configured
 	 */
-	protected void addCommonActions() throws ConfigurationException {
+	protected void addCommonActions() throws AluminumException {
 		findActions("com.googlecode.aluminumproject.libraries.common.actions");
 	}
 
-	private void findActions(String... packageNames) {
-		List<Class<? extends Action>> actionClasses;
-
-		try {
-			actionClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return Action.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
-						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, packageNames));
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find actions");
-		}
+	private void findActions(String... packageNames) throws AluminumException {
+		List<Class<? extends Action>> actionClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return Action.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
+					&& !type.isAnnotationPresent(Ignored.class);
+			}
+		}, packageNames));
 
 		for (Class<? extends Action> actionClass: actionClasses) {
 			logger.debug("creating default action factory for action class ", actionClass.getName());
@@ -143,27 +136,24 @@ public abstract class AbstractLibrary implements Library {
 	 * Adds an action factory to this library. It will be initialised and its library will be set.
 	 *
 	 * @param actionFactory the action factory to add
-	 * @throws ConfigurationException when the action factory can't be initialised
+	 * @throws AluminumException when the action factory can't be initialised
 	 */
-	protected void addActionFactory(ActionFactory actionFactory) throws ConfigurationException {
+	protected void addActionFactory(ActionFactory actionFactory) throws AluminumException {
 		initialiseLibraryElement(actionFactory);
 
 		actionFactories.add(actionFactory);
 	}
 
-	private void findActionContributions() throws ConfigurationException {
-		List<Class<? extends ActionContribution>> actionContributionClasses;
-
-		try {
-			actionContributionClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return ActionContribution.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
+	private void findActionContributions() throws AluminumException {
+		TypeFilter actionContributionClassFilter = new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return ActionContribution.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
 						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, packageNames));
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find action contribution classes");
-		}
+			}
+		};
+
+		List<Class<? extends ActionContribution>> actionContributionClasses =
+			Utilities.typed(TypeFinder.find(actionContributionClassFilter, packageNames));
 
 		for (Class<? extends ActionContribution> actionContributionClass: actionContributionClasses) {
 			logger.debug("creating default action contribution factory ",
@@ -189,25 +179,21 @@ public abstract class AbstractLibrary implements Library {
 	 * Adds an action contribution factory to this library.
 	 *
 	 * @param actionContributionFactory the action contribution factory to add
+	 * @throws AluminumException when the action contribution factory can't be initialised
 	 */
-	protected void addActionContributionFactory(ActionContributionFactory actionContributionFactory) {
+	protected void addActionContributionFactory(
+			ActionContributionFactory actionContributionFactory) throws AluminumException {
 		initialiseLibraryElement(actionContributionFactory);
 
 		actionContributionFactories.add(actionContributionFactory);
 	}
 
-	private void findFunctions() throws ConfigurationException {
-		List<Class<?>> functionClasses;
-
-		try {
-			functionClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return type.isAnnotationPresent(FunctionClass.class) && !ReflectionUtilities.isAbstract(type);
-				}
-			}, packageNames));
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find function classes");
-		}
+	private void findFunctions() throws AluminumException {
+		List<Class<?>> functionClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return type.isAnnotationPresent(FunctionClass.class) && !ReflectionUtilities.isAbstract(type);
+			}
+		}, packageNames));
 
 		for (Class<?> functionClass: functionClasses) {
 			List<Method> methods = Utilities.typed(MethodFinder.find(new MethodFilter() {
@@ -232,9 +218,9 @@ public abstract class AbstractLibrary implements Library {
 	 * Adds a function factory to this library. It will be initialised and its library will be set.
 	 *
 	 * @param functionFactory the function factory to add
-	 * @throws ConfigurationException when the function factory can't be initialised
+	 * @throws AluminumException when the function factory can't be initialised
 	 */
-	protected void addFunctionFactory(FunctionFactory functionFactory) throws ConfigurationException {
+	protected void addFunctionFactory(FunctionFactory functionFactory) throws AluminumException {
 		initialiseLibraryElement(functionFactory);
 
 		functionFactories.add(functionFactory);
@@ -244,8 +230,9 @@ public abstract class AbstractLibrary implements Library {
 	 * Initialises a library element by providing it with both the configuration and this library.
 	 *
 	 * @param libraryElement the library element to initialise
+	 * @throws AluminumException when the library element can't be initialised
 	 */
-	protected void initialiseLibraryElement(LibraryElement libraryElement) {
+	protected void initialiseLibraryElement(LibraryElement libraryElement) throws AluminumException {
 		libraryElement.initialise(configuration);
 		libraryElement.setLibrary(this);
 	}
@@ -260,35 +247,35 @@ public abstract class AbstractLibrary implements Library {
 		return Collections.unmodifiableList(actionFactories);
 	}
 
-	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
+	public ActionFactory getDynamicActionFactory(String name) throws AluminumException {
 		LibraryInformation information = getInformation();
 
 		if (information.isSupportingDynamicActions()) {
-			throw new LibraryException("dynamic action factories can't be created by the abstract library");
+			throw new AluminumException("dynamic action factories can't be created by the abstract library");
 		} else {
-			throw new LibraryException("library '", information.getUrl(), "' does not support dynamic actions");
+			throw new AluminumException("library '", information.getUrl(), "' does not support dynamic actions");
 		}
 	}
 
-	public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
+	public ActionContributionFactory getDynamicActionContributionFactory(String name) throws AluminumException {
 		LibraryInformation information = getInformation();
 
 		if (information.isSupportingDynamicActionContributions()) {
-			throw new LibraryException(
+			throw new AluminumException(
 				"dynamic action contribution factories can't be created by the abstract library");
 		} else {
-			throw new LibraryException(
+			throw new AluminumException(
 				"library '", information.getUrl(), "' does not support dynamic action contributions");
 		}
 	}
 
-	public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
+	public FunctionFactory getDynamicFunctionFactory(String name) throws AluminumException {
 		LibraryInformation information = getInformation();
 
 		if (information.isSupportingDynamicFunctions()) {
-			throw new LibraryException("dynamic function factories can't be created by the abstract library");
+			throw new AluminumException("dynamic function factories can't be created by the abstract library");
 		} else {
-			throw new LibraryException("library '", information.getUrl(), "' does not support dynamic functions");
+			throw new AluminumException("library '", information.getUrl(), "' does not support dynamic functions");
 		}
 	}
 

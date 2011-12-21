@@ -15,24 +15,21 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.text.Splitter;
 import com.googlecode.aluminumproject.utilities.text.Splitter.TokenProcessor;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -80,7 +77,7 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		parameters.add(new Parameter(name, value));
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		for (Map.Entry<String, ActionParameter> dynamicParameter: getDynamicParameters().entrySet()) {
 			addParameter(dynamicParameter.getKey(), dynamicParameter.getValue().getValue(String.class, context));
 		}
@@ -102,14 +99,10 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		INTERPOLATION {
 			@Override
 			String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
-					throws ActionException {
+					throws AluminumException {
 				Interpolator interpolator = new Interpolator(getNamedParameters(parameters, converterRegistry));
 
-				try {
-					new Splitter(Arrays.asList("\\{", "\\}"), '\\').split(formatString, interpolator);
-				} catch (UtilityException exception) {
-					throw new ActionException(exception, "can't format text");
-				}
+				new Splitter(Arrays.asList("\\{", "\\}"), '\\').split(formatString, interpolator);
 
 				return interpolator.getText();
 			}
@@ -127,24 +120,24 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 					textBuilder = new StringBuilder();
 				}
 
-				public void process(String token, String separator, String separatorPattern) {
+				public void process(String token, String separator, String separatorPattern) throws AluminumException {
 					if (interpolating) {
 						if (separator.equals("}")) {
 							if (namedParameters.containsKey(token)) {
 								textBuilder.append(namedParameters.get(token));
 							} else {
-								throw new UtilityException("unknown parameter: '", token, "'");
+								throw new AluminumException("unknown parameter: '", token, "'");
 							}
 
 							interpolating = false;
 						} else {
-							throw new UtilityException("unclosed opening brace encountered");
+							throw new AluminumException("unclosed opening brace encountered");
 						}
 					} else {
 						if (separator.equals("{")) {
 							interpolating = true;
 						} else if (separator.equals("}")) {
-							throw new UtilityException("unopened closing brace encountered");
+							throw new AluminumException("unopened closing brace encountered");
 						}
 
 						textBuilder.append(token);
@@ -165,11 +158,11 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		MESSAGE_FORMAT {
 			@Override
 			public String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
-					throws ActionException {
+					throws AluminumException {
 				try {
 					return MessageFormat.format(formatString, getPositionalParameters(parameters).toArray());
 				} catch (IllegalArgumentException exception) {
-					throw new ActionException(exception, "can't format text");
+					throw new AluminumException(exception, "can't format text");
 				}
 			}
 		},
@@ -182,50 +175,42 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		PRINTF {
 			@Override
 			public String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
-					throws ActionException {
+					throws AluminumException {
 				try {
 					return String.format(formatString, getPositionalParameters(parameters).toArray());
 				} catch (IllegalFormatException exception) {
-					throw new ActionException(exception, "can't format text");
+					throw new AluminumException(exception, "can't format text");
 				}
 			}
 		};
 
 		private static Map<String, String> getNamedParameters(
-				List<Parameter> parameters, ConverterRegistry converterRegistry) throws ActionException {
+				List<Parameter> parameters, ConverterRegistry converterRegistry) throws AluminumException {
 			Map<String, String> namedParameters = new HashMap<String, String>();
 
 			for (Parameter parameter: parameters) {
 				String name = parameter.name;
 
 				if (name == null) {
-					throw new ActionException("unnamed parameter: ", parameter.value);
+					throw new AluminumException("unnamed parameter: ", parameter.value);
 				} else if (namedParameters.containsKey(name)) {
-					throw new ActionException("duplicate parameter: '", name, "'");
+					throw new AluminumException("duplicate parameter: '", name, "'");
 				} else {
-					String value;
-
-					try {
-						value = (String) converterRegistry.convert(parameter.value, String.class);
-					} catch (ConverterException exception) {
-						throw new ActionException(exception, "can't convert parameter");
-					}
-
-					namedParameters.put(name, value);
+					namedParameters.put(name, (String) converterRegistry.convert(parameter.value, String.class));
 				}
 			}
 
 			return namedParameters;
 		}
 
-		private static List<Object> getPositionalParameters(List<Parameter> parameters) throws ActionException {
+		private static List<Object> getPositionalParameters(List<Parameter> parameters) throws AluminumException {
 			List<Object> positionalParameters = new ArrayList<Object>();
 
 			for (Parameter parameter: parameters) {
 				if (parameter.name == null) {
 					positionalParameters.add(parameter.value);
 				} else {
-					throw new ActionException("named parameter: '", parameter.name, "'");
+					throw new AluminumException("named parameter: '", parameter.name, "'");
 				}
 			}
 
@@ -239,10 +224,10 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		 * @param parameters the parameters to use
 		 * @param converterRegistry the converter registry to use
 		 * @return the formatted string
-		 * @throws ActionException when the string can't be formatted
+		 * @throws AluminumException when the string can't be formatted
 		 */
 		abstract String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
-			throws ActionException;
+			throws AluminumException;
 	}
 
 	private static class Parameter {
@@ -271,7 +256,7 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		 */
 		public FormatParameter() {}
 
-		public void execute(Context context, Writer writer) throws ActionException {
+		public void execute(Context context, Writer writer) throws AluminumException {
 			findAncestorOfType(Format.class).addParameter(name, value);
 		}
 	}

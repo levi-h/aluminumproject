@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,7 +59,7 @@ public class FileSystemPropertySetContainer implements PropertySetContainer {
 		return getPropertyFile(name).exists();
 	}
 
-	public Properties readPropertySet(String name) throws UtilityException {
+	public Properties readPropertySet(String name) throws AluminumException {
 		Properties propertySet = new Properties();
 
 		try {
@@ -73,15 +73,15 @@ public class FileSystemPropertySetContainer implements PropertySetContainer {
 				in.close();
 			}
 		} catch (IOException exception) {
-			throw new UtilityException(exception, "can't read property set '", name, "'");
+			throw new AluminumException(exception, "can't read property set '", name, "'");
 		}
 
 		return propertySet;
 	}
 
-	public void writePropertySet(String name, Properties propertySet) throws UtilityException {
+	public void writePropertySet(String name, Properties propertySet) throws AluminumException {
 		if (!location.exists() && !location.mkdirs()) {
-			throw new UtilityException("can't create property set location ", location.getAbsolutePath());
+			throw new AluminumException("can't create property set location ", location.getAbsolutePath());
 		}
 
 		try {
@@ -95,17 +95,17 @@ public class FileSystemPropertySetContainer implements PropertySetContainer {
 				out.close();
 			}
 		} catch (IOException exception) {
-			throw new UtilityException(exception, "can't write property set '", name, "'");
+			throw new AluminumException(exception, "can't write property set '", name, "'");
 		}
 	}
 
-	public void removePropertySet(String name) throws UtilityException {
+	public void removePropertySet(String name) throws AluminumException {
 		File propertyFile = getPropertyFile(name);
 
 		if (!propertyFile.exists()) {
-			throw new UtilityException("can't find property set '", name, "' to remove");
+			throw new AluminumException("can't find property set '", name, "' to remove");
 		} else if (!propertyFile.delete()) {
-			throw new UtilityException("can't remove property set '", name, "'");
+			throw new AluminumException("can't remove property set '", name, "'");
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
@@ -47,8 +48,9 @@ public class ParserUtilities {
 	 * @param value the textual parameter value
 	 * @param configuration the configuration that contains all expression factories
 	 * @return the new action parameter
+	 * @throws AluminumException when the parameter can't be created
 	 */
-	public static ActionParameter createParameter(String value, Configuration configuration) {
+	public static ActionParameter createParameter(String value, Configuration configuration) throws AluminumException {
 		ActionParameter parameter;
 
 		SortedMap<ExpressionOccurrence, ExpressionFactory> expressionOccurrences =
@@ -99,10 +101,10 @@ public class ParserUtilities {
 	 * @param text the text to find occurrences of expressions in
 	 * @param configuration the configuration that contains all expression factories
 	 * @return a map that contains a number of blocks; each block is either text or an expression
-	 * @throws UtilityException when the given text contains overlapping expressions
+	 * @throws AluminumException when the given text contains overlapping expressions
 	 */
 	public static SortedMap<ExpressionOccurrence, ExpressionFactory> getExpressionOccurrences(
-			String text, Configuration configuration) throws UtilityException {
+			String text, Configuration configuration) throws AluminumException {
 		SortedMap<ExpressionOccurrence, ExpressionFactory> occurrences =
 			new TreeMap<ExpressionOccurrence, ExpressionFactory>();
 
@@ -111,7 +113,7 @@ public class ParserUtilities {
 				for (ExpressionOccurrence existingOccurrence: occurrences.keySet()) {
 					if ((existingOccurrence.getBeginIndex() < occurrence.getEndIndex())
 						&& (existingOccurrence.getEndIndex() > occurrence.getBeginIndex())) {
-						throw new UtilityException("found overlapping expressions");
+						throw new AluminumException("found overlapping expressions");
 					}
 				}
 

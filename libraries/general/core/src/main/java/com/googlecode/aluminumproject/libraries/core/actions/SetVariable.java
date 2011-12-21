@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.List;
@@ -42,12 +41,12 @@ public class SetVariable extends AbstractAction {
 		value = NO_VALUE;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		if (value == NO_VALUE) {
 			List<?> values = getBodyList(context, writer);
 
 			if (values.isEmpty()) {
-				throw new ActionException("the 'set-variable' action needs a value, " +
+				throw new AluminumException("the 'set-variable' action needs a value, " +
 					"either as a parameter or in its body");
 			} else if (values.size() == 1) {
 				value = values.get(0);

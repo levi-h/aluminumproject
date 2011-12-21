@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.writers;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 /**
  * Ignores all written objects.
  *
@@ -26,7 +28,7 @@ public class NullWriter extends AbstractWriter {
 	 */
 	public NullWriter() {}
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 	}
 }

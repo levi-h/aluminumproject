@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
@@ -54,10 +55,10 @@ public interface Library extends ConfigurationElement {
 	 *
 	 * @param name the name of the dynamic action
 	 * @return an action factory that creates dynamic actions with the given name
-	 * @throws LibraryException when this library does not support dynamic actions or when the action factory can't be
-	 *                          obtained
+	 * @throws AluminumException when this library does not support dynamic actions or when the action factory can't be
+	 *                           obtained
 	 */
-	ActionFactory getDynamicActionFactory(String name) throws LibraryException;
+	ActionFactory getDynamicActionFactory(String name) throws AluminumException;
 
 	/**
 	 * Returns all action contribution factories.
@@ -71,10 +72,10 @@ public interface Library extends ConfigurationElement {
 	 *
 	 * @param name the name of the dynamic action contribution
 	 * @return an action contribution factory that creates dynamic action contributions with the given name
-	 * @throws LibraryException when this library does not support dynamic action contributions or when the action
-	 *                          contribution factory can't be obtained
+	 * @throws AluminumException when this library does not support dynamic action contributions or when the action
+	 *                           contribution factory can't be obtained
 	 */
-	ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException;
+	ActionContributionFactory getDynamicActionContributionFactory(String name) throws AluminumException;
 
 	/**
 	 * Returns all function factories.
@@ -88,8 +89,8 @@ public interface Library extends ConfigurationElement {
 	 *
 	 * @param name the name of the dynamic function
 	 * @return a function factory that creates dynamic functions with the given name
-	 * @throws LibraryException when this library does not support dynamic functions or when the function factory can't
-	 *                          be obtained
+	 * @throws AluminumException when this library does not support dynamic functions or when the function factory can't
+	 *                           be obtained
 	 */
-	FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException;
+	FunctionFactory getDynamicFunctionFactory(String name) throws AluminumException;
 }

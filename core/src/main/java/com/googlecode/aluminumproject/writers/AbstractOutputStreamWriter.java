@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.writers;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -56,7 +58,7 @@ public abstract class AbstractOutputStreamWriter extends AbstractWriter {
 		this.buffer = buffer;
 	}
 
-	private OutputStream getOutputStream() {
+	private OutputStream getOutputStream() throws AluminumException {
 		if (outputStream == null) {
 			logger.debug("creating output stream");
 
@@ -74,11 +76,11 @@ public abstract class AbstractOutputStreamWriter extends AbstractWriter {
 	 * Creates the output stream that should be used. This method is invoked when the output stream is first needed.
 	 *
 	 * @return the output stream that should be written to
-	 * @throws WriterException when the output stream can't be created
+	 * @throws AluminumException when the output stream can't be created
 	 */
-	protected abstract OutputStream createOutputStream() throws WriterException;
+	protected abstract OutputStream createOutputStream() throws AluminumException;
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 
 		byte[] bytes;
@@ -92,23 +94,23 @@ public abstract class AbstractOutputStreamWriter extends AbstractWriter {
 		try {
 			getOutputStream().write(bytes);
 		} catch (IOException exception) {
-			throw new WriterException(exception, "can't write object ", object);
+			throw new AluminumException(exception, "can't write object ", object);
 		}
 	}
 
 	@Override
-	public void flush() throws WriterException {
+	public void flush() throws AluminumException {
 		checkOpen();
 
 		try {
 			getOutputStream().flush();
 		} catch (IOException exception) {
-			throw new WriterException(exception, "can't flush output stream");
+			throw new AluminumException(exception, "can't flush output stream");
 		}
 	}
 
 	@Override
-	public void close() throws WriterException {
+	public void close() throws AluminumException {
 		super.close();
 
 		closeOutputStream();
@@ -118,13 +120,13 @@ public abstract class AbstractOutputStreamWriter extends AbstractWriter {
 	 * Closes the output stream. This method can be overridden by subclasses that want to keep their output streams
 	 * open.
 	 *
-	 * @throws WriterException when the output stream can't be closed
+	 * @throws AluminumException when the output stream can't be closed
 	 */
-	protected void closeOutputStream() throws WriterException {
+	protected void closeOutputStream() throws AluminumException {
 		try {
 			getOutputStream().close();
 		} catch (IOException exception) {
-			throw new WriterException(exception, "can't close output stream");
+			throw new AluminumException(exception, "can't close output stream");
 		}
 	}
 }

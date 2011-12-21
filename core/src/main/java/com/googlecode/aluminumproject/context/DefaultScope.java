@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.context;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,11 +51,11 @@ public class DefaultScope implements Scope {
 		return Collections.unmodifiableSet(variables.keySet());
 	}
 
-	public Object getVariable(String name) throws ContextException {
+	public Object getVariable(String name) throws AluminumException {
 		if (variables.containsKey(name)) {
 			return variables.get(name);
 		} else {
-			throw new ContextException("no such variable: ", name);
+			throw new AluminumException("no such variable: ", name);
 		}
 	}
 
@@ -61,11 +63,11 @@ public class DefaultScope implements Scope {
 		return variables.put(name, value);
 	}
 
-	public Object removeVariable(String name) throws ContextException {
+	public Object removeVariable(String name) throws AluminumException {
 		if (variables.containsKey(name)) {
 			return variables.remove(name);
 		} else {
-			throw new ContextException("no such variable: ", name);
+			throw new AluminumException("no such variable: ", name);
 		}
 	}
 }

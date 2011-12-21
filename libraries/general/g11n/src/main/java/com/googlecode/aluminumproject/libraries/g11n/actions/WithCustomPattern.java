@@ -15,20 +15,18 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.DateFormatProvider;
 import com.googlecode.aluminumproject.context.g11n.DateFormatType;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatProvider;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatType;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
@@ -71,9 +69,9 @@ public class WithCustomPattern implements ActionContribution {
 	}
 
 	public void make(Context context, Writer writer,
-			final ActionParameter parameter, ActionContributionOptions options) {
+			final ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.EXECUTION) {
-			public void intercept(ActionContext actionContext) throws InterceptionException {
+			public void intercept(ActionContext actionContext) throws AluminumException {
 				Context context = actionContext.getContext();
 				GlobalisationContext globalisationContext = GlobalisationContext.from(context);
 
@@ -92,8 +90,6 @@ public class WithCustomPattern implements ActionContribution {
 					}
 
 					actionContext.proceed();
-				} catch (ActionException exception) {
-					throw new InterceptionException(exception, "can't obtain custom pattern");
 				} finally {
 					globalisationContext.setDateFormatProvider(dateFormatProvider);
 					globalisationContext.setNumberFormatProvider(numberFormatProvider);
@@ -113,7 +109,7 @@ public class WithCustomPattern implements ActionContribution {
 			this.delegate = delegate;
 		}
 
-		public DateFormat provide(DateFormatType type, Context context) throws ContextException {
+		public DateFormat provide(DateFormatType type, Context context) throws AluminumException {
 			DateFormat dateFormat;
 
 			if (type == DateFormatType.CUSTOM) {
@@ -138,7 +134,7 @@ public class WithCustomPattern implements ActionContribution {
 			this.delegate = delegate;
 		}
 
-		public NumberFormat provide(NumberFormatType type, Context context) throws ContextException {
+		public NumberFormat provide(NumberFormatType type, Context context) throws AluminumException {
 			NumberFormat numberFormat;
 
 			if (type == NumberFormatType.CUSTOM) {
@@ -147,7 +143,7 @@ public class WithCustomPattern implements ActionContribution {
 
 					numberFormat = new DecimalFormat(customPattern, new DecimalFormatSymbols(locale));
 				} catch (IllegalArgumentException exception) {
-					throw new ContextException(exception, "can't create custom number format");
+					throw new AluminumException(exception, "can't create custom number format");
 				}
 			} else {
 				numberFormat = delegate.provide(type, context);

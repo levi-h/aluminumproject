@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +56,7 @@ public class TestWebClient implements WebClient {
 		resources.clear();
 	}
 
-	public Request createRequest(String method, String url) throws UtilityException {
+	public Request createRequest(String method, String url) throws AluminumException {
 		return new TestRequest(method, url, resources);
 	}
 

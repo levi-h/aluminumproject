@@ -15,15 +15,14 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
@@ -65,7 +64,7 @@ public class Variable {
 		}
 
 		public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
-				throws ActionException {
+				throws AluminumException {
 			options.addInterceptor(new NameInterceptor((String) parameter.getValue(String.class, context)));
 		}
 	}
@@ -73,13 +72,13 @@ public class Variable {
 	private static class NameInterceptor extends AbstractActionInterceptor {
 		private String name;
 
-		public NameInterceptor(String name) {
+		public NameInterceptor(String name) throws AluminumException {
 			super(ActionPhase.EXECUTION);
 
 			this.name = name;
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			ListWriter writer = new ListWriter(true);
 
 			proceed(actionContext, writer);
@@ -105,7 +104,7 @@ public class Variable {
 			}
 		}
 
-		private void proceed(ActionContext actionContext, Writer writer) {
+		private void proceed(ActionContext actionContext, Writer writer) throws AluminumException {
 			Writer originalWriter = actionContext.getWriter();
 
 			DecorativeWriter decorativeWriter = getInnermostDecorativeWriter(originalWriter);
@@ -162,7 +161,7 @@ public class Variable {
 		}
 
 		public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
-				throws ActionException {
+				throws AluminumException {
 			options.addInterceptor(new ScopeInterceptor((String) parameter.getValue(String.class, context)));
 		}
 	}
@@ -170,13 +169,13 @@ public class Variable {
 	private static class ScopeInterceptor extends AbstractActionInterceptor {
 		private String scope;
 
-		public ScopeInterceptor(String scope) {
+		public ScopeInterceptor(String scope) throws AluminumException {
 			super(ActionPhase.EXECUTION);
 
 			this.scope = scope;
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			Map<Action, String> scopes = getScopes(actionContext.getContext());
 			Action action = actionContext.getAction();
 
@@ -185,13 +184,13 @@ public class Variable {
 			actionContext.proceed();
 
 			if (scopes.containsKey(action)) {
-				throw new InterceptionException("the 'variable scope' action contribution can't be used",
-					" without the 'variable name' one");
+				throw new AluminumException("the 'variable scope' action contribution",
+					" can't be used without the 'variable name' one");
 			}
 		}
 	}
 
-	private static Map<Action, String> getScopes(Context context) {
+	private static Map<Action, String> getScopes(Context context) throws AluminumException {
 		if (!context.getImplicitObjectNames().contains(SCOPES)) {
 			context.addImplicitObject(SCOPES, new IdentityHashMap<Action, String>());
 		}

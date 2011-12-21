@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.lang.reflect.Type;
 
@@ -35,11 +34,7 @@ public class StringToTypeConverter extends ClassBasedConverter<String, Type> {
 	public StringToTypeConverter() {}
 
 	@Override
-	protected Type convert(String value) throws ConverterException {
-		try {
-			return GenericsUtilities.getType(value, "java.lang", "java.util");
-		} catch (UtilityException exception) {
-			throw new ConverterException(exception, "can't convert '", value, "' into a type");
-		}
+	protected Type convert(String value) throws AluminumException {
+		return GenericsUtilities.getType(value, "java.lang", "java.util");
 	}
 }

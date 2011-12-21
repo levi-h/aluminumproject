@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.mail.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.mail.MailContextProvider;
 import com.googlecode.aluminumproject.libraries.mail.MailLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
@@ -26,8 +26,8 @@ import com.icegreen.greenmail.util.ServerSetupTest;
 
 import java.util.Properties;
 
-import javax.mail.MessagingException;
 import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.testng.annotations.AfterClass;
@@ -116,7 +116,7 @@ public class SendTest extends MailLibraryTest {
 		}
 	}
 
-	@Test(dependsOnMethods = "mailShouldBeSent", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "mailShouldBeSent", expectedExceptions = AluminumException.class)
 	public void omittingRecipientsShouldCauseException() {
 		processTemplate("send-without-recipients");
 	}

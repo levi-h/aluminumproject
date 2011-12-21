@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.instructions;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -93,8 +93,8 @@ abstract class InstructionStateTransition {
 	 *
 	 * @param instructionTokenProcessor the instruction token processor to modify
 	 * @param token the token to use
-	 * @throws UtilityException when something goes wrong while changing the instruction token processor
+	 * @throws AluminumException when something goes wrong while changing the instruction token processor
 	 */
 	public abstract void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token)
-		throws UtilityException;
+		throws AluminumException;
 }

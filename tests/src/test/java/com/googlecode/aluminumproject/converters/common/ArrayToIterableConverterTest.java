@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.util.Iterator;
 
@@ -89,7 +89,7 @@ public class ArrayToIterableConverterTest {
 		assert !iterator.hasNext();
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertNonArrayShouldCauseException() {
 		converter.convert("1, 2, 3", Iterable.class);
 	}

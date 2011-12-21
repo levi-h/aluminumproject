@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.instructions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ConstantActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.ExpressionActionParameter;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.parsers.aluscript.TestAluScriptContext;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.TestInstruction;
@@ -111,12 +111,12 @@ public class InstructionLineParserTest {
 		assert contributionDescriptor.getParameter() instanceof ExpressionActionParameter;
 	}
 
-	@Test(expectedExceptions = AluScriptException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void parsingMalformedLineShouldCauseException() {
 		lineParser.parseLine("@test(", context);
 	}
 
-	@Test(expectedExceptions = AluScriptException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void supplyingDuplicateParameterShouldCauseException() {
 		lineParser.parseLine("@test.test(description: 'test', description: test)", context);
 	}

@@ -15,10 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.mail;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.environment.PropertySetContainer;
 
@@ -38,19 +36,13 @@ public class PropertySetBasedSessionProvider implements SessionProvider {
 	 * Creates a property set-based session provider.
 	 *
 	 * @param name the name of the property set to use
-	 * @throws ConfigurationException when the session can't be created
+	 * @throws AluminumException when the session can't be created
 	 */
-	public PropertySetBasedSessionProvider(String name) throws ConfigurationException {
-		PropertySetContainer propertySetContainer = EnvironmentUtilities.getPropertySetContainer();
-
-		try {
-			session = Session.getInstance(propertySetContainer.readPropertySet(name));
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't create mail session '", name, "'");
-		}
+	public PropertySetBasedSessionProvider(String name) throws AluminumException {
+		session = Session.getInstance(EnvironmentUtilities.getPropertySetContainer().readPropertySet(name));
 	}
 
-	public Session provide(Context context) throws ContextException {
+	public Session provide(Context context) throws AluminumException {
 		return session;
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 /**
  * A part of a {@link Configuration configuration}.
  * <p>
@@ -28,14 +30,14 @@ public interface ConfigurationElement {
 	 * Initialises this configuration element.
 	 *
 	 * @param configuration the configuration that this configuration element is part of
-	 * @throws ConfigurationException when this configuration element can't be initialised
+	 * @throws AluminumException when this configuration element can't be initialised
 	 */
-	void initialise(Configuration configuration) throws ConfigurationException;
+	void initialise(Configuration configuration) throws AluminumException;
 
 	/**
 	 * Disables this configuration element.
 	 *
-	 * @throws ConfigurationException when this configuration element can't be disabled
+	 * @throws AluminumException when this configuration element can't be disabled
 	 */
-	void disable() throws ConfigurationException;
+	void disable() throws AluminumException;
 }

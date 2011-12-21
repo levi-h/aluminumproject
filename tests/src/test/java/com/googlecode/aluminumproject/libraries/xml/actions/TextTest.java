@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.xml.XmlLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import org.testng.annotations.Test;
 
@@ -32,7 +32,7 @@ public class TextTest extends XmlLibraryTest {
 		));
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void addingChildrenAfterSettingTextShouldCauseException() {
 		processTemplate("element-with-text-and-child");
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 
 import java.util.Arrays;
@@ -132,8 +132,7 @@ public class ElExpressionTest {
 		assert ((Integer) bracketResult).intValue() == 10;
 	}
 
-	@Test(expectedExceptions = ExpressionException.class,
-		dependsOnMethods = "expressionFactoryShouldCreateElExpressions")
+	@Test(dependsOnMethods = "expressionFactoryShouldCreateElExpressions", expectedExceptions = AluminumException.class)
 	public void evaluatingInvalidExpressionShouldCauseException() {
 		expressionFactory.create("${invalid}", context).evaluate(context);
 	}

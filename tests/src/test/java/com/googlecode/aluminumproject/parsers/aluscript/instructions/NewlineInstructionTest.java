@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.parsers.aluscript.TestAluScriptContext;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TextElement;
@@ -49,7 +49,7 @@ public class NewlineInstructionTest {
 		assert ((TextElement) templateElements.get(0)).getText().equals("\n");
 	}
 
-	@Test(expectedExceptions = AluScriptException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void supplyingParametersToInstructionShouldCauseException() {
 		instruction.execute(Collections.singletonMap("count", "2"), context);
 	}

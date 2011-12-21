@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * A writer that builds a {@link String string}. Only strings can be written; they are all concatenated into a single
@@ -43,13 +45,13 @@ public class StringWriter extends AbstractWriter {
 		return builder.toString();
 	}
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 
 		if (object instanceof String) {
 			builder.append((String) object);
 		} else {
-			throw new WriterException("string writers only accept strings");
+			throw new AluminumException("string writers only accept strings");
 		}
 	}
 }

@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 
@@ -31,9 +32,9 @@ public interface ConverterRegistry extends ConfigurationElement {
 	 * appropriate values.
 	 *
 	 * @param converter the converter to register
-	 * @throws ConverterException when the converter's fields can't be injected
+	 * @throws AluminumException when the converter's fields can't be injected
 	 */
-	void registerConverter(Converter<?> converter) throws ConverterException;
+	void registerConverter(Converter<?> converter) throws AluminumException;
 
 	/**
 	 * Finds a converter that can convert values from a certain source type to a particular target type.
@@ -42,9 +43,9 @@ public interface ConverterRegistry extends ConfigurationElement {
 	 * @param sourceType the type of the source values
 	 * @param targetType the type of the converted values
 	 * @return a converter that can convert values from the given source type into the given target type
-	 * @throws ConverterException when no converter can be found for the given types
+	 * @throws AluminumException when no converter can be found for the given types
 	 */
-	<S> Converter<? super S> getConverter(Class<S> sourceType, Type targetType) throws ConverterException;
+	<S> Converter<? super S> getConverter(Class<S> sourceType, Type targetType) throws AluminumException;
 
 	/**
 	 * Convenience method that converts a value using one of the registered converters. It is required to handle {@code
@@ -54,9 +55,9 @@ public interface ConverterRegistry extends ConfigurationElement {
 	 * @param value the value to convert (may be {@code null})
 	 * @param targetType the type that the value should be converted into
 	 * @return the converted value
-	 * @throws ConverterException when no converter can be found for the source type or when something goes wrong while
-	 *                            converting the value
+	 * @throws AluminumException when no converter can be found for the source type or when something goes wrong while
+	 *                           converting the value
 	 *
 	 */
-	<S> Object convert(S value, Type targetType) throws ConverterException;
+	<S> Object convert(S value, Type targetType) throws AluminumException;
 }

@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 
 import java.lang.reflect.Type;
@@ -45,11 +45,7 @@ public class ConstantFunctionArgument implements FunctionArgument {
 		this.converterRegistry = converterRegistry;
 	}
 
-	public Object getValue(Type type, Context context) throws FunctionException {
-		try {
-			return converterRegistry.convert(value, type);
-		} catch (ConverterException exception) {
-			throw new FunctionException(exception, "can't convert argument value");
-		}
+	public Object getValue(Type type, Context context) throws AluminumException {
+		return converterRegistry.convert(value, type);
 	}
 }

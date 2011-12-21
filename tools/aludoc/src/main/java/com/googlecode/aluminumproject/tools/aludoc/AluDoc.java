@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.tools.aludoc;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
@@ -24,9 +24,7 @@ import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
-import com.googlecode.aluminumproject.tools.ToolException;
 import com.googlecode.aluminumproject.writers.NullWriter;
 
 import java.io.File;
@@ -102,9 +100,9 @@ public class AluDoc {
 	/**
 	 * Generates documentation using a default template ({@code "aludoc/html/aludoc.alu"}).
 	 *
-	 * @throws ToolException when the documentation can't be generated
+	 * @throws AluminumException when the documentation can't be generated
 	 */
-	public void generate() throws ToolException {
+	public void generate() throws AluminumException {
 		generate("aludoc/html/aludoc.alu", "aluscript");
 	}
 
@@ -113,37 +111,29 @@ public class AluDoc {
 	 *
 	 * @param templateName the name of the template to process
 	 * @param parser the name of the parser to use
-	 * @throws ToolException when the documentation can't be generated
+	 * @throws AluminumException when the documentation can't be generated
 	 */
-	public void generate(String templateName, String parser) throws ToolException {
+	public void generate(String templateName, String parser) throws AluminumException {
 		Configuration configuration = createConfiguration();
 
 		Context context = new DefaultContext();
 		context.setVariable("libraries", getLibraries(configuration));
 		context.setVariable("location", location);
 
-		try {
-			new TemplateProcessor(configuration).processTemplate(templateName, parser, context, new NullWriter());
-		} catch (TemplateException exception) {
-			throw new ToolException(exception, "can't generate documentation");
-		}
+		new TemplateProcessor(configuration).processTemplate(templateName, parser, context, new NullWriter());
 	}
 
-	private Configuration createConfiguration() throws ToolException {
+	private Configuration createConfiguration() throws AluminumException {
 		ConfigurationParameters parameters = new ConfigurationParameters();
 
 		for (String name: configurationParameters.keySet()) {
 			parameters.addParameter(name, configurationParameters.get(name));
 		}
 
-		try {
-			return new DefaultConfiguration(parameters);
-		} catch (ConfigurationException exception) {
-			throw new ToolException(exception, "can't create configuration");
-		}
+		return new DefaultConfiguration(parameters);
 	}
 
-	private List<Library> getLibraries(Configuration configuration) throws ToolException {
+	private List<Library> getLibraries(Configuration configuration) throws AluminumException {
 		List<Library> libraries = new LinkedList<Library>();
 
 
@@ -157,7 +147,7 @@ public class AluDoc {
 		}
 
 		if (libraries.isEmpty()) {
-			throw new ToolException("no libraries were left to generate documentation for");
+			throw new AluminumException("no libraries were left to generate documentation for");
 		} else {
 			return libraries;
 		}

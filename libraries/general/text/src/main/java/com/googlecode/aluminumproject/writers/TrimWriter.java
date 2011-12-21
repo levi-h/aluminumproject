@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * Trims text as it is written. It has a normal and a multiline mode. In the normal mode, the text that's written is
@@ -44,7 +46,7 @@ public class TrimWriter extends AbstractDecorativeWriter {
 		this.buffer = new StringBuilder();
 	}
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 
 		if (object instanceof String) {
@@ -85,14 +87,14 @@ public class TrimWriter extends AbstractDecorativeWriter {
 		buffer.delete(0, buffer.length());
 	}
 
-	private void writeBuffer() {
+	private void writeBuffer() throws AluminumException {
 		if (buffer.length() > 0) {
 			getWriter().write(buffer.toString());
 			clearBuffer();
 		}
 	}
 
-	private void writeCharacter(char character) {
+	private void writeCharacter(char character) throws AluminumException {
 		getWriter().write(String.valueOf(character));
 	}
 

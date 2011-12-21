@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
@@ -44,10 +44,10 @@ public class WithWriter implements ActionContribution {
 	}
 
 	public void make(Context context, Writer originalWriter,
-			final ActionParameter parameter, ActionContributionOptions options) throws ActionException {
+			final ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		options.addInterceptor(new WriterReplacer() {
 			@Override
-			protected Writer createWriter(ActionContext actionContext) {
+			protected Writer createWriter(ActionContext actionContext) throws AluminumException {
 				return (Writer) parameter.getValue(Writer.class, actionContext.getContext());
 			}
 		});

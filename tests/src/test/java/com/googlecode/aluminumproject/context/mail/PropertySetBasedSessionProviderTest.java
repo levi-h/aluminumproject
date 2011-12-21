@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.context.mail;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
@@ -42,7 +42,7 @@ public class PropertySetBasedSessionProviderTest {
 		assert new PropertySetBasedSessionProvider("mail").provide(new DefaultContext()) != null;
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void creatingSessionProviderWithUnknownPropertySetNameShouldCauseException() {
 		new PropertySetBasedSessionProvider("nonexistent");
 	}

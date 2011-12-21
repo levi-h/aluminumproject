@@ -15,12 +15,10 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 
 import java.util.HashMap;
@@ -73,9 +71,9 @@ public class ElContext extends ELContext {
 	 *
 	 * @param context the context to use when finding variables
 	 * @param configuration the configuration used
-	 * @throws ConfigurationException when the custom EL resolvers can't be determined
+	 * @throws AluminumException when the custom EL resolvers can't be determined
 	 */
-	public ElContext(Context context, Configuration configuration) throws ConfigurationException {
+	public ElContext(Context context, Configuration configuration) throws AluminumException {
 		this.context = context;
 
 		this.configuration = configuration;
@@ -87,7 +85,7 @@ public class ElContext extends ELContext {
 		putContext(getClass(), this);
 	}
 
-	private ELResolver createElResolver() throws ConfigurationException {
+	private ELResolver createElResolver() throws AluminumException {
 		CompositeELResolver elResolver = new CompositeELResolver();
 
 		addCustomElResolvers(elResolver, EL_RESOLVER_WITHOUT_BASE_PACKAGES);
@@ -104,25 +102,17 @@ public class ElContext extends ELContext {
 	}
 
 	private void addCustomElResolvers(
-			CompositeELResolver elResolver, String elResolverPackages) throws ConfigurationException {
+			CompositeELResolver elResolver, String elResolverPackages) throws AluminumException {
 		for (String elResolverPackage: configuration.getParameters().getValues(elResolverPackages)) {
-			List<Class<?>> elResolverClasses;
-
-			try {
-				elResolverClasses = TypeFinder.find(new TypeFinder.TypeFilter() {
-					public boolean accepts(Class<?> type) {
-						return ELResolver.class.isAssignableFrom(type) && !type.isAnnotationPresent(Ignored.class);
-					}
-				}, elResolverPackage);
-			} catch (UtilityException exception) {
-				throw new ConfigurationException(exception, "can't ");
-			}
+			List<Class<?>> elResolverClasses = TypeFinder.find(new TypeFinder.TypeFilter() {
+				public boolean accepts(Class<?> type) {
+					return ELResolver.class.isAssignableFrom(type) && !type.isAnnotationPresent(Ignored.class);
+				}
+			}, elResolverPackage);
 
 			for (Class<?> elResolverClass: elResolverClasses) {
-				ConfigurationElementFactory configurationElementFactory =
-					configuration.getConfigurationElementFactory();
-
-				elResolver.add(configurationElementFactory.instantiate(elResolverClass.getName(), ELResolver.class));
+				elResolver.add(configuration.getConfigurationElementFactory().instantiate(
+					elResolverClass.getName(), ELResolver.class));
 			}
 		}
 	}

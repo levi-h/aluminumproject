@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.xml;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
@@ -51,14 +51,14 @@ public class XmlLibrary extends AbstractLibrary {
 	}
 
 	@Override
-	public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
+	public ActionFactory getDynamicActionFactory(String name) throws AluminumException {
 		ActionFactory actionFactory = new DefaultActionFactory(DynamicElement.class);
 		initialiseLibraryElement(actionFactory);
 		return actionFactory;
 	}
 
 	@Override
-	public ActionContributionFactory getDynamicActionContributionFactory(String name) {
+	public ActionContributionFactory getDynamicActionContributionFactory(String name) throws AluminumException {
 		ActionContributionFactory actionContributionFactory =
 			new DefaultActionContributionFactory(DynamicAttribute.class);
 		initialiseLibraryElement(actionContributionFactory);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.context;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Set;
 
@@ -42,7 +44,7 @@ public class DefaultScopeTest {
 		assert variableNames.isEmpty();
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void retrievingNonexistingVariableShouldCauseException() {
 		scope.getVariable("nonexisting");
 	}
@@ -72,7 +74,7 @@ public class DefaultScopeTest {
 		assert previousValue.equals("old");
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void removingNonexistingVariableShouldCauseException() {
 		scope.removeVariable("nonexisting");
 	}

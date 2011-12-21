@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.ds.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.ds.DsLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +41,7 @@ public class SortTest extends DsLibraryTest {
 		assert sortedList.equals(Arrays.asList("a", "b", "c", "d"));
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void sortingListWithNonComparableElementsShouldCauseException() {
 		Context context = new DefaultContext();
 		context.setVariable("list", Arrays.<Class<?>>asList(Short.class, Integer.class, Long.class));

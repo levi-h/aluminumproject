@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.writers.AbstractDecorativeWriter;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ import org.testng.annotations.Test;
 public class AbstractActionTest {
 	public static class Grandparent extends AbstractContainerAction<Integer> {
 		@Override
-		public void execute(Context context, Writer writer) throws WriterException {
+		public void execute(Context context, Writer writer) throws AluminumException {
 			writer.write("I'm the grandparent!");
 		}
 
@@ -44,7 +43,7 @@ public class AbstractActionTest {
 
 	public static class Parent extends AbstractContainerAction<Float> {
 		@Override
-		public void execute(Context context, Writer writer) throws WriterException {
+		public void execute(Context context, Writer writer) throws AluminumException {
 			writer.write("I'm the parent!");
 		}
 
@@ -54,7 +53,7 @@ public class AbstractActionTest {
 	}
 
 	public static class Action extends AbstractAction {
-		public void execute(Context context, Writer writer) throws WriterException {
+		public void execute(Context context, Writer writer) throws AluminumException {
 			writer.write("I'm the action itself!");
 		}
 	}
@@ -76,8 +75,7 @@ public class AbstractActionTest {
 		action.setParent(parent);
 
 		parentBody = new ActionBody() {
-			public void invoke(Context context, Writer writer)
-					throws ActionException, ContextException, WriterException {
+			public void invoke(Context context, Writer writer) throws AluminumException {
 				action.execute(context, writer);
 			}
 
@@ -138,7 +136,7 @@ public class AbstractActionTest {
 	@Test(dependsOnMethods = "bodyListShouldBeObtainable")
 	public void obtainingBodyListShouldRespectDecorativeWriters() {
 		List<?> bodyList = parent.getBodyList(new DefaultContext(), new AbstractDecorativeWriter(new NullWriter()) {
-			public void write(Object object) throws WriterException {
+			public void write(Object object) throws AluminumException {
 				checkOpen();
 
 				getWriter().write(((String) object).toUpperCase());
@@ -156,12 +154,12 @@ public class AbstractActionTest {
 		assert bodyObject.equals("I'm the action itself!");
 	}
 
-	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = ActionException.class)
+	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = AluminumException.class)
 	public void obtainingBodyObjectWithWrongTypeShouldCauseException() {
 		parent.getBodyObject(Integer.class, new DefaultContext(), new NullWriter());
 	}
 
-	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = ActionException.class)
+	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = AluminumException.class)
 	public void obtainingBodyObjectFromActionWhoseBodyDoesNotWriteAnythingShouldCauseException() {
 		action.setBody(new ActionBody() {
 			public void invoke(Context context, Writer writer) {}
@@ -174,7 +172,7 @@ public class AbstractActionTest {
 		action.getBodyObject(Object.class, new DefaultContext(), new NullWriter());
 	}
 
-	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = ActionException.class)
+	@Test(dependsOnMethods = "bodyObjectShouldBeObtainable", expectedExceptions = AluminumException.class)
 	public void obtainingBodyObjectFromActionWhoseBodyWritesMultipleObjectsShouldCauseException() {
 		action.setBody(new ActionBody() {
 			public void invoke(Context context, Writer writer) {
@@ -201,7 +199,7 @@ public class AbstractActionTest {
 	@Test(dependsOnMethods = "bodyTextShouldBeObtainable")
 	public void obtainingBodyTextShouldRespectDecorativeWriters() {
 		String bodyText = parent.getBodyText(new DefaultContext(), new AbstractDecorativeWriter(new NullWriter()) {
-			public void write(Object object) throws WriterException {
+			public void write(Object object) throws AluminumException {
 				checkOpen();
 
 				getWriter().write(String.format("*%s*", object));

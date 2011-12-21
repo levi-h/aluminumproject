@@ -15,16 +15,14 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
@@ -60,7 +58,7 @@ public class LocalisedParameter implements ActionContribution {
 	}
 
 	public void make(Context context, Writer writer,
-			ActionParameter parameter, ActionContributionOptions options) throws ActionException{
+			ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		String name = descriptor.getName();
 
 		String key = (String) parameter.getValue(String.class, context);
@@ -91,25 +89,14 @@ public class LocalisedParameter implements ActionContribution {
 			return key;
 		}
 
-		public Object getValue(Type type, Context context) throws ActionException {
-			ResourceBundle resourceBundle;
-
-			try {
-				resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
-			} catch (ContextException exception) {
-				throw new ActionException(exception, "can't obtain resource bundle");
-			}
+		public Object getValue(Type type, Context context) throws AluminumException {
+			ResourceBundle resourceBundle =
+				GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
 
 			if (Collections.list(resourceBundle.getKeys()).contains(key)) {
-				Object resource = resourceBundle.getObject(key);
-
-				try {
-					return converterRegistry.convert(resource, type);
-				} catch (ConverterException exception) {
-					throw new ActionException(exception, "can't convert localised resource ", resource, " into ", type);
-				}
+				return converterRegistry.convert(resourceBundle.getObject(key), type);
 			} else {
-				throw new ActionException("can't find localised resource with key '", key, "'");
+				throw new AluminumException("can't find localised resource with key '", key, "'");
 			}
 		}
 	}

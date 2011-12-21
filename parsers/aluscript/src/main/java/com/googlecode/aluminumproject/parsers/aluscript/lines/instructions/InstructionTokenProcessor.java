@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.instructions;
 
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.utilities.text.Splitter.TokenProcessor;
 
@@ -66,9 +66,9 @@ class InstructionTokenProcessor implements TokenProcessor {
 		stateTransitions.add(new InstructionStateTransition(READY, INSTRUCTION_NAME_OR_PREFIX, "@ *") {
 			@Override
 			public void makeTransition(
-					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluScriptException {
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				if (!token.equals("")) {
-					throw new AluScriptException("unexpected text before instruction: '", token, "'");
+					throw new AluminumException("unexpected text before instruction: '", token, "'");
 				}
 
 				instructionTokenProcessor.createInstruction();
@@ -77,14 +77,16 @@ class InstructionTokenProcessor implements TokenProcessor {
 
 		stateTransitions.add(new InstructionStateTransition(INSTRUCTION_NAME_OR_PREFIX, INSTRUCTION_NAME, " *\\. *") {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				instructionTokenProcessor.getInstruction(false).setNamePrefix(token);
 			}
 		});
 
 		stateTransitions.add(new InstructionStateTransition(INSTRUCTION_NAME_OR_PREFIX, INSTRUCTION_NAME, " *\\. *") {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				instructionTokenProcessor.getInstruction(false).setNamePrefix(token);
 			}
 		});
@@ -93,21 +95,24 @@ class InstructionTokenProcessor implements TokenProcessor {
 
 		stateTransitions.add(new InstructionStateTransition(instructionName, DONE, null) {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				instructionTokenProcessor.getInstruction(false).setName(token);
 			}
 		});
 
 		stateTransitions.add(new InstructionStateTransition(instructionName, PARAMETER_NAME_OR_PREFIX, " *\\( *") {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				instructionTokenProcessor.getInstruction(false).setName(token);
 			}
 		});
 
 		stateTransitions.add(new InstructionStateTransition(PARAMETER_NAME_OR_PREFIX, PARAMETER_NAME, " *\\. *") {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				Instruction instruction = instructionTokenProcessor.getInstruction(false);
 
 				instruction.createParameter();
@@ -119,7 +124,8 @@ class InstructionTokenProcessor implements TokenProcessor {
 
 		stateTransitions.add(new InstructionStateTransition(parameterName, PARAMETER_VALUE, " *: *") {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				Instruction instruction = instructionTokenProcessor.getInstruction(false);
 
 				if (instruction.getParameter() == null) {
@@ -132,7 +138,8 @@ class InstructionTokenProcessor implements TokenProcessor {
 
 		stateTransitions.add(new InstructionStateTransition(PARAMETER_VALUE, PARAMETER_NAME_OR_PREFIX, ", *") {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				Instruction instruction = instructionTokenProcessor.getInstruction(false);
 
 				instruction.getParameter().setValue(token);
@@ -142,7 +149,8 @@ class InstructionTokenProcessor implements TokenProcessor {
 
 		stateTransitions.add(new InstructionStateTransition(PARAMETER_VALUE, AFTER_PARAMETERS, " *\\)") {
 			@Override
-			public void makeTransition(InstructionTokenProcessor instructionTokenProcessor, String token) {
+			public void makeTransition(
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				Instruction instruction = instructionTokenProcessor.getInstruction(false);
 
 				instruction.getParameter().setValue(token);
@@ -153,9 +161,9 @@ class InstructionTokenProcessor implements TokenProcessor {
 		stateTransitions.add(new InstructionStateTransition(AFTER_PARAMETERS, DONE, null) {
 			@Override
 			public void makeTransition(
-					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluScriptException {
+					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
 				if (!token.equals("")) {
-					throw new AluScriptException("unexpected text after parameters: '", token, "'");
+					throw new AluminumException("unexpected text after parameters: '", token, "'");
 				}
 			}
 		});
@@ -192,9 +200,9 @@ class InstructionTokenProcessor implements TokenProcessor {
 	 * Returns the instruction that was built and filled by this instruction token processor.
 	 *
 	 * @return this instruction token processor's instruction
-	 * @throws AluScriptException when the instruction is incomplete
+	 * @throws AluminumException when the instruction is incomplete
 	 */
-	public Instruction getInstruction() throws AluScriptException {
+	public Instruction getInstruction() throws AluminumException {
 		return getInstruction(true);
 	}
 
@@ -203,18 +211,18 @@ class InstructionTokenProcessor implements TokenProcessor {
 	 *
 	 * @param requireCompleteInstruction whether the instruction should be complete
 	 * @return this instruction token processor's instruction
-	 * @throws AluScriptException when {@code requireCompleteInstruction} is {@code true} and the instruction is
-	 *                            incomplete
+	 * @throws AluminumException when {@code requireCompleteInstruction} is {@code true} and the instruction is
+	 *                           incomplete
 	 */
-	protected Instruction getInstruction(boolean requireCompleteInstruction) throws AluScriptException {
+	protected Instruction getInstruction(boolean requireCompleteInstruction) throws AluminumException {
 		if (requireCompleteInstruction && (state != InstructionState.DONE)) {
-			throw new AluScriptException("the instruction is incomplete");
+			throw new AluminumException("the instruction is incomplete");
 		}
 
 		return instruction;
 	}
 
-	public void process(String token, String separator, String separatorPattern) throws AluScriptException {
+	public void process(String token, String separator, String separatorPattern) throws AluminumException {
 		Iterator<InstructionStateTransition> it = stateTransitions.iterator();
 
 		InstructionStateTransition stateTransition = null;

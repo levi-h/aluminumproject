@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.interceptors;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 
@@ -40,7 +41,7 @@ public class TestActionInterceptor extends AbstractActionInterceptor {
 		super(phases);
 	}
 
-	public void intercept(ActionContext actionContext) throws InterceptionException {
+	public void intercept(ActionContext actionContext) throws AluminumException {
 		String actionName = actionContext.getActionFactory().getInformation().getName();
 		String phase = actionContext.getPhase().name().toLowerCase();
 

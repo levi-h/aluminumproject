@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.core.CoreLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import org.testng.annotations.Test;
 
@@ -41,7 +41,7 @@ public class BlocksTest extends CoreLibraryTest {
 		assert output.equals("block");
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void namingMultipleBlocksTheSameShouldCauseException() {
 		processTemplate("block-duplication");
 	}

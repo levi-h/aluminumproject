@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.cli;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -48,11 +48,7 @@ public class PropertyEffect<T> implements OptionEffect<Object> {
 		this.value = value;
 	}
 
-	public void apply(OptionSet options, OptionSpec<Object> option) throws CommandException {
-		try {
-			ReflectionUtilities.setProperty(command, propertyType, propertyName, value);
-		} catch (UtilityException exception) {
-			throw new CommandException(exception, "Options ", option.options(), " can't be applied.");
-		}
+	public void apply(OptionSet options, OptionSpec<Object> option) throws AluminumException {
+		ReflectionUtilities.setProperty(command, propertyType, propertyName, value);
 	}
 }

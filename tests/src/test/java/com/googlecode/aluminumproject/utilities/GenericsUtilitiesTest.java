@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.googlecode.aluminumproject.utilities;
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getName;
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getType;
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getTypeArgument;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.io.Serializable;
 import java.lang.reflect.GenericArrayType;
@@ -92,7 +94,7 @@ public class GenericsUtilitiesTest {
 		assert getTypeArgument(SubclassOfSubclass.class, Superclass.class, 1) == Double.class;
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void requestingAbstractTypeArgumentShouldCauseException() {
 		getTypeArgument(Interface.class, Interface.class, 0);
 	}
@@ -284,7 +286,7 @@ public class GenericsUtilitiesTest {
 		assert getType("boolean") == Boolean.TYPE;
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void obtainingNonexistentTypeShouldCauseException() {
 		getType("java.util.Collection<int>");
 	}

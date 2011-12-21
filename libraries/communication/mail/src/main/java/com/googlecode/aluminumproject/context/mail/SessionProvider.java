@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.mail;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 import javax.mail.Session;
 
@@ -31,7 +31,7 @@ public interface SessionProvider {
 	 *
 	 * @param context the current context
 	 * @return the session to use
-	 * @throws ContextException when no session can be provided
+	 * @throws AluminumException when no session can be provided
 	 */
-	Session provide(Context context) throws ContextException;
+	Session provide(Context context) throws AluminumException;
 }

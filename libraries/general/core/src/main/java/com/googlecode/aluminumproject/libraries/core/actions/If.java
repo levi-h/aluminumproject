@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.annotations.UsableAsAction;
 import com.googlecode.aluminumproject.context.Context;
@@ -42,7 +43,8 @@ public class If implements ActionContribution {
 		return true;
 	}
 
-	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options) {
+	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
+			throws AluminumException {
 		if (!((Boolean) parameter.getValue(Boolean.TYPE, context)).booleanValue()) {
 			options.skipAction();
 		}

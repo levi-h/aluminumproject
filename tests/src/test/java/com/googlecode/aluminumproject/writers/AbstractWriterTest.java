@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -32,7 +34,7 @@ public class AbstractWriterTest {
 		writer.write(new Object());
 	}
 
-	@Test(expectedExceptions = WriterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void clearingWriterShouldCauseException() {
 		writer.clear();
 	}
@@ -52,19 +54,19 @@ public class AbstractWriterTest {
 		assert writer.isFlushed();
 	}
 
-	@Test(dependsOnMethods = "writingToOpenWriterShouldBePossible", expectedExceptions = WriterException.class)
+	@Test(dependsOnMethods = "writingToOpenWriterShouldBePossible", expectedExceptions = AluminumException.class)
 	public void writingToClosedWriterShouldCauseException() {
 		writer.close();
 		writer.write(new Object());
 	}
 
-	@Test(dependsOnMethods = "flushingOpenWriterShouldBePossible", expectedExceptions = WriterException.class)
+	@Test(dependsOnMethods = "flushingOpenWriterShouldBePossible", expectedExceptions = AluminumException.class)
 	public void flushingClosedWriterShouldCauseException() {
 		writer.close();
 		writer.flush();
 	}
 
-	@Test(dependsOnMethods = "closingOpenWriterShouldBePossible", expectedExceptions = WriterException.class)
+	@Test(dependsOnMethods = "closingOpenWriterShouldBePossible", expectedExceptions = AluminumException.class)
 	public void closingClosedWriterShouldCauseException() {
 		writer.close();
 		writer.close();

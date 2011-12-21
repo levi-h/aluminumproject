@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,15 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NameBasedResourceBundleProvider;
 import com.googlecode.aluminumproject.context.g11n.ResourceBundleProvider;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
@@ -50,23 +49,19 @@ public class WithResourceBundle implements ActionContribution {
 	}
 
 	public void make(Context context, Writer writer,
-			final ActionParameter parameter, ActionContributionOptions options) {
+			final ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.CREATION, ActionPhase.EXECUTION) {
 			private ResourceBundleProvider resourceBundleProvider;
 
-			public void intercept(ActionContext actionContext) throws InterceptionException {
+			public void intercept(ActionContext actionContext) throws AluminumException {
 				Context context = actionContext.getContext();
 				GlobalisationContext globalisationContext = GlobalisationContext.from(context);
 
 				if (actionContext.getPhase() == ActionPhase.CREATION) {
 					resourceBundleProvider = globalisationContext.getResourceBundleProvider();
 
-					try {
-						globalisationContext.setResourceBundleProvider(
-							new NameBasedResourceBundleProvider(((String) parameter.getValue(String.class, context))));
-					} catch (ActionException exception) {
-						throw new InterceptionException(exception, "can't determine base name for resource bundle");
-					}
+					globalisationContext.setResourceBundleProvider(
+						new NameBasedResourceBundleProvider(((String) parameter.getValue(String.class, context))));
 
 					actionContext.proceed();
 				} else {

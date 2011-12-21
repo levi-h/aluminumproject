@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.resources;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 
@@ -31,7 +32,7 @@ public interface TemplateStoreFinder extends ConfigurationElement {
 	 *
 	 * @param name the name of the template to find an output stream for
 	 * @return an output stream where the template can be written to
-	 * @throws ResourceException when no output stream can be found for the template
+	 * @throws AluminumException when no output stream can be found for the template
 	 */
-	OutputStream find(String name) throws ResourceException;
+	OutputStream find(String name) throws AluminumException;
 }

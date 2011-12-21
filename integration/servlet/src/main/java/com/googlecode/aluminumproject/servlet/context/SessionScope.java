@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.servlet.context;
 
-import com.googlecode.aluminumproject.context.ContextException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Scope;
 import com.googlecode.aluminumproject.utilities.Utilities;
 
@@ -70,13 +70,13 @@ public class SessionScope implements Scope {
 		return variableNames;
 	}
 
-	public Object getVariable(String name) throws ContextException {
+	public Object getVariable(String name) throws AluminumException {
 		HttpSession session = request.getSession(false);
 
 		Object value = (session == null) ? null : session.getAttribute(name);
 
 		if (value == null) {
-			throw new ContextException("can't find a session attribute named '", name, "'");
+			throw new AluminumException("can't find a session attribute named '", name, "'");
 		}
 
 		return value;
@@ -92,7 +92,7 @@ public class SessionScope implements Scope {
 		return previousValue;
 	}
 
-	public Object removeVariable(String name) throws ContextException {
+	public Object removeVariable(String name) throws AluminumException {
 		Object value = getVariable(name);
 
 		request.getSession().removeAttribute(name);

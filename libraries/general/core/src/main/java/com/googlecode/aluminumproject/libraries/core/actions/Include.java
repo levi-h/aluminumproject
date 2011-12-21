@@ -15,22 +15,19 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.core.actions.Blocks.Block;
 import com.googlecode.aluminumproject.libraries.core.actions.Blocks.BlockContents;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Map;
 
@@ -58,17 +55,13 @@ public class Include extends AbstractDynamicallyParameterisableAction {
 	 */
 	public Include() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		getBody().invoke(context, new NullWriter());
 
 		String parser = this.parser;
 
 		if (parser == null) {
-			try {
-				parser = TemplateInformation.from(context).getParser();
-			} catch (TemplateException exception) {
-				throw new ActionException(exception, "can't obtain parser");
-			}
+			parser = TemplateInformation.from(context).getParser();
 		}
 
 		Context subcontext = context.createSubcontext();
@@ -84,10 +77,6 @@ public class Include extends AbstractDynamicallyParameterisableAction {
 
 		logger.debug("including template '", name, "' using parser '", parser, "'");
 
-		try {
-			new TemplateProcessor(configuration).processTemplate(name, parser, subcontext, writer);
-		} catch (TemplateException exception) {
-			throw new ActionException(exception, "can't include template '", name, "'");
-		}
+		new TemplateProcessor(configuration).processTemplate(name, parser, subcontext, writer);
 	}
 }

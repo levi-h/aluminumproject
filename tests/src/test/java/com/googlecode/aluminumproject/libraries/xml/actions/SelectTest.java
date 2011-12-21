@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.xml.XmlLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import java.util.List;
 
@@ -81,7 +81,7 @@ public class SelectTest extends XmlLibraryTest {
 		assert thirdNamespace.equals("http://www.w3.org/XML/1998/namespace");
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void supplyingDuplicateNamespacePrefixesAsXPathContextShouldCauseException() {
 		processTemplate("select-namespaces-with-illegal-context");
 	}
@@ -125,7 +125,7 @@ public class SelectTest extends XmlLibraryTest {
 		assert comment.equals("TODO: pages");
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void invalidExpressionShouldCauseException() {
 		processTemplate("select-with-invalid-expression");
 	}

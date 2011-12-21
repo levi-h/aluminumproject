@@ -15,13 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -49,7 +47,7 @@ public class Each extends AbstractAction {
 		informationName = DEFAULT_INFORMATION_NAME;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		String scope = context.addScope(EACH_SCOPE, false);
 
 		ElementProvider elementProvider = new ElementProvider(elements.iterator());

@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.mail.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import javax.mail.Address;
@@ -40,11 +40,11 @@ public class AddRecipient extends AbstractAction {
 		type = RecipientType.TO;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		Send send = findAncestorOfType(Send.class);
 
 		if (send == null) {
-			throw new ActionException("'add recipient' actions can only be used inside 'send' actions");
+			throw new AluminumException("'add recipient' actions can only be used inside 'send' actions");
 		}
 
 		send.addRecipient(type, address);

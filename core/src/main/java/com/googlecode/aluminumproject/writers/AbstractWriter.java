@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.writers;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
@@ -47,23 +48,23 @@ public abstract class AbstractWriter implements Writer {
 	 * {@link #write(Object) write}, {@link #clear() clear}, and {@link #flush() flush} methods to avoid operating on a
 	 * closed writer.
 	 *
-	 * @throws WriterException when this writer is closed
+	 * @throws AluminumException when this writer is closed
 	 */
-	protected void checkOpen() throws WriterException {
+	protected void checkOpen() throws AluminumException {
 		if (closed) {
-			throw new WriterException("the writer is closed");
+			throw new AluminumException("the writer is closed");
 		}
 	}
 
-	public void clear() throws WriterException {
-		throw new WriterException("clearing this writer is not supported");
+	public void clear() throws AluminumException {
+		throw new AluminumException("clearing this writer is not supported");
 	}
 
-	public void flush() throws WriterException {
+	public void flush() throws AluminumException {
 		checkOpen();
 	}
 
-	public void close() throws WriterException {
+	public void close() throws AluminumException {
 		checkOpen();
 
 		flush();

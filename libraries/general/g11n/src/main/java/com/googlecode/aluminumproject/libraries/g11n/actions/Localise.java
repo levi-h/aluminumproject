@@ -15,16 +15,14 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.ResourceBundleProvider;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.ResourceBundle;
@@ -54,7 +52,7 @@ public class Localise extends AbstractAction {
 		defaultResource = NO_DEFAULT;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		Object resource;
 
 		ResourceBundle resourceBundle = GlobalisationContext.from(context).getResourceBundleProvider().provide(context);
@@ -68,7 +66,7 @@ public class Localise extends AbstractAction {
 		} else if (allowMissingKey) {
 			resource = String.format("??%s??", key);
 		} else {
-			throw new ActionException("can't find localised resource with key '", key, "'");
+			throw new AluminumException("can't find localised resource with key '", key, "'");
 		}
 
 		logger.debug("writing localised resource ", resource);

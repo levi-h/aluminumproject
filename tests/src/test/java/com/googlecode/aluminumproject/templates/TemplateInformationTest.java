@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.actions.Action;
@@ -76,7 +77,7 @@ public class TemplateInformationTest {
 
 	@Test(
 		dependsOnMethods = "newTemplateInformationShouldNotHaveCurrentTemplateElement",
-		expectedExceptions = TemplateException.class
+		expectedExceptions = AluminumException.class
 	)
 	public void removingCurrentTemplateElementWithoutPreviousCurrentTemplateElementShouldCauseException() {
 		TemplateInformation.from(new DefaultContext()).removeCurrentTemplateElement();
@@ -108,7 +109,7 @@ public class TemplateInformationTest {
 
 	@Test(
 		dependsOnMethods = "newTemplateInformationShouldNotHaveCurrentAction",
-		expectedExceptions = TemplateException.class
+		expectedExceptions = AluminumException.class
 	)
 	public void removingCurrentActionWithoutPreviousCurrentActionShouldCauseException() {
 		TemplateInformation.from(new DefaultContext()).removeCurrentAction();

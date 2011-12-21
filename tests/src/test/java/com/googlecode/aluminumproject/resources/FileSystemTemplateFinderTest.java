@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.resources;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 
@@ -35,7 +35,7 @@ public class FileSystemTemplateFinderTest extends TemplateFinderTest {
 		classLoader = Thread.currentThread().getContextClassLoader();
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void omittingTemplateDirectoriesShouldCauseException() {
 		TemplateFinder templateFinder = new FileSystemTemplateFinder();
 		templateFinder.initialise(new TestConfiguration(new ConfigurationParameters()));
@@ -64,7 +64,7 @@ public class FileSystemTemplateFinderTest extends TemplateFinderTest {
 
 	@Test(
 		dependsOnMethods = "templatesShouldBeFindableInTemplateDirectory",
-		expectedExceptions = ResourceException.class
+		expectedExceptions = AluminumException.class
 	)
 	public void tryingToFindNonexistentTemplateShouldCauseException() {
 		ConfigurationParameters parameters = new ConfigurationParameters();

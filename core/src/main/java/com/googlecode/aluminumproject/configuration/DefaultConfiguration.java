@@ -19,6 +19,7 @@ import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPa
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.instantiate;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.isAbstract;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.cache.Cache;
@@ -37,7 +38,6 @@ import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
@@ -142,9 +142,9 @@ public class DefaultConfiguration implements Configuration {
 	/**
 	 * Creates a default configuration without any parameters.
 	 *
-	 * @throws ConfigurationException when the configuration can't be created
+	 * @throws AluminumException when the configuration can't be created
 	 */
-	public DefaultConfiguration() throws ConfigurationException {
+	public DefaultConfiguration() throws AluminumException {
 		this(new ConfigurationParameters());
 	}
 
@@ -152,9 +152,9 @@ public class DefaultConfiguration implements Configuration {
 	 * Creates a default configuration.
 	 *
 	 * @param parameters the configuration parameters to use
-	 * @throws ConfigurationException when the configuration can't be created
+	 * @throws AluminumException when the configuration can't be created
 	 */
-	public DefaultConfiguration(ConfigurationParameters parameters) throws ConfigurationException {
+	public DefaultConfiguration(ConfigurationParameters parameters) throws AluminumException {
 		this.parameters = parameters;
 
 		open = true;
@@ -178,23 +178,19 @@ public class DefaultConfiguration implements Configuration {
 		initialise();
 	}
 
-	private void createConfigurationElementFactory() {
+	private void createConfigurationElementFactory() throws AluminumException {
 		String configurationElementFactoryClassName = parameters.getValue(
 			CONFIGURATION_ELEMENT_FACTORY_CLASS, DefaultConfigurationElementFactory.class.getName());
 
 		logger.debug("creating configuration element factory of type ", configurationElementFactoryClassName);
 
-		try {
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-			configurationElementFactory =
-				instantiate(configurationElementFactoryClassName, ConfigurationElementFactory.class, classLoader);
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't create configuration element factory");
-		}
+		configurationElementFactory =
+			instantiate(configurationElementFactoryClassName, ConfigurationElementFactory.class, classLoader);
 	}
 
-	private void createConverterRegistry() {
+	private void createConverterRegistry() throws AluminumException {
 		String converterRegistryClassName =
 			parameters.getValue(CONVERTER_REGISTRY_CLASS, DefaultConverterRegistry.class.getName());
 
@@ -204,7 +200,7 @@ public class DefaultConfiguration implements Configuration {
 			configurationElementFactory.instantiate(converterRegistryClassName, ConverterRegistry.class);
 	}
 
-	private void createTemplateElementFactory() {
+	private void createTemplateElementFactory() throws AluminumException {
 		String templateElementFactoryClassName =
 			parameters.getValue(TEMPLATE_ELEMENT_FACTORY_CLASS, DefaultTemplateElementFactory.class.getName());
 
@@ -214,7 +210,7 @@ public class DefaultConfiguration implements Configuration {
 			configurationElementFactory.instantiate(templateElementFactoryClassName, TemplateElementFactory.class);
 	}
 
-	private void createTemplateFinder() {
+	private void createTemplateFinder() throws AluminumException {
 		String templateFinderClassName =
 			parameters.getValue(TEMPLATE_FINDER_CLASS, ClassPathTemplateFinder.class.getName());
 
@@ -223,7 +219,7 @@ public class DefaultConfiguration implements Configuration {
 		templateFinder = configurationElementFactory.instantiate(templateFinderClassName, TemplateFinder.class);
 	}
 
-	private void createTemplateStoreFinder() {
+	private void createTemplateStoreFinder() throws AluminumException {
 		String templateStoreFinderClassName =
 			parameters.getValue(TEMPLATE_STORE_FINDER_CLASS, InMemoryTemplateStoreFinder.class.getName());
 
@@ -233,7 +229,7 @@ public class DefaultConfiguration implements Configuration {
 			configurationElementFactory.instantiate(templateStoreFinderClassName, TemplateStoreFinder.class);
 	}
 
-	private void createCache() {
+	private void createCache() throws AluminumException {
 		String cacheClassName = parameters.getValue(CACHE_CLASS, null);
 
 		if (cacheClassName == null) {
@@ -245,23 +241,17 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	private void createLibraries() throws ConfigurationException {
+	private void createLibraries() throws AluminumException {
 		String[] libraryPackages = getConfiguredPackages(LIBRARY_PACKAGES, getPackageName(Library.class));
 
 		logger.debug("libraries will be looked for in ", libraryPackages);
 
-		List<Class<?>> libraryClasses;
-
-		try {
-			libraryClasses = TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return Library.class.isAssignableFrom(type) && !isAbstract(type)
-						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, libraryPackages);
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find libraries");
-		}
+		List<Class<?>> libraryClasses = TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return Library.class.isAssignableFrom(type) && !isAbstract(type)
+					&& !type.isAnnotationPresent(Ignored.class);
+			}
+		}, libraryPackages);
 
 		libraries = new ArrayList<Library>();
 
@@ -272,23 +262,17 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	private void createParsers() throws ConfigurationException {
+	private void createParsers() throws AluminumException {
 		String[] parserPackages = getConfiguredPackages(PARSER_PACKAGES, getPackageName(Parser.class));
 
 		logger.debug("parsers will be looked for in ", parserPackages);
 
-		List<Class<?>> parserClasses;
-
-		try {
-			parserClasses = TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return Parser.class.isAssignableFrom(type) && !isAbstract(type)
-						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, parserPackages);
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find parsers");
-		}
+		List<Class<?>> parserClasses = TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return Parser.class.isAssignableFrom(type) && !isAbstract(type)
+					&& !type.isAnnotationPresent(Ignored.class);
+			}
+		}, parserPackages);
 
 		parsers = new HashMap<String, Parser>();
 
@@ -296,7 +280,7 @@ public class DefaultConfiguration implements Configuration {
 			String name = getNameBasedOnAnnotationOrPackageName(parserClass);
 
 			if (parsers.containsKey(name)) {
-				throw new ConfigurationException("duplicate parser name: '", name, "' ",
+				throw new AluminumException("duplicate parser name: '", name, "' ",
 					"(types: ", parsers.get(name).getClass().getName(), " and ", parserClass.getName(), ")");
 			} else {
 				logger.debug("registering parser of type ", parserClass.getName(), " under name '", name, "'");
@@ -306,23 +290,17 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	private void createSerialisers() throws ConfigurationException {
+	private void createSerialisers() throws AluminumException {
 		String[] serialiserPackages = getConfiguredPackages(SERIALISER_PACKAGES, getPackageName(Serialiser.class));
 
 		logger.debug("serialisers will be looked for in ", serialiserPackages);
 
-		List<Class<?>> serialiserClasses;
-
-		try {
-			serialiserClasses = TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return Serialiser.class.isAssignableFrom(type) && !isAbstract(type)
-						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, serialiserPackages);
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find serialisers");
-		}
+		List<Class<?>> serialiserClasses = TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return Serialiser.class.isAssignableFrom(type) && !isAbstract(type)
+					&& !type.isAnnotationPresent(Ignored.class);
+			}
+		}, serialiserPackages);
 
 		serialisers = new HashMap<String, Serialiser>();
 
@@ -330,7 +308,7 @@ public class DefaultConfiguration implements Configuration {
 			String name = getNameBasedOnAnnotationOrPackageName(serialiserClass);
 
 			if (serialisers.containsKey(name)) {
-				throw new ConfigurationException("duplicate serialiser name: '", name, "' ",
+				throw new AluminumException("duplicate serialiser name: '", name, "' ",
 					"(types: ", serialisers.get(name).getClass().getName(), " and ", serialiserClass.getName(), ")");
 			} else {
 				logger.debug("registering serialiser of type ", serialiserClass.getName(), " under name '", name, "'");
@@ -355,22 +333,16 @@ public class DefaultConfiguration implements Configuration {
 		return name;
 	}
 
-	private void createContextEnrichers() throws ConfigurationException {
+	private void createContextEnrichers() throws AluminumException {
 		String[] contextEnricherPackages =
 			getConfiguredPackages(CONTEXT_ENRICHER_PACKAGES, getPackageName(ContextEnricher.class));
 
-		List<Class<?>> contextEnricherClasses;
-
-		try {
-			contextEnricherClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return ContextEnricher.class.isAssignableFrom(type) && !isAbstract(type)
-						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, contextEnricherPackages));
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find context enrichers");
-		}
+		List<Class<?>> contextEnricherClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return ContextEnricher.class.isAssignableFrom(type) && !isAbstract(type)
+					&& !type.isAnnotationPresent(Ignored.class);
+			}
+		}, contextEnricherPackages));
 
 		contextEnrichers = new ArrayList<ContextEnricher>();
 
@@ -382,22 +354,16 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	private void createExpressionFactories() throws ConfigurationException {
+	private void createExpressionFactories() throws AluminumException {
 		String[] expressionFactoryPackages =
 			getConfiguredPackages(EXPRESSION_FACTORY_PACKAGES, getPackageName(ExpressionFactory.class));
 
-		List<Class<?>> expressionFactoryClasses;
-
-		try {
-			expressionFactoryClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return ExpressionFactory.class.isAssignableFrom(type) && !isAbstract(type)
-						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, expressionFactoryPackages));
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find expression factories");
-		}
+		List<Class<?>> expressionFactoryClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return ExpressionFactory.class.isAssignableFrom(type) && !isAbstract(type)
+					&& !type.isAnnotationPresent(Ignored.class);
+			}
+		}, expressionFactoryPackages));
 
 		expressionFactories = new ArrayList<ExpressionFactory>();
 
@@ -418,7 +384,7 @@ public class DefaultConfiguration implements Configuration {
 		return packages.toArray(new String[packages.size()]);
 	}
 
-	private void initialise() throws ConfigurationException {
+	private void initialise() throws AluminumException {
 		converterRegistry.initialise(this);
 		templateElementFactory.initialise(this);
 		templateFinder.initialise(this);
@@ -449,79 +415,79 @@ public class DefaultConfiguration implements Configuration {
 		}
 	}
 
-	public ConfigurationParameters getParameters() throws ConfigurationException {
+	public ConfigurationParameters getParameters() throws AluminumException {
 		checkOpen();
 
 		return parameters;
 	}
 
-	public ConfigurationElementFactory getConfigurationElementFactory() throws ConfigurationException {
+	public ConfigurationElementFactory getConfigurationElementFactory() throws AluminumException {
 		checkOpen();
 
 		return configurationElementFactory;
 	}
 
-	public ConverterRegistry getConverterRegistry() throws ConfigurationException {
+	public ConverterRegistry getConverterRegistry() throws AluminumException {
 		checkOpen();
 
 		return converterRegistry;
 	}
 
-	public TemplateElementFactory getTemplateElementFactory() throws ConfigurationException {
+	public TemplateElementFactory getTemplateElementFactory() throws AluminumException {
 		checkOpen();
 
 		return templateElementFactory;
 	}
 
-	public TemplateFinder getTemplateFinder() throws ConfigurationException {
+	public TemplateFinder getTemplateFinder() throws AluminumException {
 		checkOpen();
 
 		return templateFinder;
 	}
 
-	public TemplateStoreFinder getTemplateStoreFinder() throws ConfigurationException {
+	public TemplateStoreFinder getTemplateStoreFinder() throws AluminumException {
 		checkOpen();
 
 		return templateStoreFinder;
 	}
 
-	public Cache getCache() throws ConfigurationException {
+	public Cache getCache() throws AluminumException {
 		checkOpen();
 
 		return cache;
 	}
 
-	public List<Library> getLibraries() throws ConfigurationException {
+	public List<Library> getLibraries() throws AluminumException {
 		checkOpen();
 
 		return Collections.unmodifiableList(libraries);
 	}
 
-	public Map<String, Parser> getParsers() throws ConfigurationException {
+	public Map<String, Parser> getParsers() throws AluminumException {
 		checkOpen();
 
 		return Collections.unmodifiableMap(parsers);
 	}
 
-	public Map<String, Serialiser> getSerialisers() throws ConfigurationException {
+	public Map<String, Serialiser> getSerialisers() throws AluminumException {
 		checkOpen();
 
 		return Collections.unmodifiableMap(serialisers);
 	}
 
-	public List<ContextEnricher> getContextEnrichers() throws ConfigurationException {
+	public List<ContextEnricher> getContextEnrichers() throws AluminumException {
 		checkOpen();
 
 		return Collections.unmodifiableList(contextEnrichers);
 	}
 
-	public List<ExpressionFactory> getExpressionFactories() throws ConfigurationException {
+	public List<ExpressionFactory> getExpressionFactories() throws AluminumException {
 		checkOpen();
 
 		return Collections.unmodifiableList(expressionFactories);
 	}
 
-	public void close() throws ConfigurationException {
+	public void close() throws AluminumException {
 		checkOpen();
 
 		configurationElementFactory.disable();
@@ -557,9 +523,9 @@ public class DefaultConfiguration implements Configuration {
 		open = false;
 	}
 
-	private void checkOpen() throws ConfigurationException {
+	private void checkOpen() throws AluminumException {
 		if (!open) {
-			throw new ConfigurationException("the configuration can't be used - it has been closed");
+			throw new AluminumException("the configuration can't be used - it has been closed");
 		}
 	}
 

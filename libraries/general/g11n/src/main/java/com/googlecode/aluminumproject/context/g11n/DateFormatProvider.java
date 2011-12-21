@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 import java.text.DateFormat;
 
@@ -32,7 +32,7 @@ public interface DateFormatProvider {
 	 * @param type the type of the date format to return
 	 * @param context the current context
 	 * @return a date format of the given type for the specified context
-	 * @throws ContextException when the date format can't be provided
+	 * @throws AluminumException when the date format can't be provided
 	 */
-	DateFormat provide(DateFormatType type, Context context) throws ContextException;
+	DateFormat provide(DateFormatType type, Context context) throws AluminumException;
 }

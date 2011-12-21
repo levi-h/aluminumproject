@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,14 @@ package com.googlecode.aluminumproject.templates;
 
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.libraries.Library;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
@@ -34,7 +33,6 @@ import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
@@ -77,13 +75,13 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		createActionInterceptors();
 	}
 
-	private void createActionInterceptors() throws ConfigurationException {
+	private void createActionInterceptors() throws AluminumException {
 		Set<String> actionInterceptorPackages = new HashSet<String>();
 
 		ConfigurationParameters parameters = configuration.getParameters();
@@ -93,18 +91,12 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		if (!actionInterceptorPackages.isEmpty()) {
 			logger.debug("action interceptors will be looked for in ", actionInterceptorPackages);
 
-			List<Class<?>> actionInterceptorClasses;
-
-			try {
-				actionInterceptorClasses = TypeFinder.find(new TypeFilter() {
-					public boolean accepts(Class<?> type) {
-						return ActionInterceptor.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
+			List<Class<?>> actionInterceptorClasses = TypeFinder.find(new TypeFilter() {
+				public boolean accepts(Class<?> type) {
+					return ActionInterceptor.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
 						&& !type.isAnnotationPresent(Ignored.class);
-					}
-				}, actionInterceptorPackages.toArray(new String[actionInterceptorPackages.size()]));
-			} catch (UtilityException exception) {
-				throw new ConfigurationException(exception, "can't find action interceptors");
-			}
+				}
+			}, actionInterceptorPackages.toArray(new String[actionInterceptorPackages.size()]));
 
 			ConfigurationElementFactory configurationElementFactory = configuration.getConfigurationElementFactory();
 
@@ -143,11 +135,11 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 
 	public ActionElement createActionElement(ActionDescriptor actionDescriptor,
 			Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributionDescriptors,
-			Map<String, String> libraryUrlAbbreviations) throws TemplateException {
+			Map<String, String> libraryUrlAbbreviations) throws AluminumException {
 		String libraryUrlAbbreviation = actionDescriptor.getLibraryUrlAbbreviation();
 
 		if (!libraryUrlAbbreviations.containsKey(libraryUrlAbbreviation)) {
-			throw new TemplateException("unknown library URL abbreviation: '", libraryUrlAbbreviation, "'");
+			throw new AluminumException("unknown library URL abbreviation: '", libraryUrlAbbreviation, "'");
 		}
 
 		String libraryUrl = libraryUrlAbbreviations.get(libraryUrlAbbreviation);
@@ -173,7 +165,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 
 	private Map<ActionContributionDescriptor, ActionContributionFactory> createActionContributionFactories(
 			List<ActionContributionDescriptor> contributionDescriptors,
-			Map<String, String> libraryUrlAbbreviations) throws TemplateException {
+			Map<String, String> libraryUrlAbbreviations) throws AluminumException {
 		Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories =
 			new LinkedHashMap<ActionContributionDescriptor, ActionContributionFactory>();
 
@@ -181,7 +173,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 			String libraryUrlAbbreviation = descriptor.getLibraryUrlAbbreviation();
 
 			if (!libraryUrlAbbreviations.containsKey(libraryUrlAbbreviation)) {
-				throw new TemplateException("unknown library URL abbreviation: '", libraryUrlAbbreviation, "'");
+				throw new AluminumException("unknown library URL abbreviation: '", libraryUrlAbbreviation, "'");
 			}
 
 			Library library = findLibrary(libraryUrlAbbreviations.get(libraryUrlAbbreviation));
@@ -194,11 +186,11 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		return actionContributionFactories;
 	}
 
-	private Library findLibrary(String libraryUrl) throws TemplateException {
+	private Library findLibrary(String libraryUrl) throws AluminumException {
 		Library library = ConfigurationUtilities.findLibrary(configuration, libraryUrl);
 
 		if (library == null) {
-			throw new TemplateException("can't find library with URL '", libraryUrl, "'");
+			throw new AluminumException("can't find library with URL '", libraryUrl, "'");
 		} else {
 			return library;
 		}
@@ -211,9 +203,9 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	 * @param library the library to search in
 	 * @param name the name of the action to find an action factory for
 	 * @return the action factory for the action with the given name or a dynamic action factory
-	 * @throws TemplateException when no action factory for an action with the given name can be found in the library
+	 * @throws AluminumException when no action factory for an action with the given name can be found in the library
 	 */
-	protected ActionFactory findActionFactory(Library library, String name) throws TemplateException {
+	protected ActionFactory findActionFactory(Library library, String name) throws AluminumException {
 		ActionFactory actionFactory = null;
 
 		Iterator<ActionFactory> actionFactories = library.getActionFactories().iterator();
@@ -230,13 +222,9 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 			LibraryInformation libraryInformation = library.getInformation();
 
 			if (libraryInformation.isSupportingDynamicActions()) {
-				try {
-					actionFactory = library.getDynamicActionFactory(name);
-				} catch (LibraryException exception) {
-					throw new TemplateException("can't get dynamic action factory for action '", name, "'");
-				}
+				actionFactory = library.getDynamicActionFactory(name);
 			} else {
-				throw new TemplateException("can't find action factory for action with name '", name, "'",
+				throw new AluminumException("can't find action factory for action with name '", name, "'",
 					" in library with URL '", libraryInformation.getUrl(), "' and dynamic actions are not supported");
 			}
 		}
@@ -250,11 +238,11 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	 * @param library the library to search in
 	 * @param name the name of the action contribution to find an action contribution factory for
 	 * @return the action contribution factory for the action contribution with the given name
-	 * @throws TemplateException when no action contribution factory for an action contribution with the given name can
+	 * @throws AluminumException when no action contribution factory for an action contribution with the given name can
 	 *                           be found in the library
 	 */
 	protected ActionContributionFactory findActionContributionFactory(
-			Library library, String name) throws TemplateException {
+			Library library, String name) throws AluminumException {
 		ActionContributionFactory actionContributionFactory = null;
 
 		Iterator<ActionContributionFactory> actionContributionFactoryIterator =
@@ -272,14 +260,9 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 			LibraryInformation libraryInformation = library.getInformation();
 
 			if (libraryInformation.isSupportingDynamicActionContributions()) {
-				try {
-					actionContributionFactory = library.getDynamicActionContributionFactory(name);
-				} catch (LibraryException exception) {
-					throw new TemplateException(exception, "can't get dynamic action contribution factory",
-						" for action contribution '", name, "'");
-				}
+				actionContributionFactory = library.getDynamicActionContributionFactory(name);
 			} else {
-				throw new TemplateException("can't find action contribution factory for action contribution",
+				throw new AluminumException("can't find action contribution factory for action contribution",
 					" with name '", name, "' in library with URL '", library.getInformation().getUrl(), "'",
 					" and dynamic action contributions are not supported");
 			}

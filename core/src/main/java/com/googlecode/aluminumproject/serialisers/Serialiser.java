@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.serialisers;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.templates.Template;
@@ -30,7 +31,7 @@ public interface Serialiser extends ConfigurationElement {
 	 *
 	 * @param template the template to serialise
 	 * @param name the name to use for the template
-	 * @throws SerialisationException when the template can't be serialised
+	 * @throws AluminumException when the template can't be serialised
 	 */
-	void serialiseTemplate(Template template, String name) throws SerialisationException;
+	void serialiseTemplate(Template template, String name) throws AluminumException;
 }

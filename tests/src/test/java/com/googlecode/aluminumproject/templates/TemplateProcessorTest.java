@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.templates;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CACHE_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.PARSER_PACKAGES;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.cache.Cache;
 import com.googlecode.aluminumproject.cache.MemoryCache;
@@ -31,7 +32,6 @@ import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.converters.TestConverterRegistry;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
-import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.parsers.xml.XmlParser;
 import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
@@ -61,7 +61,7 @@ public class TemplateProcessorTest {
 			configuration = null;
 		}
 
-		public Template parseTemplate(String name) throws ParseException {
+		public Template parseTemplate(String name) throws AluminumException {
 			Map<String, String> libraryUrlAbbreviations = Collections.emptyMap();
 
 			TemplateBuilder templateBuilder = new TemplateBuilder();

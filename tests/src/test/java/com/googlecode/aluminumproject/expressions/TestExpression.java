@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.expressions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 /**
  * An expression that can be used in tests.
@@ -35,19 +35,13 @@ public class TestExpression implements Expression {
 		this.value = value;
 	}
 
-	public Object evaluate(Context context) throws ExpressionException {
+	public Object evaluate(Context context) throws AluminumException {
 		int length = value.length();
 
 		if ((length <= 4) || !value.substring(0, 2).equals("<<") || !value.substring(length - 2).equals(">>")) {
-			throw new ExpressionException("test expressions should be in <<this form>>");
+			throw new AluminumException("test expressions should be in <<this form>>");
 		} else {
-			String variableName = value.substring(2, length - 2);
-
-			try {
-				return context.findVariable(variableName);
-			} catch (ContextException exception) {
-				throw new ExpressionException(exception, "can't find variable '", variableName, "'");
-			}
+			return context.findVariable(value.substring(2, length - 2));
 		}
 	}
 }

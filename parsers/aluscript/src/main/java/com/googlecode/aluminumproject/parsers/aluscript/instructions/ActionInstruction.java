@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,13 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionElement;
-import com.googlecode.aluminumproject.templates.TemplateElement;
-import com.googlecode.aluminumproject.templates.TemplateElementFactory;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.utilities.ParserUtilities;
 
 import java.util.LinkedHashMap;
@@ -54,9 +51,7 @@ public class ActionInstruction extends AbstractInstruction {
 		this.name = name;
 	}
 
-	public void execute(Map<String, String> parameters, AluScriptContext context) throws AluScriptException {
-		TemplateElementFactory templateElementFactory = context.getConfiguration().getTemplateElementFactory();
-
+	public void execute(Map<String, String> parameters, AluScriptContext context) throws AluminumException {
 		Map<String, String> libraryUrlAbbreviations = context.getLibraryUrlAbbreviations();
 
 		Map<String, ActionParameter> actionParameters = new LinkedHashMap<String, ActionParameter>();
@@ -64,24 +59,16 @@ public class ActionInstruction extends AbstractInstruction {
 
 		splitParameters(parameters, actionParameters, contributionDescriptors, context);
 
-		TemplateElement actionElement;
+		ActionDescriptor actionDescriptor = new ActionDescriptor(namePrefix,
+			context.getSettings().getTemplateNameTranslator().translateActionName(name));
 
-		try {
-			ActionDescriptor actionDescriptor = new ActionDescriptor(namePrefix,
-				context.getSettings().getTemplateNameTranslator().translateActionName(name));
-
-			actionElement = templateElementFactory.createActionElement(
-				actionDescriptor, actionParameters, contributionDescriptors, libraryUrlAbbreviations);
-		} catch (TemplateException exception) {
-			throw new AluScriptException(exception, "can't create action element for action ", namePrefix, ".", name);
-		}
-
-		context.addTemplateElement(actionElement);
+		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createActionElement(
+			actionDescriptor, actionParameters, contributionDescriptors, libraryUrlAbbreviations));
 	}
 
 	private void splitParameters(Map<String, String> parameters,
 			Map<String, ActionParameter> actionParameters, List<ActionContributionDescriptor> contributionDescriptors,
-			AluScriptContext context) throws AluScriptException {
+			AluScriptContext context) throws AluminumException {
 		TemplateNameTranslator templateNameTranslator = context.getSettings().getTemplateNameTranslator();
 
 		for (String name: parameters.keySet()) {

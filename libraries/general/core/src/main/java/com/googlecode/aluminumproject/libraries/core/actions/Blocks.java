@@ -15,16 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,11 +50,11 @@ public class Blocks {
 		 */
 		public Block() {}
 
-		public void execute(Context context, Writer writer) throws ActionException {
+		public void execute(Context context, Writer writer) throws AluminumException {
 			Map<String, ActionBody> blocks = getBlocks(context, true);
 
 			if (blocks.containsKey(name)) {
-				throw new TemplateException("duplicate block: '", name, "'");
+				throw new AluminumException("duplicate block: '", name, "'");
 			} else {
 				logger.debug("storing block '", name, "'");
 
@@ -80,7 +77,7 @@ public class Blocks {
 		 */
 		public BlockContents() {}
 
-		public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+		public void execute(Context context, Writer writer) throws AluminumException {
 			ActionBody block = findBlock(context, name);
 
 			if (block == null) {
@@ -95,7 +92,7 @@ public class Blocks {
 		}
 	}
 
-	private static ActionBody findBlock(Context context, String name) throws ActionException {
+	private static ActionBody findBlock(Context context, String name) throws AluminumException {
 		Map<String, ActionBody> blocks = null;
 
 		do {
@@ -107,7 +104,7 @@ public class Blocks {
 		return (blocks == null) ? null : blocks.get(name);
 	}
 
-	private static Map<String, ActionBody> getBlocks(Context context, boolean create) {
+	private static Map<String, ActionBody> getBlocks(Context context, boolean create) throws AluminumException {
 		Map<String, ActionBody> blocks;
 
 		if (context.getImplicitObjectNames().contains(BLOCKS)) {

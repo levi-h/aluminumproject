@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.html;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import org.testng.annotations.Test;
 
@@ -41,7 +41,7 @@ public class Html4Test extends HtmlLibraryTest {
 		assert processTemplate("html4-tag-with-attribute").equals("<hr size=\"1\">");
 	}
 
-	@Test(dependsOnMethods = "bodyShouldBeWritten", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "bodyShouldBeWritten", expectedExceptions = AluminumException.class)
 	public void usingUnknownAttributesShouldCauseException() {
 		processTemplate("html4-tag-with-unknown-attribute");
 	}

@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -54,7 +56,7 @@ public class ClassBasedConverterTest {
 		assert convertedValue.equals("12.5");
 	}
 
-	@Test(dependsOnMethods = "subtypesOfTargetTypeShouldNotBeSupported", expectedExceptions = ConverterException.class)
+	@Test(dependsOnMethods = "subtypesOfTargetTypeShouldNotBeSupported", expectedExceptions = AluminumException.class)
 	public void conversionToUnsupportedTargetTypeShouldCauseException() {
 		converter.convert(12F, String.class);
 	}

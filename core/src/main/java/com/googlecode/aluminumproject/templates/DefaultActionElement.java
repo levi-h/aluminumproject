@@ -15,25 +15,21 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionOptions;
 import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.Injector.ClassBasedValueProvider;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -102,7 +98,7 @@ public class DefaultActionElement implements ActionElement {
 		return new LinkedList<ActionContributionDescriptor>(actionContributionFactories.keySet());
 	}
 
-	public void process(Context context, Writer writer) throws TemplateException {
+	public void process(Context context, Writer writer) throws AluminumException {
 		TemplateInformation templateInformation = TemplateInformation.from(context);
 		templateInformation.addTemplateElement(this);
 
@@ -128,11 +124,7 @@ public class DefaultActionElement implements ActionElement {
 		for (ActionPhase phase: ActionPhase.values()) {
 			actionContext.setPhase(phase);
 
-			try {
-				actionContext.proceed();
-			} catch (InterceptionException exception) {
-				throw new TemplateException(exception, "can't process action element");
-			}
+			actionContext.proceed();
 		}
 
 		templateInformation.removeCurrentTemplateElement();
@@ -143,46 +135,28 @@ public class DefaultActionElement implements ActionElement {
 			super(ActionPhase.CONTRIBUTION);
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			DefaultActionContributionOptions options = new DefaultActionContributionOptions();
 
 			Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories =
 				actionContext.getActionContributionFactories();
 
 			for (ActionContributionDescriptor descriptor: actionContributionFactories.keySet()) {
-				ActionContribution actionContribution;
-
-				try {
-					actionContribution = actionContributionFactories.get(descriptor).create();
-				} catch (ActionException exception) {
-					throw new InterceptionException(exception, "can't create action contribution");
-				}
-
+				ActionContribution actionContribution = actionContributionFactories.get(descriptor).create();
 				ActionFactory actionFactory = actionContext.getActionFactory();
 
 				if (actionContribution.canBeMadeTo(actionFactory)) {
-					try {
-						Injector injector = new Injector();
-						injector.addValueProvider(new ClassBasedValueProvider(descriptor));
-						injector.inject(actionContribution);
-					} catch (UtilityException exception) {
-						throw new InterceptionException(exception, "can't inject action contribution");
-					}
+					Injector injector = new Injector();
+					injector.addValueProvider(new ClassBasedValueProvider(descriptor));
+					injector.inject(actionContribution);
 
 					ActionParameter parameter = descriptor.getParameter();
 
 					logger.debug("making action contribution ", actionContribution, " with parameter ", parameter);
 
-					try {
-						actionContribution.make(
-							actionContext.getContext(), actionContext.getWriter(), parameter, options);
-					} catch (ActionException exception) {
-						throw new InterceptionException(exception, "can't make action contribution");
-					} catch (ContextException exception) {
-						throw new InterceptionException(exception, "can't make action contribution");
-					}
+					actionContribution.make(actionContext.getContext(), actionContext.getWriter(), parameter, options);
 				} else {
-					throw new InterceptionException("action contribution ", actionContribution, " can't be made to",
+					throw new AluminumException("action contribution ", actionContribution, " can't be made to",
 						" action '", actionFactory.getInformation().getName(), "'");
 				}
 			}
@@ -198,35 +172,19 @@ public class DefaultActionElement implements ActionElement {
 			super(ActionPhase.CREATION);
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			if (actionContext.getAction() == null) {
 				ActionFactory actionFactory = actionContext.getActionFactory();
 
 				logger.debug("creating action using ", actionFactory);
 
-				Action action;
+				Action action = actionFactory.create(actionContext.getParameters(), actionContext.getContext());
 
-				try {
-					action = actionFactory.create(actionContext.getParameters(), actionContext.getContext());
-				} catch (ActionException exception) {
-					throw new InterceptionException(exception, "can't create action");
-				}
+				Injector injector = new Injector();
+				injector.addValueProvider(new ClassBasedValueProvider(actionContext.getActionDescriptor()));
+				injector.inject(action);
 
-				try {
-					Injector injector = new Injector();
-					injector.addValueProvider(new ClassBasedValueProvider(actionContext.getActionDescriptor()));
-					injector.inject(action);
-				} catch (UtilityException exception) {
-					throw new InterceptionException(exception, "can't inject action");
-				}
-
-				TemplateInformation templateInformation;
-
-				try {
-					templateInformation = TemplateInformation.from(actionContext.getContext());
-				} catch (TemplateException exception) {
-					throw new InterceptionException(exception, "can't obtain template information");
-				}
+				TemplateInformation templateInformation = TemplateInformation.from(actionContext.getContext());
 
 				action.setParent(templateInformation.getCurrentAction());
 				action.setBody(new TemplateBody(
@@ -253,13 +211,9 @@ public class DefaultActionElement implements ActionElement {
 				return new TemplateBody(template, currentTemplateElement);
 			}
 
-			public void invoke(Context context, Writer writer) throws ActionException {
-				try {
-					for (TemplateElement templateElement: template.getChildren(currentTemplateElement)) {
-						templateElement.process(context, writer);
-					}
-				} catch (TemplateException exception) {
-					throw new ActionException(exception, "can't process body");
+			public void invoke(Context context, Writer writer) throws AluminumException {
+				for (TemplateElement templateElement: template.getChildren(currentTemplateElement)) {
+					templateElement.process(context, writer);
 				}
 			}
 		}
@@ -270,32 +224,17 @@ public class DefaultActionElement implements ActionElement {
 			super(ActionPhase.EXECUTION);
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			Action action = actionContext.getAction();
 
 			logger.debug("executing action ", action);
 
-			TemplateInformation templateInformation;
-
-			try {
-				templateInformation = TemplateInformation.from(actionContext.getContext());
-			} catch (TemplateException exception) {
-				throw new InterceptionException(exception, "can't obtain template information");
-			}
-
+			TemplateInformation templateInformation = TemplateInformation.from(actionContext.getContext());
 			templateInformation.addAction(action);
 
-			try {
-				action.execute(actionContext.getContext(), actionContext.getWriter());
-			} catch (ActionException exception) {
-				throw new InterceptionException(exception, "can't execute action");
-			} catch (ContextException exception) {
-				throw new InterceptionException(exception, "can't execute action");
-			} catch (WriterException exception) {
-				throw new InterceptionException(exception, "can't execute action");
-			} finally {
-				templateInformation.removeCurrentAction();
-			}
+			action.execute(actionContext.getContext(), actionContext.getWriter());
+
+			templateInformation.removeCurrentAction();
 
 			actionContext.proceed();
 		}

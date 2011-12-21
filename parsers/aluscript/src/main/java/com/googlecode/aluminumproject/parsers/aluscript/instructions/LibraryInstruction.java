@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 
 import java.util.Map;
 
@@ -34,9 +34,9 @@ public class LibraryInstruction extends AbstractInstruction {
 		super(NAME);
 	}
 
-	public void execute(Map<String, String> parameters, AluScriptContext context) throws AluScriptException {
+	public void execute(Map<String, String> parameters, AluScriptContext context) throws AluminumException {
 		if (parameters.isEmpty()) {
-			throw new AluScriptException("at least one library URL should be given");
+			throw new AluminumException("at least one library URL should be given");
 		}
 
 		for (String abbreviation: parameters.keySet()) {

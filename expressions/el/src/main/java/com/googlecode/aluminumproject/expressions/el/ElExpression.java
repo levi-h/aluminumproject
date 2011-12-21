@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.expressions.Expression;
-import com.googlecode.aluminumproject.expressions.ExpressionException;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -46,13 +45,11 @@ public class ElExpression implements Expression {
 		this.configuration = configuration;
 	}
 
-	public Object evaluate(Context context) throws ExpressionException {
+	public Object evaluate(Context context) throws AluminumException {
 		try {
 			return expression.getValue(new ElContext(context, configuration));
-		} catch (ConfigurationException exception) {
-			throw new ExpressionException(exception, "can't create EL context");
 		} catch (ELException exception) {
-			throw new ExpressionException(exception, "can't evaluate expression");
+			throw new AluminumException(exception, "can't evaluate expression");
 		}
 	}
 }

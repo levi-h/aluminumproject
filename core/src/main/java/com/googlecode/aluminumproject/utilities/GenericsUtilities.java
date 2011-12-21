@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.utilities;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
@@ -61,10 +63,10 @@ public class GenericsUtilities {
 	 * @param index the (zero-based) index that indicates which type argument should be retrieved
 	 * @return the type argument at position {@code index} used by {@code parameterisedType} to extend or implement
 	 *         {@code genericType}
-	 * @throws UtilityException when the type argument can't be worked out
+	 * @throws AluminumException when the type argument can't be worked out
 	 */
 	public static Class<?> getTypeArgument(
-			Class<?> parameterisedType, Class<?> genericType, int index) throws UtilityException {
+			Class<?> parameterisedType, Class<?> genericType, int index) throws AluminumException {
 		Type typeArgument = null;
 
 		List<Class<?>> path = new ArrayList<Class<?>>();
@@ -105,7 +107,7 @@ public class GenericsUtilities {
 				}
 
 				if (parameterisedImplementedOrExtendedType == null) {
-					throw new UtilityException("can't find a parameterised version of ", implementedOrExtendedType);
+					throw new AluminumException("can't find a parameterised version of ", implementedOrExtendedType);
 				}
 
 				typeArgument = parameterisedImplementedOrExtendedType.getActualTypeArguments()[index];
@@ -129,7 +131,7 @@ public class GenericsUtilities {
 		Class<?> typeClass = getTypeClass(typeArgument);
 
 		if (typeClass == null) {
-			throw new UtilityException("can't find type argument ", index, " that ", parameterisedType, " uses to ",
+			throw new AluminumException("can't find type argument ", index, " that ", parameterisedType, " uses to ",
 				genericType.isInterface() ? "implement" : "extend", " ", genericType);
 		} else {
 			return typeClass;
@@ -265,14 +267,14 @@ public class GenericsUtilities {
 	 * @param name the name of the type to find or create
 	 * @param defaultPackages the packages for which class names don't have to be qualified
 	 * @return the type with the given name
-	 * @throws UtilityException when the type can't be found or created
+	 * @throws AluminumException when the type can't be found or created
 	 */
-	public static Type getType(String name, String... defaultPackages) throws UtilityException {
+	public static Type getType(String name, String... defaultPackages) throws AluminumException {
 		return getType(name, true, defaultPackages);
 	}
 
 	private static Type getType(
-			String name, boolean allowPrimitive, String... defaultPackages) throws UtilityException {
+			String name, boolean allowPrimitive, String... defaultPackages) throws AluminumException {
 		Type type;
 
 		if (name.startsWith("?")) {
@@ -290,11 +292,11 @@ public class GenericsUtilities {
 		return type;
 	}
 
-	private static Type createGenericArrayType(String name, String... defaultPackages) throws UtilityException {
+	private static Type createGenericArrayType(String name, String... defaultPackages) throws AluminumException {
 		Type componentType = getType(name.substring(0, name.length() - 2), defaultPackages);
 
 		if (componentType instanceof Class) {
-			throw new UtilityException("can't create class with component type ", componentType);
+			throw new AluminumException("can't create class with component type ", componentType);
 		} else {
 			return new GenericArrayTypeImpl(componentType);
 		}
@@ -312,7 +314,7 @@ public class GenericsUtilities {
 		}
 	}
 
-	private static WildcardType createWildcardType(String name, String... defaultPackages) throws UtilityException {
+	private static WildcardType createWildcardType(String name, String... defaultPackages) throws AluminumException {
 		Matcher matcher = WILDCARD_TYPE_PATTERN.matcher(name);
 
 		if (matcher.matches()) {
@@ -337,7 +339,7 @@ public class GenericsUtilities {
 
 			return new WildcardTypeImpl(boundingTypes, upperBound);
 		} else {
-			throw new UtilityException("can't create wildcard type with name '", name, "'");
+			throw new AluminumException("can't create wildcard type with name '", name, "'");
 		}
 	}
 
@@ -368,7 +370,7 @@ public class GenericsUtilities {
 	}
 
 	private static ParameterizedType createParameterisedType(
-			String name, String... defaultPackages) throws UtilityException {
+			String name, String... defaultPackages) throws AluminumException {
 		Matcher matcher = PARAMETERISED_TYPE_PATTERN.matcher(name);
 
 		if (matcher.matches()) {
@@ -383,7 +385,7 @@ public class GenericsUtilities {
 
 			return new ParameterisedType(rawType, arguments);
 		} else {
-			throw new UtilityException("can't create parameterised type with name '", name, "'");
+			throw new AluminumException("can't create parameterised type with name '", name, "'");
 		}
 	}
 
@@ -409,7 +411,7 @@ public class GenericsUtilities {
 		}
 	}
 
-	private static Class<?> getClass(String className, String... defaultPackages) throws UtilityException {
+	private static Class<?> getClass(String className, String... defaultPackages) throws AluminumException {
 		Class<?> foundClass = null;
 
 		List<String> classNames = new LinkedList<String>();
@@ -431,7 +433,7 @@ public class GenericsUtilities {
 		}
 
 		if (foundClass == null) {
-			throw new UtilityException("can't find class with name '", className, "'");
+			throw new AluminumException("can't find class with name '", className, "'");
 		} else {
 			return foundClass;
 		}

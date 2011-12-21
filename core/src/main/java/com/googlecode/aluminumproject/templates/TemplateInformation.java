@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.utilities.Logger;
 
@@ -110,11 +110,11 @@ public class TemplateInformation {
 	/**
 	 * Removes the current template element.
 	 *
-	 * @throws TemplateException when there is no template element to remove
+	 * @throws AluminumException when there is no template element to remove
 	 */
-	public void removeCurrentTemplateElement() throws TemplateException {
+	public void removeCurrentTemplateElement() throws AluminumException {
 		if (templateElements.isEmpty()) {
-			throw new TemplateException("there is no current template element");
+			throw new AluminumException("there is no current template element");
 		} else {
 			TemplateElement templateElement = templateElements.pop();
 
@@ -145,11 +145,11 @@ public class TemplateInformation {
 	/**
 	 * Removes the current action.
 	 *
-	 * @throws TemplateException when there is no action to remove
+	 * @throws AluminumException when there is no action to remove
 	 */
-	public void removeCurrentAction() throws TemplateException {
+	public void removeCurrentAction() throws AluminumException {
 		if (actions.isEmpty()) {
-			throw new TemplateException("there is no current action");
+			throw new AluminumException("there is no current action");
 		} else {
 			Action action = actions.pop();
 
@@ -162,18 +162,14 @@ public class TemplateInformation {
 	 *
 	 * @param context the context to search in
 	 * @return the (possibly new) template information in the given context
-	 * @throws TemplateException when the template information can't be obtained
+	 * @throws AluminumException when the template information can't be obtained
 	 */
-	public static TemplateInformation from(Context context) throws TemplateException {
+	public static TemplateInformation from(Context context) throws AluminumException {
 		if (!context.getImplicitObjectNames().contains(TEMPLATE_INFORMATION)) {
 			context.addImplicitObject(TEMPLATE_INFORMATION, new TemplateInformation());
 		}
 
-		try {
-			return (TemplateInformation) context.getImplicitObject(TEMPLATE_INFORMATION);
-		} catch (ContextException exception) {
-			throw new TemplateException(exception, "can't obtain template information");
-		}
+		return (TemplateInformation) context.getImplicitObject(TEMPLATE_INFORMATION);
 	}
 
 	private final static String TEMPLATE_INFORMATION =

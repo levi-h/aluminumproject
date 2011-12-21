@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.lang.reflect.Type;
@@ -71,18 +71,18 @@ public class StringToNumberConverter implements Converter<String> {
 		return converters.containsKey(targetType);
 	}
 
-	public Object convert(String value, Type targetType) throws ConverterException {
+	public Object convert(String value, Type targetType) throws AluminumException {
 		return converters.get(targetType).convert(value, targetType);
 	}
 
 	@Ignored
 	private static class StringToByteConverter extends ClassBasedConverter<String, Byte> {
 		@Override
-		protected Byte convert(String value) throws ConverterException {
+		protected Byte convert(String value) throws AluminumException {
 			try {
 				return Byte.valueOf(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to byte");
+				throw new AluminumException(exception, "can't convert to byte");
 			}
 		}
 	}
@@ -90,11 +90,11 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToShortConverter extends ClassBasedConverter<String, Short> {
 		@Override
-		protected Short convert(String value) throws ConverterException {
+		protected Short convert(String value) throws AluminumException {
 			try {
 				return Short.valueOf(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to short");
+				throw new AluminumException(exception, "can't convert to short");
 			}
 		}
 	}
@@ -102,11 +102,11 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToIntegerConverter extends ClassBasedConverter<String, Integer> {
 		@Override
-		protected Integer convert(String value) throws ConverterException {
+		protected Integer convert(String value) throws AluminumException {
 			try {
 				return Integer.valueOf(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to integer");
+				throw new AluminumException(exception, "can't convert to integer");
 			}
 		}
 	}
@@ -114,11 +114,11 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToLongConverter extends ClassBasedConverter<String, Long> {
 		@Override
-		protected Long convert(String value) throws ConverterException {
+		protected Long convert(String value) throws AluminumException {
 			try {
 				return Long.valueOf(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to long");
+				throw new AluminumException(exception, "can't convert to long");
 			}
 		}
 	}
@@ -126,11 +126,11 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToFloatConverter extends ClassBasedConverter<String, Float> {
 		@Override
-		protected Float convert(String value) throws ConverterException {
+		protected Float convert(String value) throws AluminumException {
 			try {
 				return Float.valueOf(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to float");
+				throw new AluminumException(exception, "can't convert to float");
 			}
 		}
 	}
@@ -138,11 +138,11 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToDoubleConverter extends ClassBasedConverter<String, Double> {
 		@Override
-		protected Double convert(String value) throws ConverterException {
+		protected Double convert(String value) throws AluminumException {
 			try {
 				return Double.valueOf(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to double");
+				throw new AluminumException(exception, "can't convert to double");
 			}
 		}
 	}
@@ -150,11 +150,11 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToBigIntegerConverter extends ClassBasedConverter<String, BigInteger> {
 		@Override
-		protected BigInteger convert(String value) throws ConverterException {
+		protected BigInteger convert(String value) throws AluminumException {
 			try {
 				return new BigInteger(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to big integer");
+				throw new AluminumException(exception, "can't convert to big integer");
 			}
 		}
 	}
@@ -162,11 +162,11 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private static class StringToBigDecimalConverter extends ClassBasedConverter<String, BigDecimal> {
 		@Override
-		protected BigDecimal convert(String value) throws ConverterException {
+		protected BigDecimal convert(String value) throws AluminumException {
 			try {
 				return new BigDecimal(value);
 			} catch (NumberFormatException exception) {
-				throw new ConverterException(exception, "can't convert to big decimal");
+				throw new AluminumException(exception, "can't convert to big decimal");
 			}
 		}
 	}
@@ -174,7 +174,7 @@ public class StringToNumberConverter implements Converter<String> {
 	@Ignored
 	private class StringToBaseTypeConverter extends ClassBasedConverter<String, Number> {
 		@Override
-		protected Number convert(String value) throws ConverterException {
+		protected Number convert(String value) {
 			Number convertedValue;
 
 			BigDecimal bigDecimalValue =

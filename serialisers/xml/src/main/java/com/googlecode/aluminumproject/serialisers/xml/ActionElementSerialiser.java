@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.serialisers.xml;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
@@ -38,8 +39,8 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 	 */
 	public ActionElementSerialiser() {}
 
-	public void writeBeforeChildren(Template template,
-			ActionElement actionElement, ElementNameTranslator elementNameTranslator, PrintWriter writer) {
+	public void writeBeforeChildren(Template template, ActionElement actionElement,
+			ElementNameTranslator elementNameTranslator, PrintWriter writer) throws AluminumException {
 		ActionDescriptor actionDescriptor = actionElement.getDescriptor();
 
 		writer.print("<");
@@ -92,8 +93,8 @@ public class ActionElementSerialiser implements TemplateElementSerialiser<Action
 		writer.print(">");
 	}
 
-	public void writeAfterChildren(Template template,
-			ActionElement actionElement, ElementNameTranslator elementNameTranslator, PrintWriter writer) {
+	public void writeAfterChildren(Template template, ActionElement actionElement,
+			ElementNameTranslator elementNameTranslator, PrintWriter writer) throws AluminumException {
 		if (!template.getChildren(actionElement).isEmpty()) {
 			ActionDescriptor actionDescriptor = actionElement.getDescriptor();
 

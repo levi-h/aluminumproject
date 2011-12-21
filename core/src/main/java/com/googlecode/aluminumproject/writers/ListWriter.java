@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +65,7 @@ public class ListWriter extends AbstractWriter {
 		return Collections.unmodifiableList(list.subList(0, flushIndex));
 	}
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 
 		list.add(object);
@@ -74,14 +76,14 @@ public class ListWriter extends AbstractWriter {
 	}
 
 	@Override
-	public void clear() throws WriterException {
+	public void clear() throws AluminumException {
 		checkOpen();
 
 		list.subList(flushIndex, list.size()).clear();
 	}
 
 	@Override
-	public void flush() throws WriterException {
+	public void flush() throws AluminumException {
 		checkOpen();
 
 		flushIndex = list.size();

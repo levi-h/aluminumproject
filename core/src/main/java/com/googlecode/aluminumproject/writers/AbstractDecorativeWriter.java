@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * Convenience superclass for decorative writers. It implements the {@link #getWriter() getWriter} and {@link
@@ -38,21 +40,21 @@ public abstract class AbstractDecorativeWriter extends AbstractWriter implements
 		return writer;
 	}
 
-	public void setWriter(Writer writer) throws WriterException {
+	public void setWriter(Writer writer) throws AluminumException {
 		flush();
 
 		this.writer = writer;
 	}
 
 	@Override
-	public void flush() throws WriterException {
+	public void flush() throws AluminumException {
 		super.flush();
 
 		writer.flush();
 	}
 
 	@Override
-	public void close() throws WriterException {
+	public void close() throws AluminumException {
 		super.close();
 
 		writer.close();

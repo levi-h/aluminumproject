@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,7 +41,7 @@ public class LocaleBasedDateFormatProvider implements DateFormatProvider {
 		this.customPattern = customPattern;
 	}
 
-	public DateFormat provide(DateFormatType type, Context context) throws ContextException {
+	public DateFormat provide(DateFormatType type, Context context) throws AluminumException {
 		DateFormat dateFormat;
 
 		Locale locale = GlobalisationContext.from(context).getLocaleProvider().provide(context);
@@ -67,7 +67,7 @@ public class LocaleBasedDateFormatProvider implements DateFormatProvider {
 		} else if (type == DateFormatType.CUSTOM) {
 			dateFormat = new SimpleDateFormat(customPattern, locale);
 		} else {
-			throw new ContextException("unexpected date format type: ", type);
+			throw new AluminumException("unexpected date format type: ", type);
 		}
 
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));

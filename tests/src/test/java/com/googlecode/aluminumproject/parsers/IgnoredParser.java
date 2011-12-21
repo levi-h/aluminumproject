@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class IgnoredParser implements Parser {
 
 	public void disable() {}
 
-	public Template parseTemplate(String name) throws ParseException {
+	public Template parseTemplate(String name) {
 		return null;
 	}
 }

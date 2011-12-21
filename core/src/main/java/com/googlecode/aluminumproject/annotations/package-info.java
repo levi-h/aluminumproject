@@ -15,8 +15,8 @@
  */
 
 /**
- * Various annotations. They are grouped together (unlike, e.g., the different exceptions) because some of them (such
- * as {@link com.googlecode.aluminumproject.annotations.Ignored &#64;Ignored} or {@link
+ * Various annotations. They are grouped together because some of them (such as {@link
+ * com.googlecode.aluminumproject.annotations.Ignored &#64;Ignored} or {@link
  * com.googlecode.aluminumproject.annotations.Injected}) can be applied to classes in more than one package.
  */
 package com.googlecode.aluminumproject.annotations;

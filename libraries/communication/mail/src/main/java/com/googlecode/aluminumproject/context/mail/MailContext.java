@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.mail;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 /**
  * Contains mail-related information for mail library elements.
@@ -61,9 +61,9 @@ public class MailContext {
 	 *
 	 * @param context the context to find the mail context in
 	 * @return the mail context in the context
-	 * @throws ContextException when the context does not contain a mail context implicit object
+	 * @throws AluminumException when the context does not contain a mail context implicit object
 	 */
-	public static MailContext from(Context context) throws ContextException {
+	public static MailContext from(Context context) throws AluminumException {
 		return (MailContext) context.getImplicitObject(MAIL_CONTEXT);
 	}
 

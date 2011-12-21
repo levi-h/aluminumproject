@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.interceptors;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 
@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 public class AbstractActionInterceptorTest {
 	@Ignored
 	private static final class DefaultActionInterceptor extends AbstractActionInterceptor {
-		public DefaultActionInterceptor(ActionPhase... phases) throws ActionException {
+		public DefaultActionInterceptor(ActionPhase... phases) throws AluminumException {
 			super(phases);
 		}
 
@@ -44,7 +44,7 @@ public class AbstractActionInterceptorTest {
 		assert phases.contains(ActionPhase.EXECUTION);
 	}
 
-	@Test(expectedExceptions = ActionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void notSupplyingAnyActionPhasesToInterceptShouldCauseException() {
 		new DefaultActionInterceptor();
 	}

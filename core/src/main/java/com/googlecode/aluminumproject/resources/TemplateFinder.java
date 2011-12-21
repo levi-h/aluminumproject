@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.resources;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.parsers.Parser;
 
@@ -31,7 +32,7 @@ public interface TemplateFinder extends ConfigurationElement {
 	 *
 	 * @param name the name of the template to find an input stream for
 	 * @return an input stream where the template can be read from
-	 * @throws ResourceException when no input stream can be found for the template
+	 * @throws AluminumException when no input stream can be found for the template
 	 */
-	InputStream find(String name) throws ResourceException;
+	InputStream find(String name) throws AluminumException;
 }

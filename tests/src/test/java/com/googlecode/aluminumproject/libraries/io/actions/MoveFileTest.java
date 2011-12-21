@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@ package com.googlecode.aluminumproject.libraries.io.actions;
 
 import static com.googlecode.aluminumproject.libraries.io.functions.Directories.temporaryDirectory;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.io.IoLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class MoveFileTest extends IoLibraryTest {
 		assert targetDirectory.exists();
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void movingNonexistentFileShouldCauseException() throws IOException {
 		File sourceFile = new File(temporaryDirectory(), generateUniqueName(temporaryDirectory()));
 
@@ -75,7 +75,7 @@ public class MoveFileTest extends IoLibraryTest {
 		processTemplate("move-file", context);
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void movingFileToDirectoryThatContainsFileWithSameNameShouldCauseException() throws IOException {
 		File sourceFile = createTemporaryFile();
 		File targetDirectory = createTemporaryDirectory();
@@ -91,7 +91,7 @@ public class MoveFileTest extends IoLibraryTest {
 		processTemplate("move-file", context);
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void movingFileToNonexistentDirectoryShouldCauseException() throws IOException {
 		File sourceFile = createTemporaryFile();
 		File targetDirectory = new File(temporaryDirectory(), generateUniqueName(temporaryDirectory()));

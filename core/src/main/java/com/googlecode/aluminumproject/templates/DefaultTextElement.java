@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.Map;
@@ -52,15 +52,11 @@ public class DefaultTextElement implements TextElement {
 		return text;
 	}
 
-	public void process(Context context, Writer writer) throws TemplateException {
+	public void process(Context context, Writer writer) throws AluminumException {
 		TemplateInformation templateInformation = TemplateInformation.from(context);
 		templateInformation.addTemplateElement(this);
 
-		try {
-			writer.write(text);
-		} catch (WriterException exception) {
-			throw new TemplateException(exception, "can't write text '", text, "'");
-		}
+		writer.write(text);
 
 		templateInformation.removeCurrentTemplateElement();
 	}

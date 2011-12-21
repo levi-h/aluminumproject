@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -97,9 +96,9 @@ public interface ActionContext {
 	 *
 	 * @param name the name of the parameter to add
 	 * @param parameter the parameter to add
-	 * @throws ActionException when an action has already been created
+	 * @throws AluminumException when an action has already been created
 	 */
-	void addParameter(String name, ActionParameter parameter) throws ActionException;
+	void addParameter(String name, ActionParameter parameter) throws AluminumException;
 
 	/**
 	 * Returns the factories of the action contributions that will be made to the action.
@@ -113,10 +112,10 @@ public interface ActionContext {
 	 *
 	 * @param descriptor the descriptor of the action contribution factory
 	 * @param contributionFactory the factory that will create the action contribution
-	 * @throws ActionException when it is too late to add an action contribution
+	 * @throws AluminumException when it is too late to add an action contribution
 	 */
-	void addActionContribution(
-		ActionContributionDescriptor descriptor, ActionContributionFactory contributionFactory) throws ActionException;
+	void addActionContribution(ActionContributionDescriptor descriptor, ActionContributionFactory contributionFactory)
+		throws AluminumException;
 
 	/**
 	 * Returns the action that will be executed.
@@ -129,17 +128,17 @@ public interface ActionContext {
 	 * Sets the action that will be executed.
 	 *
 	 * @param action the action to execute
-	 * @throws ActionException when an action has already been created
+	 * @throws AluminumException when an action has already been created
 	 */
-	void setAction(Action action) throws ActionException;
+	void setAction(Action action) throws AluminumException;
 
 	/**
 	 * Adds an interceptor to this action context. The later an action interceptor is added, the higher its priority.
 	 *
 	 * @param interceptor the interceptor to add
-	 * @throws ActionException when the interceptor has no chance of running
+	 * @throws AluminumException when the interceptor has no chance of running
 	 */
-	void addInterceptor(ActionInterceptor interceptor) throws ActionException;
+	void addInterceptor(ActionInterceptor interceptor) throws AluminumException;
 
 	/**
 	 * Returns the current phase of this action context.
@@ -152,7 +151,7 @@ public interface ActionContext {
 	 * Proceeds this action context by running the next interceptor of the current phase. If there are no more
 	 * interceptors to run, this method does nothing.
 	 *
-	 * @throws InterceptionException when the interceptor can't be run
+	 * @throws AluminumException when the interceptor can't be run
 	 */
-	void proceed() throws InterceptionException;
+	void proceed() throws AluminumException;
 }

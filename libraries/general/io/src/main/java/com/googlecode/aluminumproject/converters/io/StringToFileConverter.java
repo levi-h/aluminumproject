@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.io.File;
 
@@ -32,11 +32,11 @@ public class StringToFileConverter extends ClassBasedConverter<String, File> {
 	public StringToFileConverter() {}
 
 	@Override
-	protected File convert(String value) throws ConverterException {
+	protected File convert(String value) throws AluminumException {
 		File file = new File(value);
 
 		if (!file.exists()) {
-			throw new ConverterException("file '", value, "' does not exist");
+			throw new AluminumException("file '", value, "' does not exist");
 		}
 
 		return file;

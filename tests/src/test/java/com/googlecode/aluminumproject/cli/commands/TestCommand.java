@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.cli.commands;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.cli.Command;
-import com.googlecode.aluminumproject.cli.CommandException;
 
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -57,11 +57,11 @@ public class TestCommand extends Command {
 
 	@Override
 	protected void execute(
-			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws CommandException {
+			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws AluminumException {
 		logger.debug("executing test command");
 
 		if (argumentRequired && arguments.isEmpty()) {
-			throw new CommandException(new IllegalStateException(), "no arguments were supplied");
+			throw new AluminumException(new IllegalStateException(), "no arguments were supplied");
 		}
 	}
 }

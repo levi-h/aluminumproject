@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -51,9 +53,9 @@ public class TemplateBuilder {
 	 * Adds a template element to the current template element and makes the new template element the current one.
 	 *
 	 * @param templateElement the template element to add
-	 * @throws TemplateException when this template builder should no longer be used
+	 * @throws AluminumException when this template builder should no longer be used
 	 */
-	public void addTemplateElement(TemplateElement templateElement) throws TemplateException {
+	public void addTemplateElement(TemplateElement templateElement) throws AluminumException {
 		ensureNotBuilt();
 
 		templateElements.addTemplateElement(currentTemplateElement, templateElement);
@@ -64,10 +66,10 @@ public class TemplateBuilder {
 	/**
 	 * Makes the template element that was the current one before the current template element current again.
 	 *
-	 * @throws TemplateException when there is no previous template element to restore or when this template builder
+	 * @throws AluminumException when there is no previous template element to restore or when this template builder
 	 *                           should no longer be used
 	 */
-	public void restoreCurrentTemplateElement() throws TemplateException {
+	public void restoreCurrentTemplateElement() throws AluminumException {
 		ensureNotBuilt();
 
 		currentTemplateElement = templateElements.getParent(currentTemplateElement);
@@ -86,9 +88,9 @@ public class TemplateBuilder {
 		return new BuiltTemplate(templateElements);
 	}
 
-	private void ensureNotBuilt() throws TemplateException {
+	private void ensureNotBuilt() throws AluminumException {
 		if (built) {
-			throw new TemplateException("can't operate on builder - a template has already been built");
+			throw new AluminumException("can't operate on builder - a template has already been built");
 		}
 	}
 
@@ -130,9 +132,9 @@ public class TemplateBuilder {
 		 *
 		 * @param templateElement the template element to find the parent of
 		 * @return the template element that's the parent of the given template element
-		 * @throws TemplateException when the template element has not been added
+		 * @throws AluminumException when the template element has not been added
 		 */
-		public TemplateElement getParent(TemplateElement templateElement) throws TemplateException {
+		public TemplateElement getParent(TemplateElement templateElement) throws AluminumException {
 			Iterator<Map.Entry<TemplateElement, List<TemplateElement>>> it = templateElements.entrySet().iterator();
 
 			TemplateElement parentTemplateElement = null;
@@ -149,7 +151,7 @@ public class TemplateBuilder {
 			if (parentTemplateElementFound) {
 				return parentTemplateElement;
 			} else {
-				throw new TemplateException("element ", templateElement, " could not be found");
+				throw new AluminumException("element ", templateElement, " could not be found");
 			}
 		}
 
@@ -158,13 +160,13 @@ public class TemplateBuilder {
 		 *
 		 * @param templateElement the template element to find the children of
 		 * @return the template elements that have the given template element as their parent
-		 * @throws TemplateException when the template element has not been added
+		 * @throws AluminumException when the template element has not been added
 		 */
-		public List<TemplateElement> getChildren(TemplateElement templateElement) throws TemplateException {
+		public List<TemplateElement> getChildren(TemplateElement templateElement) throws AluminumException {
 			if (templateElements.containsKey(templateElement)) {
 				return templateElements.get(templateElement);
 			} else {
-				throw new TemplateException("element ", templateElement, " could not be found");
+				throw new AluminumException("element ", templateElement, " could not be found");
 			}
 		}
 	}
@@ -186,11 +188,11 @@ public class TemplateBuilder {
 			this.templateElements = templateElements;
 		}
 
-		public TemplateElement getParent(TemplateElement templateElement) throws TemplateException {
+		public TemplateElement getParent(TemplateElement templateElement) throws AluminumException {
 			return templateElements.getParent(templateElement);
 		}
 
-		public List<TemplateElement> getChildren(TemplateElement templateElement) throws TemplateException {
+		public List<TemplateElement> getChildren(TemplateElement templateElement) throws AluminumException {
 			return templateElements.getChildren(templateElement);
 		}
 	}

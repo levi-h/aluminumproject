@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.resources;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 
@@ -41,7 +42,7 @@ public class ClassPathTemplateFinderTest extends TemplateFinderTest {
 		assertAvailable(templateFinder, "test.xml");
 	}
 
-	@Test(dependsOnMethods = "templatePathShouldDefaultToClassPathRoot", expectedExceptions = ResourceException.class)
+	@Test(dependsOnMethods = "templatePathShouldDefaultToClassPathRoot", expectedExceptions = AluminumException.class)
 	public void tryingToFindNonexistentTemplateShouldCauseException() {
 		TemplateFinder templateFinder = new ClassPathTemplateFinder();
 		templateFinder.initialise(new TestConfiguration(new ConfigurationParameters()));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.configuration;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * A configuration element factory that can be used in tests.
@@ -45,11 +47,11 @@ public class TestConfigurationElementFactory implements ConfigurationElementFact
 		return configuration;
 	}
 
-	public <T> T instantiate(String className, Class<T> type) throws ConfigurationException {
+	public <T> T instantiate(String className, Class<T> type) throws AluminumException {
 		try {
 			return type.cast(Thread.currentThread().getContextClassLoader().loadClass(className).newInstance());
 		} catch (Exception exception) {
-			throw new ConfigurationException(exception, "can't instantiate '", className, "'");
+			throw new AluminumException(exception, "can't instantiate '", className, "'");
 		}
 	}
 }

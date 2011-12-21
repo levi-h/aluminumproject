@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.html.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.Library;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
@@ -82,14 +82,14 @@ public class TagFactory implements ActionFactory {
 		return information;
 	}
 
-	public Tag create(Map<String, ActionParameter> parameters, Context context) throws ActionException {
+	public Tag create(Map<String, ActionParameter> parameters, Context context) throws AluminumException {
 		Map<String, String> attributes = new LinkedHashMap<String, String>();
 
 		for (Map.Entry<String, ActionParameter> parameter: parameters.entrySet()) {
 			String attributeName = parameter.getKey();
 
 			if (!this.attributes.contains(attributeName)) {
-				throw new ActionException("tag '", name, "' does not support attribute '", attributeName, "'");
+				throw new AluminumException("tag '", name, "' does not support attribute '", attributeName, "'");
 			}
 
 			attributes.put(attributeName, (String) parameter.getValue().getValue(String.class, context));

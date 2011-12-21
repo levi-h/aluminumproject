@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,10 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.templates.ExpressionElement;
-import com.googlecode.aluminumproject.templates.TemplateElement;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import java.util.Map;
 
@@ -46,20 +44,12 @@ public class ExpressionInstruction extends AbstractInstruction {
 		this.text = text;
 	}
 
-	public void execute(Map<String, String> parameters, AluScriptContext context) throws AluScriptException {
+	public void execute(Map<String, String> parameters, AluScriptContext context) throws AluminumException {
 		if (!parameters.isEmpty()) {
-			throw new AluScriptException("text instructions do not allow parameters");
+			throw new AluminumException("text instructions do not allow parameters");
 		}
 
-		TemplateElement expressionElement;
-
-		try {
-			expressionElement = context.getConfiguration().getTemplateElementFactory().createExpressionElement(
-				expressionFactory, text, context.getLibraryUrlAbbreviations());
-		} catch (TemplateException exception) {
-			throw new AluScriptException(exception, "can't create expression element for expression ", text);
-		}
-
-		context.addTemplateElement(expressionElement);
+		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createExpressionElement(
+			expressionFactory, text, context.getLibraryUrlAbbreviations()));
 	}
 }

@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.beans.FeatureDescriptor;
@@ -51,7 +51,7 @@ public class ContextVariableElResolver extends ELResolver {
 				value = ((ElContext) context.getContext(ElContext.class)).getContext().findVariable((String) property);
 
 				context.setPropertyResolved(true);
-			} catch (ContextException exception) {
+			} catch (AluminumException exception) {
 				logger.debug("can't find variable '", property, "'");
 			}
 		}

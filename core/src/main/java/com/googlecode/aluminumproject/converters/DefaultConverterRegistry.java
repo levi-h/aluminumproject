@@ -18,17 +18,16 @@ package com.googlecode.aluminumproject.converters;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
@@ -77,7 +76,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		injector = new Injector();
@@ -100,23 +99,17 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 	 * &#64;Ignored}.
 	 *
 	 * @param packageName the name of the package that contains the converters to register
-	 * @throws ConfigurationException when one of the converters can't be registered
+	 * @throws AluminumException when one of the converters can't be registered
 	 */
-	protected void registerConverters(String packageName) throws ConfigurationException {
+	protected void registerConverters(String packageName) throws AluminumException {
 		logger.debug("registering all converters in package ", packageName);
 
-		List<Class<?>> converterClasses;
-
-		try {
-			converterClasses = TypeFinder.find(new TypeFilter() {
-				public boolean accepts(Class<?> type) {
-					return Converter.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
-						&& !type.isAnnotationPresent(Ignored.class);
-				}
-			}, packageName);
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find converter classes in package ", packageName);
-		}
+		List<Class<?>> converterClasses = TypeFinder.find(new TypeFilter() {
+			public boolean accepts(Class<?> type) {
+				return Converter.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
+					&& !type.isAnnotationPresent(Ignored.class);
+			}
+		}, packageName);
 
 		ConfigurationElementFactory configurationElementFactory = configuration.getConfigurationElementFactory();
 
@@ -129,21 +122,17 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		converters.clear();
 	}
 
-	public void registerConverter(Converter<?> converter) throws ConverterException {
-		try {
-			injector.inject(converter);
+	public void registerConverter(Converter<?> converter) throws AluminumException {
+		injector.inject(converter);
 
-			logger.debug("injected fields of converter");
-		} catch (UtilityException exception) {
-			throw new ConverterException(exception, "can't inject fields of converter");
-		}
+		logger.debug("injected fields of converter");
 
 		converters.add(converter);
 
 		logger.debug("registered converter ", converter);
 	}
 
-	public <S> Converter<? super S> getConverter(Class<S> sourceType, Type targetType) throws ConverterException {
+	public <S> Converter<? super S> getConverter(Class<S> sourceType, Type targetType) throws AluminumException {
 		if (targetType instanceof Class) {
 			targetType = ReflectionUtilities.wrapPrimitiveType((Class<?>) targetType);
 		}
@@ -163,7 +152,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		}
 
 		if (convertersForSourceType.isEmpty()) {
-			throw new ConverterException("no converter found that can convert values ",
+			throw new AluminumException("no converter found that can convert values ",
 				"from type ", sourceType.getName(), " to ", targetType);
 		} else {
 			return Collections.min(convertersForSourceType, new ConverterComparator(sourceType));
@@ -205,7 +194,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		}
 	}
 
-	public <S> Object convert(S value, Type targetType) throws ConverterException {
+	public <S> Object convert(S value, Type targetType) throws AluminumException {
 		Object convertedValue;
 
 		if (value == null) {

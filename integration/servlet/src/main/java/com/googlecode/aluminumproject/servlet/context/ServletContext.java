@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.servlet.context;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.AbstractContext;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultScope;
 
 import javax.servlet.http.HttpServletRequest;
@@ -116,7 +116,7 @@ public class ServletContext extends AbstractContext {
 	}
 
 	@Override
-	public AbstractContext createSubcontext() throws ContextException {
+	public AbstractContext createSubcontext() throws AluminumException {
 		return new ServletContext(this, application, request, response);
 	}
 

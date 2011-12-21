@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.expressions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.context.Context;
@@ -43,7 +44,7 @@ public interface ExpressionFactory extends ConfigurationElement {
 	 * @param value the expression value to parse
 	 * @param context the context in which the expression will be evaluated
 	 * @return the new expression
-	 * @throws ExpressionException when the expression can't be created
+	 * @throws AluminumException when the expression can't be created
 	 */
-	Expression create(String value, Context context) throws ExpressionException;
+	Expression create(String value, Context context) throws AluminumException;
 }

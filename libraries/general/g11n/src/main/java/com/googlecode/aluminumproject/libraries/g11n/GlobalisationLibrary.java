@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
@@ -45,7 +46,7 @@ public class GlobalisationLibrary extends AbstractLibrary {
 	}
 
 	@Override
-	public ActionContributionFactory getDynamicActionContributionFactory(String name) {
+	public ActionContributionFactory getDynamicActionContributionFactory(String name) throws AluminumException {
 		ActionContributionFactory actionContributionFactory =
 			new DefaultActionContributionFactory(LocalisedParameter.class);
 		initialiseLibraryElement(actionContributionFactory);

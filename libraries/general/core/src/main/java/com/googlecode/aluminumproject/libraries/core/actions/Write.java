@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,14 +39,14 @@ public class Write extends AbstractAction {
 		value = NO_VALUE;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		List<?> values;
 
 		if (value == NO_VALUE) {
 			values = getBodyList(context, writer);
 
 			if (values.isEmpty()) {
-				throw new ActionException("the 'write' action needs a value, either as a parameter or in its body");
+				throw new AluminumException("the 'write' action needs a value, either as a parameter or in its body");
 			}
 		} else {
 			values = Collections.singletonList(value);

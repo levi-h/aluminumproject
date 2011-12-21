@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@ package com.googlecode.aluminumproject.libraries.io.actions;
 
 import static com.googlecode.aluminumproject.libraries.io.functions.Directories.temporaryDirectory;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.io.IoLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class CopyFileTest extends IoLibraryTest {
 		assert readLines(sourceFile).equals(readLines(targetFile));
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void copyingDirectoryShouldCauseException() throws IOException {
 		File sourceDirectory = createTemporaryDirectory();
 		File targetDirectory = createTemporaryDirectory();
@@ -59,7 +59,7 @@ public class CopyFileTest extends IoLibraryTest {
 		processTemplate("copy-file", context);
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void copyingNonexistentFileShouldCauseException() throws IOException {
 		File sourceFile = new File(temporaryDirectory(), generateUniqueName(temporaryDirectory()));
 
@@ -72,7 +72,7 @@ public class CopyFileTest extends IoLibraryTest {
 		processTemplate("copy-file", context);
 	}
 
-	@Test(dependsOnMethods = "fileShouldBeCopyable", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "fileShouldBeCopyable", expectedExceptions = AluminumException.class)
 	public void copyingFileToDirectoryThatContainsFileWithSameNameShouldCauseException() throws IOException {
 		File sourceFile = createTemporaryFile(5);
 		File targetDirectory = createTemporaryDirectory();
@@ -85,7 +85,7 @@ public class CopyFileTest extends IoLibraryTest {
 		processTemplate("copy-file", context);
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void copyingFileToNonexistentDirectoryShouldCauseException() throws IOException {
 		File sourceFile = createTemporaryFile(10);
 		File targetDirectory = new File(temporaryDirectory(), generateUniqueName(temporaryDirectory()));

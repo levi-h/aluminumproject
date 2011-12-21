@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package com.googlecode.aluminumproject.configuration;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.CONFIGURATION_ELEMENT_PACKAGES;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.isAbstract;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
 import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
@@ -58,39 +58,34 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
-		Set<String> customiserPackages = new HashSet<String>();
+	public void initialise(Configuration configuration) throws AluminumException {
+		Set<String> configuredCustomiserPackages = new HashSet<String>();
 
 		ConfigurationParameters parameters = configuration.getParameters();
-		Collections.addAll(customiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES));
-		Collections.addAll(customiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
+		Collections.addAll(configuredCustomiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES));
+		Collections.addAll(configuredCustomiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
 
-		if (customiserPackages.isEmpty()) {
+		if (configuredCustomiserPackages.isEmpty()) {
 			logger.debug("no configuration element customisers configured");
 		} else {
-			logger.debug("looking for configuration element customisers in ", customiserPackages);
+			logger.debug("looking for configuration element customisers in ", configuredCustomiserPackages);
 
-			List<Class<? extends ConfigurationElementCustomiser>> customiserClasses;
+			TypeFilter customiserClassFilter = new TypeFilter() {
+				public boolean accepts(Class<?> type) {
+					return ConfigurationElementCustomiser.class.isAssignableFrom(type) && !isAbstract(type)
+						&& !type.isAnnotationPresent(Ignored.class);
+				}
+			};
+			String[] customiserPackages =
+					configuredCustomiserPackages.toArray(new String[configuredCustomiserPackages.size()]);
 
-			try {
-				customiserClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
-					public boolean accepts(Class<?> type) {
-						return ConfigurationElementCustomiser.class.isAssignableFrom(type) && !isAbstract(type)
-							&& !type.isAnnotationPresent(Ignored.class);
-					}
-				}, customiserPackages.toArray(new String[customiserPackages.size()])));
-			} catch (UtilityException exception) {
-				throw new ConfigurationException(exception, "can't find configuration element customisers");
-			}
+			List<Class<? extends ConfigurationElementCustomiser>> customiserClasses =
+				Utilities.typed(TypeFinder.find(customiserClassFilter, customiserPackages));
 
 			for (Class<? extends ConfigurationElementCustomiser> customiserClass: customiserClasses) {
 				logger.debug("adding configuration element customiser of type ", customiserClass.getName());
 
-				try {
-					customisers.add(ReflectionUtilities.instantiate(customiserClass));
-				} catch (UtilityException exception) {
-					throw new ConfigurationException(exception, "can't create configuration element customiser");
-				}
+				customisers.add(ReflectionUtilities.instantiate(customiserClass));
 			}
 		}
 
@@ -112,17 +107,12 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 		return Collections.unmodifiableList(customisers);
 	}
 
-	public <T> T instantiate(String className, Class<T> type) throws ConfigurationException {
+	public <T> T instantiate(String className, Class<T> type) throws AluminumException {
 		logger.debug("instantiating ", className, " with type ", type.getName(), " from configuration element factory");
 
 		T object;
 
-		try {
-			object = ReflectionUtilities.instantiate(className, type, Thread.currentThread().getContextClassLoader());
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception,
-				"can't instantiate ", className, " from configuration element factory");
-		}
+		object = ReflectionUtilities.instantiate(className, type, Thread.currentThread().getContextClassLoader());
 
 		for (ConfigurationElementCustomiser customiser: customisers) {
 			logger.debug("applying configuration element customiser ", customiser);

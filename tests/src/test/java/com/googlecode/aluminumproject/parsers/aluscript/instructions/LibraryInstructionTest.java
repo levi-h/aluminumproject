@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.parsers.aluscript.TestAluScriptContext;
 
 import java.util.Collections;
@@ -65,7 +65,7 @@ public class LibraryInstructionTest {
 		assert libraryUrlAbbreviations.get("test").equals("http://aluminumproject.googlecode.com/test");
 	}
 
-	@Test(expectedExceptions = AluScriptException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void executingInstructionWithoutParametersShouldCauseException() {
 		instruction.execute(Collections.<String, String>emptyMap(), context);
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
@@ -51,11 +50,11 @@ public class Mute implements ActionContribution {
 	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
-			throws ActionException {
+			throws AluminumException {
 		final boolean mute = ((Boolean) parameter.getValue(Boolean.TYPE, context)).booleanValue();
 
 		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.EXECUTION) {
-			public void intercept(ActionContext actionContext) throws InterceptionException {
+			public void intercept(ActionContext actionContext) throws AluminumException {
 				Writer originalWriter = actionContext.getWriter();
 
 				ToggleableWriter toggleableWriter = findToggleableWriter(originalWriter);

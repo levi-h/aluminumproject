@@ -15,13 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.scripting.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -52,7 +50,7 @@ public class Script extends AbstractAction {
 	 */
 	public Script() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		ScriptEngineManager engineManager = new ScriptEngineManager();
 		ScriptEngine engine = engineManager.getEngineByMimeType(type);
 
@@ -63,14 +61,14 @@ public class Script extends AbstractAction {
 				availableTypes.addAll(engineFactory.getMimeTypes());
 			}
 
-			throw new ActionException("unsupported script type: '", type, "', available types are ", availableTypes);
+			throw new AluminumException("unsupported script type: '", type, "', available types are ", availableTypes);
 		} else {
 			ScriptContext scriptContext = createScriptContext(engine, context, writer);
 
 			try {
 				engine.eval(getBodyText(context, writer), scriptContext);
 			} catch (ScriptException exception) {
-				throw new ActionException(exception, "can't evaluate script");
+				throw new AluminumException(exception, "can't evaluate script");
 			}
 
 			synchroniseVariables(scriptContext.getBindings(ScriptContext.ENGINE_SCOPE), context);
@@ -78,7 +76,7 @@ public class Script extends AbstractAction {
 	}
 
 	private ScriptContext createScriptContext(
-			ScriptEngine engine, Context context, Writer writer) throws ContextException {
+			ScriptEngine engine, Context context, Writer writer) throws AluminumException {
 		Bindings bindings = engine.createBindings();
 		synchroniseVariables(context, bindings);
 
@@ -89,7 +87,7 @@ public class Script extends AbstractAction {
 		return scriptContext;
 	}
 
-	private void synchroniseVariables(Context context, Bindings bindings) throws ContextException {
+	private void synchroniseVariables(Context context, Bindings bindings) throws AluminumException {
 		List<String> scopes = new ArrayList<String>(context.getScopeNames());
 		Collections.reverse(scopes);
 
@@ -104,7 +102,7 @@ public class Script extends AbstractAction {
 		}
 	}
 
-	private void synchroniseVariables(Bindings bindings, Context context) throws ContextException {
+	private void synchroniseVariables(Bindings bindings, Context context) throws AluminumException {
 		Set<String> scriptVariables = bindings.keySet();
 
 		for (String name: scriptVariables) {

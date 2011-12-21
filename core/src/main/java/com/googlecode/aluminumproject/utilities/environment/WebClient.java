@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * Provides a means to access web resources.
@@ -30,7 +30,7 @@ public interface WebClient {
 	 * @param method the request method to use
 	 * @param url the URL of the resource to request
 	 * @return the new request
-	 * @throws UtilityException when the request can't be created
+	 * @throws AluminumException when the request can't be created
 	 */
-	Request createRequest(String method, String url) throws UtilityException;
+	Request createRequest(String method, String url) throws AluminumException;
 }

@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.cli.commands.aludoc;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.cli.Command;
-import com.googlecode.aluminumproject.cli.CommandException;
 import com.googlecode.aluminumproject.cli.OptionEffect;
-import com.googlecode.aluminumproject.tools.ToolException;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -98,7 +97,7 @@ public class AluDoc extends Command {
 
 	@Override
 	protected void execute(
-			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws CommandException {
+			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws AluminumException {
 		com.googlecode.aluminumproject.tools.aludoc.AluDoc aluDoc =
 			new com.googlecode.aluminumproject.tools.aludoc.AluDoc(location);
 
@@ -106,11 +105,7 @@ public class AluDoc extends Command {
 			aluDoc.excludeLibrary(exclude);
 		}
 
-		try {
-			aluDoc.generate();
-		} catch (ToolException exception) {
-			throw new CommandException(exception, "can't generate library documentation");
-		}
+		aluDoc.generate();
 	}
 
 

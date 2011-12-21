@@ -15,14 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.Type;
@@ -43,13 +41,9 @@ public class Convert extends AbstractAction {
 	 */
 	public Convert() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException {
-		try {
-			logger.debug("trying to convert ", value, " into ", type);
+	public void execute(Context context, Writer writer) throws AluminumException {
+		logger.debug("trying to convert ", value, " into ", type);
 
-			writer.write(configuration.getConverterRegistry().convert(value, type));
-		} catch (ConverterException exception) {
-			throw new ActionException(exception, "can't convert value");
-		}
+		writer.write(configuration.getConverterRegistry().convert(value, type));
 	}
 }
