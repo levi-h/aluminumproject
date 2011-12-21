@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.parsers.xml;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
-import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.UpperCaseTemplateNameTranslator;
 import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.resources.TemplateFinder;
@@ -78,7 +78,7 @@ public class XmlParserTest {
 		assert libraryUrlAbbreviations.get("").equals("http://aluminumproject.googlecode.com/test");
 	}
 
-	@Test(expectedExceptions = ParseException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tagsWithoutLibraryShouldCauseException() {
 		createParser().parseTemplate("templates/html.xml");
 	}

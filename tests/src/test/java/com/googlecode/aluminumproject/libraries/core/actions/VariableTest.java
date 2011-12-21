@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.core.CoreLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import java.util.Arrays;
 
@@ -75,7 +75,7 @@ public class VariableTest extends CoreLibraryTest {
 
 	@Test(
 		dependsOnMethods = "supplyingScopeShouldResultInVariableInGivenScope",
-		expectedExceptions = TemplateException.class
+		expectedExceptions = AluminumException.class
 	)
 	public void omittingNameWhileSupplyingScopeShouldCauseException() {
 		Context context = new DefaultContext();

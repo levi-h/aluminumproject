@@ -15,16 +15,15 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.libraries.Library;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.functions.ConstantFunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.libraries.functions.FunctionArgument;
-import com.googlecode.aluminumproject.libraries.functions.FunctionException;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
 import com.googlecode.aluminumproject.utilities.Logger;
@@ -118,7 +117,7 @@ public class FunctionDelegateFactory {
 				if ((library != null) && library.getInformation().isSupportingDynamicFunctions()) {
 					try {
 						functionFactory = library.getDynamicFunctionFactory(functionName);
-					} catch (LibraryException exception) {
+					} catch (AluminumException exception) {
 						logger.warn("can't get dynamic function factory for function '", functionName, "'",
 							" in library with URL '", libraryUrl, "'");
 					}
@@ -150,9 +149,9 @@ public class FunctionDelegateFactory {
 	 * @param key the key of the delegate
 	 * @param parameters the parameters that were given to the delegate
 	 * @return the function result
-	 * @throws FunctionException when the function can't be created
+	 * @throws AluminumException when the function can't be created
 	 */
-	public static Object callFunction(String key, Object[] parameters) throws FunctionException {
+	public static Object callFunction(String key, Object[] parameters) throws AluminumException {
 		FunctionContext functionContext = null;
 
 		Queue<FunctionContext> functionContexts = FunctionDelegateFactory.functionContexts.get();
@@ -169,7 +168,7 @@ public class FunctionDelegateFactory {
 		}
 
 		if (functionContext == null) {
-			throw new FunctionException("can't find function context for function");
+			throw new AluminumException("can't find function context for function");
 		}
 
 		List<FunctionArgument> arguments = new ArrayList<FunctionArgument>(parameters.length);

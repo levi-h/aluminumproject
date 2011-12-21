@@ -16,6 +16,7 @@
 package com.googlecode.aluminumproject.configuration;
 
 import com.googlecode.aluminumproject.Aluminum;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.cache.Cache;
 import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
@@ -48,103 +49,103 @@ public interface Configuration {
 	 * Returns the parameters that this configuration was created with.
 	 *
 	 * @return this configuration's parameters
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	ConfigurationParameters getParameters() throws ConfigurationException;
+	ConfigurationParameters getParameters() throws AluminumException;
 
 	/**
 	 * Returns the configuration element factory.
 	 *
 	 * @return the configuration element factory to use
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	ConfigurationElementFactory getConfigurationElementFactory() throws ConfigurationException;
+	ConfigurationElementFactory getConfigurationElementFactory() throws AluminumException;
 
 	/**
 	 * Returns the converter registry.
 	 *
 	 * @return the converter registry to use
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	ConverterRegistry getConverterRegistry() throws ConfigurationException;
+	ConverterRegistry getConverterRegistry() throws AluminumException;
 
 	/**
 	 * Returns all libraries.
 	 *
 	 * @return a list with all configured libraries
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	List<Library> getLibraries() throws ConfigurationException;
+	List<Library> getLibraries() throws AluminumException;
 
 	/**
 	 * Returns the template element factory.
 	 *
 	 * @return the template element factory to use
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	TemplateElementFactory getTemplateElementFactory() throws ConfigurationException;
+	TemplateElementFactory getTemplateElementFactory() throws AluminumException;
 
 	/**
 	 * Returns the template finder.
 	 *
 	 * @return the template finder to use
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	TemplateFinder getTemplateFinder() throws ConfigurationException;
+	TemplateFinder getTemplateFinder() throws AluminumException;
 
 	/**
 	 * Returns all parsers that can be used to produce a template.
 	 *
 	 * @return a map with all of the configured parsers, keyed by their names
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	Map<String, Parser> getParsers() throws ConfigurationException;
+	Map<String, Parser> getParsers() throws AluminumException;
 
 	/**
 	 * Returns the template store finder.
 	 *
 	 * @return the template store finder to use
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	TemplateStoreFinder getTemplateStoreFinder() throws ConfigurationException;
+	TemplateStoreFinder getTemplateStoreFinder() throws AluminumException;
 
 	/**
 	 * Returns all serialisers that can be used to serialise a template.
 	 *
 	 * @return a map with all of the configured serialisers, with their names as keys
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	Map<String, Serialiser> getSerialisers() throws ConfigurationException;
+	Map<String, Serialiser> getSerialisers() throws AluminumException;
 
  	/**
 	 * Returns all context enrichers.
 	 *
 	 * @return a list with all of the configured context enrichers
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	List<ContextEnricher> getContextEnrichers() throws ConfigurationException;
+	List<ContextEnricher> getContextEnrichers() throws AluminumException;
 
 	/**
 	 * Returns all expression factories that will be used to recognise and create expressions.
 	 *
 	 * @return a list with all of the expression factories that can be used
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	List<ExpressionFactory> getExpressionFactories() throws ConfigurationException;
+	List<ExpressionFactory> getExpressionFactories() throws AluminumException;
 
 	/**
 	 * Returns the cache. A template cache is optional.
 	 *
 	 * @return the cache to use
-	 * @throws ConfigurationException when this configuration has been closed
+	 * @throws AluminumException when this configuration has been closed
 	 */
-	Cache getCache() throws ConfigurationException;
+	Cache getCache() throws AluminumException;
 
 	/**
 	 * Closes this configuration.
 	 *
-	 * @throws ConfigurationException when something goes wrong while closing this configuration or when it already has
-	 *                                been closed
+	 * @throws AluminumException when something goes wrong while closing this configuration or when it already has been
+	 *                           closed
 	 */
-	void close() throws ConfigurationException;
+	void close() throws AluminumException;
 }

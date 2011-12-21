@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.functions.Function;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.utilities.Logger;
 
@@ -68,7 +68,7 @@ public class FunctionMapper extends javax.el.FunctionMapper {
 				logger.warn("prefix '", prefix, "' is no library URL abbreviation ",
 					"(valid abbreviations are ", libraryUrlAbbreviations, ")");
 			}
-		} catch (TemplateException exception) {
+		} catch (AluminumException exception) {
 			logger.warn(exception, "can't obtain template information");
 		}
 

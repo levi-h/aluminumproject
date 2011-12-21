@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.HashMap;
@@ -48,16 +49,16 @@ public class ConfigurationParameters {
 	 *
 	 * @param name the name of the parameter
 	 * @param value the value to set
-	 * @throws ConfigurationException when {@code value} is {@code null} or empty
+	 * @throws AluminumException when {@code value} is {@code null} or empty
 	 */
-	public void addParameter(String name, String value) throws ConfigurationException {
+	public void addParameter(String name, String value) throws AluminumException {
 		if (value == null) {
-			throw new ConfigurationException("parameter '", name, "' should not be null");
+			throw new AluminumException("parameter '", name, "' should not be null");
 		} else {
 			value = value.trim();
 
 			if (value.equals("")) {
-				throw new ConfigurationException("parameter '", name, "' should not be empty");
+				throw new AluminumException("parameter '", name, "' should not be empty");
 			} else {
 				logger.debug("adding configuration parameter '", name, "' with value '", value, "'");
 
@@ -103,10 +104,10 @@ public class ConfigurationParameters {
 	 * @param name the name of the parameter to retrieve the value map of
 	 * @param defaultValueMap the value map to return if no configuration parameter exists with the given name
 	 * @return the value map of the parameter with the given name
-	 * @throws ConfigurationException when the parameter value can't be parsed into a map
+	 * @throws AluminumException when the parameter value can't be parsed into a map
 	 */
 	public Map<String, String> getValueMap(
-			String name, Map<String, String> defaultValueMap) throws ConfigurationException {
+			String name, Map<String, String> defaultValueMap) throws AluminumException {
 		Map<String, String> valueMap;
 
 		if (parameters.containsKey(name)) {
@@ -120,14 +121,12 @@ public class ConfigurationParameters {
 					String value = keyAndValue[1];
 
 					if (valueMap.containsKey(key)) {
-						throw new ConfigurationException("duplicate key '", key, "' ",
-							"in value map of parameter '", name, "'");
+						throw new AluminumException("duplicate key '", key, "' in value map of parameter '", name, "'");
 					} else {
 						valueMap.put(key, value);
 					}
 				} else {
-					throw new ConfigurationException("illegal entry (", entry, ") ",
-						"for value map of parameter '", name, "'");
+					throw new AluminumException("illegal entry (", entry, ") for value map of parameter '", name, "'");
 				}
 			}
 		} else {

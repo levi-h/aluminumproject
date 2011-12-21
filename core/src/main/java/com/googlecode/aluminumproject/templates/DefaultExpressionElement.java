@@ -15,12 +15,11 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.Map;
@@ -63,23 +62,17 @@ public class DefaultExpressionElement implements ExpressionElement {
 		return text;
 	}
 
-	public void process(Context context, Writer writer) throws TemplateException {
+	public void process(Context context, Writer writer) throws AluminumException {
 		TemplateInformation templateInformation = TemplateInformation.from(context);
 		templateInformation.addTemplateElement(this);
 
-		try {
-			logger.debug("creating expression '", text, "' using ", expressionFactory);
+		logger.debug("creating expression '", text, "' using ", expressionFactory);
 
-			Object result = expressionFactory.create(text, context).evaluate(context);
+		Object result = expressionFactory.create(text, context).evaluate(context);
 
-			logger.debug("writing ", result);
+		logger.debug("writing ", result);
 
-			writer.write(result);
-		} catch (ExpressionException exception) {
-			throw new TemplateException(exception, "can't evaluate expression");
-		} catch (WriterException exception) {
-			throw new TemplateException(exception, "can't write expression result");
-		}
+		writer.write(result);
 
 		templateInformation.removeCurrentTemplateElement();
 	}

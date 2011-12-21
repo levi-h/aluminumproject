@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * Writes objects to its underlying writer or ignores them, depending on its state.
@@ -62,7 +64,7 @@ public class ToggleableWriter extends AbstractDecorativeWriter {
 		this.write = write;
 	}
 
-	public void write(Object object) {
+	public void write(Object object) throws AluminumException {
 		if (write) {
 			getWriter().write(object);
 		} else {

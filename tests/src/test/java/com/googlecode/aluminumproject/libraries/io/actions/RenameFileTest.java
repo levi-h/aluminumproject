@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.io.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.io.IoLibraryTest;
 import com.googlecode.aluminumproject.libraries.io.functions.Directories;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class RenameFileTest extends IoLibraryTest {
 		assert targetDirectory.exists();
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void renamingNonexistentFileShouldCauseException() throws IOException {
 		File parentDirectory = Directories.temporaryDirectory();
 		File sourceFile = new File(parentDirectory, generateUniqueName(parentDirectory));
@@ -81,7 +81,7 @@ public class RenameFileTest extends IoLibraryTest {
 		processTemplate("rename-file", context);
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void movingFileShouldCauseException() throws IOException {
 		File sourceFile = createTemporaryFile();
 
@@ -93,7 +93,7 @@ public class RenameFileTest extends IoLibraryTest {
 		processTemplate("rename-file", context);
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void usingExistingTargetNameShouldCauseException() throws IOException {
 		File sourceFile = createTemporaryFile();
 		File targetFile = createTemporaryFile();

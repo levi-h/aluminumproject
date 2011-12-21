@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class AbstractDecorativeWriterTest {
 	public void createWriters() {
 		underlyingWriter = new ListWriter();
 		writer = new AbstractDecorativeWriter(underlyingWriter) {
-			public void write(Object object) throws WriterException {
+			public void write(Object object) throws AluminumException {
 				checkOpen();
 
 				getWriter().write(object);
@@ -71,14 +73,14 @@ public class AbstractDecorativeWriterTest {
 		assert list.contains("*");
 	}
 
-	@Test(dependsOnMethods = "underlyingWriterShouldBeReplaceable", expectedExceptions = WriterException.class)
+	@Test(dependsOnMethods = "underlyingWriterShouldBeReplaceable", expectedExceptions = AluminumException.class)
 	public void replacingUnderlyingWriterOfClosedWriterShouldCauseException() {
 		writer.close();
 
 		writer.setWriter(new StringWriter());
 	}
 
-	@Test(expectedExceptions = WriterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void closingWriterShouldCloseUnderlyingWriter() {
 		writer.close();
 

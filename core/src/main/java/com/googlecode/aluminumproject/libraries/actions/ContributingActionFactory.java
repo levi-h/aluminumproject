@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -48,7 +48,7 @@ public class ContributingActionFactory extends AbstractLibraryElement implements
 	}
 
 	@Override
-	public void initialise(Configuration configuration) {
+	public void initialise(Configuration configuration) throws AluminumException {
 		super.initialise(configuration);
 
 		String actionName = actionContributionInformation.getName();
@@ -66,21 +66,17 @@ public class ContributingActionFactory extends AbstractLibraryElement implements
 		return actionInformation;
 	}
 
-	public Action create(Map<String, ActionParameter> parameters, Context context) throws ActionException {
+	public Action create(Map<String, ActionParameter> parameters, Context context) throws AluminumException {
 		String parameterName = actionContributionInformation.getParameterNameWhenAction();
 
 		if ((parameters.size() != 1) || !parameters.containsKey(parameterName)) {
-			throw new ActionException("expected single parameter named '", parameterName, "'");
+			throw new AluminumException("expected single parameter named '", parameterName, "'");
 		}
 
 		Action action = new ContributingAction(actionContributionClass,
 			actionContributionInformation.getParameterNameWhenAction(), parameters.get(parameterName));
 
-		try {
-			injectFields(action);
-		} catch (LibraryException exception) {
-			throw new ActionException(exception, "can't inject contributing action fields");
-		}
+		injectFields(action);
 
 		logger.debug("created contributing action for action contribution class ", actionContributionClass.getName());
 

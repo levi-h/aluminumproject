@@ -15,12 +15,11 @@
  */
 package com.googlecode.aluminumproject.converters.ds;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.text.Splitter;
 
 import java.lang.reflect.ParameterizedType;
@@ -54,9 +53,9 @@ public class StringToListConverter implements Converter<String> {
 		return targetTypeIsInterface || targetTypeIsParameterisedInterface;
 	}
 
-	public Object convert(String value, Type targetType) throws ConverterException {
+	public Object convert(String value, Type targetType) throws AluminumException {
 		if (!supportsTargetType(targetType)) {
-			throw new ConverterException("expected list as target type, not ", targetType);
+			throw new AluminumException("expected list as target type, not ", targetType);
 		}
 
 		ConverterRegistry converterRegistry = configuration.getConverterRegistry();
@@ -73,14 +72,10 @@ public class StringToListConverter implements Converter<String> {
 		return list;
 	}
 
-	private List<String> getElements(String list) throws ConverterException {
+	private List<String> getElements(String list) throws AluminumException {
 		ElementProcessor elementProcessor = new ElementProcessor();
 
-		try {
-			new Splitter(Arrays.asList("\\[", "\\s*,\\s*", "\\]"), '\\').split(list, elementProcessor);
-		} catch (UtilityException exception) {
-			throw new ConverterException(exception, "can't split list '", list, "'");
-		}
+		new Splitter(Arrays.asList("\\[", "\\s*,\\s*", "\\]"), '\\').split(list, elementProcessor);
 
 		return elementProcessor.getElements();
 	}
@@ -101,18 +96,18 @@ public class StringToListConverter implements Converter<String> {
 			return elements;
 		}
 
-		public void process(String token, String separator, String separatorPattern) throws UtilityException {
+		public void process(String token, String separator, String separatorPattern) throws AluminumException {
 			if (separatorPattern == null) {
 				if (level > 0) {
-					throw new UtilityException("unclosed nested list");
+					throw new AluminumException("unclosed nested list");
 				} else if (!token.equals("")) {
-					throw new UtilityException("unexpected token after list: '", token, "'");
+					throw new AluminumException("unexpected token after list: '", token, "'");
 				}
 			} else if (separatorPattern.equals("\\s*,\\s*") || separator.equals("]")) {
 				elementBuilder.append(token);
 
 				if (level == 0) {
-					throw new UtilityException("unexpected separator: '", separator, "'");
+					throw new AluminumException("unexpected separator: '", separator, "'");
 				} else if (level == 1) {
 					elements.add(elementBuilder.toString());
 
@@ -131,7 +126,7 @@ public class StringToListConverter implements Converter<String> {
 
 				level++;
 			} else {
-				throw new UtilityException("unexpected token before list: '", token, "'");
+				throw new AluminumException("unexpected token before list: '", token, "'");
 			}
 		}
 	}

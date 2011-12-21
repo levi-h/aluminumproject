@@ -21,6 +21,7 @@ import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.OutputStreamAppender;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
 
@@ -184,11 +185,11 @@ public abstract class Command {
 			errorStream.println(exception.getMessage().toLowerCase());
 
 			status = -1;
-		} catch (CommandException exception) {
+		} catch (AluminumException exception) {
 			errorStream.println(exception.getMessage());
 
 			if (printStackTraces) {
-				exception.getCause().printStackTrace(errorStream);
+				((exception.getCause() == null) ? exception : exception.getCause()).printStackTrace(errorStream);
 			}
 
 			status = -1;
@@ -203,10 +204,10 @@ public abstract class Command {
 	 * @param outputStream the output stream to use
 	 * @param errorStream the error stream to use
 	 * @param arguments the command-line arguments that do not belong to any option
-	 * @throws CommandException when this command can't be executed
+	 * @throws AluminumException when this command can't be executed
 	 */
 	protected abstract void execute(
-		PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws CommandException;
+		PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws AluminumException;
 
 	private void initialiseLogging(final PrintStream outputStream) {
 		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -248,9 +249,9 @@ public abstract class Command {
 	 * Displays a help message.
 	 *
 	 * @param outputStream the output stream to print the help message to
-	 * @throws CommandException when the help message can't be displayed
+	 * @throws AluminumException when the help message can't be displayed
 	 */
-	protected void displayHelp(PrintStream outputStream) throws CommandException {
+	protected void displayHelp(PrintStream outputStream) throws AluminumException {
 		Map<String, String> helpInformation = getHelpInformation();
 
 		print(helpInformation.get("name"), outputStream);
@@ -262,7 +263,7 @@ public abstract class Command {
 		try {
 			optionParser.printHelpOn(outputStream);
 		} catch (IOException exception) {
-			throw new CommandException(exception, "The options can't be displayed.");
+			throw new AluminumException(exception, "The options can't be displayed.");
 		}
 	}
 

@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
-import com.googlecode.aluminumproject.converters.ConverterException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.writers.AbstractWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 /**
  * A {@link Writer writer} that adds text nodes to {@link AbstractElement elements}. When a non-{@link String string} is
@@ -44,23 +43,13 @@ class TextWriter extends AbstractWriter {
 		this.converterRegistry = converterRegistry;
 	}
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 
-		String text;
-
-		if (object instanceof String) {
-			text = (String) object;
-		} else {
-			try {
-				text = (String) converterRegistry.convert(object, String.class);
-			} catch (ConverterException exception) {
-				throw new WriterException("can't convert ", object, " to a string");
-			}
-		}
+		String text = (String) ((object instanceof String) ? object : converterRegistry.convert(object, String.class));
 
 		if (text == null) {
-			throw new WriterException("can't write null values");
+			throw new AluminumException("can't write null values");
 		} else {
 			element.addText(text);
 		}

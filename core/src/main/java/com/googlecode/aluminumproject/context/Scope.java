@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.context;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Set;
 
@@ -42,9 +44,9 @@ public interface Scope {
 	 *
 	 * @param name the name of the variable to retrieve
 	 * @return the value of the variable with the given name
-	 * @throws ContextException when there's no variable with the given name within this scope
+	 * @throws AluminumException when there's no variable with the given name within this scope
 	 */
-	Object getVariable(String name) throws ContextException;
+	Object getVariable(String name) throws AluminumException;
 
 	/**
 	 * Sets a variable.
@@ -60,7 +62,7 @@ public interface Scope {
 	 *
 	 * @param name the name of the variable to remove
 	 * @return the previous value of the variable
-	 * @throws ContextException when there's no variable with the given name within this scope
+	 * @throws AluminumException when there's no variable with the given name within this scope
 	 */
-	Object removeVariable(String name) throws ContextException;
+	Object removeVariable(String name) throws AluminumException;
 }

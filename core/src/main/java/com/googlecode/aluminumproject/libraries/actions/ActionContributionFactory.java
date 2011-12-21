@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.LibraryElement;
 
 /**
@@ -34,7 +35,7 @@ public interface ActionContributionFactory extends LibraryElement {
 	 * Creates the action contribution.
 	 *
 	 * @return the new action contribution
-	 * @throws ActionException when the action contribution can't be created
+	 * @throws AluminumException when the action contribution can't be created
 	 */
-	ActionContribution create() throws ActionException;
+	ActionContribution create() throws AluminumException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,16 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.annotations.UsableAsAction;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.lang.reflect.Type;
 
@@ -65,7 +63,7 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 	}
 
 	@Override
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		super.initialise(configuration);
 
 		String name;
@@ -92,17 +90,12 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 		Type parameterType;
 
 		if (actionContributionClass.isAnnotationPresent(Typed.class)) {
-			try {
-				String parameterTypeName = actionContributionClass.getAnnotation(Typed.class).value();
+			String parameterTypeName = actionContributionClass.getAnnotation(Typed.class).value();
 
-				parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
+			parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
 
-				logger.debug("parameter type of action contribution class ", actionContributionClass.getName(),
-					": ", parameterType);
-			} catch (UtilityException exception) {
-				throw new ConfigurationException(exception,
-					"can't get parameter type for action contribution class ", actionContributionClass.getName());
-			}
+			logger.debug(
+				"parameter type of action contribution class ", actionContributionClass.getName(), ": ", parameterType);
 		} else {
 			parameterType = Object.class;
 		}
@@ -114,26 +107,13 @@ public class DefaultActionContributionFactory extends AbstractLibraryElement imp
 		return information;
 	}
 
-	public ActionContribution create() throws ActionException {
-		ActionContribution actionContribution;
-
-		try {
-			ConfigurationElementFactory configurationElementFactory =
-				getConfiguration().getConfigurationElementFactory();
-
-			actionContribution =
-				configurationElementFactory.instantiate(actionContributionClass.getName(), ActionContribution.class);
-		} catch (ConfigurationException exception) {
-			throw new ActionException(exception, "can't create action contribution");
-		}
+	public ActionContribution create() throws AluminumException {
+		ActionContribution actionContribution = getConfiguration().getConfigurationElementFactory().instantiate(
+			actionContributionClass.getName(), ActionContribution.class);
 
 		logger.debug("created action contribution ", actionContribution);
 
-		try {
-			injectFields(actionContribution);
-		} catch (LibraryException exception) {
-			throw new ActionException(exception, "can't inject fields of action contribution");
-		}
+		injectFields(actionContribution);
 
 		logger.debug("injected fields");
 

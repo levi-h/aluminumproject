@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -96,7 +96,7 @@ public class NumberToNumberConverterTest {
 		assert convertedValue.equals(Byte.valueOf(Byte.MIN_VALUE));
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertIntoUnsupportedTargetTypeShouldCauseException() {
 		converter.convert(10, String.class);
 	}

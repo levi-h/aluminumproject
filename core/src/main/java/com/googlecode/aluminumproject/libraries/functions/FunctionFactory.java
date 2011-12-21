@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.LibraryElement;
 
@@ -39,7 +40,7 @@ public interface FunctionFactory extends LibraryElement {
 	 * @param arguments the arguments for the function
 	 * @param context the context in which the function will run
 	 * @return the new function
-	 * @throws FunctionException when the function can't be created
+	 * @throws AluminumException when the function can't be created
 	 */
-	Function create(List<FunctionArgument> arguments, Context context) throws FunctionException;
+	Function create(List<FunctionArgument> arguments, Context context) throws AluminumException;
 }

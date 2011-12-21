@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.model;
 
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.List;
 import java.util.Map;
@@ -34,25 +33,26 @@ public interface Element {
 	 * @param expression the XPath expression to use
 	 * @param context a set of namespaces that form the context for the XPath expression
 	 * @return a list of results
-	 * @throws ActionException when the given expression is invalid or when one of the results is of an unsupported type
+	 * @throws AluminumException when the given expression is invalid or when one of the results is of an unsupported
+	 *                           type
 	 */
-	List<?> select(String expression, Map<String, String> context) throws ActionException;
+	List<?> select(String expression, Map<String, String> context) throws AluminumException;
 
 	/**
 	 * Transforms this element using a style sheet.
 	 *
 	 * @param styleSheet the root element of the style sheet to use
 	 * @return the text and/or elements that the transformation resulted in
-	 * @throws ActionException when something goes wrong during the transformation
+	 * @throws AluminumException when something goes wrong during the transformation
 	 */
-	List<?> transform(Element styleSheet) throws ActionException;
+	List<?> transform(Element styleSheet) throws AluminumException;
 
 	/**
 	 * Writes a document with this element as root element to a writer.
 	 *
 	 * @param writer the writer to use
 	 * @param indentation the number of spaces to use for indentation
-	 * @throws WriterException when the document can't be written
+	 * @throws AluminumException when the document can't be written
 	 */
-	void writeDocument(Writer writer, int indentation) throws WriterException;
+	void writeDocument(Writer writer, int indentation) throws AluminumException;
 }

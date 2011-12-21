@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.configuration;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,12 +35,12 @@ public class ConfigurationParametersTest {
 		parameters = new ConfigurationParameters();
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void addingNullShouldCauseException() {
 		parameters.addParameter("name", null);
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void addingEmptyValueShouldCauseException() {
 		parameters.addParameter("name", "");
 	}
@@ -88,14 +90,14 @@ public class ConfigurationParametersTest {
 		assert valueMap.equals(defaultParameterMap);
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void retrievingValueMapWithIllegalEntriesShouldCauseException() {
 		parameters.addParameter("name", "key");
 
 		parameters.getValueMap("name", Collections.<String, String>emptyMap());
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void retrievingValueMapWithDuplicateKeysShouldCauseException() {
 		parameters.addParameter("name", "key: value, key: value");
 

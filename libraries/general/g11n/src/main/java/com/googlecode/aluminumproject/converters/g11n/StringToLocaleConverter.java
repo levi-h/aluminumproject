@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.converters.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.utilities.GlobalisationUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.util.Locale;
 
@@ -35,11 +34,7 @@ public class StringToLocaleConverter extends ClassBasedConverter<String, Locale>
 	public StringToLocaleConverter() {}
 
 	@Override
-	protected Locale convert(String value) throws ConverterException {
-		try {
-			return GlobalisationUtilities.convertLocale(value);
-		} catch (UtilityException exception) {
-			throw new ConverterException(exception, "can't convert locale");
-		}
+	protected Locale convert(String value) throws AluminumException {
+		return GlobalisationUtilities.convertLocale(value);
 	}
 }

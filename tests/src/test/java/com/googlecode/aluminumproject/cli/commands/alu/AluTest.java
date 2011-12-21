@@ -90,7 +90,7 @@ public class AluTest extends AbstractCommandTest {
 		assert !execution.wasSuccessful();
 		assert !execution.hadOutput();
 		assert execution.hadErrors();
-		assert execution.getErrors().equals("can't process template 'hello.xml' (unknown parser: xlm)");
+		assert execution.getErrors().equals("unknown parser: xlm");
 	}
 
 	@Test(dependsOnMethods = "aluScriptParserShouldBeDefaultParser")

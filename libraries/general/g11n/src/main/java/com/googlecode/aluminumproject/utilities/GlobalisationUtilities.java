@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.utilities;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Locale;
 
@@ -36,9 +38,9 @@ public class GlobalisationUtilities {
 	 *
 	 * @param value the value to convert
 	 * @return the converted locale
-	 * @throws UtilityException when the value can't be converted into a locale
+	 * @throws AluminumException when the value can't be converted into a locale
 	 */
-	public static Locale convertLocale(String value) throws UtilityException {
+	public static Locale convertLocale(String value) throws AluminumException {
 		Locale locale;
 
 		String[] parts = value.split("_");
@@ -60,7 +62,7 @@ public class GlobalisationUtilities {
 				break;
 
 			default:
-				throw new UtilityException("found more than three locale parts; ",
+				throw new AluminumException("found more than three locale parts; ",
 					"only the language, country and variant should be given");
 		}
 

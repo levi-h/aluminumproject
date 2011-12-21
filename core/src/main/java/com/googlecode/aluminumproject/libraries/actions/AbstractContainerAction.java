@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 /**
  * Implements {@link ContainerAction the ContainerAction interface} by obtaining the container object, {@link
@@ -41,7 +40,7 @@ public abstract class AbstractContainerAction<T> extends AbstractAction implemen
 		return containerObject;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		containerObject = provideContainerObject(context);
 
 		logger.debug("created container object ", containerObject, ", now invoking body");
@@ -54,8 +53,7 @@ public abstract class AbstractContainerAction<T> extends AbstractAction implemen
 	 *
 	 * @param context the context in which this action operates
 	 * @return the container object to make available
-	 * @throws ActionException when the container object can't be provided
-	 * @throws ContextException when the given context can't be used
+	 * @throws AluminumException when the container object can't be provided
 	 */
-	protected abstract T provideContainerObject(Context context) throws ActionException, ContextException;
+	protected abstract T provideContainerObject(Context context) throws AluminumException;
 }

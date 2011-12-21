@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.converters.ds.StringToListConverter;
@@ -55,7 +56,7 @@ public class StringToListConverterTest {
 		assert converter.supportsTargetType(GenericsUtilities.getType("List<String>", "java.lang", "java.util"));
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertToUnsupportedTypeShouldCauseException() {
 		converter.convert("[1]", Integer.class);
 	}
@@ -89,7 +90,7 @@ public class StringToListConverterTest {
 		assert convertedValue.equals(expectedValue);
 	}
 
-	@Test(dependsOnMethods = "untypedListShouldBeSupportedAsTargetType", expectedExceptions = ConverterException.class)
+	@Test(dependsOnMethods = "untypedListShouldBeSupportedAsTargetType", expectedExceptions = AluminumException.class)
 	public void tryingToConvertListWithIllegalFormatShouldCauseException() {
 		converter.convert("1, 2", List.class);
 	}

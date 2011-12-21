@@ -15,17 +15,17 @@
  */
 package com.googlecode.aluminumproject.libraries.scripting.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.scripting.ScriptingLibraryTest;
-import com.googlecode.aluminumproject.templates.TemplateException;
 
 import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"libraries", "libraries-scripting", "slow"})
 public class ScriptTest extends ScriptingLibraryTest {
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void usingUnavailableScriptTypeShouldCauseException() {
 		processTemplate("script-with-unavailable-type");
 	}

@@ -15,11 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.ds.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.FunctionClass;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,7 +41,7 @@ public class Comparators {
 	}
 
 	private static class NaturalOrderComparator implements Comparator<Object> {
-		public int compare(Object a, Object b) throws UtilityException {
+		public int compare(Object a, Object b) throws AluminumException {
 			Comparable<Object> comparableA;
 			Comparable<Object> comparableB;
 
@@ -49,7 +49,7 @@ public class Comparators {
 				comparableA = Utilities.typed(a);
 				comparableB = Utilities.typed(b);
 			} catch (ClassCastException exception) {
-				throw new UtilityException(exception, "can't compare objects that do not implement Comparable");
+				throw new AluminumException(exception, "can't compare objects that do not implement Comparable");
 			}
 
 			return Comparators.compare(comparableA, comparableB);
@@ -78,7 +78,7 @@ public class Comparators {
 			this.propertyName = propertyName;
 		}
 
-		public int compare(Object a, Object b) throws UtilityException {
+		public int compare(Object a, Object b) {
 			Comparable<Object> propertyA =
 				Utilities.typed(ReflectionUtilities.getNestedProperty(a, Comparable.class, propertyName));
 			Comparable<Object> propertyB =
@@ -103,11 +103,11 @@ public class Comparators {
 		return Collections.reverseOrder(comparator);
 	}
 
-	private static int compare(Comparable<Object> a, Comparable<Object> b) throws UtilityException {
+	private static int compare(Comparable<Object> a, Comparable<Object> b) throws AluminumException {
 		try {
 			return (a == null) ? (b == null) ? 0 : -1 : (b == null) ? 1 : a.compareTo(b);
 		} catch (ClassCastException exception) {
-			throw new UtilityException(exception, "can't compare ", a, " and ", b);
+			throw new AluminumException(exception, "can't compare ", a, " and ", b);
 		}
 	}
 }

@@ -15,13 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.html.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Map;
 
@@ -50,7 +48,7 @@ import java.util.Map;
 		this.open = open;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		writer.write("<");
 		writer.write(name);
 

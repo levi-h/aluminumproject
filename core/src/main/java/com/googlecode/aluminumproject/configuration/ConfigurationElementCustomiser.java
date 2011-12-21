@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 /**
  * Customises a {@link ConfigurationElement configuration element} after it has been created. Used by the {@link
  * DefaultConfigurationElementFactory default configuration element factory}.
@@ -26,7 +28,7 @@ public interface ConfigurationElementCustomiser extends ConfigurationElement {
 	 * Customises the new object.
 	 *
 	 * @param object the object to customise
-	 * @throws ConfigurationException when something goes wrong when customising the object
+	 * @throws AluminumException when something goes wrong when customising the object
 	 */
-	void customise(Object object) throws ConfigurationException;
+	void customise(Object object) throws AluminumException;
 }

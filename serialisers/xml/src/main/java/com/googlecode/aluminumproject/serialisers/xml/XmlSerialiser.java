@@ -15,12 +15,10 @@
  */
 package com.googlecode.aluminumproject.serialisers.xml;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
-import com.googlecode.aluminumproject.resources.ResourceException;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
-import com.googlecode.aluminumproject.serialisers.SerialisationException;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.ActionElement;
 import com.googlecode.aluminumproject.templates.ExpressionElement;
@@ -78,7 +76,7 @@ public class XmlSerialiser implements Serialiser {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		createElementNameTranslator();
@@ -88,7 +86,7 @@ public class XmlSerialiser implements Serialiser {
 		addTemplateElementSerialisers(templateElementSerialisers);
 	}
 
-	private void createElementNameTranslator() {
+	private void createElementNameTranslator() throws AluminumException {
 		String elementNameTranslatorClass = configuration.getParameters().getValue(
 			ELEMENT_NAME_TRANSLATOR_CLASS, XmlElementNameTranslator.class.getName());
 
@@ -132,27 +130,29 @@ public class XmlSerialiser implements Serialiser {
 		templateElementSerialisers.clear();
 	}
 
-	public void serialiseTemplate(Template template, String name) throws SerialisationException {
-		OutputStream out;
-
-		try {
-			out = configuration.getTemplateStoreFinder().find(name);
-		} catch (ResourceException exception) {
-			throw new SerialisationException(exception, "can't find a place to store template with name '", name, "'");
-		}
+	public void serialiseTemplate(Template template, String name) throws AluminumException {
+		OutputStream out = configuration.getTemplateStoreFinder().find(name);
 
 		PrintWriter writer = new PrintWriter(out);
 
 		serialiseChildElements(template, null, writer);
 
 		if (writer.checkError()) {
-			throw new SerialisationException("can't serialise template ", template);
+			throw new AluminumException("can't serialise template ", template);
 		} else {
 			writer.close();
 		}
 	}
 
-	private void serialiseTemplateElement(Template template, TemplateElement templateElement, PrintWriter writer) {
+	private void serialiseChildElements(
+			Template template, TemplateElement templateElement, PrintWriter writer) throws AluminumException {
+		for (TemplateElement childElement: template.getChildren(templateElement)) {
+			serialiseTemplateElement(template, childElement, writer);
+		}
+	}
+
+	private void serialiseTemplateElement(
+			Template template, TemplateElement templateElement, PrintWriter writer) throws AluminumException {
 		Class<? extends TemplateElement> templateElementType = templateElement.getClass();
 
 		TemplateElementSerialiser<TemplateElement> templateElementSerialiser =
@@ -192,12 +192,6 @@ public class XmlSerialiser implements Serialiser {
 		}
 
 		return templateElementSerialiser;
-	}
-
-	private void serialiseChildElements(Template template, TemplateElement templateElement, PrintWriter writer) {
-		for (TemplateElement childElement: template.getChildren(templateElement)) {
-			serialiseTemplateElement(template, childElement, writer);
-		}
 	}
 
 	/** The name of the configuration property that holds the class name of the element name translator to use. */

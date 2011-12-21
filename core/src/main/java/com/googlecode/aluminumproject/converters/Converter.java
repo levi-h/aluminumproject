@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.lang.reflect.Type;
 
 /**
@@ -55,8 +57,8 @@ public interface Converter<S> {
 	 * @param value the value to convert
 	 * @param targetType the type to convert the value into
 	 * @return the converted value
-	 * @throws ConverterException when the given target type is not supported or when something goes wrong while
-	 *                            converting the value
+	 * @throws AluminumException when the given target type is not supported or when something goes wrong while
+	 *                           converting the value
 	 */
-	Object convert(S value, Type targetType) throws ConverterException;
+	Object convert(S value, Type targetType) throws AluminumException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -35,7 +35,7 @@ public class RemoveVariable extends AbstractAction {
 	 */
 	public RemoveVariable() {}
 
-	public void execute(Context context, Writer writer) throws ContextException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		if (scope == null) {
 			logger.debug("removing variable '", name, "' from innermost scope");
 

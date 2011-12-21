@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.xml.model.Element;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 /**
  * Transforms a document and writes the results to the writer.
@@ -37,7 +36,7 @@ public class Transform extends AbstractAction {
 	 */
 	public Transform() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		logger.debug("transforming document ", document, " using style sheet ", styleSheet);
 
 		for (Object result: document.transform(styleSheet)) {

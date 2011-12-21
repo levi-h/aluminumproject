@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionSkipper;
 import com.googlecode.aluminumproject.templates.ActionContext;
@@ -69,8 +70,9 @@ public class DefaultActionContributionOptions implements ActionContributionOptio
 	 * Applies all chosen options to an action context.
 	 *
 	 * @param actionContext the action context to apply these action contribution options to
+	 * @throws AluminumException when the options can't be applied
 	 */
-	public void apply(ActionContext actionContext) {
+	public void apply(ActionContext actionContext) throws AluminumException {
 		for (Map.Entry<String, ActionParameter> parameter: parameters.entrySet()) {
 			actionContext.addParameter(parameter.getKey(), parameter.getValue());
 		}

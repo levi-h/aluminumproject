@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
@@ -50,11 +50,11 @@ public class ArrayToIterableConverter implements Converter<Object> {
 		return targetClass == Iterable.class;
 	}
 
-	public Object convert(Object value, Type targetType) throws ConverterException {
+	public Object convert(Object value, Type targetType) throws AluminumException {
 		if (!value.getClass().isArray()) {
-			throw new ConverterException("can't convert ", value, ", since it is not an array");
+			throw new AluminumException("can't convert ", value, ", since it is not an array");
 		} else if (!supportsTargetType(targetType)) {
-			throw new ConverterException("target type ", targetType, " is not supported");
+			throw new AluminumException("target type ", targetType, " is not supported");
 		}
 
 		return new ArrayIterable(value);

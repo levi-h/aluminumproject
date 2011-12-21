@@ -29,6 +29,7 @@ import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_STORE_FINDER_CLASS;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.cache.TestCache;
 import com.googlecode.aluminumproject.context.Context;
@@ -38,21 +39,18 @@ import com.googlecode.aluminumproject.context.TestContextEnricher;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.converters.TestConverterRegistry;
 import com.googlecode.aluminumproject.expressions.Expression;
-import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.expressions.IgnoredExpressionFactory;
 import com.googlecode.aluminumproject.expressions.TestExpressionFactory;
 import com.googlecode.aluminumproject.libraries.IgnoredLibrary;
 import com.googlecode.aluminumproject.libraries.Library;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.parsers.IgnoredParser;
-import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.parsers.TestParser;
 import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
@@ -60,7 +58,6 @@ import com.googlecode.aluminumproject.resources.InMemoryTemplateStoreFinder;
 import com.googlecode.aluminumproject.resources.TestTemplateFinder;
 import com.googlecode.aluminumproject.resources.TestTemplateStoreFinder;
 import com.googlecode.aluminumproject.serialisers.IgnoredSerialiser;
-import com.googlecode.aluminumproject.serialisers.SerialisationException;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.serialisers.TestSerialiser;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
@@ -348,24 +345,24 @@ public class DefaultConfigurationTest {
 			return Collections.emptyList();
 		}
 
-		public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
-			throw new LibraryException("the external library does not support dynamic actions");
+		public ActionFactory getDynamicActionFactory(String name) throws AluminumException {
+			throw new AluminumException("the external library does not support dynamic actions");
 		}
 
 		public List<ActionContributionFactory> getActionContributionFactories() {
 			return Collections.emptyList();
 		}
 
-		public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
-			throw new LibraryException("the external library does not support dynamic action contributions");
+		public ActionContributionFactory getDynamicActionContributionFactory(String name) throws AluminumException {
+			throw new AluminumException("the external library does not support dynamic action contributions");
 		}
 
 		public List<FunctionFactory> getFunctionFactories() {
 			return Collections.emptyList();
 		}
 
-		public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
-			throw new LibraryException("the external library does not support dynamic functions");
+		public FunctionFactory getDynamicFunctionFactory(String name) throws AluminumException {
+			throw new AluminumException("the external library does not support dynamic functions");
 		}
 	}
 
@@ -456,8 +453,8 @@ public class DefaultConfigurationTest {
 
 		public void disable() {}
 
-		public Template parseTemplate(String name) throws ParseException {
-			throw new ParseException("can't parse template '", name, "'");
+		public Template parseTemplate(String name) throws AluminumException {
+			throw new AluminumException("can't parse template '", name, "'");
 		}
 	}
 
@@ -569,8 +566,8 @@ public class DefaultConfigurationTest {
 
 		public void disable() {}
 
-		public void serialiseTemplate(Template template, String name) throws SerialisationException {
-			throw new SerialisationException("can't serialise template '", name, "'");
+		public void serialiseTemplate(Template template, String name) throws AluminumException {
+			throw new AluminumException("can't serialise template '", name, "'");
 		}
 	}
 
@@ -779,8 +776,8 @@ public class DefaultConfigurationTest {
 			return Collections.emptyList();
 		}
 
-		public Expression create(String value, Context context) throws ExpressionException {
-			throw new ExpressionException("can't create expression");
+		public Expression create(String value, Context context) throws AluminumException {
+			throw new AluminumException("can't create expression");
 		}
 	}
 
@@ -863,14 +860,14 @@ public class DefaultConfigurationTest {
 		return expressionFactoryOfRequestedType;
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	private void closingAlreadyClosedConfigurationShouldCauseException() {
 		Configuration configuration = new DefaultConfiguration();
 		configuration.close();
 		configuration.close();
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	private void tryingToObtainConfigurationElementAfterClosingConfigurationShouldCauseException() {
 		Configuration configuration = new DefaultConfiguration();
 		configuration.close();

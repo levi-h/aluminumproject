@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Named;
@@ -22,14 +23,11 @@ import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.finders.FieldFinder;
 import com.googlecode.aluminumproject.utilities.finders.FieldFinder.FieldFilter;
 
@@ -88,7 +86,7 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 	}
 
 	@Override
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		super.initialise(configuration);
 
 		parameterFields = new HashMap<String, Field>();
@@ -111,23 +109,17 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		return actionName;
 	}
 
-	private List<ActionParameterInformation> getParameterInformation() throws ConfigurationException {
+	private List<ActionParameterInformation> getParameterInformation() throws AluminumException {
 		List<ActionParameterInformation> parameterInformation = new LinkedList<ActionParameterInformation>();
 
-		List<Field> parameterFields;
+		List<Field> parameterFields = FieldFinder.find(new FieldFilter() {
+			public boolean accepts(Field field) {
+				int modifiers = field.getModifiers();
 
-		try {
-			parameterFields = FieldFinder.find(new FieldFilter() {
-				public boolean accepts(Field field) {
-					int modifiers = field.getModifiers();
-
-					return !Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers) &&
-						(field.getAnnotation(Ignored.class) == null) && (field.getAnnotation(Injected.class) == null);
-				}
-			}, actionClass);
-		} catch (UtilityException exception) {
-			throw new ConfigurationException(exception, "can't find parameter fields");
-		}
+				return !Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)
+					&& (field.getAnnotation(Ignored.class) == null) && (field.getAnnotation(Injected.class) == null);
+			}
+		}, actionClass);
 
 		for (Field parameterField: parameterFields) {
 			String parameterName;
@@ -141,13 +133,9 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 			Type parameterType;
 
 			if (parameterField.isAnnotationPresent(Typed.class)) {
-				try {
-					String parameterTypeName = parameterField.getAnnotation(Typed.class).value();
+				String parameterTypeName = parameterField.getAnnotation(Typed.class).value();
 
-					parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
-				} catch (UtilityException exception) {
-					throw new ConfigurationException(exception, "can't get type of parameter '", parameterName, "'");
-				}
+				parameterType = GenericsUtilities.getType(parameterTypeName, "java.lang", "java.util");
 			} else {
 				parameterType = parameterField.getGenericType();
 			}
@@ -178,28 +166,16 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		return actionClass;
 	}
 
-	public Action create(Map<String, ActionParameter> parameters, Context context) throws ActionException {
-		Action action;
-
-		try {
-			ConfigurationElementFactory configurationElementFactory =
-				getConfiguration().getConfigurationElementFactory();
-
-			action = configurationElementFactory.instantiate(actionClass.getName(), Action.class);
-		} catch (ConfigurationException exception) {
-			throw new ActionException(exception, "can't create action");
-		}
+	public Action create(Map<String, ActionParameter> parameters, Context context) throws AluminumException {
+		Action action =
+			getConfiguration().getConfigurationElementFactory().instantiate(actionClass.getName(), Action.class);
 
 		logger.debug("created action ", action);
 
 		setParameters(action, new HashMap<String, ActionParameter>(parameters), context);
 		logger.debug("set all parameters");
 
-		try {
-			injectFields(action);
-		} catch (LibraryException exception) {
-			throw new ActionException(exception, "can't inject action fields");
-		}
+		injectFields(action);
 
 		logger.debug("injected fields");
 
@@ -207,7 +183,7 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 	}
 
 	private void setParameters(
-			Action action, Map<String, ActionParameter> parameters, Context context) throws ActionException {
+			Action action, Map<String, ActionParameter> parameters, Context context) throws AluminumException {
 		for (ActionParameterInformation parameterInformation: information.getParameterInformation()) {
 			String parameterName = parameterInformation.getName();
 
@@ -225,14 +201,9 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 
 				logger.debug("setting parameter '", parameterName, "' (value: ", parameterValue, ")");
 
-				try {
-					ReflectionUtilities.setFieldValue(action, parameterField.getName(), parameterValue);
-				} catch (UtilityException exception) {
-					throw new ActionException(exception, "can't set parameter '", parameterName, "'",
-						" (value: ", parameterValue, ") on action ", action);
-				}
+				ReflectionUtilities.setFieldValue(action, parameterField.getName(), parameterValue);
 			} else if (parameterInformation.isRequired()) {
-				throw new ActionException("missing required parameter '", parameterName, "'");
+				throw new AluminumException("missing required parameter '", parameterName, "'");
 			} else {
 				logger.debug("skipping optional parameter '", parameterName, "'");
 			}
@@ -248,7 +219,7 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 					((DynamicallyParameterisable) action).setParameter(parameterName, parameter.getValue());
 				}
 			} else {
-				throw new ActionException("unknown parameters: ", parameters.keySet());
+				throw new AluminumException("unknown parameters: ", parameters.keySet());
 			}
 		}
 	}

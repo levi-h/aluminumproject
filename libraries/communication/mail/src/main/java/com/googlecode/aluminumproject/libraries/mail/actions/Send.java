@@ -15,15 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.mail.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.mail.MailContext;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,10 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.mail.Address;
+import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.Message.RecipientType;
 import javax.mail.internet.MimeMessage;
 
 /**
@@ -69,18 +67,18 @@ public class Send extends AbstractAction {
 		recipients.get(type).add(recipient);
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		Session session = MailContext.from(context).getSessionProvider().provide(context);
 
 		sendMessage(createMessage(context, writer, session), session);
 	}
 
 	private MimeMessage createMessage(
-			Context context, Writer writer, Session session) throws ActionException, WriterException {
+			Context context, Writer writer, Session session) throws AluminumException {
 		String content = getBodyText(context, writer);
 
 		if (!recipients.containsKey(RecipientType.TO)) {
-			throw new ActionException("at least one 'to' address is needed");
+			throw new AluminumException("at least one 'to' address is needed");
 		}
 
 		MimeMessage message = new MimeMessage(session);
@@ -101,13 +99,13 @@ public class Send extends AbstractAction {
 			message.setSubject(subject);
 			message.setContent(content, "text/plain");
 		} catch (MessagingException exception) {
-			throw new ActionException(exception, "can't create message");
+			throw new AluminumException(exception, "can't create message");
 		}
 
 		return message;
 	}
 
-	private void sendMessage(MimeMessage message, Session session) throws ActionException {
+	private void sendMessage(MimeMessage message, Session session) throws AluminumException {
 		try {
 			Transport transport = session.getTransport();
 
@@ -121,7 +119,7 @@ public class Send extends AbstractAction {
 				}
 			}
 		} catch (MessagingException exception) {
-			throw new ActionException(exception, "can't send message");
+			throw new AluminumException(exception, "can't send message");
 		}
 	}
 }

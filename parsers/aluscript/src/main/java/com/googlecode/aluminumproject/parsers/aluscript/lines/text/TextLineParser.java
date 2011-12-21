@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.text;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptSettings;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.ExpressionInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
@@ -48,7 +48,7 @@ public class TextLineParser extends AbstractLineParser {
 		return true;
 	}
 
-	public void parseLine(String line, AluScriptContext context) throws AluScriptException {
+	public void parseLine(String line, AluScriptContext context) throws AluminumException {
 		context.setLevel(getLevel(line));
 
 		line = removeIndentation(line);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,11 +46,11 @@ public class FileWriter extends AbstractOutputStreamWriter {
 	}
 
 	@Override
-	protected FileOutputStream createOutputStream() throws WriterException {
+	protected FileOutputStream createOutputStream() throws AluminumException {
 		try {
 			return new FileOutputStream(file, append);
 		} catch (FileNotFoundException exception) {
-			throw new WriterException(exception, "can't create file output stream");
+			throw new AluminumException(exception, "can't create file output stream");
 		}
 	}
 }

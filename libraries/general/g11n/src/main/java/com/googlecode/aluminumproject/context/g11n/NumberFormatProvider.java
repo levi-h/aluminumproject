@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 import java.text.NumberFormat;
 
@@ -32,7 +32,7 @@ public interface NumberFormatProvider {
 	 * @param type the desired number format type
 	 * @param context the current context
 	 * @return a number format of the given type
-	 * @throws ContextException when the number format can't be provided
+	 * @throws AluminumException when the number format can't be provided
 	 */
-	NumberFormat provide(NumberFormatType type, Context context) throws ContextException;
+	NumberFormat provide(NumberFormatType type, Context context) throws AluminumException;
 }

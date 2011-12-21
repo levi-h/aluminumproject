@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.io.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.File;
@@ -38,13 +38,13 @@ public class MoveFile extends AbstractAction {
 	 */
 	public MoveFile() {}
 
-	public void execute(Context context, Writer writer) throws ActionException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		File target = new File(targetDirectory, source.getName());
 
 		if (target.exists()) {
-			throw new ActionException(targetDirectory, " already contains a file named '", source.getName(), "'");
+			throw new AluminumException(targetDirectory, " already contains a file named '", source.getName(), "'");
 		} else if (!source.renameTo(target)) {
-			throw new ActionException("can't move '", source.getName(), "' to ", targetDirectory);
+			throw new AluminumException("can't move '", source.getName(), "' to ", targetDirectory);
 		}
 	}
 }

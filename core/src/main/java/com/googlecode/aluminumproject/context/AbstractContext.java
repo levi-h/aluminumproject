@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.context;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -55,10 +57,10 @@ public abstract class AbstractContext implements Context {
 	 *
 	 * @param scopes the scopes that are supported by the context; the first scope has the lowest priority, the last
 	 *               scope the highest one
-	 * @throws ContextException when the list of scopes does not contain the {@link Context#TEMPLATE_SCOPE template
-	 *                          scope} or when two scopes have the same name
+	 * @throws AluminumException when the list of scopes does not contain the {@link Context#TEMPLATE_SCOPE template
+	 *                           scope} or when two scopes have the same name
 	 */
-	protected AbstractContext(Scope... scopes) throws ContextException {
+	protected AbstractContext(Scope... scopes) throws AluminumException {
 		initialise(scopes);
 	}
 
@@ -68,17 +70,17 @@ public abstract class AbstractContext implements Context {
 	 * @param parent the parent context
 	 * @param scopes the scopes that are supported by the context; the first scope has the lowest priority, the last
 	 *               scope the highest one
-	 * @throws ContextException when the list of scopes does not contain the {@link Context#TEMPLATE_SCOPE template
-	 *                          scope} or when two scopes have the same name
+	 * @throws AluminumException when the list of scopes does not contain the {@link Context#TEMPLATE_SCOPE template
+	 *                           scope} or when two scopes have the same name
 	 */
 	protected AbstractContext(
-			AbstractContext parent, Scope... scopes) throws ContextException {
+			AbstractContext parent, Scope... scopes) throws AluminumException {
 		this.parent = parent;
 
 		initialise(scopes);
 	}
 
-	private void initialise(Scope... scopes) throws ContextException {
+	private void initialise(Scope... scopes) throws AluminumException {
 		this.scopes = new LinkedList<Scope>();
 
 		implicitObjects = new LinkedHashMap<String, Object>();
@@ -100,7 +102,7 @@ public abstract class AbstractContext implements Context {
 		return scopeNames;
 	}
 
-	public String addScope(String name, boolean requireUniqueName) throws ContextException {
+	public String addScope(String name, boolean requireUniqueName) throws AluminumException {
 		String scopeName = name;
 
 		int suffix = 1;
@@ -110,7 +112,7 @@ public abstract class AbstractContext implements Context {
 		}
 
 		if (requireUniqueName && !scopeName.equals(name)) {
-			throw new ContextException("a scope with name '", name, "' already exists");
+			throw new AluminumException("a scope with name '", name, "' already exists");
 		}
 
 		addScope(new DefaultScope(scopeName));
@@ -118,7 +120,7 @@ public abstract class AbstractContext implements Context {
 		return scopeName;
 	}
 
-	public void removeScope(String name) throws ContextException {
+	public void removeScope(String name) throws AluminumException {
 		if (isScopeRemovable(name)) {
 			ListIterator<Scope> scopesIterator = scopes.listIterator();
 
@@ -131,10 +133,10 @@ public abstract class AbstractContext implements Context {
 			}
 
 			if (!scopeRemoved) {
-				throw new ContextException("can't find scope with name '", name, "' to remove");
+				throw new AluminumException("can't find scope with name '", name, "' to remove");
 			}
 		} else {
-			throw new ContextException("scope '", name, "' can't be removed");
+			throw new AluminumException("scope '", name, "' can't be removed");
 		}
 	}
 
@@ -148,11 +150,11 @@ public abstract class AbstractContext implements Context {
 		return !name.equals(TEMPLATE_SCOPE);
 	}
 
-	public Set<String> getVariableNames(String scope) throws ContextException {
+	public Set<String> getVariableNames(String scope) throws AluminumException {
 		return getScope(scope).getVariableNames();
 	}
 
-	public Object getVariable(String scope, String name) throws ContextException {
+	public Object getVariable(String scope, String name) throws AluminumException {
 		return getScope(scope).getVariable(name);
 	}
 
@@ -160,19 +162,19 @@ public abstract class AbstractContext implements Context {
 		return setVariable(scopes.get(0).getName(), name, value);
 	}
 
-	public Object setVariable(String scope, String name, Object value) throws ContextException {
+	public Object setVariable(String scope, String name, Object value) throws AluminumException {
 		return getScope(scope).setVariable(name, value);
 	}
 
-	public Object removeVariable(String name) throws ContextException{
+	public Object removeVariable(String name) throws AluminumException{
 		return removeVariable(scopes.get(0).getName(), name);
 	}
 
-	public Object removeVariable(String scope, String name) throws ContextException {
+	public Object removeVariable(String scope, String name) throws AluminumException {
 		return getScope(scope).removeVariable(name);
 	}
 
-	public Object findVariable(String name) throws ContextException {
+	public Object findVariable(String name) throws AluminumException {
 		Iterator<Scope> scopesIterator = scopes.iterator();
 		Scope scope = null;
 
@@ -186,7 +188,7 @@ public abstract class AbstractContext implements Context {
 
 		if (scope == null) {
 			if (parent == null) {
-				throw new ContextException("variable '", name, "' can't be found in any scope");
+				throw new AluminumException("variable '", name, "' can't be found in any scope");
 			} else {
 				return parent.findVariable(name);
 			}
@@ -195,11 +197,11 @@ public abstract class AbstractContext implements Context {
 		}
 	}
 
-	private Scope getScope(String name) throws ContextException {
+	private Scope getScope(String name) throws AluminumException {
 		return getScope(name, false);
 	}
 
-	private Scope getScope(String name, boolean allowNull) throws ContextException {
+	private Scope getScope(String name, boolean allowNull) throws AluminumException {
 		ListIterator<Scope> scopesIterator = scopes.listIterator();
 		Scope scope = null;
 
@@ -212,13 +214,13 @@ public abstract class AbstractContext implements Context {
 		}
 
 		if ((scope == null) && !allowNull) {
-			throw new ContextException("no scope with name '", name, "' can be found");
+			throw new AluminumException("no scope with name '", name, "' can be found");
 		} else {
 			return scope;
 		}
 	}
 
-	private void addScope(Scope scope) throws ContextException {
+	private void addScope(Scope scope) throws AluminumException {
 		String name = scope.getName();
 
 		if (getScope(name, true) == null) {
@@ -226,7 +228,7 @@ public abstract class AbstractContext implements Context {
 
 			implicitObjects.put(name + IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX, new ScopeMap(scope));
 		} else {
-			throw new ContextException("a scope with name '", name, "' is already present");
+			throw new AluminumException("a scope with name '", name, "' is already present");
 		}
 	}
 
@@ -234,30 +236,30 @@ public abstract class AbstractContext implements Context {
 		return Collections.unmodifiableSet(implicitObjects.keySet());
 	}
 
-	public Object getImplicitObject(String name) throws ContextException {
+	public Object getImplicitObject(String name) throws AluminumException {
 		if (implicitObjects.containsKey(name)) {
 			return implicitObjects.get(name);
 		} else {
-			throw new ContextException("can't find implicit object with name '", name, "'");
+			throw new AluminumException("can't find implicit object with name '", name, "'");
 		}
 	}
 
-	public void addImplicitObject(String name, Object implicitObject) throws ContextException {
+	public void addImplicitObject(String name, Object implicitObject) throws AluminumException {
 		if (name.endsWith(IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX)) {
-			throw new ContextException("the name of an implicit object ",
+			throw new AluminumException("the name of an implicit object ",
 				"can't end with '", IMPLICIT_OBJECT_SCOPE_NAME_SUFFIX, "'");
 		} else if (implicitObjects.containsKey(name)) {
-			throw new ContextException("an implicit object with name '", name, "' already exists");
+			throw new AluminumException("an implicit object with name '", name, "' already exists");
 		}
 
 		implicitObjects.put(name, implicitObject);
 	}
 
-	public Object removeImplicitObject(String name) throws ContextException {
+	public Object removeImplicitObject(String name) throws AluminumException {
 		if (implicitObjects.containsKey(name)) {
 			return implicitObjects.remove(name);
 		} else {
-			throw new ContextException("can't find implicit object with name '", name, "' to remove");
+			throw new AluminumException("can't find implicit object with name '", name, "' to remove");
 		}
 	}
 
@@ -265,8 +267,8 @@ public abstract class AbstractContext implements Context {
 		return parent;
 	}
 
-	public AbstractContext createSubcontext() throws ContextException {
-		throw new ContextException("subcontexts are not supported");
+	public AbstractContext createSubcontext() throws AluminumException {
+		throw new AluminumException("subcontexts are not supported");
 	}
 
 	/**

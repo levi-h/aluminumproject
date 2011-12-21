@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.templates;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class TemplateBuilderTest {
 		templateBuilder = new TemplateBuilder();
 	}
 
-	@Test(expectedExceptions = TemplateException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void restoringCurrentTemplateElementWithoutHavingAddedOneShouldCauseException() {
 		templateBuilder.restoreCurrentTemplateElement();
 	}
@@ -39,20 +41,20 @@ public class TemplateBuilderTest {
 		assert templateBuilder.build() != null;
 	}
 
-	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void buildingTemplateMoreThanOnceShouldCauseException() {
 		templateBuilder.build();
 		templateBuilder.build();
 	}
 
-	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void restoringCurrentTemplateElementAfterBuildingTemplateShouldCauseException() {
 		templateBuilder.build();
 
 		templateBuilder.restoreCurrentTemplateElement();
 	}
 
-	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void addingTemplateElementAfterBuildingTemplateShouldCauseException() {
 		templateBuilder.build();
 
@@ -88,12 +90,12 @@ public class TemplateBuilderTest {
 		assert children.contains(secondChild);
 	}
 
-	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void retrievingParentOfUnknownTemplateElementShouldCauseException() {
 		templateBuilder.build().getParent(new TestActionElement());
 	}
 
-	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = TemplateException.class)
+	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void retrievingChildrenOfUnknownTemplateElementShouldCauseException() {
 		templateBuilder.build().getChildren(new TestActionElement());
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -56,9 +56,8 @@ public interface ActionContribution {
 	 * @param writer the writer that will be used for the action
 	 * @param parameter the parameter with which this action contribution was created
 	 * @param options the ways in which this action contribution can contribute to the action
-	 * @throws ActionException when this action contribution can't be made
-	 * @throws ContextException when something goes wrong while using the context
+	 * @throws AluminumException when this action contribution can't be made
 	 */
-	void make(Context context, Writer writer,
-		ActionParameter parameter, ActionContributionOptions options) throws ActionException, ContextException;
+	void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
+		throws AluminumException;
 }

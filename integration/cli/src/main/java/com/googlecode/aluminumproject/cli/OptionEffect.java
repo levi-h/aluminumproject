@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.cli;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -34,7 +36,7 @@ public interface OptionEffect<T> {
 	 *
 	 * @param options the set of supplied options
 	 * @param option the option that causes this effect
-	 * @throws CommandException when this option effect can't be applied
+	 * @throws AluminumException when this option effect can't be applied
 	 */
-	void apply(OptionSet options, OptionSpec<T> option) throws CommandException;
+	void apply(OptionSet options, OptionSpec<T> option) throws AluminumException;
 }

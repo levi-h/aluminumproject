@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.io;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.io.File;
 
@@ -39,7 +39,7 @@ public class StringToFileConverterTest {
 		assert ((File) convertedValue).exists();
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertUnknownPathShouldCauseException() {
 		converter.convert("** nonexistent **", File.class);
 	}

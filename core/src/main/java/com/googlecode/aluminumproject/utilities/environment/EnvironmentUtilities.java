@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -85,7 +85,7 @@ public class EnvironmentUtilities {
 
 			propertySetContainer =
 				ReflectionUtilities.instantiate(propertySetContainerClassName, PropertySetContainer.class, classLoader);
-		} catch (UtilityException exception) {
+		} catch (AluminumException exception) {
 			logger.warn(exception, "can't create property set container");
 
 			throw new ExceptionInInitializerError(exception);
@@ -95,7 +95,7 @@ public class EnvironmentUtilities {
 			String webClientClassName = environment.getProperty("web_client");
 
 			webClient = ReflectionUtilities.instantiate(webClientClassName, WebClient.class, classLoader);
-		} catch (UtilityException exception) {
+		} catch (AluminumException exception) {
 			logger.warn(exception, "can't create web client");
 
 			throw new ExceptionInInitializerError(exception);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import static com.googlecode.aluminumproject.utilities.GenericsUtilities.getTypeArgument;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.utilities.Logger;
@@ -26,7 +27,6 @@ import com.googlecode.aluminumproject.writers.ListWriter;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.List;
 
@@ -114,10 +114,9 @@ public abstract class AbstractAction implements Action {
 	 * @param context the context to execute the body in
 	 * @param writer the writer that would normally have been used to invoke the action body with
 	 * @return the objects that were written by the body
-	 * @throws ActionException when the body can't be invoked
-	 * @throws WriterException when the body can't write its output
+	 * @throws AluminumException when the body can't be invoked
 	 */
-	protected List<?> getBodyList(Context context, Writer writer) throws ActionException, WriterException {
+	protected List<?> getBodyList(Context context, Writer writer) throws AluminumException {
 		ListWriter listWriter = new ListWriter(true);
 
 		invokeBody(context, writer, listWriter);
@@ -135,25 +134,24 @@ public abstract class AbstractAction implements Action {
 	 * @param context the context to execute the body in
 	 * @param writer the writer that would normally have been used to invoke the action body with
 	 * @return the object that was written by the body
-	 * @throws ActionException when the body can't be invoked or when it does not write exactly one object of the
-	 *                         expected type
-	 * @throws WriterException when the body can't write its output
+	 * @throws AluminumException when the body can't be invoked or when it does not write exactly one object of the
+	 *                           expected type
 	 */
-	protected <T> T getBodyObject(
-			Class<T> type, Context context, Writer writer) throws ActionException, WriterException {
+	protected <T> T getBodyObject(Class<T> type, Context context, Writer writer) throws AluminumException {
 		List<?> bodyList = getBodyList(context, writer);
 
 		if (bodyList.isEmpty()) {
-			throw new ActionException("no body objects were written, expected one of type ", type.getName());
+			throw new AluminumException("no body objects were written, expected one of type ", type.getName());
 		} else if (bodyList.size() > 1) {
-			throw new ActionException("multiple objects were written, expected a single one of type ", type.getName());
+			throw new AluminumException("multiple objects were written, expected single one of type ", type.getName());
 		} else {
 			Object bodyObject = bodyList.get(0);
 
 			if (type.isInstance(bodyObject)) {
 				return type.cast(bodyObject);
 			} else {
-				throw new ActionException("body object ", bodyObject, " does not have expected type ", type.getName());
+				throw new AluminumException(
+					"body object ", bodyObject, " does not have expected type ", type.getName());
 			}
 		}
 	}
@@ -164,10 +162,9 @@ public abstract class AbstractAction implements Action {
 	 * @param context the context to execute the body in
 	 * @param writer the writer that would normally have been used to invoke the action body with
 	 * @return the text that was written by the body
-	 * @throws ActionException when the body can't be invoked
-	 * @throws WriterException when the body can't write its output
+	 * @throws AluminumException when the body can't be invoked
 	 */
-	protected String getBodyText(Context context, Writer writer) throws ActionException, WriterException {
+	protected String getBodyText(Context context, Writer writer) throws AluminumException {
 		StringWriter stringWriter = new StringWriter();
 
 		invokeBody(context, writer, new TextWriter(stringWriter, true));
@@ -181,11 +178,9 @@ public abstract class AbstractAction implements Action {
 	 * @param context the context to invoke the body with
 	 * @param originalWriter the writer that was passed to the {@link #execute(Context, Writer) execute method}
 	 * @param writer the writer to invoke the body with
-	 * @throws ActionException when the body can't be invoked
-	 * @throws WriterException when the body can't write its output
+	 * @throws AluminumException when the body can't be invoked
 	 */
-	protected void invokeBody(
-			Context context, Writer originalWriter, Writer writer) throws ActionException, WriterException {
+	protected void invokeBody(Context context, Writer originalWriter, Writer writer) throws AluminumException {
 		DecorativeWriter decorativeWriter = getInnermostDecorativeWriter(originalWriter);
 
 		if (decorativeWriter == null) {

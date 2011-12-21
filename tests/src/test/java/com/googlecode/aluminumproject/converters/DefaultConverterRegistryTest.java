@@ -19,6 +19,7 @@ import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.
 import static com.googlecode.aluminumproject.converters.DefaultConverterRegistry.CONVERTER_PACKAGES;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.converters.common.ObjectToStringConverter;
@@ -37,7 +38,7 @@ public class DefaultConverterRegistryTest {
 		converterRegistry.initialise(new TestConfiguration(new ConfigurationParameters()));
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToGetUnregisteredConverterShouldCauseException() {
 		converterRegistry.getConverter(Class.class, ClassLoader.class);
 	}
@@ -134,12 +135,12 @@ public class DefaultConverterRegistryTest {
 		assert convertedValue.equals("2.5");
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingConversionWithUnregisteredTypeShouldCauseException() {
 		converterRegistry.convert(1, Boolean.TYPE);
 	}
 
-	@Test(dependsOnMethods = "conversionShouldUseRegisteredConverters", expectedExceptions = ConverterException.class)
+	@Test(dependsOnMethods = "conversionShouldUseRegisteredConverters", expectedExceptions = AluminumException.class)
 	public void illegalConversionShouldCauseException() {
 		converterRegistry.convert("running", Thread.State.class);
 	}

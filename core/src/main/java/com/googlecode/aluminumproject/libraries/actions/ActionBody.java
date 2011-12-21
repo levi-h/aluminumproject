@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 /**
  * The body of an {@link Action action}.
@@ -38,9 +37,7 @@ public interface ActionBody {
 	 *
 	 * @param context the context to operate in
 	 * @param writer the writer to use
-	 * @throws ActionException when something goes wrong while invoking this body
-	 * @throws ContextException when something goes wrong while using the context
-	 * @throws WriterException when something goes wrong while using the writer
+	 * @throws AluminumException when something goes wrong while invoking this body
 	 */
-	void invoke(Context context, Writer writer) throws ActionException, ContextException, WriterException;
+	void invoke(Context context, Writer writer) throws AluminumException;
 }

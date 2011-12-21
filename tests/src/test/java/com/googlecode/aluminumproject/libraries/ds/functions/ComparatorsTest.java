@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.ds.functions;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Comparator;
 
@@ -31,7 +31,7 @@ public class ComparatorsTest {
 		assert naturalOrderComparator.compare(2, 1) > 0;
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void naturalOrderComparatorShouldNotSupportNonComparables() {
 		Comparators.naturalOrder().compare(Integer.class, Long.class);
 	}
@@ -51,7 +51,7 @@ public class ComparatorsTest {
 		assert naturalOrderComparator.compare(1, 2) > 0;
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void comparingObjectsOfDifferentTypesShouldCauseException() {
 		Comparators.naturalOrder().compare('l', 81);
 	}

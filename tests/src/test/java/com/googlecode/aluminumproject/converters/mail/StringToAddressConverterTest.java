@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.mail;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import javax.mail.Address;
 
@@ -52,7 +52,7 @@ public class StringToAddressConverterTest {
 		assert textualRepresentation.equals("Aluminum <aluminum@aluminum>");
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertInvalidAddressShouldCauseException() {
 		converter.convert("aluminum", Address.class);
 	}

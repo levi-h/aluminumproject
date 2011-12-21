@@ -15,14 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.ds.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.ds.functions.Comparators;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,7 +42,7 @@ public class Sort extends AbstractAction {
 	 */
 	public Sort() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		List<Object> list = new LinkedList<Object>();
 
 		for (Object element: elements) {
@@ -55,11 +53,7 @@ public class Sort extends AbstractAction {
 			comparator = Comparators.naturalOrder();
 		}
 
-		try {
-			Collections.sort(list, comparator);
-		} catch (UtilityException exception) {
-			throw new ActionException(exception, "can't sort ", list, " ", comparator);
-		}
+		Collections.sort(list, comparator);
 
 		writer.write(list);
 	}

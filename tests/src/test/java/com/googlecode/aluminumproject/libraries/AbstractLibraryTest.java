@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
@@ -101,7 +101,7 @@ public class AbstractLibraryTest {
 		return actionFactory;
 	}
 
-	@Test(expectedExceptions = LibraryException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void obtainingDynamicActionFactoryWhenDynamicActionsAreNotSupportedShouldCauseException() {
 		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestAction.class));
 
@@ -154,7 +154,7 @@ public class AbstractLibraryTest {
 		return actionContributionFactory;
 	}
 
-	@Test(expectedExceptions = LibraryException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void obtainingDynamicActionContributionFactoryWhenDynamicActionsAreNotSupportedShouldCauseException() {
 		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestAction.class));
 
@@ -216,7 +216,7 @@ public class AbstractLibraryTest {
 		return functionFactory;
 	}
 
-	@Test(expectedExceptions = LibraryException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void obtainingDynamicFunctionFactoryWhenDynamicFunctionsAreNotSupportedShouldCauseException() {
 		Library library = createLibrary(false, false, ReflectionUtilities.getPackageName(TestAction.class));
 
@@ -237,7 +237,7 @@ public class AbstractLibraryTest {
 	public void libraryElementsShouldBeInitialisedAndHaveTheirLibrariesInjected() {
 		DefaultLibrary library = new DefaultLibrary(false, false, ReflectionUtilities.getPackageName(String.class)) {
 			@Override
-			public void initialise(Configuration configuration) throws ConfigurationException {
+			public void initialise(Configuration configuration) throws AluminumException {
 				super.initialise(configuration);
 
 				addActionFactory(new TestActionFactory());
@@ -300,7 +300,7 @@ public class AbstractLibraryTest {
 		}
 
 		@Override
-		public ActionFactory getDynamicActionFactory(String name) throws LibraryException {
+		public ActionFactory getDynamicActionFactory(String name) throws AluminumException {
 			ActionFactory dynamicActionFactory;
 
 			if (information.isSupportingDynamicActions()) {
@@ -313,7 +313,7 @@ public class AbstractLibraryTest {
 			return dynamicActionFactory;
 		}
 
-		public ActionContributionFactory getDynamicActionContributionFactory(String name) throws LibraryException {
+		public ActionContributionFactory getDynamicActionContributionFactory(String name) throws AluminumException {
 			ActionContributionFactory dynamicActionContributionFactory;
 
 			if (information.isSupportingDynamicActionContributions()) {
@@ -326,7 +326,7 @@ public class AbstractLibraryTest {
 			return dynamicActionContributionFactory;
 		}
 
-		public FunctionFactory getDynamicFunctionFactory(String name) throws LibraryException {
+		public FunctionFactory getDynamicFunctionFactory(String name) throws AluminumException {
 			FunctionFactory dynamicFunctionFactory;
 
 			if (information.isSupportingDynamicFunctions()) {

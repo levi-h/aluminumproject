@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 /**
  * Aggregates globalisation information providers for globalised library elements.
@@ -126,9 +126,9 @@ public class GlobalisationContext {
 	 *
 	 * @param context the current context
 	 * @return the current globalisation context
-	 * @throws ContextException when the given context does not contain a globalisation context
+	 * @throws AluminumException when the given context does not contain a globalisation context
 	 */
-	public static GlobalisationContext from(Context context) throws ContextException {
+	public static GlobalisationContext from(Context context) throws AluminumException {
 		return (GlobalisationContext) context.getImplicitObject(GLOBALISATION_CONTEXT);
 	}
 

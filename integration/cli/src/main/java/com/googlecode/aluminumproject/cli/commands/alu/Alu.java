@@ -21,16 +21,12 @@ import static com.googlecode.aluminumproject.context.Context.TEMPLATE_SCOPE;
 import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.cli.Command;
-import com.googlecode.aluminumproject.cli.CommandException;
 import com.googlecode.aluminumproject.cli.OptionEffect;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.resources.FileSystemTemplateFinder;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.environment.PropertySetContainer;
 import com.googlecode.aluminumproject.writers.OutputStreamWriter;
@@ -106,50 +102,32 @@ public class Alu extends Command {
 
 	@Override
 	protected void execute(
-			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws CommandException {
+			PrintStream outputStream, PrintStream errorStream, List<String> arguments) throws AluminumException {
 		if (arguments.size() >= 1) {
 			ConfigurationParameters parameters = new ConfigurationParameters();
 			addConfigurationParameters(parameters);
 			addCustomConfigurationParameters(parameters);
 
-			Aluminum aluminum;
-
-			try {
-				aluminum = new Aluminum(new DefaultConfiguration(parameters));
-			} catch (ConfigurationException exception) {
-				throw new CommandException(exception, "can't create template engine");
-			}
+			Aluminum aluminum = new Aluminum(new DefaultConfiguration(parameters));
 
 			String template = arguments.get(0);
 
 			Context context = new DefaultContext();
-
-			try {
-				context.setVariable(TEMPLATE_SCOPE, ARGUMENTS_VARIABLE_NAME, arguments.subList(1, arguments.size()));
-			} catch (ContextException exception) {
-				throw new CommandException(exception, "can't add arguments");
-			}
+			context.setVariable(TEMPLATE_SCOPE, ARGUMENTS_VARIABLE_NAME, arguments.subList(1, arguments.size()));
 
 			Writer writer = new TextWriter(new OutputStreamWriter(outputStream), true);
 
 			try {
 				aluminum.processTemplate(template, parser, context, writer);
-			} catch (AluminumException exception) {
-				throw new CommandException(exception,
-					"can't process template '", template, "' (", exception.getMessage(), ")");
 			} finally {
-				try {
-					aluminum.stop();
-				} catch (AluminumException exception) {
-					throw new CommandException(exception, "can't stop the template engine");
-				}
+				aluminum.stop();
 			}
 		} else {
 			displayHelp(outputStream);
 		}
 	}
 
-	private void addConfigurationParameters(ConfigurationParameters parameters) throws CommandException {
+	private void addConfigurationParameters(ConfigurationParameters parameters) throws AluminumException {
 		String templateDirectories = System.getProperty("user.dir");
 
 		String aluminumHome = System.getenv("ALUMINUM_HOME");
@@ -161,34 +139,20 @@ public class Alu extends Command {
 			templateDirectories = String.format("%s, %s/templates", templateDirectories, aluminumHome);
 		}
 
-		try {
-			parameters.addParameter(TEMPLATE_FINDER_CLASS, FileSystemTemplateFinder.class.getName());
-			parameters.addParameter(FileSystemTemplateFinder.TEMPLATE_DIRECTORIES, templateDirectories);
-		} catch (ConfigurationException exception) {
-			throw new CommandException(exception, "can't add default configuration parameters");
-		}
+		parameters.addParameter(TEMPLATE_FINDER_CLASS, FileSystemTemplateFinder.class.getName());
+		parameters.addParameter(FileSystemTemplateFinder.TEMPLATE_DIRECTORIES, templateDirectories);
 	}
 
-	private void addCustomConfigurationParameters(ConfigurationParameters parameters) throws CommandException {
+	private void addCustomConfigurationParameters(ConfigurationParameters parameters) throws AluminumException {
 		PropertySetContainer propertySetContainer = EnvironmentUtilities.getPropertySetContainer();
 
 		if (propertySetContainer.containsPropertySet("alu")) {
-			Properties configurationPropertySet;
-
-			try {
-				configurationPropertySet = propertySetContainer.readPropertySet("alu");
-			} catch (UtilityException exception) {
-				throw new CommandException(exception, "can't read configuration property set 'alu'");
-			}
+			Properties configurationPropertySet = propertySetContainer.readPropertySet("alu");
 
 			for (Object key: Collections.list(configurationPropertySet.propertyNames())) {
 				String parameterName = (String) key;
 
-				try {
-					parameters.addParameter(parameterName, configurationPropertySet.getProperty(parameterName));
-				} catch (ConfigurationException exception) {
-					throw new CommandException(exception, "can't add configuration parameter '", parameterName, "'");
-				}
+				parameters.addParameter(parameterName, configurationPropertySet.getProperty(parameterName));
 			}
 		}
 	}

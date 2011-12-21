@@ -17,13 +17,12 @@ package com.googlecode.aluminumproject.context.mail;
 
 import static com.googlecode.aluminumproject.context.mail.MailContext.MAIL_CONTEXT;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextEnricher;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
@@ -51,11 +50,11 @@ public class MailContextProvider implements ContextEnricher {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		createSessionProvider(configuration);
 	}
 
-	private void createSessionProvider(Configuration configuration) throws ConfigurationException {
+	private void createSessionProvider(Configuration configuration) throws AluminumException {
 		ConfigurationParameters parameters = configuration.getParameters();
 
 		String sessionProviderClassName = parameters.getValue(SESSION_PROVIDER_CLASS, null);
@@ -81,7 +80,7 @@ public class MailContextProvider implements ContextEnricher {
 
 	public void disable() {}
 
-	public void beforeTemplate(Context context) throws ContextException {
+	public void beforeTemplate(Context context) throws AluminumException {
 		Context parentContext = context.getParent();
 
 		if ((parentContext != null) && parentContext.getImplicitObjectNames().contains(MAIL_CONTEXT)) {
@@ -95,7 +94,7 @@ public class MailContextProvider implements ContextEnricher {
 		}
 	}
 
-	public void afterTemplate(Context context) throws ContextException {
+	public void afterTemplate(Context context) throws AluminumException {
 		if (sessionProvider != null) {
 			context.removeImplicitObject(MAIL_CONTEXT);
 		}

@@ -15,9 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.scripting.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.io.IOException;
 
@@ -50,7 +50,7 @@ class ScriptWriter extends java.io.Writer {
 
 		try {
 			writer.write(text);
-		} catch (WriterException exception) {
+		} catch (AluminumException exception) {
 			throw new IOException("can't write text", exception);
 		}
 	}
@@ -61,7 +61,7 @@ class ScriptWriter extends java.io.Writer {
 
 		try {
 			writer.flush();
-		} catch (WriterException exception) {
+		} catch (AluminumException exception) {
 			throw new IOException("can't flush writer", exception);
 		}
 	}

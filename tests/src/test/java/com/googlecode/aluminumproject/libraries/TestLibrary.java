@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.libraries.actions.TestActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.functions.Add;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
@@ -43,7 +43,7 @@ public class TestLibrary extends AbstractLibrary {
 	}
 
 	@Override
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		super.initialise(configuration);
 
 		addActionContributionFactory(new TestActionContributionFactory());

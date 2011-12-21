@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -41,7 +41,7 @@ public class LocaleBasedNumberFormatProvider implements NumberFormatProvider {
 		this.customPattern = customPattern;
 	}
 
-	public NumberFormat provide(NumberFormatType type, Context context) throws ContextException {
+	public NumberFormat provide(NumberFormatType type, Context context) throws AluminumException {
 		NumberFormat numberFormat;
 
 		Locale locale = GlobalisationContext.from(context).getLocaleProvider().provide(context);
@@ -56,11 +56,11 @@ public class LocaleBasedNumberFormatProvider implements NumberFormatProvider {
 			try {
 				numberFormat = new DecimalFormat(customPattern, new DecimalFormatSymbols(locale));
 			} catch (IllegalArgumentException exception) {
-				throw new ContextException(exception,
+				throw new AluminumException(exception,
 					"can't create custom number format with pattern '", customPattern, "'");
 			}
 		} else {
-			throw new ContextException("unsupported number format type: ", type);
+			throw new AluminumException("unsupported number format type: ", type);
 		}
 
 		return numberFormat;

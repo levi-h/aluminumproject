@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.TestInstruction;
@@ -39,7 +40,7 @@ public class AluScriptContextTest {
 		context = new TestAluScriptContext();
 	}
 
-	@Test(expectedExceptions = AluScriptException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void creatingContextWithDuplicateInstructionShouldCauseException() {
 		new AluScriptContext(context.getConfiguration(), context.getSettings(),
 			Arrays.<Instruction>asList(new TestInstruction(), new TestInstruction()));
@@ -49,7 +50,7 @@ public class AluScriptContextTest {
 		assert context.findInstruction("test") instanceof TestInstruction;
 	}
 
-	@Test(expectedExceptions = AluScriptException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void findingNonexistentInstructionShouldCauseException() {
 		context.findInstruction("unknown");
 	}
@@ -58,7 +59,7 @@ public class AluScriptContextTest {
 		assert context.getLevel() == 0;
 	}
 
-	@Test(dependsOnMethods = "initialNestingLevelShouldBeZero", expectedExceptions = AluScriptException.class)
+	@Test(dependsOnMethods = "initialNestingLevelShouldBeZero", expectedExceptions = AluminumException.class)
 	public void increasingNestingLevelShouldCauseException() {
 		context.setLevel(1);
 	}

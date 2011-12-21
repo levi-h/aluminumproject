@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 /**
  * Implemented by {@link Action actions} that are created by {@link DefaultActionFactory the default action factory} and
  * support dynamic parameters.
@@ -27,7 +29,7 @@ public interface DynamicallyParameterisable {
 	 *
 	 * @param name the name of the parameter
 	 * @param parameter the dynamic parameter of the action
-	 * @throws ActionException when the parameter can't be used
+	 * @throws AluminumException when the parameter can't be used
 	 */
-	void setParameter(String name, ActionParameter parameter) throws ActionException;
+	void setParameter(String name, ActionParameter parameter) throws AluminumException;
 }

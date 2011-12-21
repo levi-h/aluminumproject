@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -39,7 +38,7 @@ public class Parse extends AbstractAction {
 	 */
 	public Parse() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		String text = getBodyText(context, writer);
 
 		logger.debug("body text is '", text, "', now trying to parse");
@@ -49,9 +48,9 @@ public class Parse extends AbstractAction {
 		try {
 			document = new Builder().build(new StringReader(text));
 		} catch (ParsingException exception) {
-			throw new ActionException(exception, "can't parse '", text, "'");
+			throw new AluminumException(exception, "can't parse '", text, "'");
 		} catch (IOException exception) {
-			throw new ActionException(exception, "can't parse '", text, "'");
+			throw new AluminumException(exception, "can't parse '", text, "'");
 		}
 
 		logger.debug("parsed body text, result: ", document);

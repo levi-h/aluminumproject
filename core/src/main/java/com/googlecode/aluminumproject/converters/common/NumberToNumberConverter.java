@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.lang.reflect.Type;
@@ -64,9 +64,9 @@ public class NumberToNumberConverter implements Converter<Number> {
 		return converters.containsKey(targetType);
 	}
 
-	public Object convert(Number value, Type targetType) throws ConverterException {
+	public Object convert(Number value, Type targetType) throws AluminumException {
 		if (!supportsTargetType(targetType)) {
-			throw new ConverterException(targetType, " is not a supported target type");
+			throw new AluminumException(targetType, " is not a supported target type");
 		}
 
 		return converters.get(targetType).convert(value, targetType);

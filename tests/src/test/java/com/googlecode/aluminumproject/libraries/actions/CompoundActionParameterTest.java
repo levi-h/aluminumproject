@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
@@ -68,7 +69,7 @@ public class CompoundActionParameterTest {
 		assert value.equals("5 items");
 	}
 
-	@Test(expectedExceptions = ActionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void retrievingValueWithIncompatibleTypeShouldCauseException() {
 		context.setVariable("number", 10);
 

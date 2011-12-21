@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.converters;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.converters.ds.StringToMapConverter;
@@ -56,7 +57,7 @@ public class StringToMapConverterTest {
 		assert converter.supportsTargetType(GenericsUtilities.getType("java.util.Map<String, Number>", "java.lang"));
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertToUnsupportedTypeShouldCauseException() {
 		converter.convert("[a: 1]", List.class);
 	}
@@ -96,7 +97,7 @@ public class StringToMapConverterTest {
 		assert map.get("b") == 2;
 	}
 
-	@Test(dependsOnMethods = "untypedMapShouldBeSupportedAsTargetType", expectedExceptions = ConverterException.class)
+	@Test(dependsOnMethods = "untypedMapShouldBeSupportedAsTargetType", expectedExceptions = AluminumException.class)
 	public void tryingToConvertMapWithIllegalFormatShouldCauseException() {
 		converter.convert("a: 1, b: 2", Map.class);
 	}

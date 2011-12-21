@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.configuration;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * Creates configuration elements (except for the factory itself). Created configuration elements are encouraged to use
@@ -30,8 +32,8 @@ public interface ConfigurationElementFactory extends ConfigurationElement {
 	 * @param className the name of the class to instantiate
 	 * @param type the expected type of the new instance
 	 * @return a new instance of the class with the given name, cast to the specified type
-	 * @throws ConfigurationException when the class with the given name can't be instantiated or when it is not of the
-	 *                                required type
+	 * @throws AluminumException when the class with the given name can't be instantiated or when it is not of the
+	 *                           required type
 	 */
-	<T> T instantiate(String className, Class<T> type) throws ConfigurationException;
+	<T> T instantiate(String className, Class<T> type) throws AluminumException;
 }

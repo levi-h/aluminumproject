@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.common;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.lang.annotation.ElementType;
 
@@ -69,12 +69,12 @@ public class StringToEnumConverterTest {
 		A, a, B, b;
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void convertingNonexistingNameShouldCauseException() {
 		converter.convert("INTERFACE", ElementType.class);
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void supplyingUnsupportedTargetTypeShouldCauseException() {
 		converter.convert("NAME", Enum.class);
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.templates.Template;
 
@@ -30,7 +31,7 @@ public interface Parser extends ConfigurationElement {
 	 *
 	 * @param name the name of the template
 	 * @return the parsed template
-	 * @throws ParseException when no template with the given name can be found or when the template can't be parsed
+	 * @throws AluminumException when no template with the given name can be found or when the template can't be parsed
 	 */
-	Template parseTemplate(String name) throws ParseException;
+	Template parseTemplate(String name) throws AluminumException;
 }

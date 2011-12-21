@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.configuration;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 
 import java.util.HashMap;
@@ -40,12 +41,12 @@ public class DefaultConfigurationElementFactoryTest {
 		assert configurationElementFactory.instantiate("java.util.HashMap", Map.class) instanceof HashMap;
 	}
 
-	@Test(expectedExceptions = ConfigurationException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void instantiatingUninstantiableTypeShouldCauseException() {
 		configurationElementFactory.instantiate("java.util.Map", Map.class);
 	}
 
-	@Test(dependsOnMethods = "classShouldBeInstantiable", expectedExceptions = ConfigurationException.class)
+	@Test(dependsOnMethods = "classShouldBeInstantiable", expectedExceptions = AluminumException.class)
 	public void supplyingIncompatibleTypeShouldCauseException() {
 		configurationElementFactory.instantiate("java.util.HashMap", SortedMap.class);
 	}

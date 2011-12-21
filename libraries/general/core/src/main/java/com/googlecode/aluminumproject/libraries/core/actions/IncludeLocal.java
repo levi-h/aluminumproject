@@ -15,23 +15,20 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextEnricher;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParameterisableAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.core.actions.Blocks.Block;
 import com.googlecode.aluminumproject.libraries.core.actions.Blocks.BlockContents;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Map;
 
@@ -60,7 +57,7 @@ public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 	 */
 	public IncludeLocal() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		Object body = context.getVariable(Context.TEMPLATE_SCOPE, name);
 
 		if (body instanceof ActionBody) {
@@ -68,14 +65,10 @@ public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 
 			Context subcontext = context.createSubcontext();
 
-			try {
-				TemplateInformation templateInformation = TemplateInformation.from(context);
+			TemplateInformation templateInformation = TemplateInformation.from(context);
 
-				TemplateInformation.from(subcontext).setTemplate(
-					templateInformation.getTemplate(), templateInformation.getName(), templateInformation.getParser());
-			} catch (TemplateException exception) {
-				throw new ActionException(exception, "can't copy template information");
-			}
+			TemplateInformation.from(subcontext).setTemplate(
+				templateInformation.getTemplate(), templateInformation.getName(), templateInformation.getParser());
 
 			for (Map.Entry<String, ActionParameter> variable: getDynamicParameters().entrySet()) {
 				String variableName = variable.getKey();
@@ -96,7 +89,7 @@ public class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 				contextEnricher.afterTemplate(subcontext);
 			}
 		} else {
-			throw new ActionException("can't include '", name, "' (", body, ")");
+			throw new AluminumException("can't include '", name, "' (", body, ")");
 		}
 	}
 }

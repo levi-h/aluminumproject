@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.utilities;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Locale;
 
@@ -61,7 +63,7 @@ public class GlobalisationUtilitiesTest {
 		assert variant.equals("Amsterdam");
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void convertingMoreThanThreeLocalePartsShouldCauseException() {
 		GlobalisationUtilities.convertLocale("nl_NL_Amsterdam_West");
 	}

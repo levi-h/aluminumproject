@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.resources;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,17 +40,17 @@ public class FileSystemTemplateFinder extends AbstractTemplateFinder {
 	public FileSystemTemplateFinder() {}
 
 	@Override
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		templateDirectories = configuration.getParameters().getValues(TEMPLATE_DIRECTORIES);
 
 		if (templateDirectories.length == 0) {
-			throw new ConfigurationException("please provide one or more template directories");
+			throw new AluminumException("please provide one or more template directories");
 		} else {
 			logger.debug("using template directories ", templateDirectories);
 		}
 	}
 
-	public InputStream find(String name) throws ResourceException {
+	public InputStream find(String name) throws AluminumException {
 		InputStream stream = null;
 
 		for (String directory: templateDirectories) {
@@ -64,13 +64,13 @@ public class FileSystemTemplateFinder extends AbstractTemplateFinder {
 				try {
 					stream = new FileInputStream(file);
 				} catch (FileNotFoundException exception) {
-					throw new ResourceException("can't create file input stream for template '", name, "'");
+					throw new AluminumException("can't create file input stream for template '", name, "'");
 				}
 			}
 		}
 
 		if (stream == null) {
-			throw new ResourceException("can't find template '", name, "' in ", templateDirectories);
+			throw new AluminumException("can't find template '", name, "' in ", templateDirectories);
 		} else {
 			return stream;
 		}

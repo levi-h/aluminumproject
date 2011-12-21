@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,9 +49,9 @@ public class HttpWebClient implements WebClient {
 		supportedMethods = Arrays.asList(GET_METHOD, POST_METHOD);
 	}
 
-	public Request createRequest(String method, String url) throws UtilityException {
+	public Request createRequest(String method, String url) throws AluminumException {
 		if (!supportedMethods.contains(method)) {
-			throw new UtilityException("unsupported method: '", method, "'");
+			throw new AluminumException("unsupported method: '", method, "'");
 		}
 
 		return new HttpRequest(method, url);
@@ -72,11 +72,11 @@ public class HttpWebClient implements WebClient {
 			parameters = new HashMap<String, List<String>>();
 		}
 
-		private void setMethod(HttpURLConnection connection) throws UtilityException {
+		private void setMethod(HttpURLConnection connection) throws AluminumException {
 			try {
 				connection.setRequestMethod(method);
 			} catch (ProtocolException exception) {
-				throw new UtilityException(exception, "can't set method");
+				throw new AluminumException(exception, "can't set method");
 			}
 		}
 
@@ -96,7 +96,7 @@ public class HttpWebClient implements WebClient {
 			parameters.get(name).add(value);
 		}
 
-		public Response getResponse() throws UtilityException {
+		public Response getResponse() throws AluminumException {
 			HttpURLConnection connection = getConnection();
 
 			setMethod(connection);
@@ -106,13 +106,13 @@ public class HttpWebClient implements WebClient {
 			try {
 				connection.connect();
 			} catch (IOException exception) {
-				throw new UtilityException(exception, "can't open connection");
+				throw new AluminumException(exception, "can't open connection");
 			}
 
 			return new HttpResponse(getStatusCode(connection), connection.getHeaderFields(), getBody(connection));
 		}
 
-		private HttpURLConnection getConnection() throws UtilityException {
+		private HttpURLConnection getConnection() throws AluminumException {
 			URLConnection connection;
 
 			try {
@@ -129,13 +129,13 @@ public class HttpWebClient implements WebClient {
 
 				connection = new URL(urlBuilder.toString()).openConnection();
 			} catch (IOException exception) {
-				throw new UtilityException(exception, "can't open connection to ", url);
+				throw new AluminumException(exception, "can't open connection to ", url);
 			}
 
 			if (connection instanceof HttpURLConnection) {
 				return (HttpURLConnection) connection;
 			} else {
-				throw new UtilityException("can't open HTTP connection to ", url);
+				throw new AluminumException("can't open HTTP connection to ", url);
 			}
 		}
 
@@ -149,7 +149,7 @@ public class HttpWebClient implements WebClient {
 			}
 		}
 
-		private void setBody(URLConnection connection) throws UtilityException {
+		private void setBody(URLConnection connection) throws AluminumException {
 			if (method.equals(POST_METHOD)) {
 				connection.setDoOutput(true);
 
@@ -162,12 +162,12 @@ public class HttpWebClient implements WebClient {
 						out.close();
 					}
 				} catch (IOException exception) {
-					throw new UtilityException(exception, "can't write body");
+					throw new AluminumException(exception, "can't write body");
 				}
 			}
 		}
 
-		private String getQueryString() throws UtilityException {
+		private String getQueryString() throws AluminumException {
 			StringBuilder queryStringBuilder = new StringBuilder();
 
 			for (Map.Entry<String, List<String>> requestParameter: parameters.entrySet()) {
@@ -183,7 +183,7 @@ public class HttpWebClient implements WebClient {
 					try {
 						encodedValue = URLEncoder.encode(value, "utf-8");
 					} catch (UnsupportedEncodingException exception) {
-						throw new UtilityException(exception, "can't encode request parameter '", name, "'");
+						throw new AluminumException(exception, "can't encode request parameter '", name, "'");
 					}
 
 					queryStringBuilder.append(name);
@@ -195,15 +195,15 @@ public class HttpWebClient implements WebClient {
 			return queryStringBuilder.toString();
 		}
 
-		private int getStatusCode(HttpURLConnection connection) throws UtilityException {
+		private int getStatusCode(HttpURLConnection connection) throws AluminumException {
 			try {
 				return connection.getResponseCode();
 			} catch (IOException exception) {
-				throw new UtilityException(exception, "can't get status code");
+				throw new AluminumException(exception, "can't get status code");
 			}
 		}
 
-		private byte[] getBody(HttpURLConnection connection) throws UtilityException {
+		private byte[] getBody(HttpURLConnection connection) throws AluminumException {
 			InputStream in;
 
 			try {
@@ -228,7 +228,7 @@ public class HttpWebClient implements WebClient {
 
 				return out.toByteArray();
 			} catch (IOException exception) {
-				throw new UtilityException(exception, "can't get body");
+				throw new AluminumException(exception, "can't get body");
 			}
 		}
 	}

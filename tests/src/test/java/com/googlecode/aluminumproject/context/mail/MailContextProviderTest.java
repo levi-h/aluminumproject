@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.context.mail;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.googlecode.aluminumproject.utilities.environment.PropertySetContainer;
@@ -76,7 +76,7 @@ public class MailContextProviderTest {
 	}
 
 	public static class DefaultSessionProvider implements SessionProvider {
-		public Session provide(Context context) throws ContextException {
+		public Session provide(Context context) throws AluminumException {
 			return Session.getDefaultInstance(new Properties());
 		}
 	}

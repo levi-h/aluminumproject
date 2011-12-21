@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
 
 /**
@@ -34,7 +33,7 @@ public class Scope extends AbstractAction {
 	 */
 	public Scope() {}
 
-	public void execute(Context context, Writer writer) throws ActionException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		addScope(context);
 
 		logger.debug("invoking body");
@@ -44,7 +43,7 @@ public class Scope extends AbstractAction {
 		removeScope(context);
 	}
 
-	private void addScope(Context context) throws ActionException {
+	private void addScope(Context context) throws AluminumException {
 		boolean requireUniqueName = name != null;
 
 		if (name == null) {
@@ -53,16 +52,12 @@ public class Scope extends AbstractAction {
 			name = DEFAULT_NAME;
 		}
 
-		try {
-			name = context.addScope(name, requireUniqueName);
+		name = context.addScope(name, requireUniqueName);
 
-			logger.debug("added scope '", name, "'");
-		} catch (ContextException exception) {
-			throw new ActionException(exception, "can't add scope");
-		}
+		logger.debug("added scope '", name, "'");
 	}
 
-	private void removeScope(Context context) throws ContextException {
+	private void removeScope(Context context) throws AluminumException {
 		context.removeScope(name);
 
 		logger.debug("removed scope");

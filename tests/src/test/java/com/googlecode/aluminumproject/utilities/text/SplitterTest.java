@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.utilities.text;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.text.Splitter.QuotationCharacters;
 import com.googlecode.aluminumproject.utilities.text.Splitter.TokenProcessor;
 
@@ -86,7 +86,7 @@ public class SplitterTest {
 		assert tokens.get(2).equals(new Token("c", "", null));
 	}
 
-	@Test(dependsOnMethods = "escapeCharacterShouldPreventSeparation", expectedExceptions = UtilityException.class)
+	@Test(dependsOnMethods = "escapeCharacterShouldPreventSeparation", expectedExceptions = AluminumException.class)
 	public void danglingEscapeCharacterShouldCauseException() {
 		split(new Splitter(Collections.<String>emptyList(), '\\'), "a\\");
 	}
@@ -136,7 +136,7 @@ public class SplitterTest {
 		assert tokens.get(1).equals(new Token("' '", "", null));
 	}
 
-	@Test(dependsOnMethods = "quotationCharactersShouldPreventSeparation", expectedExceptions = UtilityException.class)
+	@Test(dependsOnMethods = "quotationCharactersShouldPreventSeparation", expectedExceptions = AluminumException.class)
 	public void notClosingQuotationMarksShouldCauseException() {
 		List<QuotationCharacters> quotationCharacters = Arrays.asList(new QuotationCharacters('\'', '\'', false));
 

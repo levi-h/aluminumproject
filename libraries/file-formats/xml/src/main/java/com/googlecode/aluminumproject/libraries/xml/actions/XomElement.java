@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.xml.model.Element;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,7 +52,7 @@ class XomElement implements Element {
 		this.element = (element.getDocument() == null) ? new Document(element).getRootElement() : element;
 	}
 
-	public List<?> select(String expression, Map<String, String> context) throws ActionException {
+	public List<?> select(String expression, Map<String, String> context) throws AluminumException {
 		Nodes nodes;
 
 		try {
@@ -65,7 +64,7 @@ class XomElement implements Element {
 
 			nodes = element.query(expression, xPathContext);
 		} catch (XPathException exception) {
-			throw new ActionException(exception, "can't execute query");
+			throw new AluminumException(exception, "can't execute query");
 		}
 
 		List<Object> results = new ArrayList<Object>(nodes.size());
@@ -79,16 +78,16 @@ class XomElement implements Element {
 					|| (node instanceof nu.xom.Text) || (node instanceof Comment)) {
 				results.add(node.getValue());
 			} else {
-				throw new ActionException("unsupported node type: ", node.getClass().getSimpleName());
+				throw new AluminumException("unsupported node type: ", node.getClass().getSimpleName());
 			}
 		}
 
 		return results;
 	}
 
-	public List<?> transform(Element styleSheet) throws ActionException {
+	public List<?> transform(Element styleSheet) throws AluminumException {
 		if (!(styleSheet instanceof XomElement)) {
-			throw new ActionException("can't use style sheet ", styleSheet);
+			throw new AluminumException("can't use style sheet ", styleSheet);
 		}
 
 		Nodes nodes;
@@ -99,7 +98,7 @@ class XomElement implements Element {
 
 			nodes = new XSLTransform(styleSheetDocument).transform(inputDocument);
 		} catch (XSLException exception) {
-			throw new ActionException(exception, "can't transform document");
+			throw new AluminumException(exception, "can't transform document");
 		}
 
 		List<Object> results = new ArrayList<Object>(nodes.size());
@@ -112,14 +111,14 @@ class XomElement implements Element {
 			} else if ((node instanceof nu.xom.Text)) {
 				results.add(node.getValue());
 			} else {
-				throw new ActionException("unsupported node type: ", node.getClass().getSimpleName());
+				throw new AluminumException("unsupported node type: ", node.getClass().getSimpleName());
 			}
 		}
 
 		return results;
 	}
 
-	public void writeDocument(Writer writer, int indentation) throws WriterException {
+	public void writeDocument(Writer writer, int indentation) throws AluminumException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		Serializer serializer = new Serializer(out);
@@ -129,7 +128,7 @@ class XomElement implements Element {
 		try {
 			serializer.write(element.getDocument());
 		} catch (IOException exception) {
-			throw new WriterException(exception, "can't write document");
+			throw new AluminumException(exception, "can't write document");
 		}
 
 		writer.write(new String(out.toByteArray()).trim());

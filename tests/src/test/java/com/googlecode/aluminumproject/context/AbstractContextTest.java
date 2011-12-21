@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.context;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,12 +53,12 @@ public class AbstractContextTest {
 		context = new TestContext();
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void creatingAbstractContextWithoutTemplateScopeShouldCauseException() {
 		new AbstractContext() {};
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void creatingAbstractContextWithDuplicateScopeNamesShouldCauseException() {
 		new AbstractContext(new DefaultScope(Context.TEMPLATE_SCOPE), new DefaultScope(Context.TEMPLATE_SCOPE)) {};
 	}
@@ -86,7 +88,7 @@ public class AbstractContextTest {
 		assert context.getScopeNames().contains(NEW_SCOPE);
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void addingScopeWithUniqueNameShouldCauseExceptionForExistingScope() {
 		context.addScope(Context.TEMPLATE_SCOPE, true);
 	}
@@ -100,12 +102,12 @@ public class AbstractContextTest {
 		assert !context.addScope(NEW_SCOPE, false).equals(context.addScope(NEW_SCOPE, false));
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void removingScopeThatWasNeverAddedShouldCauseException() {
 		context.removeScope(NEW_SCOPE);
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void removingTemplateScopeShouldCauseException() {
 		context.removeScope(Context.TEMPLATE_SCOPE);
 	}
@@ -118,7 +120,7 @@ public class AbstractContextTest {
 		assert !context.getScopeNames().contains(NEW_SCOPE);
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void gettingVariableNamesFromNonexistentScopeShouldCauseException() {
 		context.getVariableNames("nonexistent");
 	}
@@ -141,7 +143,7 @@ public class AbstractContextTest {
 		assert variableNames.isEmpty();
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void gettingVariableFromNonexistentScopeShouldCauseException() {
 		context.getVariable("nonexistent", "name");
 	}
@@ -152,7 +154,7 @@ public class AbstractContextTest {
 		assert context.getVariable(Context.TEMPLATE_SCOPE, "name").equals("value");
 	}
 
-	@Test(dependsOnMethods = "newVariableShouldBeRetrievable", expectedExceptions = ContextException.class)
+	@Test(dependsOnMethods = "newVariableShouldBeRetrievable", expectedExceptions = AluminumException.class)
 	public void removedVariableShouldNotBeRetrievable() {
 		context.setVariable(Context.TEMPLATE_SCOPE, "name", "value");
 		context.removeVariable(Context.TEMPLATE_SCOPE, "name");
@@ -160,17 +162,17 @@ public class AbstractContextTest {
 		context.getVariable(Context.TEMPLATE_SCOPE, "name");
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void settingVariableInNonexistentScopeShouldCauseException() {
 		context.setVariable("nonexistent", "name", "value");
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void removingVariableFromNonexistentScopeShouldCauseException() {
 		context.removeVariable("nonexistent", "name");
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void removingNonexistentVariableShouldCauseException() {
 		context.removeVariable(Context.TEMPLATE_SCOPE, "nonexistent");
 	}
@@ -185,7 +187,7 @@ public class AbstractContextTest {
 	}
 
 	@Test(dependsOnMethods = "settingVariableWithoutScopeShouldSetItInInnermostScope",
-		expectedExceptions = ContextException.class)
+		expectedExceptions = AluminumException.class)
 	public void removingVariableWithoutScopeShouldRemoveItFromInnermostScope() {
 		context.addScope(NEW_SCOPE, true);
 
@@ -196,14 +198,14 @@ public class AbstractContextTest {
 	}
 
 	@Test(dependsOnMethods = {"scopeNamesShouldIncludeAddedScope", "removingNonexistentVariableShouldCauseException"},
-		expectedExceptions = ContextException.class)
+		expectedExceptions = AluminumException.class)
 	public void removingNonexistentVariableWithoutScopeShouldCauseException() {
 		context.addScope(NEW_SCOPE, true);
 
 		context.removeVariable("nonexistent");
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void findingNonexistentVariableShouldCauseException() {
 		context.findVariable("nonexistent");
 	}
@@ -287,7 +289,7 @@ public class AbstractContextTest {
 		assert context.getImplicitObject("templateScope") instanceof ScopeMap;
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void retrievingNonexistentImplicitObjectShouldCauseException() {
 		context.getImplicitObject("nonexistent");
 	}
@@ -302,13 +304,13 @@ public class AbstractContextTest {
 		assert context.getImplicitObject("lock") == lock;
 	}
 
-	@Test(dependsOnMethods = "implicitObjectsShouldBeAddable", expectedExceptions = ContextException.class)
+	@Test(dependsOnMethods = "implicitObjectsShouldBeAddable", expectedExceptions = AluminumException.class)
 	public void addingImplicitObjectWithExistingNameShouldCauseException() {
 		context.addImplicitObject("lock", new Object());
 		context.addImplicitObject("lock", new Object());
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void addingImplicitObjectWithScopeNameSuffixShouldCauseException() {
 		context.addImplicitObject("defaultScope", new DefaultScope("default"));
 	}
@@ -320,7 +322,7 @@ public class AbstractContextTest {
 		assert !context.getImplicitObjectNames().contains("templateScope");
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void removingNonexistentImplicitObjectShouldCauseException() {
 		context.removeImplicitObject("nonexistent");
 	}

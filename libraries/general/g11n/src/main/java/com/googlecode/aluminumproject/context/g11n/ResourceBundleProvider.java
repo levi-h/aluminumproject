@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 import java.util.ResourceBundle;
 
@@ -31,7 +31,7 @@ public interface ResourceBundleProvider {
 	 *
 	 * @param context the current context
 	 * @return a suitable resource bundle for the given context
-	 * @throws ContextException if no resource bundle can be worked out
+	 * @throws AluminumException if no resource bundle can be worked out
 	 */
-	ResourceBundle provide(Context context) throws ContextException;
+	ResourceBundle provide(Context context) throws AluminumException;
 }

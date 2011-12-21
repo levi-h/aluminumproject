@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.googlecode.aluminumproject;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
 
 /**
- * The root of the Aluminum exception hierarchy.
+ * Thrown by the template engine when an unexpected condition arises.
  *
  * @author levi_h
  */
@@ -42,5 +42,5 @@ public class AluminumException extends RuntimeException {
 		super(StringUtilities.join(messageParts), cause);
 	}
 
-	private final static long serialVersionUID = 20090308L;
+	private final static long serialVersionUID = 20111218L;
 }

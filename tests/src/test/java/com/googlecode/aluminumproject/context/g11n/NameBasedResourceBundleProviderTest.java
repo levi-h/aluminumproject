@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 
 import java.util.Collections;
@@ -106,7 +106,7 @@ public class NameBasedResourceBundleProviderTest {
 		assert resourceBundle.getString("France").equals("Paris");
 	}
 
-	@Test(expectedExceptions = ContextException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void requestingResourceBundleWithUnknownBaseNameShouldCauseException() {
 		new NameBasedResourceBundleProvider("nonexistent").provide(context);
 	}

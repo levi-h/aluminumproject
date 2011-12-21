@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
@@ -50,7 +48,7 @@ public class Namespace implements ActionContribution {
 	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
-			throws ActionException, ContextException {
+			throws AluminumException {
 		String prefix = descriptor.getLibraryUrlAbbreviation();
 		String url = (String) descriptor.getParameter().getValue(String.class, context);
 
@@ -68,7 +66,7 @@ public class Namespace implements ActionContribution {
 			this.url = url;
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			actionContext.proceed();
 
 			((AbstractElement) actionContext.getAction()).addNamespace(prefix, url);

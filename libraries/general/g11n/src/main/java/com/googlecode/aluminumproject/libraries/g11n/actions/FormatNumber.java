@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatType;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.text.NumberFormat;
 
@@ -49,7 +48,7 @@ public class FormatNumber extends AbstractAction {
 		type = NumberFormatType.CUSTOM;
 	}
 
-	public void execute(Context context, Writer writer) throws ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		NumberFormat numberFormat = GlobalisationContext.from(context).getNumberFormatProvider().provide(type, context);
 
 		if (grouping != null) {

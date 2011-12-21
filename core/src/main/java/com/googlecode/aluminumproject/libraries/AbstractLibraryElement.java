@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.utilities.Injector;
@@ -42,7 +43,7 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		injector = new Injector();
@@ -89,9 +90,9 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 	 * addValueProviders method}.
 	 *
 	 * @param injectable the object whose fields should be injected
-	 * @throws LibraryException when the object's fields can't be injected
+	 * @throws AluminumException when the object's fields can't be injected
 	 */
-	protected void injectFields(Object injectable) throws LibraryException {
+	protected void injectFields(Object injectable) throws AluminumException {
 		injector.inject(injectable);
 	}
 }

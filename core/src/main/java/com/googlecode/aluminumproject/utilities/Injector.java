@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.utilities.finders.FieldFinder;
 
@@ -62,9 +63,9 @@ public class Injector {
 	 * Injected &#64;Injected} and for which a value provider exists.
 	 *
 	 * @param injectable the object to fill
-	 * @throws UtilityException when something goes wrong while injecting the values
+	 * @throws AluminumException when something goes wrong while injecting the values
 	 */
-	public void inject(Object injectable) throws UtilityException {
+	public void inject(Object injectable) throws AluminumException {
 		List<Field> fields = FieldFinder.find(new FieldFinder.FieldFilter() {
 			public boolean accepts(Field field) {
 				return !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(Injected.class);
@@ -121,9 +122,9 @@ public class Injector {
 		 *
 		 * @param field the field for which a value should be provided
 		 * @return the value for the field
-		 * @throws UtilityException when no value can be provided for the given field
+		 * @throws AluminumException when no value can be provided for the given field
 		 */
-		Object getValue(Field field) throws UtilityException;
+		Object getValue(Field field) throws AluminumException;
 	}
 
 	/**
@@ -147,11 +148,11 @@ public class Injector {
 			return field.getType().isInstance(value);
 		}
 
-		public Object getValue(Field field) throws UtilityException {
+		public Object getValue(Field field) throws AluminumException {
 			if (hasValue(field)) {
 				return value;
 			} else {
-				throw new UtilityException("can't provide value",
+				throw new AluminumException("can't provide value",
 					" for field ", field.getDeclaringClass().getSimpleName(), "#", field.getName(), ", since",
 					" its type is not assignment-compatible with value type ", value.getClass().getSimpleName());
 			}

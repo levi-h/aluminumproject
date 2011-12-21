@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * A writer that wraps another writer and writes {@link String strings} to it.
@@ -51,7 +53,7 @@ public class TextWriter extends AbstractWriter {
 		this.autoFlush = autoFlush;
 	}
 
-	public void write(Object object) throws WriterException {
+	public void write(Object object) throws AluminumException {
 		checkOpen();
 
 		buffer.append(String.valueOf(object));
@@ -62,14 +64,14 @@ public class TextWriter extends AbstractWriter {
 	}
 
 	@Override
-	public void clear() {
+	public void clear() throws AluminumException {
 		checkOpen();
 
 		buffer.delete(0, buffer.length());
 	}
 
 	@Override
-	public void flush() throws WriterException {
+	public void flush() throws AluminumException {
 		super.flush();
 
 		if (buffer.length() > 0) {
@@ -81,7 +83,7 @@ public class TextWriter extends AbstractWriter {
 	}
 
 	@Override
-	public void close() throws WriterException {
+	public void close() throws AluminumException {
 		super.close();
 
 		writer.close();

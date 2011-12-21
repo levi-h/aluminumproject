@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,20 @@
  */
 package com.googlecode.aluminumproject.libraries.common.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.Library;
-import com.googlecode.aluminumproject.libraries.LibraryException;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.libraries.functions.FunctionArgument;
-import com.googlecode.aluminumproject.libraries.functions.FunctionException;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -78,19 +74,15 @@ public class CallFunction extends AbstractAction {
 		return factory.getLibrary();
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		getBody().invoke(context, new NullWriter());
 
-		try {
-			logger.debug("calling function");
+		logger.debug("calling function");
 
-			writer.write(createFunction(context).call(context));
-		} catch (FunctionException exception) {
-			throw new ActionException(exception, "can't call function");
-		}
+		writer.write(createFunction(context).call(context));
 	}
 
-	private Function createFunction(Context context) throws ActionException, FunctionException {
+	private Function createFunction(Context context) throws AluminumException {
 		Library library = getLibrary();
 
 		Iterator<FunctionFactory> it = library.getFunctionFactories().iterator();
@@ -108,13 +100,9 @@ public class CallFunction extends AbstractAction {
 			LibraryInformation libraryInformation = library.getInformation();
 
 			if (libraryInformation.isSupportingDynamicFunctions()) {
-				try {
-					functionFactory = library.getDynamicFunctionFactory(name);
-				} catch (LibraryException exception) {
-					throw new ActionException("can't get dynamic function factory for function '", name, "'");
-				}
+				functionFactory = library.getDynamicFunctionFactory(name);
 			} else {
-				throw new ActionException("can't find factory for function '", name, "'");
+				throw new AluminumException("can't find factory for function '", name, "'");
 			}
 		}
 

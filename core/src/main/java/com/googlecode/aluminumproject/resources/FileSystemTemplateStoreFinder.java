@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.resources;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,25 +40,25 @@ public class FileSystemTemplateStoreFinder extends AbstractTemplateStoreFinder {
 	public FileSystemTemplateStoreFinder() {}
 
 	@Override
-	public void initialise(Configuration configuration) {
+	public void initialise(Configuration configuration) throws AluminumException {
 		super.initialise(configuration);
 
 		directory = configuration.getParameters().getValue(TEMPLATE_DIRECTORY, null);
 
 		if (directory == null) {
-			throw new ConfigurationException("please provide a directory");
+			throw new AluminumException("please provide a directory");
 		} else {
 			logger.debug("using directory ", directory);
 		}
 	}
 
-	public OutputStream find(String name) throws ResourceException {
+	public OutputStream find(String name) throws AluminumException {
 		logger.debug("trying to find location to store template '", name, "' in directory '", directory, "'");
 
 		try {
 			return new FileOutputStream(new File(directory, name));
 		} catch (FileNotFoundException exception) {
-			throw new ResourceException(exception, "can't find place in directory '", directory, "'",
+			throw new AluminumException(exception, "can't find place in directory '", directory, "'",
 				" to store template '", name, "'");
 		}
 	}

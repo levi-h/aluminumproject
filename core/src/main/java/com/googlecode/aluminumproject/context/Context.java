@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.context;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.util.Set;
 
 /**
@@ -51,26 +53,26 @@ public interface Context {
 	 * @return the actual name of the new scope: this will be the same name as was requested if it should be unique, it
 	 *         could be different if a scope with the requested name already exists and the name is not required to be
 	 *         unique
-	 * @throws ContextException when the name has to be unique and there already is a scope with the given name
+	 * @throws AluminumException when the name has to be unique and there already is a scope with the given name
 	 */
-	String addScope(String name, boolean requireUniqueName) throws ContextException;
+	String addScope(String name, boolean requireUniqueName) throws AluminumException;
 
 	/**
 	 * Removes a scope.
 	 *
 	 * @param name the name of the scope to remove
-	 * @throws ContextException when there's no scope with the given name or when the scope can't be removed
+	 * @throws AluminumException when there's no scope with the given name or when the scope can't be removed
 	 */
-	void removeScope(String name) throws ContextException;
+	void removeScope(String name) throws AluminumException;
 
 	/**
 	 * Returns all variable names within a certain scope.
 	 *
 	 * @param scope the name of the scope to retrieve the variable names of
 	 * @return a set that contains the names of all variables in the given scope (may be empty but not {@code null})
-	 * @throws ContextException when there's no scope with the given name
+	 * @throws AluminumException when there's no scope with the given name
 	 */
-	Set<String> getVariableNames(String scope) throws ContextException;
+	Set<String> getVariableNames(String scope) throws AluminumException;
 
 	/**
 	 * Retrieves a variable by name.
@@ -78,10 +80,10 @@ public interface Context {
 	 * @param scope the name of the scope to get the variable from
 	 * @param name the name of the variable to retrieve
 	 * @return the value of the variable with the given name in the specified scope
-	 * @throws ContextException when there's no scope with the given name or when there's no variable with the given
-	 *                          name within the scope
+	 * @throws AluminumException when there's no scope with the given name or when there's no variable with the given
+	 *                           name within the scope
 	 */
-	Object getVariable(String scope, String name) throws ContextException;
+	Object getVariable(String scope, String name) throws AluminumException;
 
 	/**
 	 * Sets a variable in the innermost scope (i.e. the scope that was added last).
@@ -99,18 +101,18 @@ public interface Context {
 	 * @param name the name of the variable to set
 	 * @param value the value to set
 	 * @return the previous value of the variable (or {@code null} if the variable did not exist)
-	 * @throws ContextException when there's no scope with the given name
+	 * @throws AluminumException when there's no scope with the given name
 	 */
-	Object setVariable(String scope, String name, Object value) throws ContextException;
+	Object setVariable(String scope, String name, Object value) throws AluminumException;
 
 	/**
 	 * Removes a variable from the innermost scope (i.e. the scope that was added last).
 	 *
 	 * @param name the name of the variable to remove
 	 * @return the previous value of the variable
-	 * @throws ContextException when there's no variable with the given name within the innermost scope
+	 * @throws AluminumException when there's no variable with the given name within the innermost scope
 	 */
-	Object removeVariable(String name) throws ContextException;
+	Object removeVariable(String name) throws AluminumException;
 
 	/**
 	 * Removes a variable.
@@ -118,10 +120,10 @@ public interface Context {
 	 * @param scope the name of the scope to remove the variable from
 	 * @param name the name of the variable to remove
 	 * @return the previous value of the variable
-	 * @throws ContextException when there's no scope with the given name or when there's no variable with the given
-	 *                          name within the scope
+	 * @throws AluminumException when there's no scope with the given name or when there's no variable with the given
+	 *                           name within the scope
 	 */
-	Object removeVariable(String scope, String name) throws ContextException;
+	Object removeVariable(String scope, String name) throws AluminumException;
 
 	/**
 	 * Finds a variable across all scopes. When multiple scopes have a variable with the given name, it's up to the
@@ -131,10 +133,10 @@ public interface Context {
 	 *
 	 * @param name the name of the variable to find
 	 * @return the value of the variable with the given name
-	 * @throws ContextException when not a scope in either this context or one of its ancestor contexts contains a
-	 *                          variable with the given name
+	 * @throws AluminumException when not a scope in either this context or one of its ancestor contexts contains a
+	 *                           variable with the given name
 	 */
-	Object findVariable(String name) throws ContextException;
+	Object findVariable(String name) throws AluminumException;
 
 	/**
 	 * Returns all implicit object names.
@@ -148,28 +150,28 @@ public interface Context {
 	 *
 	 * @param name the name of the implicit object to return
 	 * @return the implicit object with the given name
-	 * @throws ContextException when no implicit object with the given name exists in this context
+	 * @throws AluminumException when no implicit object with the given name exists in this context
 	 */
-	Object getImplicitObject(String name) throws ContextException;
+	Object getImplicitObject(String name) throws AluminumException;
 
  	/**
 	 * Adds an implicit object.
 	 *
 	 * @param name the name of the implicit object
 	 * @param implicitObject the implicit object to add
-	 * @throws ContextException when there already is an implicit object with the given name or when the name is
-	 *                          reserved
+	 * @throws AluminumException when there already is an implicit object with the given name or when the name is
+	 *                           reserved
 	 */
-	void addImplicitObject(String name, Object implicitObject) throws ContextException;
+	void addImplicitObject(String name, Object implicitObject) throws AluminumException;
 
 	/**
 	 * Removes an implicit object with a certain name.
 	 *
 	 * @param name the name of the implicit object to remove
 	 * @return the removed implicit object
-	 * @throws ContextException when there's no implicit object with the given name
+	 * @throws AluminumException when there's no implicit object with the given name
 	 */
-	Object removeImplicitObject(String name) throws ContextException;
+	Object removeImplicitObject(String name) throws AluminumException;
 
 	/**
 	 * Returns the parent of this context.
@@ -182,9 +184,9 @@ public interface Context {
 	 * Creates a child context of this context.
 	 *
 	 * @return the new subcontext
-	 * @throws ContextException when this context does not support subcontexts
+	 * @throws AluminumException when this context does not support subcontexts
 	 */
-	Context createSubcontext() throws ContextException;
+	Context createSubcontext() throws AluminumException;
 
 	/** The name of the default scope. */
 	String TEMPLATE_SCOPE = "template";

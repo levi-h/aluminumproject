@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
@@ -22,9 +23,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.TestAction;
@@ -115,7 +114,7 @@ public class DefaultActionContextTest {
 		assert parameters.get("test") == parameter;
 	}
 
-	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = ActionException.class)
+	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = AluminumException.class)
 	public void addingParameterAfterActionHasBeenCreatedShouldCauseException() {
 		actionContext.setPhase(ActionPhase.CREATION);
 		actionContext.setAction(new TestAction());
@@ -146,7 +145,7 @@ public class DefaultActionContextTest {
 		assert actionContributionFactories.get(descriptor) == actionContributionFactory;
 	}
 
-	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = ActionException.class)
+	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = AluminumException.class)
 	public void addingActionContributionAfterContributionsHaveBeenMadeShouldCauseException() {
 		actionContext.setPhase(ActionPhase.CREATION);
 
@@ -155,7 +154,7 @@ public class DefaultActionContextTest {
 			new TestActionContributionFactory());
 	}
 
-	@Test(expectedExceptions = ActionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void replacingActionShouldCauseException() {
 		actionContext.setAction(new TestAction());
 		actionContext.setAction(new TestAction());
@@ -203,7 +202,7 @@ public class DefaultActionContextTest {
 
 	}
 
-	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = ActionException.class)
+	@Test(dependsOnMethods = "phaseShouldBeChangeable", expectedExceptions = AluminumException.class)
 	public void addingInterceptorForPastPhaseShouldCauseException() {
 		actionContext.setPhase(ActionPhase.EXECUTION);
 
@@ -225,7 +224,7 @@ public class DefaultActionContextTest {
 	@Test(dependsOnMethods = {"interceptorsShouldBeAddable", "phaseShouldBeChangeable"})
 	public void proceedingActionContextShouldRunNextInterceptor() {
 		actionContext.addInterceptor(new AbstractActionInterceptor(ActionPhase.EXECUTION) {
-			public void intercept(ActionContext actionContext) throws InterceptionException {
+			public void intercept(ActionContext actionContext) throws AluminumException {
 				actionContext.getContext().setVariable("run", true);
 
 				actionContext.proceed();

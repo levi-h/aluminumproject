@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.finders;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,9 +61,9 @@ public class TypeFinder {
 	 * @param packageNames the names of the packages to include in the search (subpackages will be included)
 	 * @return a list with all types in the given packages that match the given filter (may be empty)
 	 * @throws IllegalArgumentException when no package names are supplied
-	 * @throws UtilityException when something goes wrong while trying to find matching types
+	 * @throws AluminumException when something goes wrong while trying to find matching types
 	 */
-	public static List<Class<?>> find(TypeFilter filter, String... packageNames) throws UtilityException {
+	public static List<Class<?>> find(TypeFilter filter, String... packageNames) throws AluminumException {
 		if ((packageNames == null) || (packageNames.length == 0)) {
 			throw new IllegalArgumentException("please provide at least one package name");
 		}
@@ -97,7 +97,7 @@ public class TypeFinder {
 					}
 				}
 			} catch (IOException exception) {
-				throw new UtilityException(exception, "trying to find types in package ", packageName, " failed");
+				throw new AluminumException(exception, "trying to find types in package ", packageName, " failed");
 			}
 		}
 
@@ -105,7 +105,7 @@ public class TypeFinder {
 	}
 
 	private static void findInJar(List<Class<?>> types, TypeFilter filter, ClassLoader classLoader,
-			File jarFile, String packagePath) throws UtilityException {
+			File jarFile, String packagePath) throws AluminumException {
 		try {
 			JarInputStream in = new JarInputStream(new FileInputStream(jarFile));
 
@@ -119,7 +119,7 @@ public class TypeFinder {
 						try {
 							addMatchingType(types, filter, classLoader, entryName);
 						} catch (ClassNotFoundException exception) {
-							throw new UtilityException(exception, "can't find type ", entryName,
+							throw new AluminumException(exception, "can't find type ", entryName,
 								" in JAR file ", jarFile.getAbsolutePath());
 						}
 					}
@@ -128,13 +128,13 @@ public class TypeFinder {
 				in.close();
 			}
 		} catch (IOException exception) {
-			throw new UtilityException(exception,
+			throw new AluminumException(exception,
 				"trying to find types in JAR file ", jarFile.getAbsolutePath(), " failed");
 		}
 	}
 
 	private static void findInDirectory(List<Class<?>> types, TypeFilter filter, ClassLoader classLoader,
-			File directory, String packagePath) throws UtilityException {
+			File directory, String packagePath) throws AluminumException {
 		File[] files = directory.listFiles();
 
 		if (files != null) {
@@ -145,7 +145,7 @@ public class TypeFinder {
 					try {
 						addMatchingType(types, filter, classLoader, path.substring(path.indexOf(packagePath)));
 					} catch (ClassNotFoundException exception) {
-						throw new UtilityException(exception, "can't find type ", path,
+						throw new AluminumException(exception, "can't find type ", path,
 							" in directory ", directory.getAbsolutePath());
 					}
 				} else if (file.isDirectory()) {

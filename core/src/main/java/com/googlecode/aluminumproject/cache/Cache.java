@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.cache;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.utilities.Utilities;
@@ -34,18 +35,18 @@ public interface Cache extends ConfigurationElement {
 	 *
 	 * @param key the key to store the template under
 	 * @param template the template to store
-	 * @throws CacheException when the cache is not available
+	 * @throws AluminumException when the cache is not available
 	 */
-	void storeTemplate(Key key, Template template) throws CacheException;
+	void storeTemplate(Key key, Template template) throws AluminumException;
 
 	/**
 	 * Finds a template by its key. When this cache does not contain the given key, {@code null} is returned.
 	 *
 	 * @param key the key to find a template by
 	 * @return the template with the given key or {@code null} if no template was stored under the key given
-	 * @throws CacheException when the cache is not available
+	 * @throws AluminumException when the cache is not available
 	 */
-	Template findTemplate(Key key) throws CacheException;
+	Template findTemplate(Key key) throws AluminumException;
 
 	/**
 	 * The key that cached templates are stored under.

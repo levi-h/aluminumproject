@@ -15,6 +15,8 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
+
 import java.util.List;
 
 /**
@@ -29,16 +31,16 @@ public interface Template {
 	 *
 	 * @param templateElement the template element to find the parent of
 	 * @return the template element that's the parent of the given template element
-	 * @throws TemplateException when this template does not contain the given template element
+	 * @throws AluminumException when this template does not contain the given template element
 	 */
-	TemplateElement getParent(TemplateElement templateElement) throws TemplateException;
+	TemplateElement getParent(TemplateElement templateElement) throws AluminumException;
 
 	/**
 	 * Finds the children of a certain template element.
 	 *
 	 * @param templateElement the template element to find the children of
 	 * @return the template elements that have the given template element as their parent
-	 * @throws TemplateException when this template does not contain the given template element
+	 * @throws AluminumException when this template does not contain the given template element
 	 */
-	List<TemplateElement> getChildren(TemplateElement templateElement) throws TemplateException;
+	List<TemplateElement> getChildren(TemplateElement templateElement) throws AluminumException;
 }

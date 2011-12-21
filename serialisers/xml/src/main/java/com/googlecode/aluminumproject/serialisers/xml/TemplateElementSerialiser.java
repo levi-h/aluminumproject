@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.serialisers.xml;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateElement;
@@ -35,9 +36,10 @@ public interface TemplateElementSerialiser<E extends TemplateElement> {
 	 * @param templateElement the serialised template element
 	 * @param elementNameTranslator the element name translator to use
 	 * @param writer the writer to use
+	 * @throws AluminumException when the template element part can't be written
 	 */
 	void writeBeforeChildren(Template template,
-		E templateElement, ElementNameTranslator elementNameTranslator, PrintWriter writer);
+		E templateElement, ElementNameTranslator elementNameTranslator, PrintWriter writer) throws AluminumException;
 
 	/**
 	 * Writes the part of a template element that should be written before its children are serialised.
@@ -46,7 +48,8 @@ public interface TemplateElementSerialiser<E extends TemplateElement> {
 	 * @param templateElement the serialised template element
 	 * @param elementNameTranslator the element name translator to use
 	 * @param writer the writer to use
+	 * @throws AluminumException when the template element part can't be written
 	 */
 	void writeAfterChildren(Template template,
-		E templateElement, ElementNameTranslator elementNameTranslator, PrintWriter writer);
+		E templateElement, ElementNameTranslator elementNameTranslator, PrintWriter writer) throws AluminumException;
 }

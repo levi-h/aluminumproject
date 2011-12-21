@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.resources;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 
 import java.io.InputStream;
 
@@ -38,7 +38,7 @@ public class ClassPathTemplateFinder extends AbstractTemplateFinder {
 	public ClassPathTemplateFinder() {}
 
 	@Override
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		super.initialise(configuration);
 
 		templatePath = configuration.getParameters().getValue(TEMPLATE_PATH, null);
@@ -48,7 +48,7 @@ public class ClassPathTemplateFinder extends AbstractTemplateFinder {
 		}
 	}
 
-	public InputStream find(String name) throws ResourceException {
+	public InputStream find(String name) throws AluminumException {
 		String fullName = (templatePath == null) ? name : String.format("%s/%s", templatePath, name);
 
 		logger.debug("trying to find template '", fullName, "'");
@@ -56,7 +56,7 @@ public class ClassPathTemplateFinder extends AbstractTemplateFinder {
 		InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fullName);
 
 		if (stream == null) {
-			throw new ResourceException("can't find template '", fullName, "'");
+			throw new AluminumException("can't find template '", fullName, "'");
 		}
 
 		logger.debug("found template '", fullName, "' in class path");

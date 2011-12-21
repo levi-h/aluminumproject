@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.common.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.configuration.Configuration;
@@ -22,7 +23,6 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.Action;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.ConstantFunctionArgument;
 import com.googlecode.aluminumproject.libraries.functions.Function;
@@ -44,11 +44,11 @@ public class FunctionArgument extends AbstractAction {
 	 */
 	public FunctionArgument() {}
 
-	public void execute(Context context, Writer writer) throws ActionException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		findCallFunction().addArgument(new ConstantFunctionArgument(value, configuration.getConverterRegistry()));
 	}
 
-	private CallFunction findCallFunction() throws ActionException {
+	private CallFunction findCallFunction() throws AluminumException {
 		CallFunction callFunction = null;
 
 		Library library = factory.getLibrary();
@@ -71,7 +71,7 @@ public class FunctionArgument extends AbstractAction {
 		} while ((action != null) && (callFunction == null));
 
 		if (callFunction == null) {
-			throw new ActionException("can't find call function action",
+			throw new AluminumException("can't find call function action",
 				" for library '", library.getInformation().getUrl(), "'");
 		} else {
 			return callFunction;

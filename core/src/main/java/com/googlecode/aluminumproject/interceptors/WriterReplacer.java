@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
  */
 package com.googlecode.aluminumproject.interceptors;
 
-import com.googlecode.aluminumproject.context.ContextException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.actions.Action;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 /**
  * An {@link ActionInterceptor action interceptor} that will replace the {@link Writer writer} that will be used by the
@@ -39,8 +37,7 @@ public abstract class WriterReplacer extends AbstractActionInterceptor {
 		super(ActionPhase.EXECUTION);
 	}
 
-	public void intercept(ActionContext actionContext)
-			throws ActionException, ContextException, WriterException {
+	public void intercept(ActionContext actionContext) throws AluminumException {
 		Writer originalWriter = actionContext.getWriter();
 		Writer writer = createWriter(actionContext);
 
@@ -63,6 +60,7 @@ public abstract class WriterReplacer extends AbstractActionInterceptor {
 	 *
 	 * @param actionContext the current action context
 	 * @return the writer to use
+	 * @throws AluminumException when the writer can't be created
 	 */
-	protected abstract Writer createWriter(ActionContext actionContext);
+	protected abstract Writer createWriter(ActionContext actionContext) throws AluminumException;
 }

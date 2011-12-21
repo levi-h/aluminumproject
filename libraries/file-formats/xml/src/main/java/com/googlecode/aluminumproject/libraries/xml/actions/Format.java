@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.xml.model.Element;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 /**
  * Formats and writes an {@link Element XML document}. The document can be given both as a parameter and as a body
@@ -43,7 +42,7 @@ public class Format extends AbstractAction {
 		indentation = DEFAULT_INDENTATION;
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		Element document;
 
 		if (this.document == null) {

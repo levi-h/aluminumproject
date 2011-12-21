@@ -15,16 +15,14 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -81,9 +79,9 @@ abstract class AbstractElement extends AbstractAction {
 	 * Adds a child element to the element.
 	 *
 	 * @param child the element to add
-	 * @throws ActionException when the child can't be added
+	 * @throws AluminumException when the child can't be added
 	 */
-	protected void addChild(Element child) throws ActionException {
+	protected void addChild(Element child) throws AluminumException {
 		addChildNode(child);
 	}
 
@@ -91,9 +89,9 @@ abstract class AbstractElement extends AbstractAction {
 	 * Adds a text element to the element.
 	 *
 	 * @param text the text to add
-	 * @throws ActionException when the text can't be added
+	 * @throws AluminumException when the text can't be added
 	 */
-	protected void addText(String text) {
+	protected void addText(String text) throws AluminumException {
 		addChildNode(new Text(text));
 	}
 
@@ -101,17 +99,17 @@ abstract class AbstractElement extends AbstractAction {
 	 * Sets the text of this element. After setting an element's text, no other children may be added.
 	 *
 	 * @param text the text to set
-	 * @throws ActionException when the text can't be set
+	 * @throws AluminumException when the text can't be set
 	 */
-	public void setText(String text) throws ActionException {
+	public void setText(String text) throws AluminumException {
 		addText(text);
 
 		moreChildrenAllowed = false;
 	}
 
-	private void addChildNode(Node child) throws ActionException {
+	private void addChildNode(Node child) throws AluminumException {
 		if (!moreChildrenAllowed) {
-			throw new ActionException("can't add ", child, ": the element does not allow any more children");
+			throw new AluminumException("can't add ", child, ": the element does not allow any more children");
 		}
 
 		children.add(child);
@@ -122,11 +120,11 @@ abstract class AbstractElement extends AbstractAction {
 	 *
 	 * @param prefix the prefix of the namespace to add
 	 * @param url the URL of the namespace to add
-	 * @throws ActionException if the element already contains a namespace with the given prefix
+	 * @throws AluminumException if the element already contains a namespace with the given prefix
 	 */
-	protected void addNamespace(String prefix, String url) throws ActionException {
+	protected void addNamespace(String prefix, String url) throws AluminumException {
 		if (namespaces.containsKey(prefix)) {
-			throw new ActionException("duplicate namespace prefix: '", prefix, "'");
+			throw new AluminumException("duplicate namespace prefix: '", prefix, "'");
 		}
 
 		namespaces.put(prefix, url);
@@ -169,7 +167,7 @@ abstract class AbstractElement extends AbstractAction {
 		attributes.get(prefix).put(name, value);
 	}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		Element element = createElement();
 		addNamespaceDeclarations(element);
 
@@ -209,7 +207,7 @@ abstract class AbstractElement extends AbstractAction {
 		}
 	}
 
-	private void addAttributes(Element element) throws ActionException {
+	private void addAttributes(Element element) throws AluminumException {
 		for (Map.Entry<String, Map<String, String>> prefixedAttribute: attributes.entrySet()) {
 			String namespacePrefix = prefixedAttribute.getKey();
 
@@ -224,7 +222,7 @@ abstract class AbstractElement extends AbstractAction {
 				String namespaceUrl = findNamespaceUrl(namespacePrefix);
 
 				if (namespaceUrl == null) {
-					throw new ActionException("can't find namespace with prefix '", namespacePrefix, "'");
+					throw new AluminumException("can't find namespace with prefix '", namespacePrefix, "'");
 				} else {
 					for (Map.Entry<String, String> attribute: prefixedAttribute.getValue().entrySet()) {
 						String attributeName = String.format("%s:%s", namespacePrefix, attribute.getKey());

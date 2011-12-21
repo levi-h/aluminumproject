@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.mail;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import javax.mail.Message.RecipientType;
 
@@ -55,7 +55,7 @@ public class StringToRecipientTypeConverterTest {
 		assert converter.convert("TO", RecipientType.class) == RecipientType.TO;
 	}
 
-	@Test(expectedExceptions = ConverterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void tryingToConvertUnknownTypeShouldCauseException() {
 		converter.convert("copy", RecipientType.class);
 	}

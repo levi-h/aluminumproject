@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.xml;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
@@ -25,7 +26,6 @@ import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateBuilder;
 import com.googlecode.aluminumproject.templates.TemplateElement;
-import com.googlecode.aluminumproject.templates.TemplateException;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ParserUtilities;
 
@@ -199,7 +199,7 @@ public class TemplateHandler extends DefaultHandler {
 		try {
 			return configuration.getTemplateElementFactory().createActionElement(
 				action, parameters, contributions, getLibraryUrlAbbreviations());
-		} catch (TemplateException exception) {
+		} catch (AluminumException exception) {
 			throw new SAXException("can't create action element", exception);
 		}
 	}
@@ -207,7 +207,7 @@ public class TemplateHandler extends DefaultHandler {
 	private TemplateElement createTextElement(String text) throws SAXException {
 		try {
 			return configuration.getTemplateElementFactory().createTextElement(text, getLibraryUrlAbbreviations());
-		} catch (TemplateException exception) {
+		} catch (AluminumException exception) {
 			throw new SAXException("can't create text element", exception);
 		}
 	}
@@ -217,7 +217,7 @@ public class TemplateHandler extends DefaultHandler {
 		try {
 			return configuration.getTemplateElementFactory().createExpressionElement(
 				expressionFactory, text, getLibraryUrlAbbreviations());
-		} catch (TemplateException exception) {
+		} catch (AluminumException exception) {
 			throw new SAXException("can't create expression element", exception);
 		}
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -42,13 +42,13 @@ public class NameBasedResourceBundleProvider implements ResourceBundleProvider {
 		this.baseName = baseName;
 	}
 
-	public ResourceBundle provide(Context context) throws ContextException {
+	public ResourceBundle provide(Context context) throws AluminumException {
 		Locale locale = GlobalisationContext.from(context).getLocaleProvider().provide(context);
 
 		try {
 			return ResourceBundle.getBundle(baseName, locale);
 		} catch (MissingResourceException exception) {
-			throw new ContextException(exception, "can't provide resource bundle");
+			throw new AluminumException(exception, "can't provide resource bundle");
 		}
 	}
 }

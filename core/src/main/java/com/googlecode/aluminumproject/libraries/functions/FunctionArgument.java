@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 
 import java.lang.reflect.Type;
@@ -31,7 +32,7 @@ public interface FunctionArgument {
 	 * @param type the required type for the argument value
 	 * @param context the context in which the argument's function will run
 	 * @return the value of this argument with the given type
-	 * @throws FunctionException when the argument value can't be retrieved or converted to the desired type
+	 * @throws AluminumException when the argument value can't be retrieved or converted to the desired type
 	 */
-	Object getValue(Type type, Context context) throws FunctionException;
+	Object getValue(Type type, Context context) throws AluminumException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.expressions.el;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.expressions.Expression;
-import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.utilities.Logger;
@@ -56,7 +55,7 @@ public class ElExpressionFactory implements ExpressionFactory {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		Map<String, String> emptyPropertyMap = Collections.emptyMap();
@@ -117,7 +116,7 @@ public class ElExpressionFactory implements ExpressionFactory {
 		return occurrences;
 	}
 
-	public Expression create(String value, Context context) throws ExpressionException {
+	public Expression create(String value, Context context) throws AluminumException {
 		try {
 			ElContext elContext = new ElContext(context, configuration);
 
@@ -125,10 +124,8 @@ public class ElExpressionFactory implements ExpressionFactory {
 				expressionFactory.createValueExpression(elContext, value, Object.class);
 
 			return new ElExpression(expression, configuration);
-		} catch (ConfigurationException exception) {
-			throw new ExpressionException(exception, "can't create EL context");
 		} catch (ELException exception) {
-			throw new ExpressionException(exception, "can't create expression");
+			throw new AluminumException(exception, "can't create expression");
 		}
 	}
 

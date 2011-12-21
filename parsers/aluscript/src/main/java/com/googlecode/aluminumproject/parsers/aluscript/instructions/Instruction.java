@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
 import java.util.Map;
@@ -40,7 +40,7 @@ public interface Instruction {
 	 *
 	 * @param parameters the parameters of this instruction (may be empty, but not {@code null})
 	 * @param context the context to use
-	 * @throws AluScriptException when something goes wrong while executing this instruction
+	 * @throws AluminumException when something goes wrong while executing this instruction
 	 */
-	void execute(Map<String, String> parameters, AluScriptContext context) throws AluScriptException;
+	void execute(Map<String, String> parameters, AluScriptContext context) throws AluminumException;
 }

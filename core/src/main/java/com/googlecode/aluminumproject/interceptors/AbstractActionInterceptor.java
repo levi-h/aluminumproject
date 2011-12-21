@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.interceptors;
 
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.utilities.Logger;
 
@@ -40,11 +40,11 @@ public abstract class AbstractActionInterceptor implements ActionInterceptor {
 	 * Creates an abstract action interceptor.
 	 *
 	 * @param phases the action phases to intercept
-	 * @throws ActionException when no action phases are specified
+	 * @throws AluminumException when no action phases are specified
 	 */
-	protected AbstractActionInterceptor(ActionPhase... phases) throws ActionException {
+	protected AbstractActionInterceptor(ActionPhase... phases) throws AluminumException {
 		if (phases.length == 0) {
-			throw new ActionException("action interceptors should intercept at least one action phase");
+			throw new AluminumException("action interceptors should intercept at least one action phase");
 		} else {
 			this.phases = EnumSet.copyOf(Arrays.asList(phases));
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 
@@ -33,12 +34,12 @@ public class StaticMethodInvokingFunctionTest {
 		context = new DefaultContext();
 	}
 
-	@Test(expectedExceptions = FunctionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void callingInaccessibleFunctionShouldCauseException() throws NoSuchMethodException {
 		new StaticMethodInvokingFunction(TestFunctions.class.getDeclaredMethod("inaccessible")).call(context);
 	}
 
-	@Test(expectedExceptions = FunctionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void callingFunctionThatThrowsExceptionShouldCauseException() throws NoSuchMethodException {
 		Method divide = TestFunctions.class.getMethod("divide", Integer.TYPE, Integer.TYPE);
 

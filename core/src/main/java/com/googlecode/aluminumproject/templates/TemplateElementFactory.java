@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
@@ -37,11 +38,11 @@ public interface TemplateElementFactory extends ConfigurationElement {
 	 * @param contributionDescriptors the action contribution descriptors
 	 * @param libraryUrlAbbreviations the action element's library URL abbreviations
 	 * @return the new action element
-	 * @throws TemplateException when the action element can't be created
+	 * @throws AluminumException when the action element can't be created
 	 */
 	ActionElement createActionElement(ActionDescriptor actionDescriptor,
 		Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributionDescriptors,
-		Map<String, String> libraryUrlAbbreviations) throws TemplateException;
+		Map<String, String> libraryUrlAbbreviations) throws AluminumException;
 
 	/**
 	 * Creates a text element.
@@ -49,9 +50,9 @@ public interface TemplateElementFactory extends ConfigurationElement {
 	 * @param text the text that the text element will write
 	 * @param libraryUrlAbbreviations the text element's library URL abbreviations
 	 * @return the new text element
-	 * @throws TemplateException when the text element can't be created
+	 * @throws AluminumException when the text element can't be created
 	 */
-	TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations) throws TemplateException;
+	TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations) throws AluminumException;
 
 	/**
 	 * Creates an expression element.
@@ -60,8 +61,8 @@ public interface TemplateElementFactory extends ConfigurationElement {
 	 * @param text the expression text
 	 * @param libraryUrlAbbreviations the expression element's library URL abbreviations
 	 * @return the new expression element
-	 * @throws TemplateException when the expression element can't be created
+	 * @throws AluminumException when the expression element can't be created
 	 */
 	ExpressionElement createExpressionElement(ExpressionFactory expressionFactory, String text,
-		Map<String, String> libraryUrlAbbreviations) throws TemplateException;
+		Map<String, String> libraryUrlAbbreviations) throws AluminumException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 
 import java.lang.reflect.Type;
@@ -40,11 +41,11 @@ public class TestActionParameter implements ActionParameter {
 		return text;
 	}
 
-	public Object getValue(Type type, Context context) throws ActionException {
+	public Object getValue(Type type, Context context) throws AluminumException {
 		if (type == String.class) {
 			return text;
 		} else {
-			throw new ActionException("'", text, "' is not of type ", type);
+			throw new AluminumException("'", text, "' is not of type ", type);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.configuration;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.lang.reflect.Method;
 
@@ -48,13 +50,13 @@ public class TestConfigurationElementCustomiser implements ConfigurationElementC
 		return configuration;
 	}
 
-	public void customise(Object object) throws ConfigurationException {
+	public void customise(Object object) throws AluminumException {
 		for (Method method: object.getClass().getMethods()) {
 			if (method.getName().equals("customise") && (method.getParameterTypes().length == 0)) {
 				try {
 					method.invoke(object);
 				} catch (Exception exception) {
-					throw new ConfigurationException(exception, "can't customise ", object);
+					throw new AluminumException(exception, "can't customise ", object);
 				}
 			}
 		}

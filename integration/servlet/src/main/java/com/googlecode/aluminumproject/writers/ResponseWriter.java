@@ -15,8 +15,7 @@
  */
 package com.googlecode.aluminumproject.writers;
 
-import com.googlecode.aluminumproject.writers.AbstractOutputStreamWriter;
-import com.googlecode.aluminumproject.writers.WriterException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -41,16 +40,16 @@ public class ResponseWriter extends AbstractOutputStreamWriter {
 	}
 
 	@Override
-	protected OutputStream createOutputStream() throws WriterException {
+	protected OutputStream createOutputStream() throws AluminumException {
 		try {
 			return response.getOutputStream();
 		} catch (IOException exception) {
-			throw new WriterException(exception, "can't create response writer");
+			throw new AluminumException(exception, "can't create response writer");
 		}
 	}
 
 	@Override
-	public void clear() throws WriterException {
+	public void clear() throws AluminumException {
 		checkOpen();
 
 		response.resetBuffer();

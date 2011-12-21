@@ -15,17 +15,9 @@
  */
 package com.googlecode.aluminumproject.servlet;
 
-import java.util.Enumeration;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.googlecode.aluminumproject.Aluminum;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
@@ -34,7 +26,13 @@ import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.ResponseWriter;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
+
+import java.util.Enumeration;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * A servlet that uses Aluminum to serve web content.
@@ -231,9 +229,9 @@ public class AluminumServlet extends HttpServlet {
 	 * This method will return a new {@link ResponseWriter response writer}.
 	 *
 	 * @return the writer to use
-	 * @throws WriterException when the writer can't be created
+	 * @throws AluminumException when the writer can't be created
 	 */
-	protected Writer createWriter() throws WriterException {
+	protected Writer createWriter() throws AluminumException {
 		return new ResponseWriter(getResponse());
 	}
 
@@ -243,10 +241,10 @@ public class AluminumServlet extends HttpServlet {
 
 		try {
 			aluminum.stop();
-		} catch (ConfigurationException exception) {
+		} catch (AluminumException exception) {
 			throw new RuntimeException("can't stop template engine", exception);
 		}
 	}
 
-	private final static long serialVersionUID = 20111020L;
+	private final static long serialVersionUID = 20111220L;
 }

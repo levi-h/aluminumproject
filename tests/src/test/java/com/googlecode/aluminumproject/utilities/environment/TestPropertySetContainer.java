@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,11 +40,11 @@ public class TestPropertySetContainer implements PropertySetContainer {
 		return propertySets.containsKey(name);
 	}
 
-	public Properties readPropertySet(String name) throws UtilityException {
+	public Properties readPropertySet(String name) throws AluminumException {
 		Properties propertySet = propertySets.get(name);
 
 		if (propertySet == null) {
-			throw new UtilityException("property set '", name, "' does not exist");
+			throw new AluminumException("property set '", name, "' does not exist");
 		}
 
 		return propertySet;
@@ -54,11 +54,11 @@ public class TestPropertySetContainer implements PropertySetContainer {
 		propertySets.put(name, propertySet);
 	}
 
-	public void removePropertySet(String name) throws UtilityException {
+	public void removePropertySet(String name) throws AluminumException {
 		if (propertySets.containsKey(name)) {
 			propertySets.remove(name);
 		} else {
-			throw new UtilityException("can't remove property set '", name, "', since it does not exist");
+			throw new AluminumException("can't remove property set '", name, "', since it does not exist");
 		}
 	}
 }

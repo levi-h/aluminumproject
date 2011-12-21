@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
@@ -60,7 +61,7 @@ public class ConstantFunctionArgumentTest {
 		assert ((Integer) value).intValue() == 32768;
 	}
 
-	@Test(expectedExceptions = FunctionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void retrievingValueWithIncompatibleTypeShouldCauseException() {
 		argument.getValue(Short.TYPE, context);
 	}

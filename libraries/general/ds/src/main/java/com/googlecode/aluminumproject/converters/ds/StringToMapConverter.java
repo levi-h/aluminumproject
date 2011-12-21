@@ -15,12 +15,11 @@
  */
 package com.googlecode.aluminumproject.converters.ds;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.converters.Converter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
-import com.googlecode.aluminumproject.utilities.UtilityException;
 import com.googlecode.aluminumproject.utilities.text.Splitter;
 
 import java.lang.reflect.ParameterizedType;
@@ -58,9 +57,9 @@ public class StringToMapConverter implements Converter<String> {
 		return targetTypeIsInterface || targetTypeIsParameterisedInterface;
 	}
 
-	public Object convert(String value, Type targetType) throws ConverterException {
+	public Object convert(String value, Type targetType) throws AluminumException {
 		if (!supportsTargetType(targetType)) {
-			throw new ConverterException("expected map as target type, not ", targetType);
+			throw new AluminumException("expected map as target type, not ", targetType);
 		}
 
 		ConverterRegistry converterRegistry = configuration.getConverterRegistry();
@@ -88,14 +87,10 @@ public class StringToMapConverter implements Converter<String> {
 		return map;
 	}
 
-	private List<Map.Entry<String, String>> getEntries(String map) throws ConverterException {
+	private List<Map.Entry<String, String>> getEntries(String map) throws AluminumException {
 		EntryProcessor entryProcessor = new EntryProcessor();
 
-		try {
-			new Splitter(EntryProcessor.SEPARATOR_PATTERNS, '\\').split(map, entryProcessor);
-		} catch (UtilityException exception) {
-			throw new ConverterException(exception, "can't split map '", map, "'");
-		}
+		new Splitter(EntryProcessor.SEPARATOR_PATTERNS, '\\').split(map, entryProcessor);
 
 		return entryProcessor.entries;
 	}
@@ -113,17 +108,17 @@ public class StringToMapConverter implements Converter<String> {
 			expectedSeparatorPatterns = Collections.singleton(OPENING_BRACKET);
 		}
 
-		public void process(String token, String separator, String separatorPattern) throws UtilityException {
+		public void process(String token, String separator, String separatorPattern) throws AluminumException {
 			if (expectedSeparatorPatterns.contains(separatorPattern)) {
 				if (separatorPattern == null) {
 					if (!token.equals("")) {
-						throw new UtilityException("unexpected token after map: '", token, "'");
+						throw new AluminumException("unexpected token after map: '", token, "'");
 					}
 				} else if (separatorPattern.equals(OPENING_BRACKET)) {
 					if (token.equals("")) {
 						expectedSeparatorPatterns = Arrays.asList(COLON, CLOSING_BRACKET);
 					} else {
-						throw new UtilityException("unexpected token before map: '", token, "'");
+						throw new AluminumException("unexpected token before map: '", token, "'");
 					}
 				} else if (separatorPattern.equals(COLON)) {
 					entry = new Entry(token);
@@ -140,7 +135,7 @@ public class StringToMapConverter implements Converter<String> {
 					expectedSeparatorPatterns = Collections.singleton(separatorPattern.equals(COMMA) ? COLON : null);
 				}
 			} else {
-				throw new UtilityException("unexpected separator: '", separator, "'");
+				throw new AluminumException("unexpected separator: '", separator, "'");
 			}
 		}
 

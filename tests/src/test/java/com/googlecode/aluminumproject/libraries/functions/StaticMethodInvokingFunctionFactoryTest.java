@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
@@ -108,12 +109,12 @@ public class StaticMethodInvokingFunctionFactoryTest {
 		assert unannotatedFunctionFactory.getInformation().getResultType() == Integer.TYPE;
 	}
 
-	@Test(expectedExceptions = FunctionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void creatingFunctionWithTooFewArgumentsShouldCauseException() {
 		unannotatedFunctionFactory.create(Collections.<FunctionArgument>emptyList(), new DefaultContext());
 	}
 
-	@Test(expectedExceptions = FunctionException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void creatingFunctionWithTooManyArgumentsShouldCauseException() {
 		annotatedFunctionFactory.create(Arrays.asList(new FunctionArgument() {
 			public Object getValue(Type type, Context context) {
@@ -132,11 +133,11 @@ public class StaticMethodInvokingFunctionFactoryTest {
 
 	public void usingCorrectNumberOfArgumentsShouldCreateFunction() {
 		List<FunctionArgument> functionArguments = Arrays.asList(new FunctionArgument() {
-			public Object getValue(Type type, Context context) throws FunctionException {
+			public Object getValue(Type type, Context context) throws AluminumException {
 				return 1;
 			}
 		}, new FunctionArgument() {
-			public Object getValue(Type type, Context context) throws FunctionException {
+			public Object getValue(Type type, Context context) throws AluminumException {
 				return 2;
 			}
 		});

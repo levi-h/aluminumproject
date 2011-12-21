@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.interceptors.InterceptionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
@@ -47,13 +46,13 @@ public class Text implements ActionContribution {
 	}
 
 	public void make(Context context, Writer writer,
-			ActionParameter parameter, ActionContributionOptions options) throws ActionException {
+			ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		String text = (String) parameter.getValue(String.class, context);
 
 		options.addInterceptor(new TextSetter(text));
 	}
 
-	private class TextSetter extends AbstractActionInterceptor {
+	private static class TextSetter extends AbstractActionInterceptor {
 		private String text;
 
 		public TextSetter(String text) {
@@ -62,14 +61,10 @@ public class Text implements ActionContribution {
 			this.text = text;
 		}
 
-		public void intercept(ActionContext actionContext) throws InterceptionException {
+		public void intercept(ActionContext actionContext) throws AluminumException {
 			actionContext.proceed();
 
-			try {
-				((AbstractElement) actionContext.getAction()).setText(text);
-			} catch (ActionException exception) {
-				throw new InterceptionException(exception, "can't set text");
-			}
+			((AbstractElement) actionContext.getAction()).setText(text);
 		}
 	}
 }

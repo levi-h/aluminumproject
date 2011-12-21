@@ -15,15 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.aludoc.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.actions.ActionException;
 import com.googlecode.aluminumproject.writers.Writer;
-import com.googlecode.aluminumproject.writers.WriterException;
 
 import java.util.Collections;
 import java.util.Locale;
@@ -45,7 +43,7 @@ public class Translate extends AbstractAction {
 	 */
 	public Translate() {}
 
-	public void execute(Context context, Writer writer) throws ActionException, ContextException, WriterException {
+	public void execute(Context context, Writer writer) throws AluminumException {
 		Locale locale = GlobalisationContext.from(context).getLocaleProvider().provide(context);
 
 		String message = findMessage(library.getInformation().getPreferredUrlAbbreviation(), locale);
@@ -63,7 +61,7 @@ public class Translate extends AbstractAction {
 		writer.write(message);
 	}
 
-	private String findMessage(String baseName, Locale locale) throws ActionException {
+	private String findMessage(String baseName, Locale locale) throws AluminumException {
 		baseName = String.format("aludoc/%s", baseName);
 
 		logger.debug("trying to find message with key '", key, "' in messages resource bundle '", baseName, "'");
@@ -73,7 +71,7 @@ public class Translate extends AbstractAction {
 		try {
 			messageBundle = ResourceBundle.getBundle(baseName, locale);
 		} catch (MissingResourceException exception) {
-			throw new ActionException(exception, "can't find messages resource bundle '", baseName, "'",
+			throw new AluminumException(exception, "can't find messages resource bundle '", baseName, "'",
 				" for locale ", locale);
 		}
 

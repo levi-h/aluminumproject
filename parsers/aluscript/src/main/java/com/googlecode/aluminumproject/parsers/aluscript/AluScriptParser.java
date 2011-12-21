@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
@@ -29,7 +28,6 @@ import com.googlecode.aluminumproject.parsers.aluscript.lines.LineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.comments.CommentLineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.instructions.InstructionLineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.text.TextLineParser;
-import com.googlecode.aluminumproject.resources.ResourceException;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.utilities.Logger;
 
@@ -91,7 +89,7 @@ public class AluScriptParser implements Parser {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		templateExtension = configuration.getParameters().getValue(TEMPLATE_EXTENSION, null);
@@ -114,7 +112,7 @@ public class AluScriptParser implements Parser {
 		);
 	}
 
-	private void createSettings() throws ConfigurationException {
+	private void createSettings() throws AluminumException {
 		ConfigurationParameters parameters = configuration.getParameters();
 
 		settings = new AluScriptSettings();
@@ -137,36 +135,28 @@ public class AluScriptParser implements Parser {
 
 	public void disable() {}
 
-	public Template parseTemplate(String name) throws ParseException {
+	public Template parseTemplate(String name) throws AluminumException {
 		String templateContents = readStream(name, getTemplateStream(name));
 		logger.debug("read template '", name, "': ", templateContents);
 
 		AluScriptContext context = new AluScriptContext(configuration, settings, instructions);
 
 		for (String line: templateContents.split("(\r?\n)+")) {
-			try {
-				findLineParser(line).parseLine(line, context);
-			} catch (AluScriptException exception) {
-				throw new ParseException(exception, "can't parse '", line, "'");
-			}
+			findLineParser(line).parseLine(line, context);
 		}
 
 		return context.getTemplate();
 	}
 
-	private InputStream getTemplateStream(String name) throws ParseException {
+	private InputStream getTemplateStream(String name) throws AluminumException {
 		if (templateExtension != null) {
 			name = String.format("%s.%s", name, templateExtension);
 		}
 
-		try {
-			return configuration.getTemplateFinder().find(name);
-		} catch (ResourceException exception) {
-			throw new ParseException(exception, "can't find template");
-		}
+		return configuration.getTemplateFinder().find(name);
 	}
 
-	private String readStream(String name, InputStream in) throws ParseException {
+	private String readStream(String name, InputStream in) throws AluminumException {
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -183,11 +173,11 @@ public class AluScriptParser implements Parser {
 
 			return out.toString();
 		} catch (IOException exception) {
-			throw new ParseException(exception, "can't read template '", name, "'");
+			throw new AluminumException(exception, "can't read template '", name, "'");
 		}
 	}
 
-	private LineParser findLineParser(String line) throws ParseException {
+	private LineParser findLineParser(String line) throws AluminumException {
 		LineParser lineParser = null;
 
 		Iterator<LineParser> it = lineParsers.iterator();
@@ -201,7 +191,7 @@ public class AluScriptParser implements Parser {
 		}
 
 		if (lineParser == null) {
-			throw new ParseException("can't find a line parser for '", line, "'");
+			throw new AluminumException("can't find a line parser for '", line, "'");
 		}
 
 		return lineParser;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.writers;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -38,7 +40,7 @@ public class StringWriterTest {
 		writer.write("5");
 	}
 
-	@Test(expectedExceptions = WriterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void writingNonStringShouldCauseException() {
 		writer.write(5);
 	}
@@ -54,7 +56,7 @@ public class StringWriterTest {
 		assert string.equals("together");
 	}
 
-	@Test(expectedExceptions = WriterException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void clearingWriterShouldCauseException() {
 		writer.clear();
 	}

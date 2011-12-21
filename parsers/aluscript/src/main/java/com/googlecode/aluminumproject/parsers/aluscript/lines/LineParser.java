@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
 
 /**
  * Parses a single line in an AluScript template.
@@ -38,7 +38,7 @@ public interface LineParser {
 	 *
 	 * @param line the line to parse
 	 * @param context the context to use
-	 * @throws AluScriptException when the line can't be parsed
+	 * @throws AluminumException when the line can't be parsed
 	 */
-	void parseLine(String line, AluScriptContext context) throws AluScriptException;
+	void parseLine(String line, AluScriptContext context) throws AluminumException;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.utilities;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -38,22 +40,22 @@ public class ReflectionUtilities {
 	 * @param type the type of the bean class (can be a supertype of the actual bean class)
 	 * @param loader the class loader to use
 	 * @return a new instance of the class with the given name, cast to the given type
-	 * @throws UtilityException when no class with the given name can be found, when the bean class is not assignable to
-	 *                          the specified type, or when the bean class can't be initialised
+	 * @throws AluminumException when no class with the given name can be found, when the bean class is not assignable
+	 *                           to the specified type, or when the bean class can't be initialised
 	 */
-	public static <T> T instantiate(String beanClassName, Class<T> type, ClassLoader loader) throws UtilityException {
+	public static <T> T instantiate(String beanClassName, Class<T> type, ClassLoader loader) throws AluminumException {
 		Class<?> beanClass;
 
 		try {
 			beanClass = loader.loadClass(beanClassName);
 		} catch (ClassNotFoundException exception) {
-			throw new UtilityException(exception, "can't find bean class '", beanClassName, "'");
+			throw new AluminumException(exception, "can't find bean class '", beanClassName, "'");
 		}
 
 		if (type.isAssignableFrom(beanClass)) {
 			return type.cast(instantiate(beanClass));
 		} else {
-			throw new UtilityException("class ", beanClassName, " is not of type ", type.getName());
+			throw new AluminumException("class ", beanClassName, " is not of type ", type.getName());
 		}
 	}
 
@@ -63,13 +65,13 @@ public class ReflectionUtilities {
 	 * @param <T> the type of the new object
 	 * @param beanClass the class to instantiate
 	 * @return a new instance of the given class
-	 * @throws UtilityException when the class can't be instantiated
+	 * @throws AluminumException when the class can't be instantiated
 	 */
-	public static <T> T instantiate(Class<T> beanClass) throws UtilityException {
+	public static <T> T instantiate(Class<T> beanClass) throws AluminumException {
 		try {
 			return beanClass.newInstance();
 		} catch (Exception exception) {
-			throw new UtilityException(exception, "can't instantiate ", beanClass);
+			throw new AluminumException(exception, "can't instantiate ", beanClass);
 		}
 	}
 
@@ -136,17 +138,17 @@ public class ReflectionUtilities {
 	 * @param bean the bean whose field value should be returned
 	 * @param fieldName the name of the field to retrieve
 	 * @return the value of the field with the specified name from the given bean
-	 * @throws UtilityException when the field value can't be got
+	 * @throws AluminumException when the field value can't be got
 	 */
-	public static Object getFieldValue(Object bean, String fieldName) throws UtilityException {
+	public static Object getFieldValue(Object bean, String fieldName) throws AluminumException {
 		Field field = getAccessibleField(bean, fieldName);
 
 		try {
 			return field.get(bean);
 		} catch (IllegalArgumentException exception) {
-			throw new UtilityException(exception, "can't get value of field '", field, "' from ", bean);
+			throw new AluminumException(exception, "can't get value of field '", field, "' from ", bean);
 		} catch (IllegalAccessException exception) {
-			throw new UtilityException(exception, "may not get value of field '", field, "' from ", bean);
+			throw new AluminumException(exception, "may not get value of field '", field, "' from ", bean);
 		}
 	}
 
@@ -156,35 +158,35 @@ public class ReflectionUtilities {
 	 * @param bean the bean whose field value should be set
 	 * @param fieldName the name of the field to set
 	 * @param value the new value for the field
-	 * @throws UtilityException when the field value can't be set
+	 * @throws AluminumException when the field value can't be set
 	 */
-	public static void setFieldValue(Object bean, String fieldName, Object value) throws UtilityException {
+	public static void setFieldValue(Object bean, String fieldName, Object value) throws AluminumException {
 		Field field = getAccessibleField(bean, fieldName);
 
 		try {
 			field.set(bean, value);
 		} catch (IllegalArgumentException exception) {
-			throw new UtilityException(exception, "can't set value of field '", field, "' on ", bean);
+			throw new AluminumException(exception, "can't set value of field '", field, "' on ", bean);
 		} catch (IllegalAccessException exception) {
-			throw new UtilityException(exception, "may not set value of field '", field, "' on ", bean);
+			throw new AluminumException(exception, "may not set value of field '", field, "' on ", bean);
 		}
 	}
 
-	private static Field getAccessibleField(Object bean, String name) throws UtilityException {
+	private static Field getAccessibleField(Object bean, String name) throws AluminumException {
 		Field field;
 
 		try {
 			field = getField(bean.getClass(), name);
 
 			if (field == null) {
-				throw new UtilityException("can't find field named '", name, "' on ", bean);
+				throw new AluminumException("can't find field named '", name, "' on ", bean);
 			}
 
 			if (!field.isAccessible()) {
 				field.setAccessible(true);
 			}
 		} catch (SecurityException exception) {
-			throw new UtilityException(exception, "may not access field '", name, "' on ", bean);
+			throw new AluminumException(exception, "may not access field '", name, "' on ", bean);
 		}
 
 		return field;
@@ -224,9 +226,9 @@ public class ReflectionUtilities {
 	 *
 	 * @param method the method to examine
 	 * @return {@code true} if the method is a getter, {@code false} otherwise
-	 * @throws UtilityException if no information about the method's declaring class can be found
+	 * @throws AluminumException if no information about the method's declaring class can be found
 	 */
-	public static boolean isGetter(Method method) throws UtilityException {
+	public static boolean isGetter(Method method) throws AluminumException {
 		PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(method.getDeclaringClass());
 		int i = 0;
 
@@ -245,14 +247,14 @@ public class ReflectionUtilities {
 	 * @param propertyType the expected type of the property
 	 * @param propertyName the name of the property
 	 * @return the value of the property on the given bean
-	 * @throws UtilityException when the property is of a different type than was expected, when the property is
-	 *                          write-only, or when something goes wrong while getting the value
+	 * @throws AluminumException when the property is of a different type than was expected, when the property is
+	 *                           write-only, or when something goes wrong while getting the value
 	 */
-	public static <T> T getProperty(Object bean, Class<T> propertyType, String propertyName) throws UtilityException {
+	public static <T> T getProperty(Object bean, Class<T> propertyType, String propertyName) throws AluminumException {
 		Method getter = getPropertyDescriptor(bean.getClass(), propertyType, propertyName).getReadMethod();
 
 		if (getter == null) {
-			throw new UtilityException("property '", propertyName, "' is write-only");
+			throw new AluminumException("property '", propertyName, "' is write-only");
 		} else {
 			if (!getter.isAccessible()) {
 				getter.setAccessible(true);
@@ -263,13 +265,14 @@ public class ReflectionUtilities {
 			try {
 				property = getter.invoke(bean);
 			} catch (Exception exception) {
-				throw new UtilityException(exception, "can't invoke getter of property '", propertyName, "' on ", bean);
+				throw new AluminumException(exception,
+					"can't invoke getter of property '", propertyName, "' on ", bean);
 			}
 
 			try {
 				return propertyType.cast(property);
 			} catch (ClassCastException exception) {
-				throw new UtilityException(exception, "can't cast ", property, " to ", propertyType);
+				throw new AluminumException(exception, "can't cast ", property, " to ", propertyType);
 			}
 		}
 	}
@@ -282,11 +285,11 @@ public class ReflectionUtilities {
 	 * @param propertyType the expected type of the property
 	 * @param propertyPath the path to the property
 	 * @return the value of the property
-	 * @throws UtilityException when the property is of a different type than was expected, when of the properties is
-	 *                          write-only, or when something goes wrong while getting the value
+	 * @throws AluminumException when the property is of a different type than was expected, when of the properties is
+	 *                           write-only, or when something goes wrong while getting the value
 	 */
 	public static <T> T getNestedProperty(
-			Object bean, Class<T> propertyType, String propertyPath) throws UtilityException {
+			Object bean, Class<T> propertyType, String propertyPath) throws AluminumException {
 		Object value = bean;
 
 		String[] propertyNames = propertyPath.split("\\.");
@@ -301,7 +304,7 @@ public class ReflectionUtilities {
 		try {
 			return propertyType.cast(value);
 		} catch (ClassCastException exception) {
-			throw new UtilityException(exception, "can't cast ", value, " to ", propertyType);
+			throw new AluminumException(exception, "can't cast ", value, " to ", propertyType);
 		}
 	}
 
@@ -310,9 +313,9 @@ public class ReflectionUtilities {
 	 *
 	 * @param method the method to examine
 	 * @return {@code true} if the method is a setter, {@code false} otherwise
-	 * @throws UtilityException if no information about the method's declaring class can be found
+	 * @throws AluminumException if no information about the method's declaring class can be found
 	 */
-	public static boolean isSetter(Method method) throws UtilityException {
+	public static boolean isSetter(Method method) throws AluminumException {
 		PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(method.getDeclaringClass());
 		int i = 0;
 
@@ -331,15 +334,15 @@ public class ReflectionUtilities {
 	 * @param propertyType the expected type of the property
 	 * @param propertyName the name of the property
 	 * @param propertyValue the value to set
-	 * @throws UtilityException when the property is of a different type than was expected, when the property is
-	 *                          read-only, or when something goes wrong while setting the value
+	 * @throws AluminumException when the property is of a different type than was expected, when the property is
+	 *                           read-only, or when something goes wrong while setting the value
 	 */
 	public static <T> void setProperty(
-			Object bean, Class<T> propertyType, String propertyName, T propertyValue) throws UtilityException {
+			Object bean, Class<T> propertyType, String propertyName, T propertyValue) throws AluminumException {
 		Method setter = getPropertyDescriptor(bean.getClass(), propertyType, propertyName).getWriteMethod();
 
 		if (setter == null) {
-			throw new UtilityException("property '", propertyName, "' is read-only");
+			throw new AluminumException("property '", propertyName, "' is read-only");
 		} else {
 			if (!setter.isAccessible()) {
 				setter.setAccessible(true);
@@ -348,7 +351,8 @@ public class ReflectionUtilities {
 			try {
 				setter.invoke(bean, propertyValue);
 			} catch (Exception exception) {
-				throw new UtilityException(exception, "can't invoke setter of property '", propertyName, "' on ", bean);
+				throw new AluminumException(exception,
+					"can't invoke setter of property '", propertyName, "' on ", bean);
 			}
 		}
 	}
@@ -358,9 +362,9 @@ public class ReflectionUtilities {
 	 *
 	 * @param method the getter or setter of a property
 	 * @return the name of the property that the given method is a getter or setter for
-	 * @throws UtilityException when the method is neither a getter nor a setter
+	 * @throws AluminumException when the method is neither a getter nor a setter
 	 */
-	public static String getPropertyName(Method method) throws UtilityException {
+	public static String getPropertyName(Method method) throws AluminumException {
 		PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(method.getDeclaringClass());
 		int i = 0;
 
@@ -370,26 +374,26 @@ public class ReflectionUtilities {
 		}
 
 		if (i == propertyDescriptors.length) {
-			throw new UtilityException("method ", method, " is neither a getter nor a setter");
+			throw new AluminumException("method ", method, " is neither a getter nor a setter");
 		} else {
 			return propertyDescriptors[i].getName();
 		}
 	}
 
-	private static PropertyDescriptor[] getPropertyDescriptors(Class<?> beanClass) throws UtilityException {
+	private static PropertyDescriptor[] getPropertyDescriptors(Class<?> beanClass) throws AluminumException {
 		PropertyDescriptor[] propertyDescriptors;
 
 		try {
 			propertyDescriptors = Introspector.getBeanInfo(beanClass).getPropertyDescriptors();
 		} catch (IntrospectionException exception) {
-			throw new UtilityException(exception, "can't get information on ", beanClass.getName());
+			throw new AluminumException(exception, "can't get information on ", beanClass.getName());
 		}
 
 		return propertyDescriptors;
 	}
 
 	private static PropertyDescriptor getPropertyDescriptor(
-			Class<?> beanClass, Class<?> expectedPropertyType, String propertyName) throws UtilityException {
+			Class<?> beanClass, Class<?> expectedPropertyType, String propertyName) throws AluminumException {
 		PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(beanClass);
 		int i = 0;
 
@@ -398,7 +402,7 @@ public class ReflectionUtilities {
 		}
 
 		if (i == propertyDescriptors.length) {
-			throw new UtilityException("can't find property with name '", propertyName, "' on ", beanClass);
+			throw new AluminumException("can't find property with name '", propertyName, "' on ", beanClass);
 		} else {
 			PropertyDescriptor propertyDescriptor = propertyDescriptors[i];
 
@@ -408,7 +412,7 @@ public class ReflectionUtilities {
 					|| (actualPropertyType.isPrimitive() && (expectedPropertyType == Object.class))) {
 				return propertyDescriptor;
 			} else {
-				throw new UtilityException("property '", propertyName, "' is of type ", actualPropertyType.getName(),
+				throw new AluminumException("property '", propertyName, "' is of type ", actualPropertyType.getName(),
 					", not of type ", expectedPropertyType.getName());
 			}
 		}

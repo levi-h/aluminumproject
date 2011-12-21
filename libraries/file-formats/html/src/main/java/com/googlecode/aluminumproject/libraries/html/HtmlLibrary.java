@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.html;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.libraries.AbstractLibrary;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.html.actions.TagFactory;
@@ -49,7 +49,7 @@ public class HtmlLibrary extends AbstractLibrary {
 	}
 
 	@Override
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		super.initialise(configuration);
 
 		information = new LibraryInformation(URL, "h", EnvironmentUtilities.getVersion());
@@ -57,7 +57,7 @@ public class HtmlLibrary extends AbstractLibrary {
 		addTagFactories();
 	}
 
-	private void addTagFactories() throws ConfigurationException {
+	private void addTagFactories() throws AluminumException {
 		Properties tagInformation = new Properties();
 
 		try {
@@ -70,7 +70,7 @@ public class HtmlLibrary extends AbstractLibrary {
 				tagInformationStream.close();
 			}
 		} catch (IOException exception) {
-			throw new ConfigurationException(exception, "can't read HTML 4 tag information");
+			throw new AluminumException(exception, "can't read HTML 4 tag information");
 		}
 
 		Map<String, String[]> attributeGroups = new HashMap<String, String[]>();

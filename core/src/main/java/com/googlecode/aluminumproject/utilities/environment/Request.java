@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * A request to a server by a {@link WebClient web client}.
@@ -43,7 +43,7 @@ public interface Request {
 	 * Sends this request and returns the server's response.
 	 *
 	 * @return the the server's response to this request
-	 * @throws UtilityException when something goes wrong while sending this request
+	 * @throws AluminumException when something goes wrong while sending this request
 	 */
-	Response getResponse() throws UtilityException;
+	Response getResponse() throws AluminumException;
 }

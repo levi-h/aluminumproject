@@ -15,7 +15,7 @@
  */
 package com.googlecode.aluminumproject.utilities.environment;
 
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Properties;
 
@@ -42,10 +42,10 @@ public interface PropertySetContainer {
 	 *
 	 * @param name the name of the property set to read
 	 * @return the property set with the given name
-	 * @throws UtilityException if this property set container does not contain a property set with the given name or
-	 *                          when the property set can't be read
+	 * @throws AluminumException if this property set container does not contain a property set with the given name or
+	 *                           when the property set can't be read
 	 */
-	Properties readPropertySet(String name) throws UtilityException;
+	Properties readPropertySet(String name) throws AluminumException;
 
 	/**
 	 * Writes a property set. If this property set container does not contain a property set with the given name, it
@@ -53,15 +53,15 @@ public interface PropertySetContainer {
 	 *
 	 * @param name the name to use for the property set
 	 * @param propertySet the property set to write
-	 * @throws UtilityException when the property set can't be written
+	 * @throws AluminumException when the property set can't be written
 	 */
-	void writePropertySet(String name, Properties propertySet) throws UtilityException;
+	void writePropertySet(String name, Properties propertySet) throws AluminumException;
 
 	/**
 	 * Removes a property set.
 	 *
 	 * @param name the name of the property set to remove
-	 * @throws UtilityException if this property set container does not contain a property set with the given name
+	 * @throws AluminumException if this property set container does not contain a property set with the given name
 	 */
-	void removePropertySet(String name) throws UtilityException;
+	void removePropertySet(String name) throws AluminumException;
 }

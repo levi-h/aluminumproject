@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,15 +41,15 @@ public class StaticMethodInvokingFunction implements Function {
 		this.parameters = parameters;
 	}
 
-	public Object call(Context context) throws FunctionException {
+	public Object call(Context context) throws AluminumException {
 		try {
 			return method.invoke(null, parameters);
 		} catch (IllegalArgumentException exception) {
-			throw new FunctionException(exception, "can't invoke static method");
+			throw new AluminumException(exception, "can't invoke static method");
 		} catch (IllegalAccessException exception) {
-			throw new FunctionException(exception, "may not invoke static method");
+			throw new AluminumException(exception, "may not invoke static method");
 		} catch (InvocationTargetException exception) {
-			throw new FunctionException(exception, "exception while invoking static method");
+			throw new AluminumException(exception, "exception while invoking static method");
 		}
 	}
 }

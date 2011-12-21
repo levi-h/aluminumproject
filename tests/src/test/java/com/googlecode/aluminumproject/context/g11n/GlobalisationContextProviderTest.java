@@ -28,7 +28,6 @@ import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextPr
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.context.DefaultContext;
 
 import java.text.DateFormat;
@@ -265,7 +264,7 @@ public class GlobalisationContextProviderTest {
 	}
 
 	public static class YearFormatProvider implements DateFormatProvider {
-		public DateFormat provide(DateFormatType type, Context context) throws ContextException {
+		public DateFormat provide(DateFormatType type, Context context) {
 			return new SimpleDateFormat("yy");
 		}
 	}
@@ -334,7 +333,7 @@ public class GlobalisationContextProviderTest {
 	}
 
 	public static class IntegerFormatProvider implements NumberFormatProvider {
-		public NumberFormat provide(NumberFormatType type, Context context) throws ContextException {
+		public NumberFormat provide(NumberFormatType type, Context context) {
 			return new DecimalFormat("0");
 		}
 	}

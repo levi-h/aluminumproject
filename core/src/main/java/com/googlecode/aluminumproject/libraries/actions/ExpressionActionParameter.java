@@ -15,10 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.converters.ConverterException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
-import com.googlecode.aluminumproject.expressions.ExpressionException;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 
 import java.lang.reflect.Type;
@@ -55,13 +54,7 @@ public class ExpressionActionParameter implements ActionParameter {
 		return text;
 	}
 
-	public Object getValue(Type type, Context context) throws ActionException {
-		try {
-			return converterRegistry.convert(expressionFactory.create(text, context).evaluate(context), type);
-		} catch (ExpressionException exception) {
-			throw new ActionException(exception, "can't evaluate expression");
-		} catch (ConverterException exception) {
-			throw new ActionException(exception, "can't convert expression value");
-		}
+	public Object getValue(Type type, Context context) throws AluminumException {
+		return converterRegistry.convert(expressionFactory.create(text, context).evaluate(context), type);
 	}
 }

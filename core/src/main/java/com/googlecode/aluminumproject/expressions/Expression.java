@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.expressions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ExpressionActionParameter;
@@ -31,7 +32,7 @@ public interface Expression {
 	 *
 	 * @param context the context to evaluate this expression in
 	 * @return the value that this expression evaluates to
-	 * @throws ExpressionException when this expression can't be evaluated
+	 * @throws AluminumException when this expression can't be evaluated
 	 */
-	Object evaluate(Context context) throws ExpressionException;
+	Object evaluate(Context context) throws AluminumException;
 }

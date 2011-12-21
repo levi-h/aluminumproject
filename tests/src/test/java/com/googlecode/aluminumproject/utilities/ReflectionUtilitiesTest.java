@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.utilities;
+
+import com.googlecode.aluminumproject.AluminumException;
 
 import java.awt.Point;
 import java.text.Collator;
@@ -62,17 +64,17 @@ public class ReflectionUtilitiesTest {
 		assert test.getClass().getClassLoader() == classLoader;
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void instantiatingNonexistingClassShouldFail() {
 		ReflectionUtilities.instantiate("Nonexisting", Object.class, contextClassLoader);
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void instantiationWithUnassignableTypeShouldFail() {
 		ReflectionUtilities.instantiate("java.util.HashMap", Collection.class, contextClassLoader);
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void instantiatingUninstantiableClassShouldCauseException() {
 		ReflectionUtilities.instantiate(Float.class);
 	}
@@ -121,7 +123,7 @@ public class ReflectionUtilitiesTest {
 		assert ReflectionUtilities.isAbstract(Map.class);
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void gettingValueOfUnknownFieldShouldCauseException() {
 		ReflectionUtilities.getFieldValue(new Object(), "name");
 	}
@@ -132,17 +134,17 @@ public class ReflectionUtilitiesTest {
 		assert ((Integer) fieldValue).intValue() == 0;
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void settingFieldValueWithWrongTypeShouldCauseException() {
 		ReflectionUtilities.setFieldValue(new Point(), "x", 0L);
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void settingValueOfUnknownFieldShouldCauseException() {
 		ReflectionUtilities.setFieldValue(new Point(), "z", 4);
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void settingValueOfFinalFieldShouldCauseException() {
 		ReflectionUtilities.setFieldValue("", "CASE_INSENSITIVE_ORDER", Collections.reverseOrder());
 	}
@@ -162,17 +164,17 @@ public class ReflectionUtilitiesTest {
 		assert !ReflectionUtilities.isGetter(Collection.class.getMethod("size"));
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void gettingPropertyWithWrongTypeShouldCauseException() {
 		ReflectionUtilities.getProperty(getClass(), Integer.class, "name");
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void gettingUnknownPropertyShouldCauseException() {
 		ReflectionUtilities.getProperty(new Object(), Object.class, "name");
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void gettingWriteOnlyPropertyShouldCauseException() {
 		ReflectionUtilities.getProperty(new StringBuilder(), Integer.TYPE, "length");
 	}
@@ -183,12 +185,12 @@ public class ReflectionUtilitiesTest {
 		assert property.equals("ReflectionUtilitiesTest");
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void gettingNestedPropertyWithWrongTypeShouldCauseException() {
 		ReflectionUtilities.getNestedProperty(10, Integer.class, "class.name");
 	}
 
-	@Test(dependsOnMethods = "gettingUnknownPropertyShouldCauseException", expectedExceptions = UtilityException.class)
+	@Test(dependsOnMethods = "gettingUnknownPropertyShouldCauseException", expectedExceptions = AluminumException.class)
 	public void exceptionInChainWhileGettingNestedPropertyShouldBePropagated() {
 		ReflectionUtilities.getNestedProperty("", Object.class, "class.count");
 	}
@@ -211,17 +213,17 @@ public class ReflectionUtilitiesTest {
 		assert !ReflectionUtilities.isSetter(System.class.getMethod("setProperty", String.class, String.class));
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void settingPropertyWithWrongTypeShouldCauseException() {
 		ReflectionUtilities.setProperty(new StringBuilder(), Long.TYPE, "length", 12L);
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void settingUnknownPropertyShouldCauseException() {
 		ReflectionUtilities.setProperty(new Object(), Object.class, "name", "object");
 	}
 
-	@Test(expectedExceptions = UtilityException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void settingReadOnlyPropertyShouldCauseException() {
 		ReflectionUtilities.setProperty(getClass(), String.class, "simpleName", "ReflectionUtilitiesTest");
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.context.ContextException;
 
 /**
  * Determines a result based on a number of {@link FunctionArgument arguments}.
@@ -29,8 +29,7 @@ public interface Function {
 	 *
 	 * @param context the context to run in
 	 * @return the result of this function
-	 * @throws FunctionException when the function can't be run
-	 * @throws ContextException when something goes wrong while using the context
+	 * @throws AluminumException when the function can't be run
 	 */
-	Object call(Context context) throws FunctionException, ContextException;
+	Object call(Context context) throws AluminumException;
 }

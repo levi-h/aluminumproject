@@ -15,8 +15,8 @@
  */
 package com.googlecode.aluminumproject.converters.mail;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.ClassBasedConverter;
-import com.googlecode.aluminumproject.converters.ConverterException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,11 +44,11 @@ public class StringToRecipientTypeConverter extends ClassBasedConverter<String, 
 	}
 
 	@Override
-	protected RecipientType convert(String value) throws ConverterException {
+	protected RecipientType convert(String value) throws AluminumException {
 		RecipientType recipientType = recipientTypes.get(value.toLowerCase());
 
 		if (recipientType == null) {
-			throw new ConverterException("unknown recipient type: '", value, "'");
+			throw new AluminumException("unknown recipient type: '", value, "'");
 		} else {
 			return recipientType;
 		}

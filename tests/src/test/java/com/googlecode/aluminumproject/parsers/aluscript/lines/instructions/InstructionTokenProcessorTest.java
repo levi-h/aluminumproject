@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript.lines.instructions;
 
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptException;
-import com.googlecode.aluminumproject.utilities.UtilityException;
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.utilities.text.Splitter;
 
 import java.util.List;
@@ -97,22 +96,22 @@ public class InstructionTokenProcessorTest {
 		assert secondParameter.getValue().equals("${printZoo}");
 	}
 
-	@Test(dependsOnMethods = "instructionWithNameShouldBeAccepted", expectedExceptions = AluScriptException.class)
+	@Test(dependsOnMethods = "instructionWithNameShouldBeAccepted", expectedExceptions = AluminumException.class)
 	public void textBeforeInstructionShouldCauseException() {
 		createInstruction("  @newline");
 	}
 
-	@Test(expectedExceptions = AluScriptException.class)
+	@Test(expectedExceptions = AluminumException.class)
 	public void incompleteInstructionShouldCauseException() {
 		createInstruction("@c.template(");
 	}
 
-	@Test(dependsOnMethods = "instructionWithParameterShouldBeAccepted", expectedExceptions = AluScriptException.class)
+	@Test(dependsOnMethods = "instructionWithParameterShouldBeAccepted", expectedExceptions = AluminumException.class)
 	public void textAfterParametersShouldCauseException() {
 		createInstruction("@library(c: http://aluminumproject.googlecode.com/core) ");
 	}
 
-	private Instruction createInstruction(String text) throws AluScriptException, UtilityException {
+	private Instruction createInstruction(String text) throws AluminumException {
 		InstructionTokenProcessor processor = new InstructionTokenProcessor();
 
 		new Splitter(processor.getSeparatorPatterns()).split(text, processor);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.googlecode.aluminumproject.libraries.functions;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 
@@ -70,7 +71,7 @@ public class Add implements Function {
 			return information;
 		}
 
-		public Function create(List<FunctionArgument> arguments, Context context) throws FunctionException {
+		public Function create(List<FunctionArgument> arguments, Context context) throws AluminumException {
 			String[] termsAsText = name.substring("add".length()).split("and");
 			int[] terms = new int[termsAsText.length];
 

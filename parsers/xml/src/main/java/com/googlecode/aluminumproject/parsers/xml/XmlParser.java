@@ -15,14 +15,12 @@
  */
 package com.googlecode.aluminumproject.parsers.xml;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
-import com.googlecode.aluminumproject.configuration.ConfigurationException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.parsers.ParseException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
-import com.googlecode.aluminumproject.resources.ResourceException;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.utilities.Logger;
 
@@ -66,7 +64,7 @@ public class XmlParser implements Parser {
 		logger = Logger.get(getClass());
 	}
 
-	public void initialise(Configuration configuration) throws ConfigurationException {
+	public void initialise(Configuration configuration) throws AluminumException {
 		this.configuration = configuration;
 
 		ConfigurationParameters parameters = configuration.getParameters();
@@ -80,7 +78,7 @@ public class XmlParser implements Parser {
 		createTemplateNameTranslator();
 	}
 
-	private void createTemplateNameTranslator() throws ConfigurationException {
+	private void createTemplateNameTranslator() throws AluminumException {
 		String templateNameTranslatorClassName = configuration.getParameters().getValue(
 			TEMPLATE_NAME_TRANSLATOR_CLASS, XmlTemplateNameTranslator.class.getName());
 
@@ -94,7 +92,7 @@ public class XmlParser implements Parser {
 
 	public void disable() {}
 
-	public Template parseTemplate(String name) throws ParseException {
+	public Template parseTemplate(String name) throws AluminumException {
 		XMLReader parser = createParser();
 		logger.debug("created XML parser");
 
@@ -114,7 +112,7 @@ public class XmlParser implements Parser {
 		return template;
 	}
 
-	private XMLReader createParser() throws ParseException {
+	private XMLReader createParser() throws AluminumException {
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 		parserFactory.setNamespaceAware(true);
 
@@ -123,33 +121,29 @@ public class XmlParser implements Parser {
 		try {
 			parser = parserFactory.newSAXParser().getXMLReader();
 		} catch (SAXException exception) {
-			throw new ParseException(exception, "can't create an XML parser");
+			throw new AluminumException(exception, "can't create an XML parser");
 		} catch (ParserConfigurationException exception) {
-			throw new ParseException(exception, "can't configure the XML parser factory");
+			throw new AluminumException(exception, "can't configure the XML parser factory");
 		}
 
 		return parser;
 	}
 
-	private InputStream findTemplateStream(String name) throws ParseException {
+	private InputStream findTemplateStream(String name) throws AluminumException {
 		if (templateExtension != null) {
 			name = String.format("%s.%s", name, templateExtension);
 		}
 
-		try {
-			return configuration.getTemplateFinder().find(name);
-		} catch (ResourceException exception) {
-			throw new ParseException(exception, "can't find template '", name, "'");
-		}
+		return configuration.getTemplateFinder().find(name);
 	}
 
-	private void parse(String name, XMLReader parser, InputStream templateStream) throws ParseException {
+	private void parse(String name, XMLReader parser, InputStream templateStream) throws AluminumException {
 		try {
 			parser.parse(new InputSource(templateStream));
 		} catch (IOException exception) {
-			throw new ParseException(exception, "can't parse template '", name, "'");
+			throw new AluminumException(exception, "can't parse template '", name, "'");
 		} catch (SAXException exception) {
-			throw new ParseException(exception, "can't parse template '", name, "'");
+			throw new AluminumException(exception, "can't parse template '", name, "'");
 		}
 	}
 

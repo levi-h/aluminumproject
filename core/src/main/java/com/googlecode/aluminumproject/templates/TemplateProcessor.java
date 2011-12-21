@@ -15,12 +15,11 @@
  */
 package com.googlecode.aluminumproject.templates;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.cache.Cache;
-import com.googlecode.aluminumproject.cache.CacheException;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.ContextEnricher;
-import com.googlecode.aluminumproject.context.ContextException;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -58,9 +57,9 @@ public class TemplateProcessor {
 	 * @param parser the name of the parser to use
 	 * @param context the context to use
 	 * @param writer the writer to use
-	 * @throws TemplateException when the template can't be processed
+	 * @throws AluminumException when the template can't be processed
 	 */
-	public void processTemplate(String name, String parser, Context context, Writer writer) throws TemplateException {
+	public void processTemplate(String name, String parser, Context context, Writer writer) throws AluminumException {
 		logger.debug("processing template '", name, "'");
 
 		Template template = findTemplateInCache(name, parser);
@@ -73,30 +72,22 @@ public class TemplateProcessor {
 
 		TemplateInformation.from(context).setTemplate(template, name, parser);
 
-		try {
-			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
-				contextEnricher.beforeTemplate(context);
-			}
-		} catch (ContextException exception) {
-			throw new TemplateException(exception, "can't enrich context");
+		for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
+			contextEnricher.beforeTemplate(context);
 		}
 
 		for (TemplateElement templateElement: template.getChildren(null)) {
 			templateElement.process(context, writer);
 		}
 
-		try {
-			for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
-				contextEnricher.afterTemplate(context);
-			}
-		} catch (ContextException exception) {
-			throw new TemplateException(exception, "can't enrich context");
+		for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
+			contextEnricher.afterTemplate(context);
 		}
 
 		logger.debug("finished processing template '", name, "'");
 	}
 
-	private Template findTemplateInCache(String name, String parser) throws TemplateException {
+	private Template findTemplateInCache(String name, String parser) throws AluminumException {
 		Template template;
 
 		Cache cache = configuration.getCache();
@@ -108,17 +99,13 @@ public class TemplateProcessor {
 		} else {
 			logger.debug("finding template in cache");
 
-			try {
-				template = cache.findTemplate(new Cache.Key(name, parser));
-			} catch (CacheException exception) {
-				throw new TemplateException(exception, "can't use cache to find template");
-			}
+			template = cache.findTemplate(new Cache.Key(name, parser));
 		}
 
 		return template;
 	}
 
-	private void storeTemplateInCache(String name, String parser, Template template) throws TemplateException {
+	private void storeTemplateInCache(String name, String parser, Template template) throws AluminumException {
 		Cache cache = configuration.getCache();
 
 		if (cache == null) {
@@ -126,15 +113,11 @@ public class TemplateProcessor {
 		} else {
 			logger.debug("storing template in cache");
 
-			try {
-				cache.storeTemplate(new Cache.Key(name, parser), template);
-			} catch (CacheException exception) {
-				throw new TemplateException(exception, "can't use cache to store template");
-			}
+			cache.storeTemplate(new Cache.Key(name, parser), template);
 		}
 	}
 
-	private Template parseTemplate(String name, String parser) {
+	private Template parseTemplate(String name, String parser) throws AluminumException {
 		logger.debug("parsing template '", name, "' with parser '", parser, "'");
 
 		Map<String, Parser> parsers = configuration.getParsers();
@@ -142,7 +125,7 @@ public class TemplateProcessor {
 		if (parsers.containsKey(parser)) {
 			return parsers.get(parser).parseTemplate(name);
 		} else {
-			throw new TemplateException("unknown parser: ", parser);
+			throw new AluminumException("unknown parser: ", parser);
 		}
 	}
 }
