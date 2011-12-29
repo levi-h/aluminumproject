@@ -26,8 +26,8 @@ import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
 @SuppressWarnings("all")
 public abstract class LibraryTest {
@@ -41,7 +41,7 @@ public abstract class LibraryTest {
 		this.parser = parser;
 	}
 
-	@BeforeMethod
+	@BeforeClass
 	public final void createTemplateEngine() {
 		ConfigurationParameters configurationParameters = new ConfigurationParameters();
 		configurationParameters.addParameter(ClassPathTemplateFinder.TEMPLATE_PATH, templatePath);
@@ -55,7 +55,7 @@ public abstract class LibraryTest {
 
 	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {}
 
-	@AfterMethod
+	@AfterClass
 	public final void stopTemplateEngine() {
 		engine.stop();
 	}
