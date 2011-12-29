@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2011 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,26 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("all")
 @Test(groups = {"libraries", "libraries-core", "slow"})
-public class IncludeLocalTest extends CoreLibraryTest {
+public class IncludesTest extends CoreLibraryTest {
+	public void outputOfIncludedTemplateShouldBecomeOutput() {
+		String output = processTemplate("include");
+		assert output != null;
+		assert output.equals("included");
+	}
+
+	public void omittingParserShouldFallBackToParserOfIncludingTemplate() {
+		String output = processTemplate("include-without-parser");
+		assert output != null;
+		assert output.equals("included");
+	}
+
+	@Test(dependsOnMethods = "omittingParserShouldFallBackToParserOfIncludingTemplate")
+	public void parameterShouldBeAvailableInIncludedTemplate() {
+		String output = processTemplate("include-with-parameter");
+		assert output != null;
+		assert output.equals("included");
+	}
+
 	public void localTemplateShouldBeIncludable() {
 		String output = processTemplate("include-local");
 		assert output != null;
@@ -30,7 +49,7 @@ public class IncludeLocalTest extends CoreLibraryTest {
 	}
 
 	@Test(expectedExceptions = AluminumException.class)
-	public void includingNonexistentTemplateShouldCauseException() {
+	public void includingNonexistentLocalTemplateShouldCauseException() {
 		processTemplate("include-local-without-available-template");
 	}
 }

@@ -20,6 +20,8 @@ import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
+import com.googlecode.aluminumproject.libraries.core.actions.Includes.Include;
+import com.googlecode.aluminumproject.libraries.core.actions.Includes.IncludeLocal;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.Writer;
 
