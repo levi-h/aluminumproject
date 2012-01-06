@@ -28,18 +28,18 @@ import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.converters.DefaultConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
+import com.googlecode.aluminumproject.finders.DefaultTypeFinder;
 import com.googlecode.aluminumproject.finders.InMemoryTemplateStoreFinder;
 import com.googlecode.aluminumproject.finders.TemplateFinder;
 import com.googlecode.aluminumproject.finders.TemplateStoreFinder;
+import com.googlecode.aluminumproject.finders.TypeFinder;
+import com.googlecode.aluminumproject.finders.TypeFinder.TypeFilter;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
 import com.googlecode.aluminumproject.utilities.Logger;
-import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,8 +53,12 @@ import java.util.Set;
  * A default configuration. It is created with a number of initialisation parameters, which determines which {@link
  * ConfigurationElement configuration elements} will be used.
  * <p>
- * The configuration elements will be created using the {@link DefaultConfigurationElementFactory default configuration
- * element factory}, although a different implementation can be used by providing a value for the {@value
+ * The type finder can be configured through the configuration parameter named {@value #TYPE_FINDER_CLASS}, which is
+ * expected to hold the fully qualified name of the type finder class. If the parameter is not supplied, a {@link
+ * DefaultTypeFinder default type finder} will be used instead.
+ * <p>
+ * The other configuration elements will be created using the {@link DefaultConfigurationElementFactory default
+ * configuration element factory}, although a different implementation can be used by providing a value for the {@value
  * #CONFIGURATION_ELEMENT_FACTORY_CLASS} parameter.
  * <p>
  * For the converter registry, the configuration will look for a parameter with the name {@value
@@ -123,6 +127,7 @@ import java.util.Set;
 public class DefaultConfiguration implements Configuration {
 	private ConfigurationParameters parameters;
 
+	private TypeFinder typeFinder;
 	private ConfigurationElementFactory configurationElementFactory;
 	private ConverterRegistry converterRegistry;
 	private TemplateElementFactory templateElementFactory;
@@ -161,6 +166,9 @@ public class DefaultConfiguration implements Configuration {
 
 		logger = Logger.get(getClass());
 
+		createTypeFinder();
+		typeFinder.initialise(this);
+
 		createConfigurationElementFactory();
 		configurationElementFactory.initialise(this);
 
@@ -176,6 +184,14 @@ public class DefaultConfiguration implements Configuration {
 		createExpressionFactories();
 
 		initialise();
+	}
+
+	private void createTypeFinder() throws AluminumException {
+		String typeFinderClassName = parameters.getValue(TYPE_FINDER_CLASS, DefaultTypeFinder.class.getName());
+
+		logger.debug("creating type finder of type ", typeFinderClassName);
+
+		typeFinder = instantiate(typeFinderClassName, TypeFinder.class, Thread.currentThread().getContextClassLoader());
 	}
 
 	private void createConfigurationElementFactory() throws AluminumException {
@@ -246,7 +262,7 @@ public class DefaultConfiguration implements Configuration {
 
 		logger.debug("libraries will be looked for in ", libraryPackages);
 
-		List<Class<?>> libraryClasses = TypeFinder.find(new TypeFilter() {
+		List<Class<?>> libraryClasses = typeFinder.find(new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return Library.class.isAssignableFrom(type) && !isAbstract(type)
 					&& !type.isAnnotationPresent(Ignored.class);
@@ -267,7 +283,7 @@ public class DefaultConfiguration implements Configuration {
 
 		logger.debug("parsers will be looked for in ", parserPackages);
 
-		List<Class<?>> parserClasses = TypeFinder.find(new TypeFilter() {
+		List<Class<?>> parserClasses = typeFinder.find(new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return Parser.class.isAssignableFrom(type) && !isAbstract(type)
 					&& !type.isAnnotationPresent(Ignored.class);
@@ -295,7 +311,7 @@ public class DefaultConfiguration implements Configuration {
 
 		logger.debug("serialisers will be looked for in ", serialiserPackages);
 
-		List<Class<?>> serialiserClasses = TypeFinder.find(new TypeFilter() {
+		List<Class<?>> serialiserClasses = typeFinder.find(new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return Serialiser.class.isAssignableFrom(type) && !isAbstract(type)
 					&& !type.isAnnotationPresent(Ignored.class);
@@ -337,12 +353,12 @@ public class DefaultConfiguration implements Configuration {
 		String[] contextEnricherPackages =
 			getConfiguredPackages(CONTEXT_ENRICHER_PACKAGES, getPackageName(ContextEnricher.class));
 
-		List<Class<?>> contextEnricherClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+		List<Class<?>> contextEnricherClasses = typeFinder.find(new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return ContextEnricher.class.isAssignableFrom(type) && !isAbstract(type)
 					&& !type.isAnnotationPresent(Ignored.class);
 			}
-		}, contextEnricherPackages));
+		}, contextEnricherPackages);
 
 		contextEnrichers = new ArrayList<ContextEnricher>();
 
@@ -358,12 +374,12 @@ public class DefaultConfiguration implements Configuration {
 		String[] expressionFactoryPackages =
 			getConfiguredPackages(EXPRESSION_FACTORY_PACKAGES, getPackageName(ExpressionFactory.class));
 
-		List<Class<?>> expressionFactoryClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+		List<Class<?>> expressionFactoryClasses = typeFinder.find(new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return ExpressionFactory.class.isAssignableFrom(type) && !isAbstract(type)
 					&& !type.isAnnotationPresent(Ignored.class);
 			}
-		}, expressionFactoryPackages));
+		}, expressionFactoryPackages);
 
 		expressionFactories = new ArrayList<ExpressionFactory>();
 
@@ -419,6 +435,12 @@ public class DefaultConfiguration implements Configuration {
 		checkOpen();
 
 		return parameters;
+	}
+
+	public TypeFinder getTypeFinder() throws AluminumException {
+		checkOpen();
+
+		return typeFinder;
 	}
 
 	public ConfigurationElementFactory getConfigurationElementFactory() throws AluminumException {
@@ -490,6 +512,7 @@ public class DefaultConfiguration implements Configuration {
 	public void close() throws AluminumException {
 		checkOpen();
 
+		typeFinder.disable();
 		configurationElementFactory.disable();
 		converterRegistry.disable();
 		templateElementFactory.disable();
@@ -528,6 +551,11 @@ public class DefaultConfiguration implements Configuration {
 			throw new AluminumException("the configuration can't be used - it has been closed");
 		}
 	}
+
+	/**
+	 * The name of the configuration parameter that contains the class name of the type finder to use.
+	 */
+	public final static String TYPE_FINDER_CLASS = "configuration.default.type_finder.class";
 
 	/**
 	 * The name of the configuration parameter that contains the class name of the configuration element factory to use.

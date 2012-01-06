@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.FunctionClass;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.finders.TypeFinder.TypeFilter;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
@@ -35,8 +36,6 @@ import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.utilities.finders.MethodFinder;
 import com.googlecode.aluminumproject.utilities.finders.MethodFinder.MethodFilter;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -118,12 +117,15 @@ public abstract class AbstractLibrary implements Library {
 	}
 
 	private void findActions(String... packageNames) throws AluminumException {
-		List<Class<? extends Action>> actionClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+		TypeFilter actionClassFilter = new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return Action.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
 					&& !type.isAnnotationPresent(Ignored.class);
 			}
-		}, packageNames));
+		};
+
+		List<Class<? extends Action>> actionClasses =
+			Utilities.typed(configuration.getTypeFinder().find(actionClassFilter, packageNames));
 
 		for (Class<? extends Action> actionClass: actionClasses) {
 			logger.debug("creating default action factory for action class ", actionClass.getName());
@@ -153,7 +155,7 @@ public abstract class AbstractLibrary implements Library {
 		};
 
 		List<Class<? extends ActionContribution>> actionContributionClasses =
-			Utilities.typed(TypeFinder.find(actionContributionClassFilter, packageNames));
+			Utilities.typed(configuration.getTypeFinder().find(actionContributionClassFilter, packageNames));
 
 		for (Class<? extends ActionContribution> actionContributionClass: actionContributionClasses) {
 			logger.debug("creating default action contribution factory ",
@@ -189,7 +191,7 @@ public abstract class AbstractLibrary implements Library {
 	}
 
 	private void findFunctions() throws AluminumException {
-		List<Class<?>> functionClasses = Utilities.typed(TypeFinder.find(new TypeFilter() {
+		List<Class<?>> functionClasses = Utilities.typed(configuration.getTypeFinder().find(new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return type.isAnnotationPresent(FunctionClass.class) && !ReflectionUtilities.isAbstract(type);
 			}

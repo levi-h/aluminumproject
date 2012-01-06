@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,10 @@ import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.isAbs
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
+import com.googlecode.aluminumproject.finders.TypeFinder.TypeFilter;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -59,16 +58,16 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 	}
 
 	public void initialise(Configuration configuration) throws AluminumException {
-		Set<String> configuredCustomiserPackages = new HashSet<String>();
+		Set<String> customiserPackageSet = new HashSet<String>();
 
 		ConfigurationParameters parameters = configuration.getParameters();
-		Collections.addAll(configuredCustomiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES));
-		Collections.addAll(configuredCustomiserPackages, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
+		Collections.addAll(customiserPackageSet, parameters.getValues(CONFIGURATION_ELEMENT_CUSTOMISER_PACKAGES));
+		Collections.addAll(customiserPackageSet, parameters.getValues(CONFIGURATION_ELEMENT_PACKAGES));
 
-		if (configuredCustomiserPackages.isEmpty()) {
+		if (customiserPackageSet.isEmpty()) {
 			logger.debug("no configuration element customisers configured");
 		} else {
-			logger.debug("looking for configuration element customisers in ", configuredCustomiserPackages);
+			logger.debug("looking for configuration element customisers in ", customiserPackageSet);
 
 			TypeFilter customiserClassFilter = new TypeFilter() {
 				public boolean accepts(Class<?> type) {
@@ -76,11 +75,10 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 						&& !type.isAnnotationPresent(Ignored.class);
 				}
 			};
-			String[] customiserPackages =
-					configuredCustomiserPackages.toArray(new String[configuredCustomiserPackages.size()]);
+			String[] customiserPackages = customiserPackageSet.toArray(new String[customiserPackageSet.size()]);
 
 			List<Class<? extends ConfigurationElementCustomiser>> customiserClasses =
-				Utilities.typed(TypeFinder.find(customiserClassFilter, customiserPackages));
+				Utilities.typed(configuration.getTypeFinder().find(customiserClassFilter, customiserPackages));
 
 			for (Class<? extends ConfigurationElementCustomiser> customiserClass: customiserClasses) {
 				logger.debug("adding configuration element customiser of type ", customiserClass.getName());
@@ -110,9 +108,7 @@ public class DefaultConfigurationElementFactory implements ConfigurationElementF
 	public <T> T instantiate(String className, Class<T> type) throws AluminumException {
 		logger.debug("instantiating ", className, " with type ", type.getName(), " from configuration element factory");
 
-		T object;
-
-		object = ReflectionUtilities.instantiate(className, type, Thread.currentThread().getContextClassLoader());
+		T object = ReflectionUtilities.instantiate(className, type, Thread.currentThread().getContextClassLoader());
 
 		for (ConfigurationElementCustomiser customiser: customisers) {
 			logger.debug("applying configuration element customiser ", customiser);

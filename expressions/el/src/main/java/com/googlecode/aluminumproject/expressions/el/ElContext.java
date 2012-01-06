@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
+import com.googlecode.aluminumproject.finders.TypeFinder.TypeFilter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +104,7 @@ public class ElContext extends ELContext {
 	private void addCustomElResolvers(
 			CompositeELResolver elResolver, String elResolverPackages) throws AluminumException {
 		for (String elResolverPackage: configuration.getParameters().getValues(elResolverPackages)) {
-			List<Class<?>> elResolverClasses = TypeFinder.find(new TypeFinder.TypeFilter() {
+			List<Class<?>> elResolverClasses = configuration.getTypeFinder().find(new TypeFilter() {
 				public boolean accepts(Class<?> type) {
 					return ELResolver.class.isAssignableFrom(type) && !type.isAnnotationPresent(Ignored.class);
 				}

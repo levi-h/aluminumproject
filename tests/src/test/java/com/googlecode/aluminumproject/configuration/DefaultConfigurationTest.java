@@ -27,6 +27,7 @@ import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_ELEMENT_FACTORY_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_FINDER_CLASS;
 import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TEMPLATE_STORE_FINDER_CLASS;
+import static com.googlecode.aluminumproject.configuration.DefaultConfiguration.TYPE_FINDER_CLASS;
 import static com.googlecode.aluminumproject.utilities.ReflectionUtilities.getPackageName;
 
 import com.googlecode.aluminumproject.AluminumException;
@@ -44,9 +45,11 @@ import com.googlecode.aluminumproject.expressions.ExpressionOccurrence;
 import com.googlecode.aluminumproject.expressions.IgnoredExpressionFactory;
 import com.googlecode.aluminumproject.expressions.TestExpressionFactory;
 import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
+import com.googlecode.aluminumproject.finders.DefaultTypeFinder;
 import com.googlecode.aluminumproject.finders.InMemoryTemplateStoreFinder;
 import com.googlecode.aluminumproject.finders.TestTemplateFinder;
 import com.googlecode.aluminumproject.finders.TestTemplateStoreFinder;
+import com.googlecode.aluminumproject.finders.TestTypeFinder;
 import com.googlecode.aluminumproject.libraries.IgnoredLibrary;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
@@ -85,6 +88,45 @@ public class DefaultConfigurationTest {
 
 			configuration = null;
 		}
+	}
+
+	public void typeFinderShouldDefaultToDefaultTypeFinder() {
+		configuration = new DefaultConfiguration();
+
+		assert configuration.getTypeFinder() instanceof DefaultTypeFinder;
+	}
+
+	public void typeFinderShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TYPE_FINDER_CLASS, TestTypeFinder.class.getName());
+
+		configuration = new DefaultConfiguration(parameters);
+
+		assert configuration.getTypeFinder() instanceof TestTypeFinder;
+	}
+
+	@Test(dependsOnMethods = "typeFinderShouldBeConfigurable")
+	public void configurationShoulInitialiseTypeFinder() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TYPE_FINDER_CLASS, TestTypeFinder.class.getName());
+
+		configuration = new DefaultConfiguration(parameters);
+
+		assert ((TestTypeFinder) configuration.getTypeFinder()).getConfiguration() == configuration;
+	}
+
+	@Test(dependsOnMethods = "configurationShoulInitialiseTypeFinder")
+	public void configurationShouldDisableTypeFinderWhenItIsClosed() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TYPE_FINDER_CLASS, TestTypeFinder.class.getName());
+
+		Configuration configuration = new DefaultConfiguration(parameters);
+
+		TestTypeFinder typeFinder = (TestTypeFinder) configuration.getTypeFinder();
+
+		configuration.close();
+
+		assert typeFinder.getConfiguration() == null;
 	}
 
 	public void configurationElementFactoryShouldDefaultToDefaultConfigurationElementFactory() {

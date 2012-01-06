@@ -19,8 +19,10 @@ import com.googlecode.aluminumproject.cache.Cache;
 import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
+import com.googlecode.aluminumproject.finders.DefaultTypeFinder;
 import com.googlecode.aluminumproject.finders.TemplateFinder;
 import com.googlecode.aluminumproject.finders.TemplateStoreFinder;
+import com.googlecode.aluminumproject.finders.TypeFinder;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
@@ -41,6 +43,7 @@ import java.util.Map;
 public class TestConfiguration implements Configuration {
 	private ConfigurationParameters parameters;
 
+	private TypeFinder typeFinder;
 	private ConfigurationElementFactory configurationElementFactory;
 	private ConverterRegistry converterRegistry;
 	private TemplateElementFactory templateElementFactory;
@@ -62,6 +65,9 @@ public class TestConfiguration implements Configuration {
 	public TestConfiguration(ConfigurationParameters parameters) {
 		this.parameters = parameters;
 
+		typeFinder = new DefaultTypeFinder();
+		typeFinder.initialise(this);
+
 		configurationElementFactory = new DefaultConfigurationElementFactory();
 		configurationElementFactory.initialise(this);
 
@@ -74,6 +80,19 @@ public class TestConfiguration implements Configuration {
 
 	public ConfigurationParameters getParameters() {
 		return parameters;
+	}
+
+	public TypeFinder getTypeFinder() {
+		return typeFinder;
+	}
+
+	/**
+	 * Sets the type finder.
+	 *
+	 * @param typeFinder the type finder to use
+	 */
+	public void setTypeFinder(TypeFinder typeFinder) {
+		this.typeFinder = typeFinder;
 	}
 
 	public ConfigurationElementFactory getConfigurationElementFactory() {

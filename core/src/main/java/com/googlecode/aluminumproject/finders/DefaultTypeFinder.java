@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.utilities.finders;
+package com.googlecode.aluminumproject.finders;
 
 import com.googlecode.aluminumproject.AluminumException;
+import com.googlecode.aluminumproject.configuration.Configuration;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,40 +32,25 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
 /**
- * Finds types in the class path, based on a filter. Types can reside either in a directory or in a JAR file. To find
- * types, supply a {@link TypeFilter filter} and one or more package names to the {@link #find(TypeFilter, String...)
- * find method}.
+ * Type finder that locates types in directories and JAR files.
  *
  * @author levi_h
  */
-public class TypeFinder {
-	private TypeFinder() {}
+public class DefaultTypeFinder implements TypeFinder {
+	private final Logger logger;
 
 	/**
-	 * The filter used by the {@link TypeFinder#find(TypeFilter, String...) find method}.
-	 *
-	 * @author levi_h
+	 * Creates a default type finder.
 	 */
-	public static interface TypeFilter {
-		/**
-		 * Determines whether a certain type is accepted by this filter.
-		 *
-		 * @param type the type to possibly include
-		 * @return {@code true} if this filter matches the given type, {@code false} otherwise
-		 */
-		boolean accepts(Class<?> type);
+	public DefaultTypeFinder() {
+		logger = Logger.get(getClass());
 	}
 
-	/**
-	 * Finds types matching a certain filter in a number of packages.
-	 *
-	 * @param filter the filter to apply
-	 * @param packageNames the names of the packages to include in the search (subpackages will be included)
-	 * @return a list with all types in the given packages that match the given filter (may be empty)
-	 * @throws IllegalArgumentException when no package names are supplied
-	 * @throws AluminumException when something goes wrong while trying to find matching types
-	 */
-	public static List<Class<?>> find(TypeFilter filter, String... packageNames) throws AluminumException {
+	public void initialise(Configuration configuration) {}
+
+	public void disable() {}
+
+	public List<Class<?>> find(TypeFilter filter, String... packageNames) throws AluminumException {
 		if ((packageNames == null) || (packageNames.length == 0)) {
 			throw new IllegalArgumentException("please provide at least one package name");
 		}
@@ -101,11 +88,13 @@ public class TypeFinder {
 			}
 		}
 
+		logger.debug("matching types found in ", packageNames, ": ", types);
+
 		return types;
 	}
 
-	private static void findInJar(List<Class<?>> types, TypeFilter filter, ClassLoader classLoader,
-			File jarFile, String packagePath) throws AluminumException {
+	private void findInJar(List<Class<?>> types,
+			TypeFilter filter, ClassLoader classLoader, File jarFile, String packagePath) throws AluminumException {
 		try {
 			JarInputStream in = new JarInputStream(new FileInputStream(jarFile));
 
@@ -133,8 +122,8 @@ public class TypeFinder {
 		}
 	}
 
-	private static void findInDirectory(List<Class<?>> types, TypeFilter filter, ClassLoader classLoader,
-			File directory, String packagePath) throws AluminumException {
+	private void findInDirectory(List<Class<?>> types,
+			TypeFilter filter, ClassLoader classLoader, File directory, String packagePath) throws AluminumException {
 		File[] files = directory.listFiles();
 
 		if (files != null) {
@@ -155,8 +144,8 @@ public class TypeFinder {
 		}
 	}
 
-	private static void addMatchingType(List<Class<?>> types, TypeFilter filter, ClassLoader classLoader,
-			String typeName) throws ClassNotFoundException {
+	private void addMatchingType(List<Class<?>> types,
+			TypeFilter filter, ClassLoader classLoader, String typeName) throws ClassNotFoundException {
 		if (typeName.endsWith(".class")) {
 			Class<?> type = classLoader.loadClass(typeName.substring(0, typeName.lastIndexOf('.')).replace('/', '.'));
 
