@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.googlecode.aluminumproject.writers.StringWriter;
 
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-core", "slow"})
 public class WithWriterTest extends CoreLibraryTest {
 	public void writerShouldBeUsed() {

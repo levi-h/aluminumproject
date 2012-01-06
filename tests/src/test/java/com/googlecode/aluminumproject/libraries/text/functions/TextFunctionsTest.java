@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.libraries.text.functions;
 
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-text", "fast"})
 public class TextFunctionsTest {
 	public void replacingNullShouldResultInNull() {

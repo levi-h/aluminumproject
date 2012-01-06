@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.googlecode.aluminumproject.context.g11n;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 
 import java.util.Locale;
@@ -23,7 +22,7 @@ import java.util.Locale;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-g11n", "fast"})
 public class ConstantLocaleProviderTest {
 	private LocaleProvider localeProvider;
