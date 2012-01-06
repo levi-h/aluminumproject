@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-io", "fast"})
 public class DirectoriesTest extends IoLibraryTest {
 	public void obtainingCurrentDirectoryShouldResultInDirectory() {

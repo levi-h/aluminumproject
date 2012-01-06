@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.math.BigInteger;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"core", "fast"})
 public class NumberToNumberConverterTest {
 	private Converter<Number> converter;

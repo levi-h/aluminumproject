@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.util.Comparator;
 
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-ds", "fast"})
 public class ComparatorsTest {
 	public void naturalOrderComparatorShouldBeUsable() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 public abstract class XmlLibraryTest extends LibraryTest {
 	public XmlLibraryTest() {
 		super("templates/xml", "aluscript");

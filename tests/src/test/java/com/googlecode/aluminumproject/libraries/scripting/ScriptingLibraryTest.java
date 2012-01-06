@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.googlecode.aluminumproject.libraries.scripting;
 
 import com.googlecode.aluminumproject.libraries.LibraryTest;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 public abstract class ScriptingLibraryTest extends LibraryTest {
 	protected ScriptingLibraryTest() {
 		super("templates/scripting", "xml");

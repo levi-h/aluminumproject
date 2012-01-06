@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.googlecode.aluminumproject.resources;
 import java.io.IOException;
 import java.io.InputStream;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 abstract class TemplateFinderTest {
 	protected void assertAvailable(TemplateFinder templateFinder, String name) throws IOException {
 		InputStream stream = templateFinder.find(name);

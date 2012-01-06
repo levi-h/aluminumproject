@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"tools", "tools-aludoc", "slow"})
 public class TranslationsTest {
 	private List<Library> libraries;

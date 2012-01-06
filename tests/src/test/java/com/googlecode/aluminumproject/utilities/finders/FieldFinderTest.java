@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"utilities", "fast"})
 public class FieldFinderTest {
 	@Test(expectedExceptions = IllegalArgumentException.class)
@@ -73,14 +73,17 @@ public class FieldFinderTest {
 	}
 
 	private static class Vehicle {
+		@SuppressWarnings("unused")
 		private int maximumSpeed;
 	}
 
 	private static interface TrafficParticipant {
+		@SuppressWarnings("unused")
 		BigDecimal MINIMUM_SPEEDING_FINE_AMOUNT = new BigDecimal("25");
 	}
 
 	private static class Car extends Vehicle implements TrafficParticipant {
+		@SuppressWarnings("unused")
 		private String manufacturer;
 	}
 }

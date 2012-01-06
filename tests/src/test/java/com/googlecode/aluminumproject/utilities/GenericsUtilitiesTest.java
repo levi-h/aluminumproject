@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-@SuppressWarnings("all")
+@SuppressWarnings("javadoc")
 @Test(groups = {"utilities", "fast"})
 public class GenericsUtilitiesTest {
 	public static interface Interface<A, B> {}
@@ -74,7 +74,7 @@ public class GenericsUtilitiesTest {
 		assert getTypeArgument(Subclass.class, Superclass.class, 1) == Double.class;
 	}
 
-	public static class ParameterisedSubclass<T extends String>
+	public static class ParameterisedSubclass<T extends Number>
 		extends Superclass<List<?>, ThreadLocal<? extends String>> {}
 
 	@Test(dependsOnMethods = "typeArgumentOfSubclassShouldBeObtainable")
