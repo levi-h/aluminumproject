@@ -15,17 +15,17 @@
  */
 package com.googlecode.aluminumproject.parsers.aluscript;
 
+import static com.googlecode.aluminumproject.finders.ClassPathTemplateFinder.TEMPLATE_PATH;
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.AUTOMATIC_NEWLINES;
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.TEMPLATE_EXTENSION;
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.TEMPLATE_NAME_TRANSLATOR_CLASS;
-import static com.googlecode.aluminumproject.resources.ClassPathTemplateFinder.TEMPLATE_PATH;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
+import com.googlecode.aluminumproject.finders.TemplateFinder;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
 import com.googlecode.aluminumproject.parsers.UpperCaseTemplateNameTranslator;
-import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
-import com.googlecode.aluminumproject.resources.TemplateFinder;
 import com.googlecode.aluminumproject.templates.DefaultTemplateElementFactory;
 import com.googlecode.aluminumproject.templates.Template;
 import com.googlecode.aluminumproject.templates.TemplateElement;

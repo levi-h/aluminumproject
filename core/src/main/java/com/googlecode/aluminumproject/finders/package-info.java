@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 
 /**
- * The {@link com.googlecode.aluminumproject.resources.TemplateFinder template} and {@link
- * com.googlecode.aluminumproject.resources.TemplateStoreFinder template store} finders.
+ * Configuration elements that find templates, locations to store templates, and types.
  */
-package com.googlecode.aluminumproject.resources;
+package com.googlecode.aluminumproject.finders;

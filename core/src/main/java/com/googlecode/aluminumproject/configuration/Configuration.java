@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import com.googlecode.aluminumproject.cache.Cache;
 import com.googlecode.aluminumproject.context.ContextEnricher;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
+import com.googlecode.aluminumproject.finders.TemplateFinder;
+import com.googlecode.aluminumproject.finders.TemplateStoreFinder;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.parsers.Parser;
-import com.googlecode.aluminumproject.resources.TemplateFinder;
-import com.googlecode.aluminumproject.resources.TemplateStoreFinder;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
 import com.googlecode.aluminumproject.templates.TemplateElementFactory;
 

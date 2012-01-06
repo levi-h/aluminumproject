@@ -20,9 +20,9 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 import com.googlecode.aluminumproject.parsers.xml.XmlParser;
-import com.googlecode.aluminumproject.resources.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 

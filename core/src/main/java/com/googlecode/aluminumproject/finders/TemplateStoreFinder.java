@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.resources;
+package com.googlecode.aluminumproject.finders;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
-import com.googlecode.aluminumproject.parsers.Parser;
+import com.googlecode.aluminumproject.serialisers.Serialiser;
 
-import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
- * Used by a {@link Parser parser} to find a template by name.
+ * Used by a {@link Serialiser serialiser} to find a location to store a template.
  *
  * @author levi_h
  */
-public interface TemplateFinder extends ConfigurationElement {
+public interface TemplateStoreFinder extends ConfigurationElement {
 	/**
-	 * Finds an input stream for a template with a certain name.
+	 * Finds an output stream for a template with a certain name.
 	 *
-	 * @param name the name of the template to find an input stream for
-	 * @return an input stream where the template can be read from
-	 * @throws AluminumException when no input stream can be found for the template
+	 * @param name the name of the template to find an output stream for
+	 * @return an output stream where the template can be written to
+	 * @throws AluminumException when no output stream can be found for the template
 	 */
-	InputStream find(String name) throws AluminumException;
+	OutputStream find(String name) throws AluminumException;
 }
