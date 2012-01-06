@@ -23,6 +23,7 @@ import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.finders.TemplateFinder;
 import com.googlecode.aluminumproject.finders.TemplateStoreFinder;
+import com.googlecode.aluminumproject.finders.TypeFinder;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.parsers.Parser;
 import com.googlecode.aluminumproject.serialisers.Serialiser;
@@ -52,6 +53,14 @@ public interface Configuration {
 	 * @throws AluminumException when this configuration has been closed
 	 */
 	ConfigurationParameters getParameters() throws AluminumException;
+
+	/**
+	 * Returns the type finder.
+	 *
+	 * @return the type finder to use
+	 * @throws AluminumException when this configuration has been closed
+	 */
+	TypeFinder getTypeFinder() throws AluminumException;
 
 	/**
 	 * Returns the configuration element factory.

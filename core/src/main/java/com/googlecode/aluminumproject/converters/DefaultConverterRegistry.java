@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,12 @@ import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
+import com.googlecode.aluminumproject.finders.TypeFinder.TypeFilter;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.Utilities;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -104,7 +103,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 	protected void registerConverters(String packageName) throws AluminumException {
 		logger.debug("registering all converters in package ", packageName);
 
-		List<Class<?>> converterClasses = TypeFinder.find(new TypeFilter() {
+		List<Class<?>> converterClasses = configuration.getTypeFinder().find(new TypeFilter() {
 			public boolean accepts(Class<?> type) {
 				return Converter.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
 					&& !type.isAnnotationPresent(Ignored.class);

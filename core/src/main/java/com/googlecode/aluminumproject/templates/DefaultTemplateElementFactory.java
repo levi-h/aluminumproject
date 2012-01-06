@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.expressions.ExpressionFactory;
+import com.googlecode.aluminumproject.finders.TypeFinder.TypeFilter;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
@@ -33,8 +34,6 @@ import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.utilities.ConfigurationUtilities;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder;
-import com.googlecode.aluminumproject.utilities.finders.TypeFinder.TypeFilter;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -91,7 +90,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 		if (!actionInterceptorPackages.isEmpty()) {
 			logger.debug("action interceptors will be looked for in ", actionInterceptorPackages);
 
-			List<Class<?>> actionInterceptorClasses = TypeFinder.find(new TypeFilter() {
+			List<Class<?>> actionInterceptorClasses = configuration.getTypeFinder().find(new TypeFilter() {
 				public boolean accepts(Class<?> type) {
 					return ActionInterceptor.class.isAssignableFrom(type) && !ReflectionUtilities.isAbstract(type)
 						&& !type.isAnnotationPresent(Ignored.class);
