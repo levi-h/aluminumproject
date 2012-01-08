@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,4 +22,6 @@ processResources {
 	filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
 }
 
-packagesToExcludeFromApiDocs = ['com.googlecode.aluminumproject.libraries.common.actions']
+javadoc {
+	exclude 'com/googlecode/aluminumproject/libraries/common/actions/**'
+}
