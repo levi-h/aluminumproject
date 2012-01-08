@@ -246,4 +246,13 @@ public class ReflectionUtilitiesTest {
 		assert propertyName != null;
 		assert propertyName.equals("daemon");
 	}
+
+	public void propertyTypeShouldBeObtainable() {
+		assert ReflectionUtilities.getPropertyType(Class.class, "name") == String.class;
+	}
+
+	@Test(expectedExceptions = AluminumException.class)
+	public void tryingToGetPropertyTypeOfUnknownPropertyShouldCauseException() {
+		ReflectionUtilities.getPropertyType(Class.class, "nonexistent");
+	}
 }

@@ -380,6 +380,18 @@ public class ReflectionUtilities {
 		}
 	}
 
+	/**
+	 * Determines the type of a property.
+	 *
+	 * @param beanClass the bean that contains the property
+	 * @param propertyName the name of the property to determine the type of
+	 * @return the type of the property with the specified name on the given bean class
+	 * @throws AluminumException when the bean class does not have a property with the given name
+	 */
+	public static Class<?> getPropertyType(Class<?> beanClass, String propertyName) throws AluminumException {
+		return getPropertyDescriptor(beanClass, Object.class, propertyName).getPropertyType();
+	}
+
 	private static PropertyDescriptor[] getPropertyDescriptors(Class<?> beanClass) throws AluminumException {
 		PropertyDescriptor[] propertyDescriptors;
 
