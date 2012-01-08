@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,7 @@ subprojects {
 
 	configurations {
 		distribution
-		apiDocs.extendsFrom distribution
-		compile.extendsFrom apiDocs
+		compile.extendsFrom distribution
 	}
 
 	repositories {
@@ -37,6 +36,10 @@ subprojects {
 	}
 
 	if (name != 'aluminum-tests') {
+		javadoc {
+			options.links 'http://download.oracle.com/javase/6/docs/api/'
+		}
+
 		task createSources(type: Zip, visible: false) {
 			destinationDir = project.distsDir
 
@@ -65,29 +68,12 @@ task createAluDocs(type: JavaExec, visible: false, dependsOn: subprojects*.build
 task createApiDocs(type: Javadoc, visible: false)  {
 	destinationDir = new File(project.buildDir, 'docs/api')
 
-	def subprojectsToInclude = subprojects.findAll {subproject ->
-		subproject.name != 'aluminum-tests'
-	}
+	Collection<Project> projects = subprojects.findAll {project -> project.name != 'aluminum-tests'}
 
-	source subprojectsToInclude.collect {subproject ->
-		subproject.sourceSets.main.java
-	}
-	classpath = files(subprojectsToInclude.collect {subproject ->
-		subproject.configurations.apiDocs.resolve()
-	})
-
-	options.links = subprojectsToInclude.inject(['http://download.oracle.com/javase/6/docs/api/']) {links, subproject ->
-		subproject.hasProperty('apiDocUrls') ? links + subproject.property('apiDocUrls') : links
-	}
-
-	def excludedPackages = subprojectsToInclude.inject([]) {excludedPackages, subproject ->
-		excludedPackages + (subproject.hasProperty('packagesToExcludeFromApiDocs')
-			? subproject.property('packagesToExcludeFromApiDocs') : [])
-	}
-
-	exclude {details ->
-		details.directory && excludedPackages.contains(details.relativePath.pathString.replace('/', '.'))
-	}
+	source = projects*.sourceSets*.main*.java
+	classpath = files(projects*.configurations*.compile)
+	options.links = projects.collectMany {project -> project.javadoc.options.links}.unique().toList()
+	excludes = projects.collectMany {project -> project.javadoc.excludes}
 }
 
 task createDocs(dependsOn: [createAluDocs, createApiDocs])

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,4 +20,6 @@ dependencies {
 	distribution group: 'xom', name: 'xom', version: '1.2.5', transitive: false
 }
 
-packagesToExcludeFromApiDocs = ['com.googlecode.aluminumproject.libraries.xml']
+javadoc {
+	exclude 'com/googlecode/aluminumproject/libraries/xml/**'
+}
