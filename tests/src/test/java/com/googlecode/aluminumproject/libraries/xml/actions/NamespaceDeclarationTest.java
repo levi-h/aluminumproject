@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-xml", "slow"})
-public class NamespaceTest extends XmlLibraryTest {
+public class NamespaceDeclarationTest extends XmlLibraryTest {
 	public void namespacesShouldBeSupported() {
 		assert processTemplate("element-in-namespace").equals(createXml(
 			"<d:document xmlns:d=\"http://documents.example.com/\"/>"

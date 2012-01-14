@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ public abstract class AbstractAction implements Action {
 	 * @return the first ancestor with the given type or {@code null} if none of this action's ancestors has the
 	 *         requested type
 	 */
-	protected <T extends Action> T findAncestorOfType(Class<T> type) {
+	protected <T> T findAncestorOfType(Class<T> type) {
 		Action action = getParent();
 
 		while ((action != null) && !type.isAssignableFrom(action.getClass())) {

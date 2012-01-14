@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Levi Hoogenberg
+# Copyright 2012 Levi Hoogenberg
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,5 +20,7 @@
 	    <t:test/>
 	</c:template>
 
-@xml.select (element: ${template}, expression: '/core:template/namespace::node()', c.variable name: 'namespaces')
+@xml.selection context (c.variable name: 'selectionContext')
 	@xml.namespace (prefix: core, url: http://aluminumproject.googlecode.com/core)
+
+@xml.select (element: ${template}, expression: '/core:template/namespace::node()', context: ${selectionContext}, c.variable name: 'namespaces')

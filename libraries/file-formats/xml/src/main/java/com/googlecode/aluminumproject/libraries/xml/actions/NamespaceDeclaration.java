@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
+import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
@@ -30,17 +31,18 @@ import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
 
 /**
- * Adds a namespace to an {@link AbstractElement element}.
+ * Adds a namespace declaration to an {@link AbstractElement element}.
  *
  * @author levi_h
  */
-public class Namespace implements ActionContribution {
+@Named("namespace")
+public class NamespaceDeclaration implements ActionContribution {
 	private @Injected ActionContributionDescriptor descriptor;
 
 	/**
-	 * Creates a namespace action contribution.
+	 * Creates a namespace declaration action contribution.
 	 */
-	public Namespace() {}
+	public NamespaceDeclaration() {}
 
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return (actionFactory instanceof DefaultActionFactory) &&
