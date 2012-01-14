@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -187,8 +187,7 @@ public class DefaultActionElement implements ActionElement {
 				TemplateInformation templateInformation = TemplateInformation.from(actionContext.getContext());
 
 				action.setParent(templateInformation.getCurrentAction());
-				action.setBody(new TemplateBody(
-					templateInformation.getTemplate(), templateInformation.getCurrentTemplateElement()));
+				action.setBody(new TemplateBody(templateInformation.getCurrentTemplateElement()));
 
 				actionContext.setAction(action);
 
@@ -199,22 +198,34 @@ public class DefaultActionElement implements ActionElement {
 		}
 
 		private static class TemplateBody implements ActionBody {
-			private Template template;
 			private TemplateElement currentTemplateElement;
 
-			public TemplateBody(Template template, TemplateElement currentTemplateElement) {
-				this.template = template;
+			public TemplateBody(TemplateElement currentTemplateElement) {
 				this.currentTemplateElement = currentTemplateElement;
 			}
 
 			public ActionBody copy() {
-				return new TemplateBody(template, currentTemplateElement);
+				return new TemplateBody(currentTemplateElement);
 			}
 
 			public void invoke(Context context, Writer writer) throws AluminumException {
+				Template template = findTemplate(context, currentTemplateElement);
+
 				for (TemplateElement templateElement: template.getChildren(currentTemplateElement)) {
 					templateElement.process(context, writer);
 				}
+			}
+
+			private Template findTemplate(Context context, TemplateElement templateElement) {
+				Template template = null;
+
+				do {
+					template = TemplateInformation.from(context).getTemplate();
+
+					context = context.getParent();
+				} while ((context != null) && !template.contains(templateElement));
+
+				return template;
 			}
 		}
 	}

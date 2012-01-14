@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,13 +111,7 @@ public class TemplateBuilder {
 			addTemplateElements(null);
 		}
 
-		/**
-		 * Adds a template element to another template element.
-		 *
-		 * @param parentTemplateElement the template element that's the parent of the added template element
-		 * @param templateElement the template element to add
-		 */
-		public void addTemplateElement(TemplateElement parentTemplateElement, TemplateElement templateElement) {
+		private void addTemplateElement(TemplateElement parentTemplateElement, TemplateElement templateElement) {
 			templateElements.get(parentTemplateElement).add(templateElement);
 
 			addTemplateElements(templateElement);
@@ -127,14 +121,11 @@ public class TemplateBuilder {
 			templateElements.put(parentTemplateElement, new LinkedList<TemplateElement>());
 		}
 
-		/**
-		 * Finds the parent of a template element.
-		 *
-		 * @param templateElement the template element to find the parent of
-		 * @return the template element that's the parent of the given template element
-		 * @throws AluminumException when the template element has not been added
-		 */
-		public TemplateElement getParent(TemplateElement templateElement) throws AluminumException {
+		private boolean contains(TemplateElement templateElement) {
+			return templateElements.containsKey(templateElement);
+		}
+
+		private TemplateElement getParent(TemplateElement templateElement) throws AluminumException {
 			Iterator<Map.Entry<TemplateElement, List<TemplateElement>>> it = templateElements.entrySet().iterator();
 
 			TemplateElement parentTemplateElement = null;
@@ -155,14 +146,7 @@ public class TemplateBuilder {
 			}
 		}
 
-		/**
-		 * Finds the children of a template element.
-		 *
-		 * @param templateElement the template element to find the children of
-		 * @return the template elements that have the given template element as their parent
-		 * @throws AluminumException when the template element has not been added
-		 */
-		public List<TemplateElement> getChildren(TemplateElement templateElement) throws AluminumException {
+		private List<TemplateElement> getChildren(TemplateElement templateElement) throws AluminumException {
 			if (templateElements.containsKey(templateElement)) {
 				return templateElements.get(templateElement);
 			} else {
@@ -186,6 +170,10 @@ public class TemplateBuilder {
 		 */
 		public BuiltTemplate(TemplateElements templateElements) {
 			this.templateElements = templateElements;
+		}
+
+		public boolean contains(TemplateElement templateElement) {
+			return templateElements.contains(templateElement);
 		}
 
 		public TemplateElement getParent(TemplateElement templateElement) throws AluminumException {

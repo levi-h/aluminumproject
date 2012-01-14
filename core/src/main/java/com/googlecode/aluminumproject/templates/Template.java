@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,14 @@ import java.util.List;
  * @author levi_h
  */
 public interface Template {
+	/**
+	 * Determines whether this template contains a certain template element.
+	 *
+	 * @param templateElement the template element to check
+	 * @return {@code true} if this template contains the given template element; {@code false} if it doesn't
+	 */
+	boolean contains(TemplateElement templateElement);
+
 	/**
 	 * Finds the parent of a certain template element.
 	 *
