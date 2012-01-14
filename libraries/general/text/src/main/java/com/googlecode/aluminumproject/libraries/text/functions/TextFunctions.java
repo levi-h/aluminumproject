@@ -71,4 +71,14 @@ public class TextFunctions {
 	public static String upperCase(@Named("text") String text) {
 		return (text == null) ? text : text.toUpperCase();
 	}
+
+	/**
+	 * Reverses a text.
+	 *
+	 * @param text the text to reverse
+	 * @return the reversed text
+	 */
+	public static String reverse(@Named("text") String text) {
+		return (text == null) ? text : new StringBuilder(text).reverse().toString();
+	}
 }
