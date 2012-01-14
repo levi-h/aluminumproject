@@ -65,4 +65,14 @@ public class TextFunctionsTest {
 		assert text != null;
 		assert text.equals("GOAL");
 	}
+
+	public void reversingNullShouldResultInNull() {
+		assert TextFunctions.reverse(null) == null;
+	}
+
+	public void reversingTextShouldResultInReversedText() {
+		String text = TextFunctions.reverse("yellow card");
+		assert text != null;
+		assert text.equals("drac wolley");
+	}
 }
