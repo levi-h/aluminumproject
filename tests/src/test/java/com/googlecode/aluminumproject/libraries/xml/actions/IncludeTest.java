@@ -49,4 +49,16 @@ public class IncludeTest extends XmlLibraryTest {
 			"</zoo>"
 		));
 	}
+
+	public void includedDocumentShouldContainElementsFromBlock() {
+		Context context = new DefaultContext();
+		context.setVariable("animals", Arrays.asList("tiger", "lion"));
+
+		assert processTemplate("include-with-block", context).equals(createXml(
+			"<zoo>",
+			"    <animal name=\"tiger\"/>",
+			"    <animal name=\"lion\"/>",
+			"</zoo>"
+		));
+	}
 }
