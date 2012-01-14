@@ -81,6 +81,32 @@ public class SelectTest extends XmlLibraryTest {
 		assert thirdNamespace.equals("http://www.w3.org/XML/1998/namespace");
 	}
 
+	public void namespacesShouldBeSelectableUsingReusableContext() {
+		Context context = new DefaultContext();
+
+		processTemplate("select-namespaces-with-reusable-context", context);
+
+		assert context.getVariableNames(Context.TEMPLATE_SCOPE).contains("namespaces");
+
+		Object variable = context.getVariable(Context.TEMPLATE_SCOPE, "namespaces");
+		assert variable instanceof List;
+
+		List<?> namespaces = (List<?>) variable;
+		assert namespaces.size() == 3;
+
+		Object firstNamespace = namespaces.get(0);
+		assert firstNamespace != null;
+		assert firstNamespace.equals("http://aluminumproject.googlecode.com/core");
+
+		Object secondNamespace = namespaces.get(1);
+		assert secondNamespace != null;
+		assert secondNamespace.equals("http://aluminumproject.googlecode.com/test");
+
+		Object thirdNamespace = namespaces.get(2);
+		assert thirdNamespace != null;
+		assert thirdNamespace.equals("http://www.w3.org/XML/1998/namespace");
+	}
+
 	@Test(expectedExceptions = AluminumException.class)
 	public void supplyingDuplicateNamespacePrefixesAsXPathContextShouldCauseException() {
 		processTemplate("select-namespaces-with-illegal-context");

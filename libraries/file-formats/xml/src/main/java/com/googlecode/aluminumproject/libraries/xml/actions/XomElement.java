@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.libraries.xml.model.Element;
+import com.googlecode.aluminumproject.libraries.xml.model.SelectionContext;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.ByteArrayOutputStream;
@@ -52,13 +53,13 @@ class XomElement implements Element {
 		this.element = (element.getDocument() == null) ? new Document(element).getRootElement() : element;
 	}
 
-	public List<?> select(String expression, Map<String, String> context) throws AluminumException {
+	public List<?> select(String expression, SelectionContext context) throws AluminumException {
 		Nodes nodes;
 
 		try {
 			XPathContext xPathContext = new XPathContext();
 
-			for (Map.Entry<String, String> namespace: context.entrySet()) {
+			for (Map.Entry<String, String> namespace: context.getNamespaces().entrySet()) {
 				xPathContext.addNamespace(namespace.getKey(), namespace.getValue());
 			}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * An XML element.
@@ -36,7 +35,7 @@ public interface Element {
 	 * @throws AluminumException when the given expression is invalid or when one of the results is of an unsupported
 	 *                           type
 	 */
-	List<?> select(String expression, Map<String, String> context) throws AluminumException;
+	List<?> select(String expression, SelectionContext context) throws AluminumException;
 
 	/**
 	 * Transforms this element using a style sheet.

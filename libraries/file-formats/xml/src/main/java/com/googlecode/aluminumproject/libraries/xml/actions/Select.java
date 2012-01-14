@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,14 @@
 package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
+import com.googlecode.aluminumproject.libraries.xml.model.SelectionContext;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Executes an <a href="http://www.w3.org/TR/xpath/">XPath</a> query and writes the results. The following node types
@@ -42,21 +40,26 @@ import java.util.Map;
  * When a query leads to a single result, only that result will be written. In any other case, the result will be
  * written as a {@link List list}.
  * <p>
- * XPath expressions may be given a context by nesting {@link Namespace namespace actions}.
+ * XPath expressions may be given a context by using the context parameter or by nesting {@link Namespace namespace
+ * actions}.
  *
  * @author levi_h
  */
-public class Select extends AbstractAction {
+public class Select extends AbstractAction implements SelectionContextContainer {
 	private @Required com.googlecode.aluminumproject.libraries.xml.model.Element element;
 
 	private @Required String expression;
-	private @Ignored Map<String, String> context;
+	private SelectionContext context;
 
 	/**
 	 * Creates a <em>select</em> action.
 	 */
 	public Select() {
-		context = new HashMap<String, String>();
+		context = new SelectionContext();
+	}
+
+	public SelectionContext getSelectionContext() {
+		return context;
 	}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
@@ -65,33 +68,5 @@ public class Select extends AbstractAction {
 		List<?> results = element.select(expression, this.context);
 
 		writer.write((results.size() == 1) ? results.get(0) : results);
-	}
-
-	/**
-	 * Adds a namespace to the context of an XPath expression that is used to {@link Select select} nodes of an XML
-	 * element.
-	 *
-	 * @author levi_h
-	 */
-	public static class Namespace extends AbstractAction {
-		private @Required String prefix;
-		private @Required String url;
-
-		/**
-		 * Creates a <em>namespace</em> action.
-		 */
-		public Namespace() {}
-
-		public void execute(Context context, Writer writer) throws AluminumException {
-			Select select = findAncestorOfType(Select.class);
-
-			if (select == null) {
-				throw new AluminumException("namespace actions may only be used inside select actions");
-			} else if (select.context.containsKey(prefix)) {
-				throw new AluminumException("duplicate namespace prefix: '", prefix, "'");
-			} else {
-				select.context.put(prefix, url);
-			}
-		}
 	}
 }
