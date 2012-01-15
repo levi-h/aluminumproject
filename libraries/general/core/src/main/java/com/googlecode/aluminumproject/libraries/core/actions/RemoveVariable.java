@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Levi Hoogenberg
+ * Copyright 2009-2012 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
-
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
+
 
 @SuppressWarnings("javadoc")
 public class RemoveVariable extends AbstractAction {
