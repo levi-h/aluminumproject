@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,30 +35,17 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
-/**
- * Sends an e-mail.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Send extends AbstractAction {
 	private Address from;
 	private @Required String subject;
 
 	private @Ignored Map<RecipientType, List<Address>> recipients;
 
-	/**
-	 * Creates a <em>send</em> action.
-	 */
 	public Send() {
 		recipients = new HashMap<RecipientType, List<Address>>();
 	}
 
-	/**
-	 * Adds a recipient for the e-mail.
-	 *
-	 * @param type the type of the new recipient
-	 * @param recipient the recipient to add
-	 */
 	void addRecipient(RecipientType type, Address recipient) {
 		if (!recipients.containsKey(type)) {
 			recipients.put(type, new LinkedList<Address>());

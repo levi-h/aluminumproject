@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,10 @@ import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Adds e-mail capabilities to templates.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class MailLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Constructs a mail library.
-	 */
 	public MailLibrary() {
 		super(ReflectionUtilities.getPackageName(MailLibrary.class));
 
@@ -41,6 +34,5 @@ public class MailLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The URL of the mail library: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/mail";
 }

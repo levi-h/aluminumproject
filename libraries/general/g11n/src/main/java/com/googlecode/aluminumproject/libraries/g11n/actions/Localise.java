@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,13 @@ import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
-import com.googlecode.aluminumproject.context.g11n.ResourceBundleProvider;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Collections;
 import java.util.ResourceBundle;
 
-/**
- * Writes a localised resource from the current {@link GlobalisationContext globalisation context}'s {@link
- * ResourceBundleProvider resource bundle provider}'s {@link ResourceBundle resource bundle}.
- * <p>
- * If no resource can be found for a given key, the action will throw an exception. There are two ways to change this
- * behaviour: either by providing a <em>default</em> resource or by using the <em>allow missing key</em> parameter,
- * which will cause the key to be wrapped in two pairs of question marks and used as resource.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Localise extends AbstractAction {
 	private @Required String key;
 
@@ -45,9 +35,6 @@ public class Localise extends AbstractAction {
 
 	private boolean allowMissingKey;
 
-	/**
-	 * Creates a <em>localise</em> action.
-	 */
 	public Localise() {
 		defaultResource = NO_DEFAULT;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,10 @@ import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Contains actions and functions that create and operate on data structures.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class DsLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates a data structures library.
-	 */
 	public DsLibrary() {
 		super(ReflectionUtilities.getPackageName(DsLibrary.class));
 
@@ -41,6 +34,5 @@ public class DsLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The data structures library URL: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/ds";
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,23 +29,13 @@ import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter;
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Abstract superclass of action contributions that replace the current writer with a {@link PreserveWhitespaceWriter
- * preserve whitespace writer}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 @Typed("int")
 public abstract class WhitespaceToPreserve implements ActionContribution {
 	private WhitespaceType type;
 
 	private final Logger logger;
 
-	/**
-	 * Creates a <em>whitespace to preserve</em> action contribution.
-	 *
-	 * @param type the kind of whitespace to preserve
-	 */
 	protected WhitespaceToPreserve(WhitespaceType type) {
 		this.type = type;
 

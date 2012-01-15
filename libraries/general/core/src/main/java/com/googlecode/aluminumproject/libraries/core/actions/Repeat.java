@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,22 +21,12 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Invokes its body a number of times.
- * <p>
- * The body is invoked in its own scope (prefixed {@value #REPEAT_SCOPE}); information about the current loop will be
- * available in that scope.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Repeat extends AbstractAction {
 	private @Required int count;
 
 	private String informationName;
 
-	/**
-	 * Creates a <em>repeat</em> action.
-	 */
 	public Repeat() {
 		informationName = DEFAULT_INFORMATION_NAME;
 	}
@@ -81,9 +71,7 @@ public class Repeat extends AbstractAction {
 		}
 	}
 
-	/** The name prefixes of the scopes that will be used for <em>repeat</em> actions. */
 	public final static String REPEAT_SCOPE = "repeat";
 
-	/** The name of the variable that will contain information about the current loop when none is given. */
 	public final static String DEFAULT_INFORMATION_NAME = "loop";
 }

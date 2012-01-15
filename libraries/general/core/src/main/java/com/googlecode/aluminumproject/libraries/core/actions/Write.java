@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,18 +23,10 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Writes a value to the writer. The value to write can be supplied in two ways: using the <em>value</em> parameter or
- * in the action body.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Write extends AbstractAction {
 	private Object value;
 
-	/**
-	 * Creates a <em>write</em> action.
-	 */
 	public Write() {
 		value = NO_VALUE;
 	}

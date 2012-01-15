@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,10 @@ import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Contains actions that can be used in almost any template.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class CoreLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates a core library.
-	 */
 	public CoreLibrary() {
 		super(ReflectionUtilities.getPackageName(CoreLibrary.class));
 
@@ -41,6 +34,5 @@ public class CoreLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The URL of the core library: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/core";
 }

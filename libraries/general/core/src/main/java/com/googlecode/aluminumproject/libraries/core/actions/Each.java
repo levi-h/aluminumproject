@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,23 +25,13 @@ import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/**
- * Iterates over an {@link Iterable iterable}, invoking its body for each element.
- * <p>
- * The body is invoked in its own scope (with prefix {@value #EACH_SCOPE}); the current element and information about
- * the current loop will be available in that scope.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Each extends AbstractAction {
 	private @Required Iterable<?> elements;
 
 	private String elementName;
 	private String informationName;
 
-	/**
-	 * Creates an <em>each</em> action.
-	 */
 	public Each() {
 		elementName = DEFAULT_ELEMENT_NAME;
 		informationName = DEFAULT_INFORMATION_NAME;
@@ -147,12 +137,8 @@ public class Each extends AbstractAction {
 		}
 	}
 
-	/** The name prefix of the scopes that will be used for <em>each</em> actions. */
 	public final static String EACH_SCOPE = "each";
 
-	/** The name of the variable that will be used for element variables when none is given. */
 	public final static String DEFAULT_ELEMENT_NAME = "element";
-
-	/** The name of the variable that will contain information about the current loop when none is supplied. */
 	public final static String DEFAULT_INFORMATION_NAME = "loop";
 }

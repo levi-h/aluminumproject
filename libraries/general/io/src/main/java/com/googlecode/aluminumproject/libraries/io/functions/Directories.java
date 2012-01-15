@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,51 +21,23 @@ import com.googlecode.aluminumproject.annotations.Named;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Supplies all kinds of directories.
- *
- * @author levi_h
- */
 @FunctionClass
+@SuppressWarnings("javadoc")
 public class Directories {
 	private Directories() {}
 
-	/**
-	 * Returns the current working directory.
-	 *
-	 * @return the current directory
-	 */
 	public static File currentDirectory() {
 		return new File(System.getProperty("user.dir"));
 	}
 
-	/**
-	 * Returns the current user's home directory.
-	 *
-	 * @return the home directory
-	 */
 	public static File homeDirectory() {
 		return new File(System.getProperty("user.home"));
 	}
 
-	/**
-	 * Returns the directory that is used to store temporary files in.
-	 *
-	 * @return the temporary directory
-	 */
 	public static File temporaryDirectory() {
 		return new File(System.getProperty("java.io.tmpdir"));
 	}
 
-	/**
-	 * Creates a directory and returns it. Intermediate directories will be created when necessary.
-	 *
-	 * @param directory the directory in which to create the directory
-	 * @param name the name of the new directory
-	 * @return the new directory
-	 * @throws IllegalArgumentException when a file with the given name already exists in the specified directory
-	 * @throws IOException when the directory can't be created
-	 */
 	public static File newDirectory(@Named("directory") File directory, @Named("name") String name)
 			throws IllegalArgumentException, IOException {
 		File newDirectory = new File(directory, name);

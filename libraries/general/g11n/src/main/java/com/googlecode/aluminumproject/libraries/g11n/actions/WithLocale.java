@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,19 +32,9 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Locale;
 
-/**
- * Changes the locale of the {@link GlobalisationContext globalisation context} in which an action is created and
- * executes.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 @Typed("Locale")
 public class WithLocale implements ActionContribution {
-	/**
-	 * Creates a <em>with locale</em> action contribution.
-	 */
-	public WithLocale() {}
-
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return true;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,24 +23,14 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Map;
 
-/**
- * Writes an HTML tag, its attributes, and its children.
- *
- * @author levi_h
- */
-@Ignored class Tag extends AbstractAction {
+@Ignored
+@SuppressWarnings("javadoc")
+class Tag extends AbstractAction {
 	private String name;
 	private Map<String, String> attributes;
 
 	private boolean open;
 
-	/**
-	 * Creates a <em>tag</em> action.
-	 *
-	 * @param name the name of the tag
-	 * @param attributes the attributes of the tag
-	 * @param open whether the tag is open or not
-	 */
 	public Tag(String name, Map<String, String> attributes, boolean open) {
 		this.name = name;
 		this.attributes = attributes;

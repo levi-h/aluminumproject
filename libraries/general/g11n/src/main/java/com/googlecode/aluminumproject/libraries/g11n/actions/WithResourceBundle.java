@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,20 +30,9 @@ import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Changes the {@link ResourceBundleProvider resource bundle provider} of the {@link GlobalisationContext globalisation
- * context} in which an action is created and executes to a {@link NameBasedResourceBundleProvider name-based one} with
- * the action contribution's parameter value as base name for the resource bundle.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 @Typed("String")
 public class WithResourceBundle implements ActionContribution {
-	/**
-	 * Creates a <em>with resource bundle</em> action contribution.
-	 */
-	public WithResourceBundle() {}
-
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return true;
 	}

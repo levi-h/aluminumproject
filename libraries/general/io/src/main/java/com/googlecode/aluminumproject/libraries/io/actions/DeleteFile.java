@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,20 +23,9 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.File;
 
-/**
- * Deletes a file.
- * <p>
- * If the file is a directory, all of its contents will be deleted as well.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class DeleteFile extends AbstractAction {
 	private @Required File file;
-
-	/**
-	 * Creates a <em>delete file</em> action.
-	 */
-	public DeleteFile() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		delete(file);

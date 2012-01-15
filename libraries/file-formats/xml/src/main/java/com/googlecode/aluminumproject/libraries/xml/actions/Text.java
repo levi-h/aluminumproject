@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,18 +28,9 @@ import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Sets the text of an {@link Element element}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 @Typed("String")
 public class Text implements ActionContribution {
-	/**
-	 * Creates a <em>text</em> action contribution.
-	 */
-	public Text() {}
-
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return (actionFactory instanceof DefaultActionFactory) &&
 			AbstractElement.class.isAssignableFrom(((DefaultActionFactory) actionFactory).getActionClass());

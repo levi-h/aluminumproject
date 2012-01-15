@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
-import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
@@ -27,18 +26,9 @@ import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Makes sure that the {@link Action action} that it contributes to uses a certain {@link Writer writer}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 @Typed("com.googlecode.aluminumproject.writers.Writer")
 public class WithWriter implements ActionContribution {
-	/**
-	 * Creates a <em>with writer</em> action contribution.
-	 */
-	public WithWriter() {}
-
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return true;
 	}

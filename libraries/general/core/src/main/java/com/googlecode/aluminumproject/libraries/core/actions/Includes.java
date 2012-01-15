@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParam
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.core.actions.Blocks.Block;
-import com.googlecode.aluminumproject.libraries.core.actions.Blocks.BlockContents;
 import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
@@ -36,28 +34,8 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.util.Map;
 import java.util.Stack;
 
-/**
- * Contains two actions that include templates into another template.
- * <p>
- * By default, included templates are processed in a stand-alone fashion. By setting the <em>inherit ancestors</em>
- * parameter, this behaviour can be changed.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Includes {
-	/**
-	 * Includes a template.
-	 * <p>
-	 * The action has two parameters: the name of the included template and the name of the parser that should be used
-	 * for it. The parser parameter may be omitted; in that case, the parser that is used for the template that contains
-	 * the include action will be used to parse the included template as well.
-	 * <p>
-	 * The include action supports dynamic parameters, all of which will be made available as variables in the included
-	 * template's context. It's also possible to pass blocks to included templates by using the {@link Block block}
-	 * action; these blocks can be used through the {@link BlockContents block contents} action.
-	 *
-	 * @author levi_h
-	 */
 	public static class Include extends AbstractDynamicallyParameterisableAction {
 		private @Required String name;
 		private String parser;
@@ -65,11 +43,6 @@ public class Includes {
 		private boolean inheritAncestors;
 
 		private @Injected Configuration configuration;
-
-		/**
-		 * Creates an <em>include</em> action.
-		 */
-		public Include() {}
 
 		public void execute(Context context, Writer writer) throws AluminumException {
 			getBody().invoke(context, new NullWriter());
@@ -105,32 +78,12 @@ public class Includes {
 		}
 	}
 
-	/**
-	 * Includes a part of a template that was saved earlier. Upon execution, the <em>include local</em> action reads a
-	 * {@link Context#TEMPLATE_SCOPE template-scoped} context variable that contains an {@link ActionBody action body}
-	 * and invokes it.
-	 * <p>
-	 * There are two ways to pass information to the included template:
-	 * <ul>
-	 * <li>The action supports dynamic parameters, all of which will be available within the template;
-	 * <li>It's possible to used {@link Block blocks} in the action body, these can be invoked inside the included
-	 *     template using the {@link BlockContents block contents} action.
-	 * </ul>
-	 *
-	 * @author levi_h
-	 * @see Template
-	 */
 	public static class IncludeLocal extends AbstractDynamicallyParameterisableAction {
 		private @Required String name;
 
 		private boolean inheritAncestors;
 
 		private @Injected Configuration configuration;
-
-		/**
-		 * Creates an <em>include local</em> action.
-		 */
-		public IncludeLocal() {}
 
 		public void execute(Context context, Writer writer) throws AluminumException {
 			Object body = context.getVariable(Context.TEMPLATE_SCOPE, name);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,10 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.xml.model.Element;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Transforms a document and writes the results to the writer.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Transform extends AbstractAction {
 	private @Required Element document;
 	private @Required Element styleSheet;
-
-	/**
-	 * Creates a <em>transform</em> action.
-	 */
-	public Transform() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		logger.debug("transforming document ", document, " using style sheet ", styleSheet);

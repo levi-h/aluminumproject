@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,19 +26,12 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.text.DateFormat;
 import java.util.Date;
 
-/**
- * Formats a date in a certain {@link DateFormatType way} and writes the result to the writer.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class FormatDate extends AbstractAction {
 	private @Required Date value;
 
 	private DateFormatType type;
 
-	/**
-	 * Creates a <em>format date</em> action.
-	 */
 	public FormatDate() {
 		type = DateFormatType.CUSTOM;
 	}

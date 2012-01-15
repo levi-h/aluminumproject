@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,10 @@ import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Provides actions and functions related to input and output.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class IoLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates an I/O library.
-	 */
 	public IoLibrary() {
 		super(ReflectionUtilities.getPackageName(IoLibrary.class));
 
@@ -41,6 +34,5 @@ public class IoLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The URL of the I/O library: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/io";
 }

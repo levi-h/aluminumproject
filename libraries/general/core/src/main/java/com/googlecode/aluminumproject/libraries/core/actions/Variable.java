@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,29 +36,13 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Contains two action contributions that can be used to capture the output of an action and store it in a context
- * variable. When the contributed action does not have any output, no variable will be set. If it outputs more than one
- * value, the type of the context variable will be a {@link List list}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Variable {
 	private Variable() {}
 
-	/**
-	 * Sets the name of the {@link Variable variable} that will contain the output of the action that it contributes to.
-	 *
-	 * @author levi_h
-	 */
 	@Named("variable name")
 	@Typed("String")
 	public static class Name implements ActionContribution {
-		/**
-		 * Creates a <em>variable name</em> action contribution.
-		 */
-		public Name() {}
-
 		public boolean canBeMadeTo(ActionFactory actionFactory) {
 			return true;
 		}
@@ -142,20 +126,9 @@ public class Variable {
 		}
 	}
 
-	/**
-	 * Sets the scope of the {@link Variable variable} that will contain the output of the action that it contributes
-	 * to. If no scope is given, the variable will be set in the innermost scope.
-	 *
-	 * @author levi_h
-	 */
 	@Named("variable scope")
 	@Typed("String")
 	public static class Scope implements ActionContribution {
-		/**
-		 * Creates a <em>variable scope</em> action contribution.
-		 */
-		public Scope() {}
-
 		public boolean canBeMadeTo(ActionFactory actionFactory) {
 			return true;
 		}

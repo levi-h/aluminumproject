@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,8 @@
  */
 package com.googlecode.aluminumproject.libraries.text.actions;
 
-
-/**
- * Trims each line of the body text of the action that it contributes to.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class TrimLines extends AbstractTrim {
-	/**
-	 * Creates a <em>trim lines</em> action contribution.
-	 */
 	public TrimLines() {
 		super(true);
 	}

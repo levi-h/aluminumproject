@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,8 @@ package com.googlecode.aluminumproject.libraries.text.actions;
 
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;
 
-/**
- * Preserves a number of contiguous spaces of the body text of the action that it contributes to. How many spaces are
- * maintained depends on the given parameter.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class SpacesToPreserve extends WhitespaceToPreserve {
-	/**
-	 * Creates a <em>spaces to preserve</em> action contribution.
-	 */
 	public SpacesToPreserve() {
 		super(WhitespaceType.SPACE);
 	}

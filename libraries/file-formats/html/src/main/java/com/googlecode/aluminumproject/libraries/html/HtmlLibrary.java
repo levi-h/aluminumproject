@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,17 +33,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * Allows users to generate HTML documents.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class HtmlLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates an HTML library.
-	 */
 	public HtmlLibrary() {
 		super(ReflectionUtilities.getPackageName(HtmlLibrary.class));
 	}
@@ -111,6 +104,5 @@ public class HtmlLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The URL of the HTML library: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/html";
 }

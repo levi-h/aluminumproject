@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,24 +25,14 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
 import com.googlecode.aluminumproject.libraries.functions.ConstantFunctionArgument;
-import com.googlecode.aluminumproject.libraries.functions.Function;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Adds an argument to a {@link Function function} that's being called by the {@link CallFunction call function action}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class FunctionArgument extends AbstractAction {
 	private @Required Object value;
 
 	private @Injected DefaultActionFactory factory;
 	private @Injected Configuration configuration;
-
-	/**
-	 * Creates a <i>function argument</i> action.
-	 */
-	public FunctionArgument() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		findCallFunction().addArgument(new ConstantFunctionArgument(value, configuration.getConverterRegistry()));

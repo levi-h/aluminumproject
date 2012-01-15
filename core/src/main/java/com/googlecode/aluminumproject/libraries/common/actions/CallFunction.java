@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,42 +34,21 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Calls a {@link Function function}. {@link FunctionArgument function arguments} can be added by nesting {@link
- * com.googlecode.aluminumproject.libraries.common.actions.FunctionArgument function argument actions}. The result of
- * the function will be written to the action's {@link Writer writer}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class CallFunction extends AbstractAction {
 	private @Required String name;
-
-	@Ignored
-	private List<FunctionArgument> arguments;
+	private @Ignored List<FunctionArgument> arguments;
 
 	private @Injected DefaultActionFactory factory;
 
-	/**
-	 * Creates a <em>call function</em> action.
-	 */
 	public CallFunction() {
 		arguments = new LinkedList<FunctionArgument>();
 	}
 
-	/**
-	 * Adds an argument to the invoked function.
-	 *
-	 * @param argument the argument to add
-	 */
 	protected void addArgument(FunctionArgument argument) {
 		arguments.add(argument);
 	}
 
-	/**
-	 * Returns the library that contains the function that will be called.
-	 *
-	 * @return the called function's library
-	 */
 	protected Library getLibrary() {
 		return factory.getLibrary();
 	}

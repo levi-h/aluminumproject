@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,20 +23,12 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.List;
 
-/**
- * Sets a variable in the context. The value of the variable can be given by setting the <em>value</em> parameter or by
- * using the body. If the body contains more than one value, they will be collected in a list.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class SetVariable extends AbstractAction {
 	private String scope;
 	private @Required String name;
 	private Object value;
 
-	/**
-	 * Creates a <em>set variable</em> action.
-	 */
 	public SetVariable() {
 		value = NO_VALUE;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,10 @@ import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Allows template authors to include scripts in their templates.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class ScriptingLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates a scripting library.
-	 */
 	public ScriptingLibrary() {
 		super(ReflectionUtilities.getPackageName(ScriptingLibrary.class));
 
@@ -41,6 +34,5 @@ public class ScriptingLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The URL of the scripting library: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/scripting";
 }

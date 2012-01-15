@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,8 @@ package com.googlecode.aluminumproject.libraries.text.actions;
 
 import com.googlecode.aluminumproject.writers.PreserveWhitespaceWriter.WhitespaceType;
 
-/**
- * Preserves a number of adjacent tabs of the body text of the action that it contributes to. How many tabs are
- * preserved depends on the parameter of the action contribution.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class TabsToPreserve extends WhitespaceToPreserve {
-	/**
-	 * Creates a <em>tabs to preserve</em> action contribution.
-	 */
 	public TabsToPreserve() {
 		super(WhitespaceType.TAB);
 	}

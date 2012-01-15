@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,22 +34,13 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Writes a formatted text.
- * <p>
- * The <em>format</em> action supports three format types: interpolation (the default), message format, and
- * printf-style. Parameters can be added by nesting {@link FormatParameter parameter actions}, and (for the
- * interpolation format) by providing dynamic parameters.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Format extends AbstractDynamicallyParameterisableAction {
 	private FormatType type;
 
@@ -58,21 +49,12 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 
 	private @Injected Configuration configuration;
 
-	/**
-	 * Creates a <em>format</em> action.
-	 */
 	public Format() {
 		type = FormatType.INTERPOLATION;
 
 		parameters = new LinkedList<Parameter>();
 	}
 
-	/**
-	 * Adds a format parameter.
-	 *
-	 * @param name the name of the parameter to add (may be {@code null})
-	 * @param value the value of the parameter to add
-	 */
 	protected void addParameter(String name, Object value) {
 		parameters.add(new Parameter(name, value));
 	}
@@ -87,15 +69,7 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		writer.write(type.format(formatString, parameters, configuration.getConverterRegistry()));
 	}
 
-	/**
-	 * A possible format type.
-	 *
-	 * @author levi_h
-	 */
 	public static enum FormatType {
-		/**
-		 * Uses named parameters to format strings such as <code>Hello, {name}!</code>
-		 */
 		INTERPOLATION {
 			@Override
 			String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
@@ -150,11 +124,6 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 			}
 		},
 
-		/**
-		 * Uses positional parameters to format strings like <code>Hello, {0}!</code>.
-		 *
-		 * @see MessageFormat
-		 */
 		MESSAGE_FORMAT {
 			@Override
 			public String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
@@ -167,11 +136,6 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 			}
 		},
 
-		/**
-		 * Uses positional parameters to format strings such as <code>Hello, %s!</code>
-		 *
-		 * @see Formatter
-		 */
 		PRINTF {
 			@Override
 			public String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
@@ -217,15 +181,6 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 			return positionalParameters;
 		}
 
-		/**
-		 * Formats a string, given a number of parameters.
-		 *
-		 * @param formatString the string to format
-		 * @param parameters the parameters to use
-		 * @param converterRegistry the converter registry to use
-		 * @return the formatted string
-		 * @throws AluminumException when the string can't be formatted
-		 */
 		abstract String format(String formatString, List<Parameter> parameters, ConverterRegistry converterRegistry)
 			throws AluminumException;
 	}
@@ -240,21 +195,11 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 		}
 	}
 
-	/**
-	 * Adds an optionally named parameter to a <em>format</em> action.
-	 *
-	 * @author levi_h
-	 */
 	@Named("parameter")
 	public static class FormatParameter extends AbstractAction {
 		private String name;
 
 		private @Required Object value;
-
-		/**
-		 * Creates a <em>format parameter</em> action.
-		 */
-		public FormatParameter() {}
 
 		public void execute(Context context, Writer writer) throws AluminumException {
 			findAncestorOfType(Format.class).addParameter(name, value);

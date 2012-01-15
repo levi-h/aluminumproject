@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,8 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
 
-/**
- * Parses its body text as an XML document and writes the resulting {@link Element root element}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Parse extends AbstractAction {
-	/**
-	 * Creates a <em>parse</em> action.
-	 */
-	public Parse() {}
-
 	public void execute(Context context, Writer writer) throws AluminumException {
 		String text = getBodyText(context, writer);
 

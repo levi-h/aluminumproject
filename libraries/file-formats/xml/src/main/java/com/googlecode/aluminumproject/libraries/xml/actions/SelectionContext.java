@@ -22,18 +22,10 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Constructs a {@link com.googlecode.aluminumproject.libraries.xml.model.SelectionContext selection context} and writes
- * it. Namespaces can be added through nested {@link Namespace namespace actions}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class SelectionContext extends AbstractAction implements SelectionContextContainer {
 	private @Ignored com.googlecode.aluminumproject.libraries.xml.model.SelectionContext selectionContext;
 
-	/**
-	 * Creates a selection context.
-	 */
 	public SelectionContext() {
 		selectionContext = new com.googlecode.aluminumproject.libraries.xml.model.SelectionContext();
 	}

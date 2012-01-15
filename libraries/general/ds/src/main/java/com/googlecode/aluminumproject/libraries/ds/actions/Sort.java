@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,20 +27,11 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Writes a {@link List list} that contains the sorted elements of an {@link Iterable iterable}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Sort extends AbstractAction {
 	private @Required Iterable<?> elements;
 
 	private Comparator<Object> comparator;
-
-	/**
-	 * Creates a <em>sort</em> action.
-	 */
-	public Sort() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		List<Object> list = new LinkedList<Object>();

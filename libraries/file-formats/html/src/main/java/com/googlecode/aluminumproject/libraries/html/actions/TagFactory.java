@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Creates {@link Tag tags}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class TagFactory implements ActionFactory {
 	private String name;
 	private List<String> attributes;
@@ -44,13 +40,6 @@ public class TagFactory implements ActionFactory {
 
 	private Library library;
 
-	/**
-	 * Creates a tag factory.
-	 *
-	 * @param name the tag name
-	 * @param attributes a list with all of the attributes that are allowed
-	 * @param open whether the tag is open or not
-	 */
 	public TagFactory(String name, List<String> attributes, boolean open) {
 		this.name = name;
 		this.attributes = attributes;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,23 +21,12 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.xml.model.Element;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Formats and writes an {@link Element XML document}. The document can be given both as a parameter and as a body
- * object. The following formatting options can be set:
- * <ul>
- * <li>The number of spaces that should be used for indenting the document ({@value #DEFAULT_INDENTATION} by default).
- * </ul>
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Format extends AbstractAction {
 	private Element document;
 
 	private int indentation;
 
-	/**
-	 * Creates a <em>format</em> action.
-	 */
 	public Format() {
 		indentation = DEFAULT_INDENTATION;
 	}
@@ -58,6 +47,5 @@ public class Format extends AbstractAction {
 		document.writeDocument(writer, indentation);
 	}
 
-	/** The default indentation for documents: {@value} spaces. */
 	public final static int DEFAULT_INDENTATION = 4;
 }

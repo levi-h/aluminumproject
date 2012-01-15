@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,10 @@ import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * A library with actions and functions that can be used by AluDoc templates.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class AluDocLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates an AluDoc library.
-	 */
 	public AluDocLibrary() {
 		super(ReflectionUtilities.getPackageName(AluDocLibrary.class));
 
@@ -43,6 +36,5 @@ public class AluDocLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The AluDoc library URL: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/aludoc";
 }
