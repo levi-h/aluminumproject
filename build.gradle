@@ -21,7 +21,6 @@ allprojects {
 
 subprojects {
 	apply plugin: 'java'
-	apply plugin: 'eclipse'
 
 	sourceCompatibility = 1.5
 	targetCompatibility = 1.5
@@ -54,6 +53,8 @@ subprojects {
 
 		test.enabled = false
 	}
+
+	applyScripts('sub', project)
 
 	rootProject.evaluationDependsOn name
 }
@@ -138,3 +139,11 @@ task clean(type: Delete) {
 }
 
 task createWrapper(type: Wrapper)
+
+applyScripts('root', project)
+
+private void applyScripts(String category, Project project) {
+	rootProject.file("gradle/${category}").listFiles().sort {File script -> script.name - '.gradle'}.each {File script ->
+		apply from: script, to: project
+	}
+}
