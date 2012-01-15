@@ -137,6 +137,4 @@ task clean(type: Delete) {
 	delete = rootProject.buildDir
 }
 
-task createWrapper(type: Wrapper) {
-	jarFile = "${project.projectDir}/gradle-wrapper.jar"
-}
+task createWrapper(type: Wrapper)
