@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,6 @@ import java.lang.annotation.Target;
  * Which field types are allowed to be annotated depends on the type of the target object. Each of them should be able
  * to obtain the current {@link Configuration configuration}. Objects that are created by {@link LibraryElement library
  * elements} (i.e. actions, action contributions, and functions) should also be able to get a hold of their factories.
- *
- * @author levi_h
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

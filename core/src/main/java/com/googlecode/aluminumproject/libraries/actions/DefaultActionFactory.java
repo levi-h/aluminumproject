@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,8 +66,6 @@ import java.util.Map;
  * Actions will be created using the configured {@link ConfigurationElementFactory configuration element factory}. After
  * an action has been created, all of its fields that are annotated with {@link Injected &#64;Injected} will be fed with
  * an appropriate value.
- *
- * @author levi_h
  */
 public class DefaultActionFactory extends AbstractLibraryElement implements ActionFactory {
 	private Class<? extends Action> actionClass;

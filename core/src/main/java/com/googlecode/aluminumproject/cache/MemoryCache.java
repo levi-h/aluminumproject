@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import java.util.Map;
 
 /**
  * An in-memory {@link Cache cache} implementation. It does not have any configuration parameters.
- *
- * @author levi_h
  */
 public class MemoryCache implements Cache {
 	private Map<Key, Template> templates;

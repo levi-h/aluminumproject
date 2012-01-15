@@ -121,8 +121,6 @@ import java.util.Set;
  * parser named {@code com.googlecode.aluminumproject.parsers.simple.SimpleParser} or a serialiser named {@code
  * com.googlecode.aluminumproject.serialisers.simple.SimpleSerialiser} will be registered under the name {@code simple}.
  * This behaviour can be changed by annotating a parser or serialiser with {@link Named &#64;Named}.
- *
- * @author levi_h
  */
 public class DefaultConfiguration implements Configuration {
 	private ConfigurationParameters parameters;

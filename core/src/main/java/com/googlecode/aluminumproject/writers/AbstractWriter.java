@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import com.googlecode.aluminumproject.utilities.Logger;
  * <p>
  * The {@link #close() close} method sets a {@code closed} flag. This flag is checked by the {@link #checkOpen()
  * checkOpen} method, which can be called from methods that depend on the writer not being closed.
- *
- * @author levi_h
  */
 public abstract class AbstractWriter implements Writer {
 	private boolean closed;

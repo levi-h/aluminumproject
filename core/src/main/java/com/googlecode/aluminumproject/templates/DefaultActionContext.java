@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,6 @@ import java.util.Map;
 /**
  * The {@link ActionContext action context} implementation that is used by the {@link DefaultActionElement default
  * action element}.
- *
- * @author levi_h
  */
 public class DefaultActionContext implements ActionContext {
 	private Configuration configuration;

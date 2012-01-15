@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import com.googlecode.aluminumproject.context.Context;
  * Normally, globalisation contexts will be made available by the {@link GlobalisationContextProvider globalisation
  * context provider}; in that case, the current globalisation context can be obtained using the {@link #from(Context)
  * designated method}.
- *
- * @author levi_h
  */
 public class GlobalisationContext {
 	private LocaleProvider localeProvider;

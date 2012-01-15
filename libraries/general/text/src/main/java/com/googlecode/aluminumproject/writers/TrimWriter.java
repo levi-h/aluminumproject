@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import com.googlecode.aluminumproject.AluminumException;
 /**
  * Trims text as it is written. It has a normal and a multiline mode. In the normal mode, the text that's written is
  * being trimmed in its entirety. In multiline mode, each line is being trimmed individually.
- *
- * @author levi_h
  */
 public class TrimWriter extends AbstractDecorativeWriter {
 	private TrimType type;
@@ -100,8 +98,6 @@ public class TrimWriter extends AbstractDecorativeWriter {
 
 	/**
 	 * A way to trim text.
-	 *
-	 * @author levi_h
 	 */
 	public static enum TrimType {
 		/** Don't remove whitespace. */

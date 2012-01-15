@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,6 @@ import java.util.SortedMap;
  * Parses lines that contain text and/or expressions. It executes {@link TextInstruction text} and {@link
  * ExpressionInstruction expression} instructions for each text or expression found and, with the default {@link
  * AluScriptSettings settings}, finishes by executing a {@link NewlineInstruction newline instruction}.
- *
- * @author levi_h
  */
 public class TextLineParser extends AbstractLineParser {
 	/**

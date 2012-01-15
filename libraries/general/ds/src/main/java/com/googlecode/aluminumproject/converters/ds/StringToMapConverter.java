@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,6 @@ import java.util.Map;
 
 /**
  * Converts strings to {@link Map maps}. The expected format is {@code [a: 1, b: 2]}.
- *
- * @author levi_h
  */
 public class StringToMapConverter implements Converter<String> {
 	private @Injected Configuration configuration;

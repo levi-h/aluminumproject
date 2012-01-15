@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,7 @@ import java.util.Set;
 
 /**
  * Simplifies implementing {@link ActionInterceptor the ActionInterceptor interface} by accepting the intercepted
- * phases .
- *
- * @author levi_h
+ * phases that subclasses pass to the constructor.
  */
 public abstract class AbstractActionInterceptor implements ActionInterceptor {
 	private Set<ActionPhase> phases;

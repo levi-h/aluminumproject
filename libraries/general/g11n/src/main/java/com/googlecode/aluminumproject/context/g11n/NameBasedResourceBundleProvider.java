@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import java.util.ResourceBundle;
  * ResourceBundle#getBundle(String, Locale) factory method} that accepts a base name and a {@link Locale locale}. The
  * base name that will be used needs to be supplied when creating a name-based resource bundle provider; the locale is
  * obtained by asking the current {@link LocaleProvider locale provider}.
- *
- * @author levi_h
  */
 public class NameBasedResourceBundleProvider implements ResourceBundleProvider {
 	private String baseName;

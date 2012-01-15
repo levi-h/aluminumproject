@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,6 @@ import java.util.regex.Pattern;
  * escaped. Another way to prevent tokens to be identified as separators is quoting them. To do so, create a splitter
  * with one or more {@link QuotationCharacters quotation characters} and surround the token text with the quotation
  * characters.
- *
- * @author levi_h
  */
 public class Splitter {
 	private List<Pattern> separatorPatterns;
@@ -248,8 +246,6 @@ public class Splitter {
 	/**
 	 * A pair of characters that can be used to prevent a {@link Splitter splitter} from seeing text as (part of) a
 	 * separator.
-	 *
-	 * @author levi_h
 	 */
 	public static class QuotationCharacters {
 		private final char openingCharacter;
@@ -274,8 +270,6 @@ public class Splitter {
 
 	/**
 	 * Will be notified of each token found by a {@link Splitter splitter}.
-	 *
-	 * @author levi_h
 	 */
 	public static interface TokenProcessor {
 		/**

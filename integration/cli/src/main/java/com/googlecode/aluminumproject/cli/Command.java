@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,8 +54,6 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * When a command is executed, its options are processed first. After that, the {@link #execute(PrintStream,
  * PrintStream, List) execute method} is invoked with the command-line arguments that do not belong to any option.
- *
- * @author levi_h
  */
 public abstract class Command {
 	private OptionParser optionParser;

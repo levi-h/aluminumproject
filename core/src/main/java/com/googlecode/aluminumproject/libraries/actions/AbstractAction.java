@@ -32,8 +32,6 @@ import java.util.List;
 
 /**
  * Reduces the effort it takes to implement {@link Action the Action interface} and offers some convenience methods.
- *
- * @author levi_h
  */
 public abstract class AbstractAction implements Action {
 	private @Ignored Action parent;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import com.googlecode.aluminumproject.serialisers.ElementNameTranslator;
 
 /**
  * The default element name translator. It replaces all spaces in a name with hyphens.
- *
- * @author levi_h
  */
 public class XmlElementNameTranslator implements ElementNameTranslator {
 	/**

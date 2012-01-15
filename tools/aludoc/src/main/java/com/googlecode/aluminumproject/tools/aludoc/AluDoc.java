@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,8 +52,6 @@ import java.util.Map;
  *     #excludeLibrary(String) excluded});
  * <li>{@code "location"}, the desired output location for the documentation.
  * </ul>
- *
- * @author levi_h
  */
 public class AluDoc {
 	private File location;

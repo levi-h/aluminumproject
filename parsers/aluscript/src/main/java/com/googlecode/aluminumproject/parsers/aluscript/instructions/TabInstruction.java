@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package com.googlecode.aluminumproject.parsers.aluscript.instructions;
 
 /**
  * Adds a text element that contains a tab character to the context. The name of the instruction is {@value #NAME}.
- *
- * @author levi_h
  */
 public class TabInstruction extends TextInstruction {
 	/**

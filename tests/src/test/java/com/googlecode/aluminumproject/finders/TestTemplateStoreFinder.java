@@ -21,8 +21,6 @@ import java.io.OutputStream;
 
 /**
  * A template store finder that can be used in tests.
- *
- * @author levi_h
  */
 public class TestTemplateStoreFinder implements TemplateStoreFinder {
 	private Configuration configuration;

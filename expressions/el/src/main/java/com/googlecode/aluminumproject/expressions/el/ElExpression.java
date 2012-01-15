@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import javax.el.ValueExpression;
 
 /**
  * An expression that delegates to an {@link ValueExpression EL value expression}.
- *
- * @author levi_h
  */
 public class ElExpression implements Expression {
 	private ValueExpression expression;

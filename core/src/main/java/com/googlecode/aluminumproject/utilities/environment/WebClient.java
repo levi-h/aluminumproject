@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * Provides a means to access web resources.
- *
- * @author levi_h
  */
 public interface WebClient {
 	/**

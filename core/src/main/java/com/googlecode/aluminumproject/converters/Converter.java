@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import java.lang.reflect.Type;
  * Converters should support neither {@code null} source objects nor primitive source or target types and are encouraged
  * to be case-insensitive when converting strings.
  *
- * @author levi_h
  * @param <S> the type of the source values
  */
 public interface Converter<S> {

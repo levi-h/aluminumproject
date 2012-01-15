@@ -22,8 +22,6 @@ import java.util.List;
 /**
  * A template. It consists of a tree of {@link TemplateElement template elements}. A template should be stateless; all
  * information regarding the processing of a template is kept in {@link TemplateInformation template information}.
- *
- * @author levi_h
  */
 public interface Template {
 	/**

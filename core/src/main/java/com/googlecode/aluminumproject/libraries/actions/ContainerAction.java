@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.googlecode.aluminumproject.libraries.actions;
 /**
  * An action that creates or finds an object and makes it available to its body.
  *
- * @author levi_h
  * @param <T> the type of the object that the action contains
  */
 public interface ContainerAction<T> extends Action {

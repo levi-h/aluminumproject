@@ -23,8 +23,6 @@ import java.util.Map;
 /**
  * A template store finder that finds {@link ByteArrayOutputStream in-memory output streams}. After templates have
  * been stored they can be {@link #get(String) retrieved} and {@link #remove(String) removed}.
- *
- * @author levi_h
  */
 public class InMemoryTemplateStoreFinder extends AbstractTemplateStoreFinder {
 	private Map<String, ByteArrayOutputStream> templates;

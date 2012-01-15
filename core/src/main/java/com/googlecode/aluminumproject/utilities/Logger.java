@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package com.googlecode.aluminumproject.utilities;
 
-import com.googlecode.aluminumproject.utilities.StringUtilities;
-
 import org.slf4j.LoggerFactory;
 
 /**
@@ -31,8 +29,6 @@ import org.slf4j.LoggerFactory;
  * <p>
  * The general usage of this class consists of obtaining a {@code Logger} with the {@link #get(Class) get method} and
  * invoking the logging methods as needed.
- *
- * @author levi_h
  */
 public class Logger {
 	private org.slf4j.Logger logger;

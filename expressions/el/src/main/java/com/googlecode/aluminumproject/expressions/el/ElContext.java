@@ -54,8 +54,6 @@ import javax.el.VariableMapper;
  * #EL_RESOLVER_WITHOUT_BASE_PACKAGES} or {@value #EL_RESOLVER_WITH_BASE_PACKAGES}: the EL resolvers that are
  * encountered in these comma-separated lists of packages and are not annotated with {@link Ignored &#64;Ignored} are
  * added at the head and tail of the resolver list, respectively.
- *
- * @author levi_h
  */
 public class ElContext extends ELContext {
 	private Context context;

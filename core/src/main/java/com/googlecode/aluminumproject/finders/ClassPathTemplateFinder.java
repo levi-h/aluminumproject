@@ -26,8 +26,6 @@ import java.io.InputStream;
  * By default, templates will be looked for in the root of the class path, but this template path can be configured
  * using the {@value #TEMPLATE_PATH} parameter. A template path is separated by slashes, but does not start with a
  * slash.
- *
- * @author levi_h
  */
 public class ClassPathTemplateFinder extends AbstractTemplateFinder {
 	private String templatePath;

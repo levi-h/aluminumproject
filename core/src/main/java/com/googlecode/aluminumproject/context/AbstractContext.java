@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +42,6 @@ import java.util.Set;
  * doesn't know which context class to instantiate. Subclasses that want to support subcontexts have to override this
  * method and delegate to a constructor that calls the {@link #AbstractContext(AbstractContext, Scope...) constructor
  * that accepts a parent}.
- *
- * @author levi_h
  */
 public abstract class AbstractContext implements Context {
 	private AbstractContext parent;

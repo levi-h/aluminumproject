@@ -20,8 +20,6 @@ import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
  * Makes it easier to implement the {@link TemplateStoreFinder template store finder interface}.
- *
- * @author levi_h
  */
 public abstract class AbstractTemplateStoreFinder implements TemplateStoreFinder {
 	/** The logger to use. */

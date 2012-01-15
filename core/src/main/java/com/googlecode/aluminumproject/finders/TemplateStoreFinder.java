@@ -23,8 +23,6 @@ import java.io.OutputStream;
 
 /**
  * Used by a {@link Serialiser serialiser} to find a location to store a template.
- *
- * @author levi_h
  */
 public interface TemplateStoreFinder extends ConfigurationElement {
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import java.lang.reflect.Type;
 /**
  * Converts {@link String strings} into {@link Type types} using a {@link GenericsUtilities#getType(String, String...)
  * utility method} (with {@code java.lang} and {@code java.util} as default packages).
- *
- * @author levi_h
  */
 public class StringToTypeConverter extends ClassBasedConverter<String, Type> {
 	/**

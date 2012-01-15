@@ -55,8 +55,6 @@ import java.util.Set;
  * com.googlecode.aluminumproject.configuration.DefaultConfiguration#CONFIGURATION_ELEMENT_PACKAGES} that contains one
  * or more package names. All non-abstract action interceptors in these packages that are not annotated with {@link
  * Ignored &#64;Ignored} will be created and used.
- *
- * @author levi_h
  */
 public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	private Configuration configuration;

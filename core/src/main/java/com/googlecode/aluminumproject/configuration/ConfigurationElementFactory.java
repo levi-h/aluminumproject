@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import com.googlecode.aluminumproject.AluminumException;
  * Creates configuration elements (except for the factory itself). Created configuration elements are encouraged to use
  * the configuration element factory when they need to instantiate classes as well. This allows users to customise new
  * objects from a central location.
- *
- * @author levi_h
  */
 public interface ConfigurationElementFactory extends ConfigurationElement {
 	/**

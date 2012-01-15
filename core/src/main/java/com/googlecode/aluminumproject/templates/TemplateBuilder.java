@@ -33,8 +33,6 @@ import java.util.Map;
  * <p>
  * When all template elements have been added to the template builder, a template can be {@link #build() built}. After
  * that, the template builder should no longer be used.
- *
- * @author levi_h
  */
 public class TemplateBuilder {
 	private TemplateElements templateElements;
@@ -96,8 +94,6 @@ public class TemplateBuilder {
 
 	/**
 	 * Contains the template elements that were added to the {@link TemplateBuilder template builder}.
-	 *
-	 * @author levi_h
 	 */
 	private static class TemplateElements {
 		private Map<TemplateElement, List<TemplateElement>> templateElements;
@@ -157,8 +153,6 @@ public class TemplateBuilder {
 
 	/**
 	 * The template that is built by the {@link TemplateBuilder template builder}.
-	 *
-	 * @author levi_h
 	 */
 	private static class BuiltTemplate implements Template {
 		private TemplateElements templateElements;

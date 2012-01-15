@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import java.io.Serializable;
 /**
  * A cache for {@link Template templates}. Templates are stored under a {@link Key key}: the combination of the name of
  * the template and the name of the parser that produced it.
- *
- * @author levi_h
  */
 public interface Cache extends ConfigurationElement {
 	/**
@@ -50,8 +48,6 @@ public interface Cache extends ConfigurationElement {
 
 	/**
 	 * The key that cached templates are stored under.
-	 *
-	 * @author levi_h
 	 */
 	public static class Key implements Serializable {
 		private String name;

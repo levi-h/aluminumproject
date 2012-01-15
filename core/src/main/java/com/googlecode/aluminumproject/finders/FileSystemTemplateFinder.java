@@ -28,8 +28,6 @@ import java.io.InputStream;
  * <p>
  * The directories that are expected to contain templates can be configured using the {@value #TEMPLATE_DIRECTORIES}
  * parameter. At least one directory should be provided.
- *
- * @author levi_h
  */
 public class FileSystemTemplateFinder extends AbstractTemplateFinder {
 	private String[] templateDirectories;

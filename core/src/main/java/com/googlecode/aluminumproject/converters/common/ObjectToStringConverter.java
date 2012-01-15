@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 
 /**
  * Converts {@link Object objects} to {@link String strings} by using the {@link Object#toString() toString method}.
- *
- * @author levi_h
  */
 public class ObjectToStringConverter extends ClassBasedConverter<Object, String> {
 	/**

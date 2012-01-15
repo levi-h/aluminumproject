@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,6 @@ import java.util.Set;
  * <p>
  * When a context supports it, it's possible to create one or more child contexts. The parent of such a child context
  * can be {@link #getParent() obtained} and will be used when {@link #findVariable(String) finding variables}.
- *
- * @author levi_h
  */
 public interface Context {
 	/**

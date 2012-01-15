@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,6 @@ import java.util.Properties;
 /**
  * A property set container that uses the file system to both read and write property sets. Each property set is stored
  * in a properties file that carries its name; the location of the property sets is {@code ~/.aluminum}.
- *
- * @author levi_h
  */
 public class FileSystemPropertySetContainer implements PropertySetContainer {
 	private File location;

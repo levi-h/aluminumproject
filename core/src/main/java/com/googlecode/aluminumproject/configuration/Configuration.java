@@ -42,8 +42,6 @@ import java.util.Map;
  * <p>
  * Trying to use a configuration or its configuration elements after it has been closed could result in strange
  * behaviour.
- *
- * @author levi_h
  */
 public interface Configuration {
 	/**

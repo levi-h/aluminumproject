@@ -38,8 +38,6 @@ import java.util.Map;
 
 /**
  * The default {@link ActionElement action element} implementation.
- *
- * @author levi_h
  */
 public class DefaultActionElement implements ActionElement {
 	private Configuration configuration;

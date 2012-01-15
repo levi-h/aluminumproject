@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import com.googlecode.aluminumproject.writers.Writer;
  * An {@link ActionInterceptor action interceptor} that will replace the {@link Writer writer} that will be used by the
  * {@link Action action} that it contributes to. If the new writer is not a decorative writer, then it will be closed
  * after it has been used.
- *
- * @author levi_h
  */
 public abstract class WriterReplacer extends AbstractActionInterceptor {
 	/**

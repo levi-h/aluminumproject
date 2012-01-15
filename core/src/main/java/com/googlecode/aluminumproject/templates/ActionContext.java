@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,6 @@ import java.util.Map;
  * ActionPhase#CREATION created}). For the same reason, not every part of the action context can be changed during every
  * phase (e.g. after the {@link ActionPhase#CONTRIBUTION contribution phase}, it does no longer make sense to {@link
  * #addActionContribution(ActionContributionDescriptor, ActionContributionFactory) add action contributions}).
- *
- * @author levi_h
  */
 public interface ActionContext {
 	/**

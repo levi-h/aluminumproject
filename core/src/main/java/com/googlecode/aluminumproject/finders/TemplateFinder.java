@@ -23,8 +23,6 @@ import java.io.InputStream;
 
 /**
  * Used by a {@link Parser parser} to find a template by name.
- *
- * @author levi_h
  */
 public interface TemplateFinder extends ConfigurationElement {
 	/**

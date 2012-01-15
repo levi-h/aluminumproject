@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import com.googlecode.aluminumproject.parsers.aluscript.AluScriptContext;
 
 /**
  * Parses a single line in an AluScript template.
- *
- * @author levi_h
  */
 public interface LineParser {
 	/**

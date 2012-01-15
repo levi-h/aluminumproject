@@ -20,8 +20,6 @@ import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
  * Abstract superclass that simplifies implementing the {@link TemplateFinder template finder interface}.
- *
- * @author levi_h
  */
 public abstract class AbstractTemplateFinder implements TemplateFinder {
 	/** The logger to use. */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 
 /**
  * A {@link ConfigurationElement configuration element} that's part of a {@link Library library}.
- *
- * @author levi_h
  */
 public interface LibraryElement extends ConfigurationElement {
 	/**

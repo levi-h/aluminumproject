@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import java.lang.reflect.Type;
  * Note that the type of the <em>value</em> attribute is {@code String}, since {@link Type types} are not permitted. Its
  * value will be converted to a type by {@link GenericsUtilities#getType(String, String...) the getType utility method}
  * (with {@code java.lang} and {@code java.util} as default packages).
- *
- * @author levi_h
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

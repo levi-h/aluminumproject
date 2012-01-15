@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,8 +57,6 @@ import java.util.Locale;
  * locale-based}; a custom one can be configured through the {@value #NUMBER_FORMAT_PROVIDER_CLASS}. The {@value
  * #NUMBER_FORMAT_CUSTOM_PATTERN} parameter controls custom pattern of the locale-based number format provider; without
  * any configuration, {@value #DEFAULT_NUMBER_FORMAT_CUSTOM_PATTERN} will be used.
- *
- * @author levi_h
  */
 public class GlobalisationContextProvider implements ContextEnricher {
 	private LocaleProvider localeProvider;

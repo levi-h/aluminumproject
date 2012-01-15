@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import java.util.Map;
  * A web client that can be used in tests. After it has been created (or {@link EnvironmentUtilities#getWebClient()
  * obtained}), a number of {@link Resource resources} can be added to it; created requests use this resource collection
  * to formulate a response.
- *
- * @author levi_h
  */
 public class TestWebClient implements WebClient {
 	private List<Resource> resources;
@@ -62,8 +60,6 @@ public class TestWebClient implements WebClient {
 
 	/**
 	 * A test request.
-	 *
-	 * @author levi_h
 	 */
 	public static class TestRequest implements Request {
 		private String method;
@@ -154,8 +150,6 @@ public class TestWebClient implements WebClient {
 
 	/**
 	 * A test response.
-	 *
-	 * @author levi_h
 	 */
 	public static class TestResponse implements Response {
 		private int statusCode;
@@ -211,8 +205,6 @@ public class TestWebClient implements WebClient {
 
 	/**
 	 * A resource.
-	 *
-	 * @author levi_h
 	 */
 	public static interface Resource {
 		/**

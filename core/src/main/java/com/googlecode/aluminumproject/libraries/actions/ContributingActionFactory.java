@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import java.util.Map;
 
 /**
  * Creates actions that, when executed, make an action contribution.
- *
- * @author levi_h
  */
 public class ContributingActionFactory extends AbstractLibraryElement implements ActionFactory {
 	private Class<? extends ActionContribution> actionContributionClass;

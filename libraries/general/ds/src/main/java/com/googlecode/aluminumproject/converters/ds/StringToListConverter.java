@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import java.util.List;
 
 /**
  * Converts strings to {@link List lists}. Lists are expected to have the following format: {@code [1, 2, 3]}.
- *
- * @author levi_h
  */
 public class StringToListConverter implements Converter<String> {
 	private @Injected Configuration configuration;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import com.googlecode.aluminumproject.AluminumException;
  * Convenience superclass for decorative writers. It implements the {@link #getWriter() getWriter} and {@link
  * #setWriter(Writer) setWriter} methods and overrides the {@link #flush() flush} and {@link #close() close} methods to
  * propagate these operations to the underlying writer.
- *
- * @author levi_h
  */
 public abstract class AbstractDecorativeWriter extends AbstractWriter implements DecorativeWriter {
 	private Writer writer;

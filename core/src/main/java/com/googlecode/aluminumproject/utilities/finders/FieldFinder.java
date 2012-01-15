@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,12 @@ import java.util.List;
 /**
  * Finds fields of a type, based on a filter. Fields can be found by creating a {@link FieldFilter filter} and passing
  * it together with a type in which should be looked for fields to {@link #find(FieldFilter, Class) the find method}.
- *
- * @author levi_h
  */
 public class FieldFinder {
 	private FieldFinder() {}
 
 	/**
 	 * The filter that is used by the {@link #find(FieldFilter, Class) find method}.
-	 *
-	 * @author levi_h
 	 */
 	public static interface FieldFilter {
 		/**

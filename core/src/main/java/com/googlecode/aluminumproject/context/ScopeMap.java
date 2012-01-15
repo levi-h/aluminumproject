@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.Set;
 
 /**
  * A {@link Map map} that contains variables in a certain {@link Scope scope}.
- *
- * @author levi_h
  */
 public class ScopeMap extends AbstractMap<String, Object> {
 	private Scope scope;

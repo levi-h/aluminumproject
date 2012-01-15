@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import java.util.Properties;
  * Contains various property sets. Each property set is identified by its name. Since property sets are
  * environment-specific, a properties container can be obtained using {@link
  * EnvironmentUtilities#getPropertySetContainer() a method in EnvironmentUtilities}.
- *
- * @author levi_h
  */
 public interface PropertySetContainer {
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import java.util.Set;
 /**
  * A transition between two {@link InstructionState states} of an {@link InstructionTokenProcessor
  * instruction token processor}.
- *
- * @author levi_h
  */
 abstract class InstructionStateTransition {
 	private Set<InstructionState> startStates;

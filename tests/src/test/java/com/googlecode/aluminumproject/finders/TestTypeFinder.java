@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * A type finder that can be used in tests.
- *
- * @author levi_h
  */
 public class TestTypeFinder implements TypeFinder {
 	private Configuration configuration;

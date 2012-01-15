@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import java.util.List;
 
 /**
  * An expression factory that will be ignored by the {@link DefaultConfiguration default configuration}.
- *
- * @author levi_h
  */
 @Ignored
 public class IgnoredExpressionFactory implements ExpressionFactory {

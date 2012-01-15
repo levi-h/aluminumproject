@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,6 @@ import java.util.TreeSet;
 
 /**
  * Contains a number of utility methods that can be used by parsers.
- *
- * @author levi_h
  */
 public class ParserUtilities {
 	private ParserUtilities() {}

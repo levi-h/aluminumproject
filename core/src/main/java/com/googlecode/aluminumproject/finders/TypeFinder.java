@@ -22,14 +22,10 @@ import java.util.List;
 
 /**
  * Finds types in the class path, based on a filter.
- *
- * @author levi_h
  */
 public interface TypeFinder extends ConfigurationElement {
 	/**
 	 * The filter used by the {@link #find(TypeFilter, String...) find method}.
-	 *
-	 * @author levi_h
 	 */
 	interface TypeFilter {
 		/**

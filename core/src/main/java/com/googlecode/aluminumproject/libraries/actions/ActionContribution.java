@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,6 @@ import com.googlecode.aluminumproject.writers.Writer;
  * </ul>
  * An action contribution is being created with a {@link ActionParameter parameter}. This parameter can be passed to the
  * action, but it can also be used to base logic on (e.g. whether or not the action should be executed).
- *
- * @author levi_h
  */
 public interface ActionContribution {
 	/**

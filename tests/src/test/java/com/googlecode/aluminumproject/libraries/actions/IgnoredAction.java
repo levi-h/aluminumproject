@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 /**
  * An action that will be ignored when adding all actions from a package.
- *
- * @author levi_h
  */
 @Ignored
 public class IgnoredAction extends AbstractAction {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import java.lang.reflect.Type;
  * Converts the name of an to {@link Enum enum} into an enum constant. All enum types are supported.
  * <p>
  * The conversion is case-insensitive. Using spaces instead of underscores is supported.
- *
- * @author levi_h
  */
 public class StringToEnumConverter implements Converter<String> {
 	/**
