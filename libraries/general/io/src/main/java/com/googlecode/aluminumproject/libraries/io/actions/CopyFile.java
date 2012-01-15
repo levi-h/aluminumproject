@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * Copies a file.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class CopyFile extends AbstractAction {
 	private @Required File source;
 	private @Named("to") @Required File targetDirectory;
-
-	/**
-	 * Creates a <em>copy file</em> action.
-	 */
-	public CopyFile() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		File target = new File(targetDirectory, source.getName());

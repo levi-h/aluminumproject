@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,9 @@ import com.googlecode.aluminumproject.utilities.Utilities;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * Provides various {@link Comparator comparators}.
- *
- * @author levi_h
- */
 @FunctionClass
+@SuppressWarnings("javadoc")
 public class Comparators {
-	/**
-	 * Returns a comparator that compares objects by their natural ordering.
-	 *
-	 * @return a natural order comparator
-	 */
 	public static Comparator<Object> naturalOrder() {
 		return new NaturalOrderComparator();
 	}
@@ -61,12 +52,6 @@ public class Comparators {
 		}
 	}
 
-	/**
-	 * Creates a comparator that compares two objects by the values of one of their properties.
-	 *
-	 * @param propertyName the name of the property to compare by
-	 * @return a property comparator for the property with the given name
-	 */
 	public static Comparator<Object> byProperty(@Named("propertyName") String propertyName) {
 		return new PropertyComparator(propertyName);
 	}
@@ -93,12 +78,6 @@ public class Comparators {
 		}
 	}
 
-	/**
-	 * Reverses a comparator.
-	 *
-	 * @param comparator the comparator to reverse
-	 * @return the reverse version of the given comparator
-	 */
 	public static Comparator<Object> reverse(@Named("comparator") Comparator<Object> comparator) {
 		return Collections.reverseOrder(comparator);
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,18 +37,9 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
 
-/**
- * Evaluates a script.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Script extends AbstractAction {
 	private @Required String type;
-
-	/**
-	 * Creates a script.
-	 */
-	public Script() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		ScriptEngineManager engineManager = new ScriptEngineManager();

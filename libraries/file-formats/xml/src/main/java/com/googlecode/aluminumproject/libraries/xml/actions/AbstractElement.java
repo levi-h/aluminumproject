@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,17 +34,8 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Text;
 
-/**
- * Abstract superclass of actions that produce an {@link com.googlecode.aluminumproject.libraries.xml.model.Element XML
- * element}.
- * <p>
- * Abstract element actions can be nested: elements are added to their parents; the root element is sent to the {@link
- * Writer writer}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 abstract class AbstractElement extends AbstractAction {
-	/** This action's action descriptor. */
 	protected @Injected ActionDescriptor descriptor;
 
 	private @Injected Configuration configuration;
@@ -56,9 +47,6 @@ abstract class AbstractElement extends AbstractAction {
 	private @Ignored List<Node> children;
 	private @Ignored boolean moreChildrenAllowed;
 
-	/**
-	 * Creates an abstract element action.
-	 */
 	protected AbstractElement() {
 		namespaces = new LinkedHashMap<String, String>();
 
@@ -68,39 +56,16 @@ abstract class AbstractElement extends AbstractAction {
 		moreChildrenAllowed = true;
 	}
 
-	/**
-	 * Returns the name of the element.
-	 *
-	 * @return the element name to use
-	 */
 	protected abstract String getElementName();
 
-	/**
-	 * Adds a child element to the element.
-	 *
-	 * @param child the element to add
-	 * @throws AluminumException when the child can't be added
-	 */
 	protected void addChild(Element child) throws AluminumException {
 		addChildNode(child);
 	}
 
-	/**
-	 * Adds a text element to the element.
-	 *
-	 * @param text the text to add
-	 * @throws AluminumException when the text can't be added
-	 */
 	protected void addText(String text) throws AluminumException {
 		addChildNode(new Text(text));
 	}
 
-	/**
-	 * Sets the text of this element. After setting an element's text, no other children may be added.
-	 *
-	 * @param text the text to set
-	 * @throws AluminumException when the text can't be set
-	 */
 	public void setText(String text) throws AluminumException {
 		addText(text);
 
@@ -115,13 +80,6 @@ abstract class AbstractElement extends AbstractAction {
 		children.add(child);
 	}
 
-	/**
-	 * Adds a namespace declaration to the element.
-	 *
-	 * @param prefix the prefix of the namespace to add
-	 * @param url the URL of the namespace to add
-	 * @throws AluminumException if the element already contains a namespace with the given prefix
-	 */
 	protected void addNamespace(String prefix, String url) throws AluminumException {
 		if (namespaces.containsKey(prefix)) {
 			throw new AluminumException("duplicate namespace prefix: '", prefix, "'");
@@ -130,14 +88,6 @@ abstract class AbstractElement extends AbstractAction {
 		namespaces.put(prefix, url);
 	}
 
-	/**
-	 * Finds a namespace URL given a prefix, looking through both the namespaces of this action and those of its
-	 * ancestors.
-	 *
-	 * @param prefix the prefix of namespace prefix
-	 * @return the URL of the namespace with the given prefix or {@code null} if neither this action nor its ancestors
-	 *         contain a namespace with such a prefix
-	 */
 	protected String findNamespaceUrl(String prefix) {
 		String namespaceUrl;
 
@@ -152,13 +102,6 @@ abstract class AbstractElement extends AbstractAction {
 		return namespaceUrl;
 	}
 
-	/**
-	 * Adds an attribute to the element.
-	 *
-	 * @param prefix the namespace prefix of the attribute (may be {@code null})
-	 * @param name the name of the attribute to add
-	 * @param value the value of the attribute to add
-	 */
 	protected void addAttribute(String prefix, String name, String value) {
 		if (!attributes.containsKey(prefix)) {
 			attributes.put(prefix, new LinkedHashMap<String, String>());

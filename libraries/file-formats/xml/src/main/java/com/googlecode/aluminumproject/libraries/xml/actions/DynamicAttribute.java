@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,19 +29,9 @@ import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Adds an attribute to an {@link DynamicElement element}. The library URL abbreviation will be used as namespace
- * prefix; the name of the action contribution will become the attribute name.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class DynamicAttribute implements ActionContribution {
 	private @Injected ActionContributionDescriptor descriptor;
-
-	/**
-	 * Creates a dynamic attribute action contribution.
-	 */
-	public DynamicAttribute() {}
 
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return (actionFactory instanceof DefaultActionFactory) &&

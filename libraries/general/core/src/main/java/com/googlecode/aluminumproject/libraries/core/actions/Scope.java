@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,9 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Adds a scope to the context, executes its body, and removes the scope from the context.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Scope extends AbstractAction {
 	private String name;
-
-	/**
-	 * Creates a <em>scope</em> action.
-	 */
-	public Scope() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		addScope(context);
@@ -63,6 +54,5 @@ public class Scope extends AbstractAction {
 		logger.debug("removed scope");
 	}
 
-	/** The name that will be used for the scope if none is given. */
 	public final static String DEFAULT_NAME = "block";
 }

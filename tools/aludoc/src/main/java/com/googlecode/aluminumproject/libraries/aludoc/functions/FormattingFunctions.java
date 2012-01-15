@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +20,11 @@ import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 
 import java.lang.reflect.Type;
 
-/**
- * Provides functions related to the formatting of output text.
- *
- * @author levi_h
- */
 @FunctionClass
+@SuppressWarnings("javadoc")
 public class FormattingFunctions {
 	private FormattingFunctions() {}
 
-	/**
-	 * Formats the type of an action parameter, action contribution, or function argument.
-	 *
-	 * @param type the type to format
-	 * @return the formatted version of the given type
-	 */
 	public static String formatType(Type type) {
 		return GenericsUtilities.getName(type, "java.lang", "java.util");
 	}

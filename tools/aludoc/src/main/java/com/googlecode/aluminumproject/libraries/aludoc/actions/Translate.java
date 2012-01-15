@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,20 +28,10 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-/**
- * Finds a translation for a message key by looking in both the library messages resource bundle and a common messages
- * resource bundle and writes it away.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Translate extends AbstractAction {
 	private @Required String key;
 	private @Required Library library;
-
-	/**
-	 * Creates a <em>translate</em> action.
-	 */
-	public Translate() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		Locale locale = GlobalisationContext.from(context).getLocaleProvider().provide(context);

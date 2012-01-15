@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,9 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.annotations.Required;
 
-/**
- * Produces an XML element, the name of which is given as a parameter. Attributes can be added by nesting {@link
- * Attribute attribute actions}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Element extends AbstractElement {
 	private @Required String name;
-
-	/**
-	 * Creates an <em>element</em> action.
-	 */
-	public Element() {}
 
 	@Override
 	protected String getElementName() {

@@ -24,18 +24,9 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.Type;
 
-/**
- * Creates a bean and sends it to the writer.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Create extends AbstractAction {
 	private @Required Type type;
-
-	/**
-	 * Creates an <em>create</em> action.
-	 */
-	public Create() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		if (type instanceof Class) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,20 +21,11 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Adds an attribute to an {@link AbstractElement element}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Attribute extends AbstractAction {
 	private String prefix;
 	private @Required String name;
 	private @Required String value;
-
-	/**
-	 * Creates an <em>attribute</em> action.
-	 */
-	public Attribute() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		AbstractElement element = findAncestorOfType(AbstractElement.class);

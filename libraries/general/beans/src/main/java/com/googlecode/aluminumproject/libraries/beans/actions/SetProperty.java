@@ -24,11 +24,7 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Sets a property on a bean. The value will be
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class SetProperty extends AbstractAction {
 	private @Required Object bean;
 	private @Required String name;
@@ -36,9 +32,6 @@ public class SetProperty extends AbstractAction {
 
 	private @Injected Configuration configuration;
 
-	/**
-	 * Creates a <em>set property</em> action.
-	 */
 	public SetProperty() {
 		value = NO_VALUE;
 	}

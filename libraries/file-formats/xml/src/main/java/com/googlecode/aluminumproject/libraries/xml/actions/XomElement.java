@@ -36,19 +36,10 @@ import nu.xom.XPathException;
 import nu.xom.xslt.XSLException;
 import nu.xom.xslt.XSLTransform;
 
-/**
- * An element that wraps a XOM element.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 class XomElement implements Element {
 	private nu.xom.Element element;
 
-	/**
-	 * Creates a XOM element.
-	 *
-	 * @param element the wrapped element
-	 */
 	public XomElement(nu.xom.Element element) {
 		this.element = (element.getDocument() == null) ? new Document(element).getRootElement() : element;
 	}

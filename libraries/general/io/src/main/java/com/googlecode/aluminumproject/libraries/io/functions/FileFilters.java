@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,20 +21,11 @@ import com.googlecode.aluminumproject.annotations.Named;
 import java.io.File;
 import java.io.FileFilter;
 
-/**
- * Contains functions that create {@link FileFilter file filters}.
- *
- * @author levi_h
- */
 @FunctionClass
+@SuppressWarnings("javadoc")
 public class FileFilters {
 	private FileFilters() {}
 
-	/**
-	 * Creates a filter that selects normal files.
-	 *
-	 * @return the new file filter
-	 */
 	public static FileFilter files() {
 		return new FileFilter() {
 			public boolean accept(File file) {
@@ -43,11 +34,6 @@ public class FileFilters {
 		};
 	}
 
-	/**
-	 * Creates a filter that selects directories.
-	 *
-	 * @return the new file filter
-	 */
 	public static FileFilter directories() {
 		return new FileFilter() {
 			public boolean accept(File file) {
@@ -56,12 +42,6 @@ public class FileFilters {
 		};
 	}
 
-	/**
-	 * Creates a filter that selects files that have names that match a certain pattern (a regular expression).
-	 *
-	 * @param pattern the regular expression that the files' names should match
-	 * @return the new file filter
-	 */
 	public static FileFilter filesNamedLike(final @Named("pattern") String pattern) {
 		return new FileFilter() {
 			public boolean accept(File file) {
@@ -70,12 +50,6 @@ public class FileFilters {
 		};
 	}
 
-	/**
-	 * Creates a filter that selects files with a certain extension.
-	 *
-	 * @param extension the extension that the files should have
-	 * @return the new file filter
-	 */
 	public static FileFilter filesWithExtension(final @Named("extension") String extension) {
 		return new FileFilter() {
 			public boolean accept(File file) {

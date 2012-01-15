@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,31 +23,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-/**
- * Contains functions that provide information about files.
- *
- * @author levi_h
- */
 @FunctionClass
+@SuppressWarnings("javadoc")
 public class Files {
 	private Files() {}
 
-	/**
-	 * Returns the name of a file. This method delegates to the file's {@link File#getName() getName method}.
-	 *
-	 * @param file the file to determine the name of
-	 * @return the name of the file
-	 */
 	public static String name(@Named("file") File file) {
 		return file.getName();
 	}
 
-	/**
-	 * Returns the extension of a file. If the file does not have an extension, the empty string is returned.
-	 *
-	 * @param file the file to determine the extension of
-	 * @return the given file's extension (may be empty, but never {@code null})
-	 */
 	public static String extension(@Named("file") File file) {
 		String extension;
 
@@ -64,12 +48,6 @@ public class Files {
 		return extension;
 	}
 
-	/**
-	 * Returns the name of a file without its extension.
-	 *
-	 * @param file the file to determine the extensionless name of
-	 * @return the name of the given file, without its extension
-	 */
 	public static String nameWithoutExtension(@Named("file") File file) {
 		String nameWithoutExtension;
 
@@ -86,23 +64,10 @@ public class Files {
 		return nameWithoutExtension;
 	}
 
-	/**
-	 * Determines the size of a file in bytes.
-	 *
-	 * @param file the file to determine the size of
-	 * @return the size of the given file
-	 */
 	public static long size(@Named("file") File file) {
 		return file.length();
 	}
 
-	/**
-	 * Reads the contents of a file.
-	 *
-	 * @param file the file to read
-	 * @return the contents of the file
-	 * @throws IOException when the contents of the file can't be determined
-	 */
 	public static byte[] contents(@Named("file") File file) throws IOException {
 		FileInputStream in = new FileInputStream(file);
 		ByteArrayOutputStream out = new ByteArrayOutputStream((int) file.length());
@@ -121,36 +86,14 @@ public class Files {
 		return out.toByteArray();
 	}
 
-	/**
-	 * Determines whether a file is a normal file.
-	 *
-	 * @param file the file to check
-	 * @return {@code true} if the given file is a normal file, {@code false} if it isn't (e.g. when it's a directory)
-	 */
 	public static boolean isFile(@Named("file") File file) {
 		return file.isFile();
 	}
 
-	/**
-	 * Determines whether a file is a directory.
-	 *
-	 * @param file the file to check
-	 * @return {@code true} if the given file is a directory, {@code false} if it isn't
-	 */
 	public static boolean isDirectory(@Named("file") File file) {
 		return file.isDirectory();
 	}
 
-	/**
-	 * Creates a file and returns it. All of the directories that lead to the parent directory of the file are created
-	 * when they don't exist.
-	 *
-	 * @param directory the directory in which to create the file
-	 * @param name the name of the new file
-	 * @return the new file
-	 * @throws IllegalArgumentException when a file with the given name already exists in the specified directory
-	 * @throws IOException when the file can't be created
-	 */
 	public static File newFile(@Named("directory") File directory, @Named("name") String name)
 			throws IllegalArgumentException, IOException {
 		File file = new File(directory, name);

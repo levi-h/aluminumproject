@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +21,12 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.IOException;
 
-/**
- * Adapts a {@link Writer writer} so that it can be used inside a script.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 class ScriptWriter extends java.io.Writer {
 	private Writer writer;
 
 	private final Logger logger;
 
-	/**
-	 * Creates a script writer.
-	 *
-	 * @param writer the underlying writer
-	 */
 	public ScriptWriter(Writer writer) {
 		this.writer = writer;
 

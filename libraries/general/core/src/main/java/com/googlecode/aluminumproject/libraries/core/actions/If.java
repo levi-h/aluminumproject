@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,10 @@ import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Executes an action if the value of its parameter is {@code true}. The contribution can be made to any action.
- *
- * @author levi_h
- * @see Unless
- */
+@SuppressWarnings("javadoc")
 @Typed("boolean")
 @UsableAsAction(parameterName = "condition")
 public class If implements ActionContribution {
-	/**
-	 * Creates an <em>if</em> action contribution.
-	 */
-	public If() {}
-
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return true;
 	}

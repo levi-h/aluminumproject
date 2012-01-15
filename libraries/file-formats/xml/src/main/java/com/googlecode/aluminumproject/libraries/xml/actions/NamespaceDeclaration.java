@@ -30,19 +30,10 @@ import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Adds a namespace declaration to an {@link AbstractElement element}.
- *
- * @author levi_h
- */
 @Named("namespace")
+@SuppressWarnings("javadoc")
 public class NamespaceDeclaration implements ActionContribution {
 	private @Injected ActionContributionDescriptor descriptor;
-
-	/**
-	 * Creates a namespace declaration action contribution.
-	 */
-	public NamespaceDeclaration() {}
 
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return (actionFactory instanceof DefaultActionFactory) &&

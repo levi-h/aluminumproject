@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +24,10 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.File;
 
-/**
- * Moves a file to another directory.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class MoveFile extends AbstractAction {
 	private @Required File source;
 	private @Named("to") @Required File targetDirectory;
-
-	/**
-	 * Creates a <em>move file</em> action.
-	 */
-	public MoveFile() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		File target = new File(targetDirectory, source.getName());

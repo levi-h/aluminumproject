@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,21 +23,10 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.File;
 
-/**
- * Renames a file.
- * <p>
- * Note that the <em>rename file</em> action does not support moving files; the {@link MoveFile move file} action does.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class RenameFile extends AbstractAction {
 	private @Required File source;
 	private @Required String targetName;
-
-	/**
-	 * Creates a <em>rename file</em> action.
-	 */
-	public RenameFile() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		File target = new File(source.getParentFile(), targetName);

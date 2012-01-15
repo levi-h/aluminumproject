@@ -17,16 +17,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.libraries.xml.model.SelectionContext;
 
-/**
- * Contains a {@link SelectionContext selection context}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public interface SelectionContextContainer {
-	/**
-	 * Returns the selection context of this selection context container.
-	 *
-	 * @return this selection context container's selection context
-	 */
 	SelectionContext getSelectionContext();
 }

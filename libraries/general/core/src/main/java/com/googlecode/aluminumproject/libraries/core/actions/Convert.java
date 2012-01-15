@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,21 +25,12 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.Type;
 
-/**
- * Converts a value and writes it away.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Convert extends AbstractAction {
 	private @Required Object value;
 	private @Required Type type;
 
 	private @Injected Configuration configuration;
-
-	/**
-	 * Creates a <em>convert</em> action.
-	 */
-	public Convert() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		logger.debug("trying to convert ", value, " into ", type);

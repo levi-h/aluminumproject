@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.text.NumberFormat;
 
-/**
- * Formats a number in a certain {@link NumberFormatType way} and writes the result away.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class FormatNumber extends AbstractAction {
 	private @Required Number value;
 
@@ -41,9 +37,6 @@ public class FormatNumber extends AbstractAction {
 	private Integer minimumFractionDigits;
 	private Integer maximumFractionDigits;
 
-	/**
-	 * Creates a <em>format number</em> action.
-	 */
 	public FormatNumber() {
 		type = NumberFormatType.CUSTOM;
 	}

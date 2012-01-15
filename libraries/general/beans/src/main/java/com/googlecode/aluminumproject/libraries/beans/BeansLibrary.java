@@ -20,17 +20,10 @@ import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Allows template authors to work with JavaBeans&trade;.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class BeansLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates a beans library.
-	 */
 	public BeansLibrary() {
 		super(ReflectionUtilities.getPackageName(BeansLibrary.class));
 
@@ -41,6 +34,5 @@ public class BeansLibrary extends AbstractLibrary {
 		return information;
 	}
 
-	/** The URL of the beans library: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/beans";
 }

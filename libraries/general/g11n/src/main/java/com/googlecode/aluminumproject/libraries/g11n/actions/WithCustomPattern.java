@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,19 +42,9 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
-/**
- * Changes the custom pattern of the {@link GlobalisationContext globalisation context} in which {@link FormatDate
- * format date} or {@link FormatNumber format number} actions execute.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 @Typed("String")
 public class WithCustomPattern implements ActionContribution {
-	/**
-	 * Creates a <em>with custom pattern</em> action contribution.
-	 */
-	public WithCustomPattern() {}
-
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		boolean canBeMade;
 

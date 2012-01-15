@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +21,10 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * Removes a variable from the context.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class RemoveVariable extends AbstractAction {
 	private String scope;
 	private @Required String name;
-
-	/**
-	 * Creates a <em>remove variable</em> action.
-	 */
-	public RemoveVariable() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		if (scope == null) {

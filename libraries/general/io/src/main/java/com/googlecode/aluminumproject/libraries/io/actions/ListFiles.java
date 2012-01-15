@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,23 +25,12 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Arrays;
-import java.util.List;
 
-/**
- * Lists files and directories in a certain location, optionally matching a particular filter. The results will be
- * written (as a {@link List list}) to the action's writer.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class ListFiles extends AbstractAction {
 	private @Named("in") @Required File location;
 
 	private FileFilter filter;
-
-	/**
-	 * Creates a <em>list files</em> action.
-	 */
-	public ListFiles() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		File[] files = location.listFiles(filter);

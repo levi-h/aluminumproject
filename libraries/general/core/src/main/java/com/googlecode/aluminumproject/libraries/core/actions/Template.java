@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,11 @@ package com.googlecode.aluminumproject.libraries.core.actions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
-import com.googlecode.aluminumproject.libraries.core.actions.Includes.IncludeLocal;
 import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * An action that serves as a container for other actions.
- * <p>
- * Normally, the template action does nothing more than invoking its body. The processing of the template can be
- * deferred, however, by using the <em>name</em> parameter. In that case, the body is stored in a context variable and
- * can be invoked later through the {@link IncludeLocal include local} action.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Template extends AbstractAction {
 	private String name;
-
-	/**
-	 * Creates a template action.
-	 */
-	public Template() {}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		if (name == null) {

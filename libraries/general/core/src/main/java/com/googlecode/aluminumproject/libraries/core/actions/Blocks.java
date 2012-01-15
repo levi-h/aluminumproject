@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,37 +20,18 @@ import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
-import com.googlecode.aluminumproject.libraries.core.actions.Includes.Include;
-import com.googlecode.aluminumproject.libraries.core.actions.Includes.IncludeLocal;
 import com.googlecode.aluminumproject.utilities.Utilities;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Contains two actions that are useful to pass parts of a template to other templates.
- *
- * @author levi_h
- * @see Include
- * @see IncludeLocal
- */
+@SuppressWarnings("javadoc")
 public class Blocks {
 	private Blocks() {}
 
-	/**
-	 * Stores its body (a block), so that it can be used later (by the {@link BlockContents block contents} action).
-	 * Blocks are {@link Context context}-specific and need to have a unique name within a context.
-	 *
-	 * @author levi_h
-	 */
 	public static class Block extends AbstractAction {
 		private @Required String name;
-
-		/**
-		 * Creates a <em>block</em> action.
-		 */
-		public Block() {}
 
 		public void execute(Context context, Writer writer) throws AluminumException {
 			Map<String, ActionBody> blocks = getBlocks(context, true);
@@ -65,19 +46,8 @@ public class Blocks {
 		}
 	}
 
-	/**
-	 * Invokes a named {@link ActionBody body} that was stored by a {@link Block block action}. If no block can be found
-	 * with the given name, then the body of the action itself will be invoked.
-	 *
-	 * @author levi_h
-	 */
 	public static class BlockContents extends AbstractAction {
 		private @Required String name;
-
-		/**
-		 * Creates a <em>block contents</em> action.
-		 */
-		public BlockContents() {}
 
 		public void execute(Context context, Writer writer) throws AluminumException {
 			ActionBody block = findBlock(context, name);

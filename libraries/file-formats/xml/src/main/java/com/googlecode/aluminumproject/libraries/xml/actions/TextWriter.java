@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,13 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
 import com.googlecode.aluminumproject.writers.AbstractWriter;
-import com.googlecode.aluminumproject.writers.Writer;
 
-/**
- * A {@link Writer writer} that adds text nodes to {@link AbstractElement elements}. When a non-{@link String string} is
- * written, it will be converted first.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 class TextWriter extends AbstractWriter {
 	private AbstractElement element;
 
 	private ConverterRegistry converterRegistry;
 
-	/**
-	 * Creates a text writer.
-	 *
-	 * @param element the element to add the text nodes to
-	 * @param converterRegistry the converter registry to use when something other than text is being written
-	 */
 	public TextWriter(AbstractElement element, ConverterRegistry converterRegistry) {
 		this.element = element;
 

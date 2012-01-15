@@ -25,35 +25,13 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.List;
 
-/**
- * Executes an <a href="http://www.w3.org/TR/xpath/">XPath</a> query and writes the results. The following node types
- * may be selected:
- * <ul>
- * <li>{@link com.googlecode.aluminumproject.libraries.xml.model.Element Elements};
- * <li>Namespaces;
- * <li>Attributes;
- * <li>Text;
- * <li>Comments.
- * </ul>
- * Except for elements, all results will have type {@link String string}.
- * <p>
- * When a query leads to a single result, only that result will be written. In any other case, the result will be
- * written as a {@link List list}.
- * <p>
- * XPath expressions may be given a context by using the context parameter or by nesting {@link Namespace namespace
- * actions}.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class Select extends AbstractAction implements SelectionContextContainer {
 	private @Required com.googlecode.aluminumproject.libraries.xml.model.Element element;
 
 	private @Required String expression;
 	private SelectionContext context;
 
-	/**
-	 * Creates a <em>select</em> action.
-	 */
 	public Select() {
 		context = new SelectionContext();
 	}

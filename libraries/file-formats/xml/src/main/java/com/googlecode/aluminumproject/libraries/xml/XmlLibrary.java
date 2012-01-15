@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,10 @@ import com.googlecode.aluminumproject.libraries.xml.actions.DynamicElement;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Provides actions that work with XML documents. Internally, the <a href="http://www.xom.nu/">XOM</a> library is used,
- * though users of the XML library shouldn't have to be aware of that; they can work with the types in the {@code model}
- * package.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class XmlLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates an XML library.
-	 */
 	public XmlLibrary() {
 		super(ReflectionUtilities.getPackageName(XmlLibrary.class));
 
@@ -65,6 +56,5 @@ public class XmlLibrary extends AbstractLibrary {
 		return actionContributionFactory;
 	}
 
-	/** The URL of the XML library: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/xml";
 }

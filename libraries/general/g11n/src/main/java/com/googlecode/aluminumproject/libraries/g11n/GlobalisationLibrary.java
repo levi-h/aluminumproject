@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,10 @@ import com.googlecode.aluminumproject.libraries.g11n.actions.LocalisedParameter;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 
-/**
- * Helps with creating templates that support multiple languages and cultures.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class GlobalisationLibrary extends AbstractLibrary {
 	private LibraryInformation information;
 
-	/**
-	 * Creates a globalisation library.
-	 */
 	public GlobalisationLibrary() {
 		super(ReflectionUtilities.getPackageName(GlobalisationLibrary.class));
 
@@ -53,6 +46,5 @@ public class GlobalisationLibrary extends AbstractLibrary {
 		return actionContributionFactory;
 	}
 
-	/** The globalisation library URL: {@value}. */
 	public final static String URL = "http://aluminumproject.googlecode.com/g11n";
 }

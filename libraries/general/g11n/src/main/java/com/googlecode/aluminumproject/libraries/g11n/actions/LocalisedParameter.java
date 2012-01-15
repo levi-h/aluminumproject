@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
-/**
- * An action contribution that can be used instead of a normal parameter; the parameter's value will be the localised
- * resource that's found when using the key that's given to the action contribution.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class LocalisedParameter implements ActionContribution {
 	private @Injected ActionContributionDescriptor descriptor;
 
@@ -46,9 +41,6 @@ public class LocalisedParameter implements ActionContribution {
 
 	private final Logger logger;
 
-	/**
-	 * Creates a <em>localised parameter</em> action contribution.
-	 */
 	public LocalisedParameter() {
 		logger = Logger.get(getClass());
 	}
@@ -73,12 +65,6 @@ public class LocalisedParameter implements ActionContribution {
 
 		private ConverterRegistry converterRegistry;
 
-		/**
-		 * Creates a localised action parameter.
-		 *
-		 * @param key the key of the localised resource
-		 * @param converterRegistry the converter registry to use
-		 */
 		public LocalisedActionParameter(String key, ConverterRegistry converterRegistry) {
 			this.key = key;
 

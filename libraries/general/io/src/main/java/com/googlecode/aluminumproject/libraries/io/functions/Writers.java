@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,31 +22,15 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 import java.io.File;
 
-/**
- * Provides I/O related writers.
- *
- * @author levi_h
- */
 @FunctionClass
+@SuppressWarnings("javadoc")
 public class Writers {
 	private Writers() {}
 
-	/**
-	 * Creates a {@link FileWriter file writer} that will overwrite the contents of its target file.
-	 *
-	 * @param target the file to write to
-	 * @return the new file writer
-	 */
 	public static Writer fileWriter(@Named("target") File target) {
 		return new FileWriter(target, false);
 	}
 
-	/**
-	 * Creates a {@link FileWriter file writer} that will append to the contents of its target file.
-	 *
-	 * @param target the file to write to
-	 * @return the new file writer
-	 */
 	public static Writer appendingFileWriter(@Named("target") File target) {
 		return new FileWriter(target, true);
 	}

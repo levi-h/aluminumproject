@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,18 +25,10 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Creates an XML element that has a name that's equal to its action name. It supports dynamic parameters: for each
- * parameter, an attribute is added to the element.
- *
- * @author levi_h
- */
+@SuppressWarnings("javadoc")
 public class DynamicElement extends AbstractElement implements DynamicallyParameterisable {
 	private @Ignored Map<String, ActionParameter> parameters;
 
-	/**
-	 * Creates a dynamic element.
-	 */
 	public DynamicElement() {
 		parameters = new LinkedHashMap<String, ActionParameter>();
 	}
