@@ -135,7 +135,7 @@ task createDistribution(type: Zip, dependsOn: createDocs) {
 }
 
 task clean(type: Delete) {
-	delete = rootProject.buildDir
+	delete rootProject.buildDir
 }
 
 task createWrapper(type: Wrapper)
