@@ -53,8 +53,6 @@ import java.util.Set;
  * find the most specific one. This means that when a converter for a string is requested and the registry contains
  * converters for both strings and objects, the converter that converts strings will be returned, even though both would
  * be able to convert values of the requested type.
- *
- * @author levi_h
  */
 public class DefaultConverterRegistry implements ConverterRegistry {
 	private Configuration configuration;

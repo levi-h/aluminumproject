@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElement;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+
 import java.util.Iterator;
 
 /**
  * Contains utility methods that help when working with {@link Configuration configurations} and {@link
  * ConfigurationElement configuration elements}.
- *
- * @author levi_h
  */
 public class ConfigurationUtilities {
 	private ConfigurationUtilities() {}

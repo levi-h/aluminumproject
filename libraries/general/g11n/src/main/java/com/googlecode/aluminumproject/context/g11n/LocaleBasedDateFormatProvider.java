@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import java.util.TimeZone;
 /**
  * A date format provider that provides date formats that are based on the current {@link Locale locale}. All date
  * formats have GMT timezones.
- *
- * @author levi_h
  */
 public class LocaleBasedDateFormatProvider implements DateFormatProvider {
 	private String customPattern;

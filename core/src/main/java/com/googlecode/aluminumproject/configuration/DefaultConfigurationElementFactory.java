@@ -40,8 +40,6 @@ import java.util.Set;
  * com.googlecode.aluminumproject.configuration.DefaultConfiguration#CONFIGURATION_ELEMENT_PACKAGES} parameter is
  * supplied, all customisers in the given packages that are not annotated with {@link Ignored &#64;Ignored} will be
  * applied to a new object after it's been created.
- *
- * @author levi_h
  */
 public class DefaultConfigurationElementFactory implements ConfigurationElementFactory {
 	private List<ConfigurationElementCustomiser> customisers;

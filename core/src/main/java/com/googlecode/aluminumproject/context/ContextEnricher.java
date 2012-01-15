@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.googlecode.aluminumproject.configuration.ConfigurationElement;
  * <p>
  * An example of where a context enricher might be useful is when a library would like to ensure that the context
  * contains a certain implicit object, so that all of its actions and functions can use it.
- *
- * @author levi_h
  */
 public interface ContextEnricher extends ConfigurationElement {
 	/**

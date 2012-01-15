@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.List;
 /**
  * An instruction as built by an {@link InstructionTokenProcessor instruction token processor}. It contains a (possibly
  * prefixed) name and a set of parameters, one of which can be under edit.
- *
- * @author levi_h
  */
 class Instruction {
 	private String namePrefix;

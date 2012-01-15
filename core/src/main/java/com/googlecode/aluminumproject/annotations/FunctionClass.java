@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import java.lang.annotation.Target;
 /**
  * Indicates that the static methods of a class can be used as {@link Function functions}. Function classes will be
  * found by {@link AbstractLibrary abstract libraries}.
- *
- * @author levi_h
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

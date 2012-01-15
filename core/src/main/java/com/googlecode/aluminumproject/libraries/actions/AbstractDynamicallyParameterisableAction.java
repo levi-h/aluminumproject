@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import java.util.Map;
 /**
  * An {@link AbstractAction abstract action} that allows dynamic parameters, which it stores and {@link
  * #getDynamicParameters() offers} to its subclasses.
- *
- * @author levi_h
  */
 public abstract class AbstractDynamicallyParameterisableAction
 		extends AbstractAction implements DynamicallyParameterisable {

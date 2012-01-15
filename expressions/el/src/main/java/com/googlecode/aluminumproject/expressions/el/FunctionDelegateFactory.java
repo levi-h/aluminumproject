@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,8 +59,6 @@ import javassist.LoaderClassPath;
  * is created. These classes contain a method per {@link FunctionFactory function factory}. When the method is invoked,
  * the parameters are converted into {@link FunctionArgument function arguments} and used to create a function. Finally,
  * the function is called with the current {@link Context context}.
- *
- * @author levi_h
  */
 public class FunctionDelegateFactory {
 	private FunctionDelegateFactory() {}

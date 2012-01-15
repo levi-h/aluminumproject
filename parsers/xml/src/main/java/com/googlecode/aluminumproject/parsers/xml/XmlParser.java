@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,6 @@ import org.xml.sax.XMLReader;
  * translator} to be configured (using the {@value #TEMPLATE_NAME_TRANSLATOR_CLASS} configuration property). If no
  * template name translator is configured, the {@link XmlTemplateNameTranslator default template name translator} will
  * be used.
- *
- * @author levi_h
  */
 public class XmlParser implements Parser {
 	private Configuration configuration;

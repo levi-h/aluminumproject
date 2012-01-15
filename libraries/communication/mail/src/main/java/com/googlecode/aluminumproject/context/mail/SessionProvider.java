@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import javax.mail.Session;
 
 /**
  * Provides a {@link Session mail session}.
- *
- * @author levi_h
  */
 public interface SessionProvider {
 	/**

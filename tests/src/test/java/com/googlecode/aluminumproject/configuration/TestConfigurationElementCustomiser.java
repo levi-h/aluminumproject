@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.lang.reflect.Method;
 /**
  * A configuration element customiser that can be used in tests. It checks whether objects have a public {@code
  * customise()} method and, if they have, invokes it.
- *
- * @author levi_h
  */
 public class TestConfigurationElementCustomiser implements ConfigurationElementCustomiser {
 	private Configuration configuration;

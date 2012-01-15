@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import java.lang.reflect.Type;
  * An action parameter with a value that is based on the evaluation of an expression.
  * <p>
  * Conversion of the value will be delegated to a {@link ConverterRegistry converter registry}.
- *
- * @author levi_h
  */
 public class ExpressionActionParameter implements ActionParameter {
 	private ExpressionFactory expressionFactory;

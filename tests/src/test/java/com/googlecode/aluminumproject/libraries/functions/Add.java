@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import java.util.List;
 /**
  * A dynamic function that parses its name (which should have the form {@code addNandN[andN...]}, where <em>N</em> is a
  * number) and adds the terms that were found.
- *
- * @author levi_h
  */
 public class Add implements Function {
 	private int[] terms;
@@ -47,8 +45,6 @@ public class Add implements Function {
 
 	/**
 	 * Creates {@link Add add} functions.
-	 *
-	 * @author levi_h
 	 */
 	public static class Factory extends AbstractLibraryElement implements FunctionFactory {
 		private String name;

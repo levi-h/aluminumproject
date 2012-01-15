@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import com.googlecode.aluminumproject.AluminumException;
  * <p>
  * The methods of configuration elements are not meant to be called by objects other than the configurations that
  * contain them.
- *
- * @author levi_h
  */
 public interface ConfigurationElement {
 	/**

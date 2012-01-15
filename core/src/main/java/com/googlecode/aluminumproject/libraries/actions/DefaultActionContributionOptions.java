@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,6 @@ import java.util.Map;
 /**
  * A default {@link ActionContributionOptions action contributions options} implementation that keeps track of all
  * chosen options, so that they can be applied to an {@link ActionContext action context}.
- *
- * @author levi_h
  */
 public class DefaultActionContributionOptions implements ActionContributionOptions {
 	private Map<String, ActionParameter> parameters;

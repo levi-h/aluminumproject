@@ -60,8 +60,6 @@ import joptsimple.OptionSpec;
  * that looks for templates in the current directory and the <em>templates</em> directory inside the directory in which
  * Aluminum was installed. Other configuration parameters may be specified in a properties file named {@code
  * alu.properties}, located in {@code ~/.aluminum}, where {@code ~} stands for the user's home directory.
- *
- * @author levi_h
  */
 public class Alu extends Command {
 	private String parser;

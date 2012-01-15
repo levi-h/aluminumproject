@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012k Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.googlecode.aluminumproject.writers.Writer;
  * #getContainerObject() making it available}, and giving child actions the opportunity to use it. The actual {@link
  * #provideContainerObject(Context) provision} of the container objects is taken care of by subclasses.
  *
- * @author levi_h
  * @param <T> the type of the container object
  */
 public abstract class AbstractContainerAction<T> extends AbstractAction implements ContainerAction<T> {

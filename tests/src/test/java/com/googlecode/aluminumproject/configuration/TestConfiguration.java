@@ -37,8 +37,6 @@ import java.util.Map;
 /**
  * A configuration that can be used in tests. Its main purpose is to initialise configuration elements that are tested
  * in isolation with.
- *
- * @author levi_h
  */
 public class TestConfiguration implements Configuration {
 	private ConfigurationParameters parameters;

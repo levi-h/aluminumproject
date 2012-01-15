@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,6 @@ import javax.el.ValueExpression;
  * {@link ExpressionFactory Expression factories} may be constructed with a number of implementation-specific
  * properties. The properties to supply can be configured by providing a parameter named {@value
  * #EXPRESSION_FACTORY_PROPERTIES}; by default, the expression factory is created without any parameters.
- *
- * @author levi_h
  */
 public class ElExpressionFactory implements ExpressionFactory {
 	private Configuration configuration;

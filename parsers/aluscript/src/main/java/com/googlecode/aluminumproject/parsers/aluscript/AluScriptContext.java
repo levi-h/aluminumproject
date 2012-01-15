@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,6 @@ import java.util.Map;
  * <p>
  * The library URL abbreviations are specific to a nesting level. The nesting level is controlled by the parser,
  * although it is incremented when an {@link ActionElement action element} is added.
- *
- * @author levi_h
  */
 public class AluScriptContext {
 	private Configuration configuration;

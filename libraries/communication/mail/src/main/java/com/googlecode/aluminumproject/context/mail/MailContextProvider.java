@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,6 @@ import com.googlecode.aluminumproject.utilities.Logger;
  * parameter. If it is available, a new instance of that class will be used as session provider. If it isn't, the
  * provider will default to a {@link PropertySetBasedSessionProvider property set-based session provider} if the name of
  * the property set is configured (using configuration property {@value #SESSION_PROPERTY_SET_NAME}).
- *
- * @author levi_h
  */
 public class MailContextProvider implements ContextEnricher {
 	private SessionProvider sessionProvider;

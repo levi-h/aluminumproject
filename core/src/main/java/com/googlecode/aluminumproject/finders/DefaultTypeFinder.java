@@ -33,8 +33,6 @@ import java.util.jar.JarInputStream;
 
 /**
  * Type finder that locates types in directories and JAR files.
- *
- * @author levi_h
  */
 public class DefaultTypeFinder implements TypeFinder {
 	private final Logger logger;

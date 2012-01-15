@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import javax.mail.Session;
  * A {@link SessionProvider session provider} that configures a {@link Session mail session} with properties that are
  * read from a property set.
  *
- * @author levi_h
  * @see PropertySetContainer
  */
 public class PropertySetBasedSessionProvider implements SessionProvider {

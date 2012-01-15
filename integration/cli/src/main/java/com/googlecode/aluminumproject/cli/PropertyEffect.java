@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import joptsimple.OptionSpec;
 /**
  * An option effect that will set a property on a command.
  *
- * @author levi_h
  * @param <T> the type of the property that will be set
  */
 public class PropertyEffect<T> implements OptionEffect<Object> {

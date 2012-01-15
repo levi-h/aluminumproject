@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,6 @@ import java.io.OutputStream;
  * An output stream writer optionally implements buffering; in that case, a {@link BufferedOutputStream buffered output
  * stream} is used to write objects to. Regardless of whether an abstract output stream writer buffers or not, {@link
  * #clear() clearing} it is not supported.
- *
- * @author levi_h
  */
 public abstract class AbstractOutputStreamWriter extends AbstractWriter {
 	private OutputStream outputStream;

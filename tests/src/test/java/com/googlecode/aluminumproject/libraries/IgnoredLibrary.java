@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import java.util.List;
 
 /**
  * A library that should be ignored when adding all libraries in a package.
- *
- * @author levi_h
  */
 @Ignored
 public class IgnoredLibrary implements Library {

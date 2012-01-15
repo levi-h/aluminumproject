@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,6 @@ import java.lang.reflect.Type;
  * The action contribution will be created by the {@link ConfigurationElementFactory configuration element factory}
  * in the configuration. After its creation, any of the action contribution's fields that are declared to be {@link
  * Injected injected} are filled.
- *
- * @author levi_h
  */
 public class DefaultActionContributionFactory extends AbstractLibraryElement implements ActionContributionFactory {
 	private Class<? extends ActionContribution> actionContributionClass;

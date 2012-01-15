@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import java.lang.annotation.Target;
  * Used to override the names that are used for {@link Action actions}, action parameters, {@link ActionContribution
  * action contributions}, {@link Function functions}, function arguments, {@link Parser parsers}, and {@link Serialiser
  * serialisers}.
- *
- * @author levi_h
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})

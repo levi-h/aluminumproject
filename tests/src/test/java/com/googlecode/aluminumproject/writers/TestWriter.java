@@ -19,8 +19,6 @@ import com.googlecode.aluminumproject.AluminumException;
 
 /**
  * A writer that can be used in tests.
- *
- * @author levi_h
  */
 public class TestWriter extends AbstractWriter {
 	private boolean flushed;

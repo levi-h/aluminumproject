@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import java.util.Set;
  * Processes tokens that form an {@Instruction instruction}. An instruction token is meant to be used only once; after
  * an instruction has been created, the token processor should no longer be used other than to obtain the new
  * instruction.
- *
- * @author levi_h
  */
 class InstructionTokenProcessor implements TokenProcessor {
 	private InstructionState state;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import javax.servlet.http.HttpSession;
 /**
  * A scope that works with session attributes. This scope won't create a session if it's not necessary; a missing
  * session will be treated as a session without any attributes.
- *
- * @author levi_h
  */
 public class SessionScope implements Scope {
 	private String name;

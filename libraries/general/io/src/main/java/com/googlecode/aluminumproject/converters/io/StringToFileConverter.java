@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.io.File;
 
 /**
  * Converts strings to files by using the {@link File#File(String) File constructor that accepts a path}.
- *
- * @author levi_h
  */
 public class StringToFileConverter extends ClassBasedConverter<String, File> {
 	/**

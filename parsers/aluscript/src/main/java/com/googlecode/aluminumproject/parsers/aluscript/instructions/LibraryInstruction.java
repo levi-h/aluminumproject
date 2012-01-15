@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import java.util.Map;
 /**
  * Adds one or more library URLs and their abbreviations to the {@link AluScriptContext context}, so that they can be
  * referenced by upcoming instructions at the same nesting level. The name of the instruction is {@value #NAME}.
- *
- * @author levi_h
  */
 public class LibraryInstruction extends AbstractInstruction {
 	/**

@@ -21,8 +21,6 @@ import java.io.InputStream;
 
 /**
  * A template finder that can be used in tests.
- *
- * @author levi_h
  */
 public class TestTemplateFinder implements TemplateFinder {
 	private Configuration configuration;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,6 @@ import java.util.List;
  * A library consists of a set of {@link Action actions}, {@link ActionContribution action contributions}, and {@link
  * Function functions}. Libraries may support dynamic actions (the names of which are not known until runtime); whether
  * or not this is the case can be found by inspecting their {@link #getInformation() library information}.
- *
- * @author levi_h
  */
 public interface Library extends ConfigurationElement {
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.googlecode.aluminumproject.AluminumException;
  * <p>
  * Note that string writers do not support the {@link #clear() clear} method. If a form of buffering is required, other
  * writers (such as the {@link TextWriter text writer}) can be used to wrap a string writer in.
- *
- * @author levi_h
  */
 public class StringWriter extends AbstractWriter {
 	private StringBuilder builder;

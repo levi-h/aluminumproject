@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import joptsimple.OptionSpec;
  * influence on the behaviour of the command. Therefore, option effects should rather change the command's state, so
  * that the command can decide what to do with the given options when it is executed.
  *
- * @author levi_h
  * @param <T> the type of the option argument(s) (if any)
  */
 public interface OptionEffect<T> {

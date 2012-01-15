@@ -62,8 +62,6 @@ import java.util.List;
  * <p>
  * A number of common actions are added to abstract libraries in the {@link #addCommonActions() addCommonActions
  * method}; (abstract) subclasses are free to override this method and add more common actions.
- *
- * @author levi_h
  */
 public abstract class AbstractLibrary implements Library {
 	private String[] packageNames;

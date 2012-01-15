@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import java.util.Map;
 
 /**
  * Converts from one kind of {@link Number number} to another. Both widening and narrowing conversions are supported.
- *
- * @author levi_h
  */
 public class NumberToNumberConverter implements Converter<Number> {
 	private Map<Class<?>, Converter<Number>> converters;

@@ -28,8 +28,6 @@ import java.io.OutputStream;
  * <p>
  * A file system template store finder accepts one configuration parameter, which is required: {@value
  * #TEMPLATE_DIRECTORY}. It specifies the directory in which templates will be stored.
- *
- * @author levi_h
  */
 public class FileSystemTemplateStoreFinder extends AbstractTemplateStoreFinder {
 	private String directory;

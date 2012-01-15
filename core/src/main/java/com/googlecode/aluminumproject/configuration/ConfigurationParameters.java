@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import java.util.Map;
  * <p>
  * Parameters can be {@link #addParameter(String, String) added} and {@link #getValue(String, String) retrieved} by
  * name. Please note that all parameter values are {@link String#trim() trimmed} and can't be empty or {@code null}.
- *
- * @author levi_h
  */
 public class ConfigurationParameters {
 	private Map<String, String> parameters;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import org.testng.annotations.AfterClass;
 
 /**
  * Abstract superclass of command tests.
- *
- * @author levi_h
  */
 public abstract class AbstractCommandTest {
 	/**
@@ -72,8 +70,6 @@ public abstract class AbstractCommandTest {
 
 	/**
 	 * Provides information about the execution of a command.
-	 *
-	 * @author levi_h
 	 */
 	protected class Execution {
 		private int status;

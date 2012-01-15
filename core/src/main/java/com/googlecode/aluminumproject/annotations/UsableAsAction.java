@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates that an {@link ActionContribution action contribution} can be used as if it were an {@link Action action}.
- *
- * @author levi_h
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

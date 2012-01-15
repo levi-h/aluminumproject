@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import com.googlecode.aluminumproject.converters.ClassBasedConverter;
 /**
  * Converts {@link String strings} into {@link Boolean booleans} by using the {@link Boolean#parseBoolean(String)
  * parseBoolean method}.
- *
- * @author levi_h
  */
 public class StringToBooleanConverter extends ClassBasedConverter<String, Boolean> {
 	/**

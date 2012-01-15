@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.googlecode.aluminumproject.writers.Writer;
 /**
  * An action contribution that can be used in tests. It will be ignored when adding all action contributions from a
  * package, since its {@link TestActionContributionFactory factory} is added to the {@link TestLibrary test library}.
- *
- * @author levi_h
  */
 @Ignored
 public class TestActionContribution implements ActionContribution {

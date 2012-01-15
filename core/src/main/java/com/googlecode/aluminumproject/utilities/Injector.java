@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,6 @@ import java.util.List;
  * <p>
  * An injector is not required to inject all of an object's annotated fields; this allows multiple injectors to be used
  * for the same injectable object.
- *
- * @author levi_h
  */
 public class Injector {
 	private List<ValueProvider> valueProviders;
@@ -104,8 +102,6 @@ public class Injector {
 
 	/**
 	 * Provides a value for certain fields.
-	 *
-	 * @author levi_h
 	 */
 	public static interface ValueProvider {
 		/**
@@ -129,8 +125,6 @@ public class Injector {
 
 	/**
 	 * Provides a constant value if it can be assigned to a field.
-	 *
-	 * @author levi_h
 	 */
 	public static class ClassBasedValueProvider implements ValueProvider {
 		private Object value;

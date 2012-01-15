@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import java.util.Locale;
 /**
  * Provides number formats that are suitable for the {@link GlobalisationContext globalisation context}'s current {@link
  * Locale locale}.
- *
- * @author levi_h
  */
 public class LocaleBasedNumberFormatProvider implements NumberFormatProvider {
 	private String customPattern;

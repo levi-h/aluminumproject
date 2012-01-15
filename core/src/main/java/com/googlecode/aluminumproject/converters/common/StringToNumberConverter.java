@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,6 @@ import java.util.Map;
  * Converting strings to the {@link Number base type} is supported as well: in that case, the most suitable type
  * will be chosen from the set of types that are most commonly used (i.e. integer, long, big integer, double, big
  * decimal).
- *
- * @author levi_h
  */
 public class StringToNumberConverter implements Converter<String> {
 	private Map<Class<?>, Converter<String>> converters;

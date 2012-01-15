@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Levi Hoogenberg
+ * Copyright 2010-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,6 @@ import java.util.Map;
 /**
  * An HTTP {@link WebClient web client} implementation. It supports two methods: {@value #GET_METHOD} and {@value
  * #POST_METHOD}.
- *
- * @author levi_h
  */
 public class HttpWebClient implements WebClient {
 	private List<String> supportedMethods;

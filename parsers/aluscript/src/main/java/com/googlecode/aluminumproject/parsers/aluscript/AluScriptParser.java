@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,8 +66,6 @@ import java.util.List;
  * <p>
  * By default, template names should include the template extension. If this extension is the same for every template
  * (<i>alu</i> is recommended), it can be configured using the {@value #TEMPLATE_EXTENSION} parameter.
- *
- * @author levi_h
  */
 public class AluScriptParser implements Parser {
 	private Configuration configuration;

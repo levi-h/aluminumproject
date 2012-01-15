@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package com.googlecode.aluminumproject.parsers.aluscript.lines.instructions;
 
 /**
  * A parameter of an {@link Instruction instruction}. It consists of a name (with an optional prefix) and a value.
- *
- * @author levi_h
  */
 class InstructionParameter {
 	private String namePrefix;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Levi Hoogenberg
+ * Copyright 2009-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,8 +60,6 @@ import javax.servlet.http.HttpServletResponse;
  * The writer that is used by the template engine is the {@link ResponseWriter response writer}, that writes byte arrays
  * (for binary output) or strings (for textual output) to the servlet output stream. When a different writer is needed,
  * the {@link #createWriter() createWriter method} can be overridden by subclasses.
- *
- * @author levi_h
  */
 public class AluminumServlet extends HttpServlet {
 	private Aluminum aluminum;

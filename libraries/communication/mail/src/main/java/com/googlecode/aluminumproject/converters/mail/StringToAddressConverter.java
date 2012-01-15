@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Levi Hoogenberg
+ * Copyright 2011-2012 Levi Hoogenberg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import javax.mail.internet.InternetAddress;
 
 /**
  * Converts strings to {@link Address addresses} by constructing new {@link InternetAddress internet addresses}.
- *
- * @author levi_h
  */
 public class StringToAddressConverter extends ClassBasedConverter<String, Address> {
 	/**
