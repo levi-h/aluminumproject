@@ -36,4 +36,8 @@ test {
 	}
 }
 
+clean {
+	delete 'test-output'
+}
+
 jar.enabled = false
