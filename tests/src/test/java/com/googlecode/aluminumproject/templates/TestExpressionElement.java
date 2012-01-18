@@ -19,24 +19,21 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Collections;
-import java.util.Map;
 
 /**
  * An expression element that can be used in tests.
  */
-public class TestExpressionElement implements ExpressionElement {
+public class TestExpressionElement extends AbstractTemplateElement implements ExpressionElement {
 	/**
 	 * Creates a test expression element.
 	 */
-	public TestExpressionElement() {}
-
-	public Map<String, String> getLibraryUrlAbbreviations() {
-		return Collections.emptyMap();
+	public TestExpressionElement() {
+		super(Collections.<String, String>emptyMap(), -1);
 	}
 
 	public String getText() {
 		return "";
 	}
 
-	public void process(Context context, Writer writer) {}
+	protected void processAsCurrent(Context context, Writer writer) {}
 }

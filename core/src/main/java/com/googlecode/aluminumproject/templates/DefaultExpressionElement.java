@@ -21,17 +21,14 @@ import com.googlecode.aluminumproject.expressions.ExpressionFactory;
 import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
  * The default {@link ExpressionElement expression element} implementation.
  */
-public class DefaultExpressionElement implements ExpressionElement {
+public class DefaultExpressionElement extends AbstractTemplateElement implements ExpressionElement {
 	private ExpressionFactory expressionFactory;
 	private String text;
-
-	private Map<String, String> libraryUrlAbbreviations;
 
 	private final Logger logger;
 
@@ -41,29 +38,23 @@ public class DefaultExpressionElement implements ExpressionElement {
 	 * @param expressionFactory the expression factory that will create the expression that gets evaluated
 	 * @param text the expression text
 	 * @param libraryUrlAbbreviations the expression element's library URL abbreviations
+	 * @param lineNumber the line number of the expression element
 	 */
 	public DefaultExpressionElement(ExpressionFactory expressionFactory, String text,
-			Map<String, String> libraryUrlAbbreviations) {
+			Map<String, String> libraryUrlAbbreviations, int lineNumber) {
+		super(libraryUrlAbbreviations, lineNumber);
+
 		this.expressionFactory = expressionFactory;
 		this.text = text;
 
-		this.libraryUrlAbbreviations = libraryUrlAbbreviations;
-
 		logger = Logger.get(getClass());
-	}
-
-	public Map<String, String> getLibraryUrlAbbreviations() {
-		return Collections.unmodifiableMap(libraryUrlAbbreviations);
 	}
 
 	public String getText() {
 		return text;
 	}
 
-	public void process(Context context, Writer writer) throws AluminumException {
-		TemplateInformation templateInformation = TemplateInformation.from(context);
-		templateInformation.addTemplateElement(this);
-
+	public void processAsCurrent(Context context, Writer writer) throws AluminumException {
 		logger.debug("creating expression '", text, "' using ", expressionFactory);
 
 		Object result = expressionFactory.create(text, context).evaluate(context);
@@ -71,7 +62,5 @@ public class DefaultExpressionElement implements ExpressionElement {
 		logger.debug("writing ", result);
 
 		writer.write(result);
-
-		templateInformation.removeCurrentTemplateElement();
 	}
 }

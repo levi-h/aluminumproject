@@ -139,8 +139,12 @@ public class AluScriptParser implements Parser {
 
 		AluScriptContext context = new AluScriptContext(configuration, settings, instructions);
 
-		for (String line: templateContents.split("(\r?\n)+")) {
-			findLineParser(line).parseLine(line, context);
+		for (String line: templateContents.split("\r?\n")) {
+			if (line.length() > 0) {
+				findLineParser(line).parseLine(line, context);
+			}
+
+			context.incrementLineNumber();
 		}
 
 		return context.getTemplate();

@@ -66,7 +66,7 @@ public class TemplateProcessorTest {
 
 			TemplateBuilder templateBuilder = new TemplateBuilder();
 			templateBuilder.addTemplateElement(
-				configuration.getTemplateElementFactory().createTextElement(name, libraryUrlAbbreviations));
+				configuration.getTemplateElementFactory().createTextElement(name, libraryUrlAbbreviations, -1));
 
 			return templateBuilder.build();
 		}
@@ -83,7 +83,7 @@ public class TemplateProcessorTest {
 
 		TemplateBuilder templateBuilder = new TemplateBuilder();
 		templateBuilder.addTemplateElement(
-			configuration.getTemplateElementFactory().createTextElement("cache", libraryUrlAbbreviations));
+			configuration.getTemplateElementFactory().createTextElement("cache", libraryUrlAbbreviations, -1));
 
 		configuration.getCache().storeTemplate(new Cache.Key("test", "name"), templateBuilder.build());
 

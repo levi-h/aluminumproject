@@ -132,7 +132,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 
 	public ActionElement createActionElement(ActionDescriptor actionDescriptor,
 			Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributionDescriptors,
-			Map<String, String> libraryUrlAbbreviations) throws AluminumException {
+			Map<String, String> libraryUrlAbbreviations, int lineNumber) throws AluminumException {
 		String libraryUrlAbbreviation = actionDescriptor.getLibraryUrlAbbreviation();
 
 		if (!libraryUrlAbbreviations.containsKey(libraryUrlAbbreviation)) {
@@ -157,7 +157,7 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 			"for action with name '", name, "': ", actionContributionFactories);
 
 		return createActionElement(actionDescriptor, actionFactory, parameters, actionContributionFactories,
-			Collections.unmodifiableList(actionInterceptors), libraryUrlAbbreviations);
+			Collections.unmodifiableList(actionInterceptors), libraryUrlAbbreviations, lineNumber);
 	}
 
 	private Map<ActionContributionDescriptor, ActionContributionFactory> createActionContributionFactories(
@@ -277,30 +277,31 @@ public class DefaultTemplateElementFactory implements TemplateElementFactory {
 	 * @param actionContributionFactories the action contributions to use
 	 * @param actionInterceptors the action interceptors to use
 	 * @param libraryUrlAbbreviations the library URL abbreviations to use
+	 * @param lineNumber the line number of the action element
 	 * @return the new action element
 	 */
 	protected ActionElement createActionElement(
 			ActionDescriptor actionDescriptor, ActionFactory actionFactory, Map<String, ActionParameter> parameters,
 			Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories,
-			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations) {
+			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations, int lineNumber) {
 		logger.debug("creating action element for action factory ", actionFactory, ", parameters ", parameters, ", ",
 			"action interceptors ", actionInterceptors, ", and contribution factories ", actionContributionFactories);
 
 		return new DefaultActionElement(configuration, actionDescriptor, actionFactory, parameters,
-			actionContributionFactories, actionInterceptors, libraryUrlAbbreviations);
+			actionContributionFactories, actionInterceptors, libraryUrlAbbreviations, lineNumber);
 	}
 
-	public TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations) {
+	public TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations, int lineNumber) {
 		logger.debug("creating text element for text '", text, "'");
 
-		return new DefaultTextElement(text, libraryUrlAbbreviations);
+		return new DefaultTextElement(text, libraryUrlAbbreviations, lineNumber);
 	}
 
 	public ExpressionElement createExpressionElement(ExpressionFactory expressionFactory, String text,
-			Map<String, String> libraryUrlAbbreviations) {
+			Map<String, String> libraryUrlAbbreviations, int lineNumber) {
 		logger.debug("creating expression element for text '", text, "'");
 
-		return new DefaultExpressionElement(expressionFactory, text, libraryUrlAbbreviations);
+		return new DefaultExpressionElement(expressionFactory, text, libraryUrlAbbreviations, lineNumber);
 	}
 
 	/**

@@ -77,7 +77,7 @@ public class XmlSerialiserTest {
 			Collections.singletonMap("test", "http://aluminumproject.googlecode.com/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations, -1));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<test:test xmlns:test=\"http://aluminumproject.googlecode.com/test\"/>");
@@ -94,9 +94,9 @@ public class XmlSerialiserTest {
 			Collections.singletonMap("test", "http://aluminumproject.googlecode.com/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations, -1));
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createTextElement(
-			"text", Collections.<String, String>emptyMap()));
+			"text", Collections.<String, String>emptyMap(), -1));
 		templateBuilder.restoreCurrentTemplateElement();
 		templateBuilder.restoreCurrentTemplateElement();
 
@@ -118,9 +118,9 @@ public class XmlSerialiserTest {
 			Collections.singletonMap("test", "http://aluminumproject.googlecode.com/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations, -1));
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations, -1));
 		templateBuilder.restoreCurrentTemplateElement();
 		templateBuilder.restoreCurrentTemplateElement();
 
@@ -139,7 +139,7 @@ public class XmlSerialiserTest {
 			Collections.singletonMap("test", "http://aluminumproject.googlecode.com/test/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations, -1));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<test:test xmlns:test=\"http://aluminumproject.googlecode.com/test/test\"/>");
@@ -157,7 +157,7 @@ public class XmlSerialiserTest {
 			Collections.singletonMap("test", "http://aluminumproject.googlecode.com/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributionDescriptors, libraryUrlAbbreviations, -1));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals(
@@ -177,7 +177,7 @@ public class XmlSerialiserTest {
 		libraryUrlAbbreviations.put("test", "http://aluminumproject.googlecode.com/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributions, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributions, libraryUrlAbbreviations, -1));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<test:test c:if=\"[proceed]\" " +
@@ -221,7 +221,7 @@ public class XmlSerialiserTest {
 		libraryUrlAbbreviations.put("TEST", "http://aluminumproject.googlecode.com/test");
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributions, libraryUrlAbbreviations));
+			actionDescriptor, parameters, contributions, libraryUrlAbbreviations, -1));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("<TEST:TEST DESCRIPTION=\"test\" C:IF=\"[proceed]\"" +
@@ -233,7 +233,7 @@ public class XmlSerialiserTest {
 		createConfiguration();
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createTextElement(
-			"text", Collections.<String, String>emptyMap()));
+			"text", Collections.<String, String>emptyMap(), -1));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("text");
@@ -243,7 +243,7 @@ public class XmlSerialiserTest {
 		createConfiguration();
 
 		templateBuilder.addTemplateElement(configuration.getTemplateElementFactory().createExpressionElement(
-			getExpressionFactory(), "[name]", Collections.<String, String>emptyMap()));
+			getExpressionFactory(), "[name]", Collections.<String, String>emptyMap(), -1));
 		templateBuilder.restoreCurrentTemplateElement();
 
 		assert getTemplateText().equals("[name]");

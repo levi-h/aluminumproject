@@ -26,7 +26,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.TestLibrary;
-import com.googlecode.aluminumproject.templates.TemplateElement;
+import com.googlecode.aluminumproject.templates.AbstractTemplateElement;
 import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.writers.Writer;
 
@@ -61,12 +61,8 @@ public class FunctionMapperTest {
 		libraryUrlAbbreviations.put("test", testLibraryInformation.getUrl());
 		libraryUrlAbbreviations.put("versionedTest", testLibraryInformation.getVersionedUrl());
 
-		TemplateInformation.from(context).addTemplateElement(new TemplateElement() {
-			public Map<String, String> getLibraryUrlAbbreviations() {
-				return libraryUrlAbbreviations;
-			}
-
-			public void process(Context context, Writer writer) {}
+		TemplateInformation.from(context).addTemplateElement(new AbstractTemplateElement(libraryUrlAbbreviations, -1) {
+			public void processAsCurrent(Context context, Writer writer) {}
 		});
 
 		functionMapper = new FunctionMapper(context, configuration);

@@ -98,6 +98,34 @@ public class AluScriptParserTest {
 		assert text.equals("test");
 	}
 
+	@Test(dependsOnMethods = "newlinesShouldBeAddedAutomaticallyByDefault")
+	public void lineNumbersShouldBeSetOnTemplateElements() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(AUTOMATIC_NEWLINES, "true");
+
+		Template template = createParser(parameters).parseTemplate("templates/test.alu");
+
+		List<TemplateElement> rootElements = template.getChildren(null);
+		assert rootElements != null;
+		assert rootElements.size() == 1;
+
+		TemplateElement rootElement = rootElements.get(0);
+		assert rootElement != null;
+		assert rootElement.getLineNumber() == 17;
+
+		List<TemplateElement> childElements = template.getChildren(rootElement);
+		assert childElements != null;
+		assert childElements.size() == 2;
+
+		TemplateElement firstChildElement = childElements.get(0);
+		assert firstChildElement != null;
+		assert firstChildElement.getLineNumber() == 18;
+
+		TemplateElement secondChildElement = childElements.get(1);
+		assert secondChildElement != null;
+		assert secondChildElement.getLineNumber() == 18;
+	}
+
 	private AluScriptParser createParser() {
 		return createParser(new ConfigurationParameters());
 	}

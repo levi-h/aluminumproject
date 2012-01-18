@@ -50,18 +50,19 @@ public class ActionInstruction extends AbstractInstruction {
 	}
 
 	public void execute(Map<String, String> parameters, AluScriptContext context) throws AluminumException {
-		Map<String, String> libraryUrlAbbreviations = context.getLibraryUrlAbbreviations();
+		ActionDescriptor actionDescriptor = new ActionDescriptor(namePrefix,
+			context.getSettings().getTemplateNameTranslator().translateActionName(name));
 
 		Map<String, ActionParameter> actionParameters = new LinkedHashMap<String, ActionParameter>();
 		List<ActionContributionDescriptor> contributionDescriptors = new LinkedList<ActionContributionDescriptor>();
 
 		splitParameters(parameters, actionParameters, contributionDescriptors, context);
 
-		ActionDescriptor actionDescriptor = new ActionDescriptor(namePrefix,
-			context.getSettings().getTemplateNameTranslator().translateActionName(name));
+		Map<String, String> libraryUrlAbbreviations = context.getLibraryUrlAbbreviations();
+		int lineNumber = context.getLineNumber();
 
 		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createActionElement(
-			actionDescriptor, actionParameters, contributionDescriptors, libraryUrlAbbreviations));
+			actionDescriptor, actionParameters, contributionDescriptors, libraryUrlAbbreviations, lineNumber));
 	}
 
 	private void splitParameters(Map<String, String> parameters,

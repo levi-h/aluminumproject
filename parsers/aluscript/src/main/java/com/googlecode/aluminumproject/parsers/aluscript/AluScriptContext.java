@@ -34,7 +34,8 @@ import java.util.Map;
  * <p>
  * The context contains a number of {@link Instruction instructions}. These instructions can access the {@link
  * #getConfiguration()}, {@link #addLibraryUrlAbbreviation(String, String) add} and {@link #getLibraryUrlAbbreviations()
- * retrieve} library URL abbreviations, and add {@link #addTemplateElement(TemplateElement) template elements}.
+ * retrieve} library URL abbreviations, retrieve the {@link #getLineNumber() current line number}, and add {@link
+ * #addTemplateElement(TemplateElement) template elements}.
  * <p>
  * The library URL abbreviations are specific to a nesting level. The nesting level is controlled by the parser,
  * although it is incremented when an {@link ActionElement action element} is added.
@@ -50,6 +51,8 @@ public class AluScriptContext {
 	private int level;
 
 	private Map<Integer, Map<String, String>> libraryUrlAbbreviations;
+
+	private int lineNumber;
 
 	private final Logger logger;
 
@@ -78,6 +81,8 @@ public class AluScriptContext {
 		templateBuilder = new TemplateBuilder();
 
 		libraryUrlAbbreviations = new HashMap<Integer, Map<String, String>>();
+
+		lineNumber = 1;
 	}
 
 	/**
@@ -213,6 +218,22 @@ public class AluScriptContext {
 		}
 
 		return libraryUrlAbbreviations.get(level);
+	}
+
+	/**
+	 * Returns the number of the current line.
+	 *
+	 * @return the current line number (1-based)
+	 */
+	public int getLineNumber() {
+		return lineNumber;
+	}
+
+	/**
+	 * Increments the current line number.
+	 */
+	void incrementLineNumber() {
+		lineNumber++;
 	}
 
 	/**

@@ -19,24 +19,21 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Collections;
-import java.util.Map;
 
 /**
  * A text element that can be used in tests.
  */
-public class TestTextElement implements TextElement {
+public class TestTextElement extends AbstractTemplateElement implements TextElement {
 	/**
 	 * Creates a test text element.
 	 */
-	public TestTextElement() {}
-
-	public Map<String, String> getLibraryUrlAbbreviations() {
-		return Collections.emptyMap();
+	public TestTextElement() {
+		super(Collections.<String, String>emptyMap(), -1);
 	}
 
 	public String getText() {
 		return "";
 	}
 
-	public void process(Context context, Writer writer) {}
+	protected void processAsCurrent(Context context, Writer writer) {}
 }

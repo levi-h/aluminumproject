@@ -39,6 +39,7 @@ import java.util.Stack;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -51,10 +52,13 @@ public class TemplateHandler extends DefaultHandler {
 	private Configuration configuration;
 	private TemplateNameTranslator templateNameTranslator;
 
+	private Locator locator;
+
 	private Stack<Map<String, String>> libraryUrlAbbreviationsStack;
 
 	private TemplateBuilder templateBuilder;
 
+	private int textLineNumber;
 	private StringBuilder textBuffer;
 
 	private final Logger logger;
@@ -73,9 +77,17 @@ public class TemplateHandler extends DefaultHandler {
 
 		templateBuilder = new TemplateBuilder();
 
+		textLineNumber = -1;
 		textBuffer = new StringBuilder();
 
 		logger = Logger.get(getClass());
+	}
+
+	@Override
+	public void setDocumentLocator(Locator locator) {
+		super.setDocumentLocator(locator);
+
+		this.locator = locator;
 	}
 
 	@Override
@@ -147,6 +159,10 @@ public class TemplateHandler extends DefaultHandler {
 	public void characters(char[] characters, int offset, int length) {
 		String text = new String(characters, offset, length);
 
+		if (textLineNumber == -1) {
+			textLineNumber = locator.getLineNumber();
+		}
+
 		textBuffer.append(text);
 		logger.debug("added '", text, "' to text buffer");
 	}
@@ -188,6 +204,7 @@ public class TemplateHandler extends DefaultHandler {
 				logger.debug("added template element ", element);
 			}
 
+			textLineNumber = -1;
 			textBuffer.delete(0, textBuffer.length());
 		}
 	}
@@ -196,7 +213,7 @@ public class TemplateHandler extends DefaultHandler {
 			List<ActionContributionDescriptor> contributions) throws SAXException {
 		try {
 			return configuration.getTemplateElementFactory().createActionElement(
-				action, parameters, contributions, getLibraryUrlAbbreviations());
+				action, parameters, contributions, getLibraryUrlAbbreviations(), locator.getLineNumber());
 		} catch (AluminumException exception) {
 			throw new SAXException("can't create action element", exception);
 		}
@@ -204,7 +221,8 @@ public class TemplateHandler extends DefaultHandler {
 
 	private TemplateElement createTextElement(String text) throws SAXException {
 		try {
-			return configuration.getTemplateElementFactory().createTextElement(text, getLibraryUrlAbbreviations());
+			return configuration.getTemplateElementFactory().createTextElement(
+				text, getLibraryUrlAbbreviations(), textLineNumber);
 		} catch (AluminumException exception) {
 			throw new SAXException("can't create text element", exception);
 		}
@@ -214,7 +232,7 @@ public class TemplateHandler extends DefaultHandler {
 			ExpressionFactory expressionFactory, String text) throws SAXException {
 		try {
 			return configuration.getTemplateElementFactory().createExpressionElement(
-				expressionFactory, text, getLibraryUrlAbbreviations());
+				expressionFactory, text, getLibraryUrlAbbreviations(), textLineNumber);
 		} catch (AluminumException exception) {
 			throw new SAXException("can't create expression element", exception);
 		}

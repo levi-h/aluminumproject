@@ -83,6 +83,23 @@ public class XmlParserTest {
 		createParser().parseTemplate("templates/html.xml");
 	}
 
+	public void lineNumbersShouldBeSetOnTemplateElements() {
+		Template template = createParser().parseTemplate("templates/test.xml");
+
+		List<TemplateElement> rootElements = template.getChildren(null);
+		assert rootElements != null;
+		assert rootElements.size() == 1;
+
+		TemplateElement rootElement = rootElements.get(0);
+		assert rootElement.getLineNumber() == 17;
+
+		List<TemplateElement> childElements = template.getChildren(rootElement);
+		assert childElements != null;
+		assert childElements.size() == 1;
+		
+		assert childElements.get(0).getLineNumber() == 19;
+	}
+
 	private XmlParser createParser() {
 		return createParser(new ConfigurationParameters());
 	}

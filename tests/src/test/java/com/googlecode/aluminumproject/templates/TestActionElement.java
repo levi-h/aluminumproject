@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * An action element that can be used in tests.
  */
-public class TestActionElement implements ActionElement {
+public class TestActionElement extends AbstractTemplateElement implements ActionElement {
 	private ActionDescriptor descriptor;
 
 	/**
@@ -42,11 +42,9 @@ public class TestActionElement implements ActionElement {
 	 * @param descriptor a descriptor of the action
 	 */
 	public TestActionElement(ActionDescriptor descriptor) {
-		this.descriptor = descriptor;
-	}
+		super(Collections.<String, String>emptyMap(), -1);
 
-	public Map<String, String> getLibraryUrlAbbreviations() {
-		return Collections.emptyMap();
+		this.descriptor = descriptor;
 	}
 
 	public ActionDescriptor getDescriptor() {
@@ -61,5 +59,5 @@ public class TestActionElement implements ActionElement {
 		return Collections.emptyList();
 	}
 
-	public void process(Context context, Writer writer) {}
+	protected void processAsCurrent(Context context, Writer writer) {}
 }
