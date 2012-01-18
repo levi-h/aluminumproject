@@ -35,22 +35,25 @@ public interface TemplateElementFactory extends ConfigurationElement {
 	 * @param parameters the action parameters
 	 * @param contributionDescriptors the action contribution descriptors
 	 * @param libraryUrlAbbreviations the action element's library URL abbreviations
+	 * @param lineNumber the location of the action element
 	 * @return the new action element
 	 * @throws AluminumException when the action element can't be created
 	 */
 	ActionElement createActionElement(ActionDescriptor actionDescriptor,
 		Map<String, ActionParameter> parameters, List<ActionContributionDescriptor> contributionDescriptors,
-		Map<String, String> libraryUrlAbbreviations) throws AluminumException;
+		Map<String, String> libraryUrlAbbreviations, int lineNumber) throws AluminumException;
 
 	/**
 	 * Creates a text element.
 	 *
 	 * @param text the text that the text element will write
 	 * @param libraryUrlAbbreviations the text element's library URL abbreviations
+	 * @param lineNumber the location of the text element
 	 * @return the new text element
 	 * @throws AluminumException when the text element can't be created
 	 */
-	TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations) throws AluminumException;
+	TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations, int lineNumber)
+		throws AluminumException;
 
 	/**
 	 * Creates an expression element.
@@ -58,9 +61,10 @@ public interface TemplateElementFactory extends ConfigurationElement {
 	 * @param expressionFactory the expression factory that will create the evaluated expression
 	 * @param text the expression text
 	 * @param libraryUrlAbbreviations the expression element's library URL abbreviations
+	 * @param lineNumber the location of the expression element
 	 * @return the new expression element
 	 * @throws AluminumException when the expression element can't be created
 	 */
 	ExpressionElement createExpressionElement(ExpressionFactory expressionFactory, String text,
-		Map<String, String> libraryUrlAbbreviations) throws AluminumException;
+		Map<String, String> libraryUrlAbbreviations, int lineNumber) throws AluminumException;
 }

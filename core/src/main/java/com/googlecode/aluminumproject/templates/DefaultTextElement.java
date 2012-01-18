@@ -19,43 +19,32 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.writers.Writer;
 
-import java.util.Collections;
 import java.util.Map;
 
 /**
  * The default {@link TextElement text element} implementation.
  */
-public class DefaultTextElement implements TextElement {
+public class DefaultTextElement extends AbstractTemplateElement implements TextElement {
 	private String text;
-
-	private Map<String, String> libraryUrlAbbreviations;
 
 	/**
 	 * Creates a default text element.
 	 *
 	 * @param text the text to write
 	 * @param libraryUrlAbbreviations the text element's library URL abbreviations
+	 * @param lineNumber the line number of the text element
 	 */
-	public DefaultTextElement(String text, Map<String, String> libraryUrlAbbreviations) {
+	public DefaultTextElement(String text, Map<String, String> libraryUrlAbbreviations, int lineNumber) {
+		super(libraryUrlAbbreviations, lineNumber);
+
 		this.text = text;
-
-		this.libraryUrlAbbreviations = libraryUrlAbbreviations;
-	}
-
-	public Map<String, String> getLibraryUrlAbbreviations() {
-		return Collections.unmodifiableMap(libraryUrlAbbreviations);
 	}
 
 	public String getText() {
 		return text;
 	}
 
-	public void process(Context context, Writer writer) throws AluminumException {
-		TemplateInformation templateInformation = TemplateInformation.from(context);
-		templateInformation.addTemplateElement(this);
-
+	protected void processAsCurrent(Context context, Writer writer) throws AluminumException {
 		writer.write(text);
-
-		templateInformation.removeCurrentTemplateElement();
 	}
 }

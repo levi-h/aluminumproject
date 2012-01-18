@@ -51,16 +51,17 @@ public class TestTemplateElementFactory implements TemplateElementFactory {
 	}
 
 	public ActionElement createActionElement(ActionDescriptor actionDescriptor, Map<String, ActionParameter> parameters,
-			List<ActionContributionDescriptor> contributionDescriptors, Map<String, String> libraryUrlAbbreviations) {
+			List<ActionContributionDescriptor> contributionDescriptors,
+			Map<String, String> libraryUrlAbbreviations, int lineNumber) {
 		return new TestActionElement(actionDescriptor);
 	}
 
-	public TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations) {
+	public TextElement createTextElement(String text, Map<String, String> libraryUrlAbbreviations, int lineNumber) {
 		return new TestTextElement();
 	}
 
-	public ExpressionElement createExpressionElement(
-			ExpressionFactory expressionFactory, String text, Map<String, String> libraryUrlAbbreviations) {
+	public ExpressionElement createExpressionElement(ExpressionFactory expressionFactory, String text,
+			Map<String, String> libraryUrlAbbreviations, int lineNumber) {
 		return new TestExpressionElement();
 	}
 }

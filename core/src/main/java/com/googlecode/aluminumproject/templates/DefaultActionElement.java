@@ -39,7 +39,7 @@ import java.util.Map;
 /**
  * The default {@link ActionElement action element} implementation.
  */
-public class DefaultActionElement implements ActionElement {
+public class DefaultActionElement extends AbstractTemplateElement implements ActionElement {
 	private Configuration configuration;
 
 	private ActionDescriptor actionDescriptor;
@@ -49,8 +49,6 @@ public class DefaultActionElement implements ActionElement {
 	private Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories;
 
 	private List<ActionInterceptor> actionInterceptors;
-
-	private Map<String, String> libraryUrlAbbreviations;
 
 	/**
 	 * Creates a default action element.
@@ -62,11 +60,14 @@ public class DefaultActionElement implements ActionElement {
 	 * @param actionContributionFactories the factories that will create the contributions for the action
 	 * @param actionInterceptors the action interceptors to use
 	 * @param libraryUrlAbbreviations the action element's library URL abbreviations
+	 * @param lineNumber the line number of the action element
 	 */
 	public DefaultActionElement(Configuration configuration,
 			ActionDescriptor actionDescriptor, ActionFactory actionFactory, Map<String, ActionParameter> parameters,
 			Map<ActionContributionDescriptor, ActionContributionFactory> actionContributionFactories,
-			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations) {
+			List<ActionInterceptor> actionInterceptors, Map<String, String> libraryUrlAbbreviations, int lineNumber) {
+		super(libraryUrlAbbreviations, lineNumber);
+
 		this.configuration = configuration;
 
 		this.actionDescriptor = actionDescriptor;
@@ -76,12 +77,6 @@ public class DefaultActionElement implements ActionElement {
 		this.actionContributionFactories = actionContributionFactories;
 
 		this.actionInterceptors = actionInterceptors;
-
-		this.libraryUrlAbbreviations = libraryUrlAbbreviations;
-	}
-
-	public Map<String, String> getLibraryUrlAbbreviations() {
-		return Collections.unmodifiableMap(libraryUrlAbbreviations);
 	}
 
 	public ActionDescriptor getDescriptor() {
@@ -96,10 +91,7 @@ public class DefaultActionElement implements ActionElement {
 		return new LinkedList<ActionContributionDescriptor>(actionContributionFactories.keySet());
 	}
 
-	public void process(Context context, Writer writer) throws AluminumException {
-		TemplateInformation templateInformation = TemplateInformation.from(context);
-		templateInformation.addTemplateElement(this);
-
+	protected void processAsCurrent(Context context, Writer writer) throws AluminumException {
 		DefaultActionContext actionContext =
 			new DefaultActionContext(configuration, actionDescriptor, actionFactory, context, writer);
 
@@ -124,8 +116,6 @@ public class DefaultActionElement implements ActionElement {
 
 			actionContext.proceed();
 		}
-
-		templateInformation.removeCurrentTemplateElement();
 	}
 
 	private static class ContributionInterceptor extends AbstractActionInterceptor {

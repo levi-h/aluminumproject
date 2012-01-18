@@ -45,6 +45,6 @@ public class TextInstruction extends AbstractInstruction {
 		}
 
 		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createTextElement(
-			text, context.getLibraryUrlAbbreviations()));
+			text, context.getLibraryUrlAbbreviations(), context.getLineNumber()));
 	}
 }

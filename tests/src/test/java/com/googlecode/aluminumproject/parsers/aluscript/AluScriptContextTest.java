@@ -76,7 +76,7 @@ public class AluScriptContextTest {
 
 		context.addLibraryUrlAbbreviation("test", "http://aluminumproject.googlecode.com/test");
 		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createActionElement(
-			actionDescriptor, parameters, contributionDescriptors, context.getLibraryUrlAbbreviations()));
+			actionDescriptor, parameters, contributionDescriptors, context.getLibraryUrlAbbreviations(), -1));
 
 		assert context.getLevel() == 1;
 	}
@@ -89,7 +89,7 @@ public class AluScriptContextTest {
 		context.addLibraryUrlAbbreviation("test", "http://aluminumproject.googlecode.com/test");
 
 		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createTextElement(
-			"text", context.getLibraryUrlAbbreviations()));
+			"text", context.getLibraryUrlAbbreviations(), -1));
 	}
 
 	public void newContextShouldNotContainLibraryUrlAbbreviations() {
@@ -109,5 +109,15 @@ public class AluScriptContextTest {
 		String testLibraryUrl = libraryUrlAbbreviations.get("test");
 		assert testLibraryUrl != null;
 		assert testLibraryUrl.equals("http://aluminumproject.googlecode.com/test");
+	}
+
+	public void lineNumberShouldBeOneBased() {
+		assert context.getLineNumber() == 1;
+	}
+
+	public void lineNumberShouldBeIncrementable() {
+		context.incrementLineNumber();
+
+		assert context.getLineNumber() == 2;
 	}
 }

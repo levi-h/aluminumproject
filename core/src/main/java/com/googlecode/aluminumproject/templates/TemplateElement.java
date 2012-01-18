@@ -34,6 +34,13 @@ public interface TemplateElement {
 	Map<String, String> getLibraryUrlAbbreviations();
 
 	/**
+	 * Returns the line number in which this template element occurs in its template.
+	 * 
+	 * @return the location of this template element in the template that contains it
+	 */
+	int getLineNumber();
+
+	/**
 	 * Processes this template element, keeping the current template element in the {@link TemplateInformation template
 	 * information} up to date.
 	 *

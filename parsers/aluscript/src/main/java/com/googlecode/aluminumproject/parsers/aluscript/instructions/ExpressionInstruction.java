@@ -48,6 +48,6 @@ public class ExpressionInstruction extends AbstractInstruction {
 		}
 
 		context.addTemplateElement(context.getConfiguration().getTemplateElementFactory().createExpressionElement(
-			expressionFactory, text, context.getLibraryUrlAbbreviations()));
+			expressionFactory, text, context.getLibraryUrlAbbreviations(), context.getLineNumber()));
 	}
 }
