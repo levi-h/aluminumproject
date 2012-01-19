@@ -26,23 +26,30 @@ import org.testng.annotations.Test;
 public class TemplateBuilderTest {
 	@Test(expectedExceptions = AluminumException.class)
 	public void restoringCurrentTemplateElementWithoutHavingAddedOneShouldCauseException() {
-		new TemplateBuilder().restoreCurrentTemplateElement();
+		new TemplateBuilder("test").restoreCurrentTemplateElement();
 	}
 
 	public void buildingEmptyTemplateShouldBePossible() {
-		assert new TemplateBuilder().build() != null;
+		assert new TemplateBuilder("test").build() != null;
+	}
+
+	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible")
+	public void builtTemplateShouldContainName() {
+		String name = new TemplateBuilder("test").build().getName();
+		assert name != null;
+		assert name.equals("test");
 	}
 
 	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void buildingTemplateMoreThanOnceShouldCauseException() {
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.build();
 		templateBuilder.build();
 	}
 
 	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void restoringCurrentTemplateElementAfterBuildingTemplateShouldCauseException() {
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.build();
 
 		templateBuilder.restoreCurrentTemplateElement();
@@ -50,7 +57,7 @@ public class TemplateBuilderTest {
 
 	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void addingTemplateElementAfterBuildingTemplateShouldCauseException() {
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.build();
 
 		templateBuilder.addTemplateElement(new TestActionElement());
@@ -59,21 +66,21 @@ public class TemplateBuilderTest {
 	public void builtTemplateShouldContainAddedTemplateElements() {
 		TemplateElement templateElement = new TestActionElement();
 
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.addTemplateElement(templateElement);
 
 		assert templateBuilder.build().contains(templateElement);
 	}
 
 	public void builtTemplateShouldNotContainTemplateElementsThatWereNotAdded() {
-		assert !new TemplateBuilder().build().contains(new TestActionElement());
+		assert !new TemplateBuilder("test").build().contains(new TestActionElement());
 	}
 
 	public void builtTemplateShouldBeAbleToRetrieveParent() {
 		TemplateElement parent = new TestActionElement();
 		TemplateElement child = new TestActionElement();
 
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.addTemplateElement(parent);
 		templateBuilder.addTemplateElement(child);
 
@@ -87,7 +94,7 @@ public class TemplateBuilderTest {
 		TemplateElement firstChild = new TestActionElement();
 		TemplateElement secondChild = new TestActionElement();
 
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.addTemplateElement(parent);
 		templateBuilder.addTemplateElement(firstChild);
 		templateBuilder.restoreCurrentTemplateElement();
@@ -102,11 +109,11 @@ public class TemplateBuilderTest {
 
 	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void retrievingParentOfUnknownTemplateElementShouldCauseException() {
-		new TemplateBuilder().build().getParent(new TestActionElement());
+		new TemplateBuilder("test").build().getParent(new TestActionElement());
 	}
 
 	@Test(dependsOnMethods = "buildingEmptyTemplateShouldBePossible", expectedExceptions = AluminumException.class)
 	public void retrievingChildrenOfUnknownTemplateElementShouldCauseException() {
-		new TemplateBuilder().build().getChildren(new TestActionElement());
+		new TemplateBuilder("test").build().getChildren(new TestActionElement());
 	}
 }

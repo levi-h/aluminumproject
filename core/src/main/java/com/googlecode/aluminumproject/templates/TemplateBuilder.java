@@ -35,6 +35,8 @@ import java.util.Map;
  * that, the template builder should no longer be used.
  */
 public class TemplateBuilder {
+	private String name;
+
 	private TemplateElements templateElements;
 	private TemplateElement currentTemplateElement;
 
@@ -42,8 +44,12 @@ public class TemplateBuilder {
 
 	/**
 	 * Creates a template builder.
+	 *
+	 * @param name the name of the template to build
 	 */
-	public TemplateBuilder() {
+	public TemplateBuilder(String name) {
+		this.name = name;
+
 		templateElements = new TemplateElements();
 	}
 
@@ -83,7 +89,7 @@ public class TemplateBuilder {
 
 		built = true;
 
-		return new BuiltTemplate(templateElements);
+		return new BuiltTemplate(name, templateElements);
 	}
 
 	private void ensureNotBuilt() throws AluminumException {
@@ -155,15 +161,18 @@ public class TemplateBuilder {
 	 * The template that is built by the {@link TemplateBuilder template builder}.
 	 */
 	private static class BuiltTemplate implements Template {
+		private String name;
+
 		private TemplateElements templateElements;
 
-		/**
-		 * Creates a built template.
-		 *
-		 * @param templateElements the template elements that the template consists of
-		 */
-		public BuiltTemplate(TemplateElements templateElements) {
+		public BuiltTemplate(String name, TemplateElements templateElements) {
+			this.name = name;
+
 			this.templateElements = templateElements;
+		}
+
+		public String getName() {
+			return name;
 		}
 
 		public boolean contains(TemplateElement templateElement) {

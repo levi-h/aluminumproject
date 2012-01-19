@@ -25,6 +25,13 @@ import java.util.List;
  */
 public interface Template {
 	/**
+	 * Returns the name of this template.
+	 *
+	 * @return this template's name
+	 */
+	String getName();
+
+	/**
 	 * Determines whether this template contains a certain template element.
 	 *
 	 * @param templateElement the template element to check

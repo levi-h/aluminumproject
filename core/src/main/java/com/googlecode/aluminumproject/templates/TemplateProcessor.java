@@ -68,7 +68,7 @@ public class TemplateProcessor {
 			storeTemplateInCache(name, parser, template);
 		}
 
-		TemplateInformation.from(context).setTemplate(template, name, parser);
+		TemplateInformation.from(context).setTemplate(template, parser);
 
 		for (ContextEnricher contextEnricher: configuration.getContextEnrichers()) {
 			contextEnricher.beforeTemplate(context);

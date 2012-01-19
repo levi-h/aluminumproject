@@ -137,7 +137,7 @@ public class AluScriptParser implements Parser {
 		String templateContents = readStream(name, getTemplateStream(name));
 		logger.debug("read template '", name, "': ", templateContents);
 
-		AluScriptContext context = new AluScriptContext(configuration, settings, instructions);
+		AluScriptContext context = new AluScriptContext(configuration, name, settings, instructions);
 
 		for (String line: templateContents.split("\r?\n")) {
 			if (line.length() > 0) {

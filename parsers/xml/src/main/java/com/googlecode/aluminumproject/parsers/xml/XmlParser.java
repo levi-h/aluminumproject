@@ -94,7 +94,7 @@ public class XmlParser implements Parser {
 		XMLReader parser = createParser();
 		logger.debug("created XML parser");
 
-		TemplateHandler templateHandler = new TemplateHandler(configuration, templateNameTranslator);
+		TemplateHandler templateHandler = new TemplateHandler(configuration, name, templateNameTranslator);
 		parser.setContentHandler(templateHandler);
 		logger.debug("using template handler ", templateHandler);
 

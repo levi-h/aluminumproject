@@ -42,7 +42,7 @@ public class AluScriptContextTest {
 
 	@Test(expectedExceptions = AluminumException.class)
 	public void creatingContextWithDuplicateInstructionShouldCauseException() {
-		new AluScriptContext(context.getConfiguration(), context.getSettings(),
+		new AluScriptContext(context.getConfiguration(), "test", context.getSettings(),
 			Arrays.<Instruction>asList(new TestInstruction(), new TestInstruction()));
 	}
 

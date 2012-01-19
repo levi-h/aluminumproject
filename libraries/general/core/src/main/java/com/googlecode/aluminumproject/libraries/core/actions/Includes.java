@@ -93,8 +93,7 @@ public class Includes {
 				TemplateInformation templateInformation = TemplateInformation.from(context);
 				TemplateInformation subtemplateInformation = TemplateInformation.from(subcontext);
 
-				subtemplateInformation.setTemplate(
-					templateInformation.getTemplate(), templateInformation.getName(), templateInformation.getParser());
+				subtemplateInformation.setTemplate(templateInformation.getTemplate(), templateInformation.getParser());
 
 				if (inheritAncestors) {
 					inheritParent(templateInformation, subtemplateInformation);

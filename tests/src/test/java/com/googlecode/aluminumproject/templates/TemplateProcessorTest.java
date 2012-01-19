@@ -64,7 +64,7 @@ public class TemplateProcessorTest {
 		public Template parseTemplate(String name) throws AluminumException {
 			Map<String, String> libraryUrlAbbreviations = Collections.emptyMap();
 
-			TemplateBuilder templateBuilder = new TemplateBuilder();
+			TemplateBuilder templateBuilder = new TemplateBuilder(name);
 			templateBuilder.addTemplateElement(
 				configuration.getTemplateElementFactory().createTextElement(name, libraryUrlAbbreviations, -1));
 
@@ -81,7 +81,7 @@ public class TemplateProcessorTest {
 
 		Map<String, String> libraryUrlAbbreviations = Collections.emptyMap();
 
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.addTemplateElement(
 			configuration.getTemplateElementFactory().createTextElement("cache", libraryUrlAbbreviations, -1));
 

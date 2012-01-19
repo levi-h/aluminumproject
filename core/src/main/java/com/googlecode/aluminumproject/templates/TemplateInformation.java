@@ -29,7 +29,6 @@ import java.util.Stack;
 public class TemplateInformation {
 	private Template template;
 
-	private String name;
 	private String parser;
 
 	private Stack<TemplateElement> templateElements;
@@ -48,13 +47,11 @@ public class TemplateInformation {
 	 * Sets the template that is being processed.
 	 *
 	 * @param template the template being processed
-	 * @param name the name of the template
 	 * @param parser the name of the parser that produced the template
 	 */
-	public void setTemplate(Template template, String name, String parser) {
+	public void setTemplate(Template template, String parser) {
 		this.template = template;
 
-		this.name = name;
 		this.parser = parser;
 	}
 
@@ -65,15 +62,6 @@ public class TemplateInformation {
 	 */
 	public Template getTemplate() {
 		return template;
-	}
-
-	/**
-	 * Returns the template name.
-	 *
-	 * @return the name of the processed template
-	 */
-	public String getName() {
-		return name;
 	}
 
 	/**

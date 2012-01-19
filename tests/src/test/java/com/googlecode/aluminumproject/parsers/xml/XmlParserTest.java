@@ -51,6 +51,12 @@ public class XmlParserTest {
 		assert createParser(parameters).parseTemplate("templates/upper-case.xml") != null;
 	}
 
+	public void templateShouldHaveName() {
+		String name = createParser().parseTemplate("templates/test.xml").getName();
+		assert name != null;
+		assert name.equals("templates/test.xml");
+	}
+
 	public void libraryUrlAbbreviationsShouldBeSetOnTemplateElements() {
 		Template template = createParser().parseTemplate("templates/test.xml");
 
@@ -96,7 +102,7 @@ public class XmlParserTest {
 		List<TemplateElement> childElements = template.getChildren(rootElement);
 		assert childElements != null;
 		assert childElements.size() == 1;
-		
+
 		assert childElements.get(0).getLineNumber() == 19;
 	}
 
