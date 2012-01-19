@@ -25,14 +25,12 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractDynamicallyParam
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionBody;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.templates.TemplateElement;
 import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Map;
-import java.util.Stack;
 
 @SuppressWarnings("javadoc")
 public class Includes {
@@ -53,8 +51,7 @@ public class Includes {
 			TemplateInformation subtemplateInformation = TemplateInformation.from(subcontext);
 
 			if (inheritAncestors) {
-				inheritTemplateElements(templateInformation, subtemplateInformation);
-				inheritActions(templateInformation, subtemplateInformation);
+				inheritParent(templateInformation, subtemplateInformation);
 			}
 
 			for (Map.Entry<String, ActionParameter> variable: getDynamicParameters().entrySet()) {
@@ -100,8 +97,7 @@ public class Includes {
 					templateInformation.getTemplate(), templateInformation.getName(), templateInformation.getParser());
 
 				if (inheritAncestors) {
-					inheritTemplateElements(templateInformation, subtemplateInformation);
-					inheritActions(templateInformation, subtemplateInformation);
+					inheritParent(templateInformation, subtemplateInformation);
 				}
 
 				for (Map.Entry<String, ActionParameter> variable: getDynamicParameters().entrySet()) {
@@ -128,39 +124,12 @@ public class Includes {
 		}
 	}
 
-	private static void inheritTemplateElements(
+	private static void inheritParent(
 			TemplateInformation templateInformation, TemplateInformation subtemplateInformation) {
-		Stack<TemplateElement> templateElements = new Stack<TemplateElement>();
+		Action parent = templateInformation.getCurrentAction().getParent();
 
-		com.googlecode.aluminumproject.templates.Template template = templateInformation.getTemplate();
-
-		TemplateElement templateElement = template.getParent(templateInformation.getCurrentTemplateElement());
-
-		while (templateElement != null) {
-			templateElements.push(templateElement);
-
-			templateElement = template.getParent(templateElement);
-		}
-
-		while (!templateElements.isEmpty()) {
-			subtemplateInformation.addTemplateElement(templateElements.pop());
-		}
-	}
-
-	private static void inheritActions(
-			TemplateInformation templateInformation, TemplateInformation subtemplateInformation) {
-		Stack<Action> actions = new Stack<Action>();
-
-		Action action = templateInformation.getCurrentAction().getParent();
-
-		while (action != null) {
-			actions.push(action.getParent());
-
-			action = action.getParent();
-		}
-
-		while (!actions.isEmpty()) {
-			subtemplateInformation.addAction(actions.pop());
+		if (parent != null) {
+			subtemplateInformation.addAction(parent);
 		}
 	}
 }
