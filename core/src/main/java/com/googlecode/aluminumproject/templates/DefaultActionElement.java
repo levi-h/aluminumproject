@@ -29,6 +29,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.libraries.actions.DefaultActionContributionOptions;
 import com.googlecode.aluminumproject.utilities.Injector;
 import com.googlecode.aluminumproject.utilities.Injector.ClassBasedValueProvider;
+import com.googlecode.aluminumproject.utilities.TemplateUtilities;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Collections;
@@ -197,23 +198,11 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 			}
 
 			public void invoke(Context context, Writer writer) throws AluminumException {
-				Template template = findTemplate(context, currentTemplateElement);
+				Template template = TemplateUtilities.findTemplate(currentTemplateElement, context);
 
 				for (TemplateElement templateElement: template.getChildren(currentTemplateElement)) {
 					templateElement.process(context, writer);
 				}
-			}
-
-			private Template findTemplate(Context context, TemplateElement templateElement) {
-				Template template = null;
-
-				do {
-					template = TemplateInformation.from(context).getTemplate();
-
-					context = context.getParent();
-				} while ((context != null) && !template.contains(templateElement));
-
-				return template;
 			}
 		}
 	}
