@@ -42,7 +42,8 @@ public class TestAluScriptContext extends AluScriptContext {
 	 * Creates a test AluScript context.
 	 */
 	public TestAluScriptContext() {
-		super(createConfiguration(), new AluScriptSettings(), Arrays.<Instruction>asList(new TestInstruction()));
+		super(createConfiguration(), "test",
+			new AluScriptSettings(), Arrays.<Instruction>asList(new TestInstruction()));
 
 		templateElements = new LinkedList<TemplateElement>();
 	}

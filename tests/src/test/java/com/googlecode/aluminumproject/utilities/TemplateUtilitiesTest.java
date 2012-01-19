@@ -37,12 +37,12 @@ public class TemplateUtilitiesTest {
 			protected void processAsCurrent(Context context, Writer writer) {}
 		};
 
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.addTemplateElement(templateElement);
 		Template template = templateBuilder.build();
 
 		Context context = new DefaultContext();
-		TemplateInformation.from(context).setTemplate(template, "test", "test");
+		TemplateInformation.from(context).setTemplate(template, "code");
 
 		assert TemplateUtilities.findTemplate(templateElement, context) == template;
 	}
@@ -52,15 +52,15 @@ public class TemplateUtilitiesTest {
 			protected void processAsCurrent(Context context, Writer writer) {}
 		};
 
-		TemplateBuilder templateBuilder = new TemplateBuilder();
+		TemplateBuilder templateBuilder = new TemplateBuilder("test");
 		templateBuilder.addTemplateElement(templateElement);
 		Template template = templateBuilder.build();
 
 		Context context = new DefaultContext();
-		TemplateInformation.from(context).setTemplate(template, "test", "test");
+		TemplateInformation.from(context).setTemplate(template, "code");
 
 		Context subcontext = context.createSubcontext();
-		TemplateInformation.from(subcontext).setTemplate(new TemplateBuilder().build(), "subtest", "test");
+		TemplateInformation.from(subcontext).setTemplate(new TemplateBuilder("subtest").build(), "test");
 
 		assert TemplateUtilities.findTemplate(templateElement, subcontext) == template;
 	}
@@ -72,7 +72,7 @@ public class TemplateUtilitiesTest {
 		};
 
 		Context context = new DefaultContext();
-		TemplateInformation.from(context).setTemplate(new TemplateBuilder().build(), "test", "test");
+		TemplateInformation.from(context).setTemplate(new TemplateBuilder("test").build(), "test");
 
 		TemplateUtilities.findTemplate(templateElement, context);
 	}

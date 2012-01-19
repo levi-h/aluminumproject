@@ -35,7 +35,7 @@ public class MemoryCacheTest {
 	}
 
 	public void storedTemplateShouldBeFindable() {
-		Template template = new TemplateBuilder().build();
+		Template template = new TemplateBuilder("test").build();
 		Cache.Key key = new Cache.Key("test", null);
 
 		cache.storeTemplate(key, template);
@@ -47,10 +47,10 @@ public class MemoryCacheTest {
 	public void storingTemplateUnderExistingKeyShouldReplaceTemplate() {
 		Cache.Key key = new Cache.Key("test", null);
 
-		Template initialTemplate = new TemplateBuilder().build();
+		Template initialTemplate = new TemplateBuilder("test").build();
 		cache.storeTemplate(key, initialTemplate);
 
-		Template replacement = new TemplateBuilder().build();
+		Template replacement = new TemplateBuilder("test").build();
 		cache.storeTemplate(key, replacement);
 
 		assert cache.findTemplate(key) == replacement;
@@ -63,7 +63,7 @@ public class MemoryCacheTest {
 	public void disablingCacheShouldRemoveStoredTemplates() {
 		Cache.Key key = new Cache.Key("test", null);
 
-		cache.storeTemplate(key, new TemplateBuilder().build());
+		cache.storeTemplate(key, new TemplateBuilder("test").build());
 		cache.disable();
 
 		assert cache.findTemplate(key) == null;

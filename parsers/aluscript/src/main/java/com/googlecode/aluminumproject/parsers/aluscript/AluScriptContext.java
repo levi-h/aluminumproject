@@ -60,12 +60,13 @@ public class AluScriptContext {
 	 * Creates an AluScript context.
 	 *
 	 * @param configuration the configuration of the parser
+	 * @param templateName the name of the template that is being parsed
 	 * @param settings the template settings
 	 * @param instructions all available instructions
 	 * @throws AluminumException when the instructions contain duplicates
 	 */
-	public AluScriptContext(Configuration configuration, AluScriptSettings settings, List<Instruction> instructions)
-			throws AluminumException {
+	public AluScriptContext(Configuration configuration, String templateName,
+			AluScriptSettings settings, List<Instruction> instructions) throws AluminumException {
 		logger = Logger.get(getClass());
 
 		this.configuration = configuration;
@@ -78,7 +79,7 @@ public class AluScriptContext {
 			addInstruction(instruction);
 		}
 
-		templateBuilder = new TemplateBuilder();
+		templateBuilder = new TemplateBuilder(templateName);
 
 		libraryUrlAbbreviations = new HashMap<Integer, Map<String, String>>();
 

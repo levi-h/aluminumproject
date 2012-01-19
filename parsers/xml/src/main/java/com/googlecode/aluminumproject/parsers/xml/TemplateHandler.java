@@ -67,15 +67,17 @@ public class TemplateHandler extends DefaultHandler {
 	 * Creates a template handler.
 	 *
 	 * @param configuration the configuration to use
+	 * @param templateName the name of the parsed template
 	 * @param templateNameTranslator the template name translator to use
 	 */
-	public TemplateHandler(Configuration configuration, TemplateNameTranslator templateNameTranslator) {
+	public TemplateHandler(Configuration configuration, String templateName,
+			TemplateNameTranslator templateNameTranslator) {
 		this.configuration = configuration;
 		this.templateNameTranslator = templateNameTranslator;
 
 		libraryUrlAbbreviationsStack = new Stack<Map<String, String>>();
 
-		templateBuilder = new TemplateBuilder();
+		templateBuilder = new TemplateBuilder(templateName);
 
 		textLineNumber = -1;
 		textBuffer = new StringBuilder();

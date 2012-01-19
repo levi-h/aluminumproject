@@ -58,7 +58,7 @@ public class XmlSerialiserTest {
 
 	@BeforeMethod
 	public void createTemplateBuilder() {
-		templateBuilder = new TemplateBuilder();
+		templateBuilder = new TemplateBuilder("test");
 	}
 
 	public void emptyTemplateShouldResultInEmptyDocument() {

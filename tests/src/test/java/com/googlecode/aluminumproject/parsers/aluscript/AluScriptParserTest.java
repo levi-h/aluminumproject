@@ -54,6 +54,12 @@ public class AluScriptParserTest {
 		assert createParser(parameters).parseTemplate("templates/upper-case.alu") != null;
 	}
 
+	public void templateShouldHaveName() {
+		String name = createParser().parseTemplate("templates/text.alu").getName();
+		assert name != null;
+		assert name.equals("templates/text.alu");
+	}
+
 	public void newlinesShouldBeAddedAutomaticallyByDefault() {
 		Template template = createParser().parseTemplate("templates/text.alu");
 

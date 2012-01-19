@@ -43,16 +43,12 @@ public class TemplateInformationTest {
 
 	@Test(dependsOnMethods = "obtainingTemplateInformationFromNewContextShouldCreateIt")
 	public void templateShouldBeRemembered() {
-		Template template = new TemplateBuilder().build();
+		Template template = new TemplateBuilder("test").build();
 
 		TemplateInformation templateInformation = TemplateInformation.from(new DefaultContext());
-		templateInformation.setTemplate(template, "test", "code");
+		templateInformation.setTemplate(template, "code");
 
 		assert templateInformation.getTemplate() == template;
-
-		String name = templateInformation.getName();
-		assert name != null;
-		assert name.equals("test");
 
 		String parser = templateInformation.getParser();
 		assert parser != null;
