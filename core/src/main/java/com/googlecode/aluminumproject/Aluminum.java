@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.Writer;
 
 /**
@@ -32,6 +33,8 @@ public class Aluminum {
 
 	private TemplateProcessor templateProcessor;
 
+	private final Logger logger;
+
 	/**
 	 * Creates a template engine.
 	 *
@@ -41,6 +44,8 @@ public class Aluminum {
 		this.configuration = configuration;
 
 		templateProcessor = new TemplateProcessor(configuration);
+
+		logger = Logger.get(getClass());
 	}
 
 	/**
@@ -58,7 +63,11 @@ public class Aluminum {
 			try {
 				templateProcessor.processTemplate(name, parser, context, writer);
 			} catch (RuntimeException exception) {
-				writer.clear();
+				try {
+					writer.clear();
+				} catch (AluminumException clearException) {
+					logger.warn(clearException, "can't clear writer ", writer);
+				}
 
 				throw exception;
 			} finally {
