@@ -21,6 +21,8 @@ import com.googlecode.aluminumproject.utilities.StringUtilities;
  * Thrown by the template engine when an unexpected condition arises.
  */
 public class AluminumException extends RuntimeException {
+	private String origin;
+
 	/**
 	 * Creates an Aluminum exception.
 	 *
@@ -40,5 +42,25 @@ public class AluminumException extends RuntimeException {
 		super(StringUtilities.join(messageParts), cause);
 	}
 
-	private final static long serialVersionUID = 20111218L;
+	/**
+	 * Sets the origin of this exception.
+	 *
+	 * @param origin the exception origin
+	 */
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+
+	@Override
+	public String getMessage() {
+		String message = super.getMessage();
+
+		if (origin != null) {
+			message = String.format("%s (%s)", message, origin);
+		}
+
+		return message;
+	}
+
+	private final static long serialVersionUID = 20120120L;
 }
