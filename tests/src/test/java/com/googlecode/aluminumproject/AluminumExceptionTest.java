@@ -33,4 +33,13 @@ public class AluminumExceptionTest {
 
 		assert new AluminumException(cause, "test").getCause() == cause;
 	}
+
+	public void originShouldBeAddedToMessageWhenAvailable() {
+		AluminumException exception = new AluminumException("empty template");
+		exception.setOrigin("templates/empty_template");
+
+		String message = exception.getMessage();
+		assert message != null;
+		assert message.equals("empty template (templates/empty_template)");
+	}
 }
