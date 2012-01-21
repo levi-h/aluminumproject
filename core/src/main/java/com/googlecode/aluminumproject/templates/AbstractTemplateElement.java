@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.templates;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.utilities.TemplateUtilities;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.util.Collections;
@@ -54,7 +55,17 @@ public abstract class AbstractTemplateElement implements TemplateElement {
 		TemplateInformation templateInformation = TemplateInformation.from(context);
 		templateInformation.addTemplateElement(this);
 
-		processAsCurrent(context, writer);
+		try {
+			processAsCurrent(context, writer);
+		} catch (AluminumException exception) {
+			if (exception.getOrigin() == null) {
+				Template template = TemplateUtilities.findTemplate(this, context);
+
+				exception.setOrigin(String.format("%s, line %d", template.getName(), getLineNumber()));
+			}
+
+			throw exception;
+		}
 
 		templateInformation.removeCurrentTemplateElement();
 	}
