@@ -43,6 +43,15 @@ public class AluminumException extends RuntimeException {
 	}
 
 	/**
+	 * Returns the origin of this exception.
+	 *
+	 * @return this exception's origin (may be {@code null})
+	 */
+	public String getOrigin() {
+		return origin;
+	}
+
+	/**
 	 * Sets the origin of this exception.
 	 *
 	 * @param origin the exception origin

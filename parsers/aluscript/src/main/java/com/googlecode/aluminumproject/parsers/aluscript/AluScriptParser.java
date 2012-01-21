@@ -141,7 +141,13 @@ public class AluScriptParser implements Parser {
 
 		for (String line: templateContents.split("\r?\n")) {
 			if (line.length() > 0) {
-				findLineParser(line).parseLine(line, context);
+				try {
+					findLineParser(line).parseLine(line, context);
+				} catch (AluminumException exception) {
+					exception.setOrigin(String.format("%s, line %d", name, context.getLineNumber()));
+
+					throw exception;
+				}
 			}
 
 			context.incrementLineNumber();

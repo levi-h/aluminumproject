@@ -20,6 +20,7 @@ import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.A
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.TEMPLATE_EXTENSION;
 import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.TEMPLATE_NAME_TRANSLATOR_CLASS;
 
+import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
@@ -130,6 +131,24 @@ public class AluScriptParserTest {
 		TemplateElement secondChildElement = childElements.get(1);
 		assert secondChildElement != null;
 		assert secondChildElement.getLineNumber() == 18;
+	}
+
+	public void parseExceptionShouldIncludeOrigin() {
+		AluminumException exception;
+
+		try {
+			createParser().parseTemplate("templates/illegal.alu");
+
+			exception = null;
+		} catch (AluminumException parseException) {
+			exception = parseException;
+		}
+
+		assert exception != null;
+
+		String origin = exception.getOrigin();
+		assert origin != null;
+		assert origin.equals("templates/illegal.alu, line 15");
 	}
 
 	private AluScriptParser createParser() {
