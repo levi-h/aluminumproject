@@ -47,7 +47,7 @@ public class ElExpression implements Expression {
 		try {
 			return expression.getValue(new ElContext(context, configuration));
 		} catch (ELException exception) {
-			throw new AluminumException(exception, "can't evaluate expression");
+			throw new AluminumException(exception, "can't evaluate expression ", expression.getExpressionString());
 		}
 	}
 }
