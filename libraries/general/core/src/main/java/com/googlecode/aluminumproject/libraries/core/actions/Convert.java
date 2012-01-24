@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.libraries.core.actions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -26,6 +27,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.lang.reflect.Type;
 
 @SuppressWarnings("javadoc")
+@UsableAsFunction(argumentParameters = {"value", "type"})
 public class Convert extends AbstractAction {
 	private @Required Object value;
 	private @Required Type type;

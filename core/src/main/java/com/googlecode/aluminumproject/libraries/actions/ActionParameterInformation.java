@@ -25,17 +25,23 @@ public class ActionParameterInformation {
 	private Type type;
 	private boolean required;
 
+	private Integer indexWhenFunctionArgument;
+
 	/**
 	 * Creates action parameter information.
 	 *
 	 * @param name the name of the parameter
 	 * @param type the type of the parameter
 	 * @param required whether the parameter is required or not
+	 * @param indexWhenFunctionArgument the argument index when the parameter's action is used as if it were a function
+	 *                                  (may be {@code null})
 	 */
-	public ActionParameterInformation(String name, Type type, boolean required) {
+	public ActionParameterInformation(String name, Type type, boolean required, Integer indexWhenFunctionArgument) {
 		this.name = name;
 		this.type = type;
 		this.required = required;
+
+		this.indexWhenFunctionArgument = indexWhenFunctionArgument;
 	}
 
 	/**
@@ -63,5 +69,16 @@ public class ActionParameterInformation {
 	 */
 	public boolean isRequired() {
 		return required;
+	}
+
+	/**
+	 * Determines, when the action of the parameter is used as if it were a function, which of the function arguments
+	 * maps to the parameter. When the action is not usable as function or when the parameter is not used if it is, this
+	 * method will return {@code null}.
+	 *
+	 * @return the index of the parameter when its action is used as if it were a function, possibly {@code null}
+	 */
+	public Integer getIndexWhenFunctionArgument() {
+		return indexWhenFunctionArgument;
 	}
 }

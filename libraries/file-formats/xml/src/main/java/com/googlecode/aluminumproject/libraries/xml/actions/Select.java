@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.libraries.xml.model.SelectionContext;
@@ -26,6 +27,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.util.List;
 
 @SuppressWarnings("javadoc")
+@UsableAsFunction(argumentParameters = {"element", "expression"})
 public class Select extends AbstractAction implements SelectionContextContainer {
 	private @Required com.googlecode.aluminumproject.libraries.xml.model.Element element;
 

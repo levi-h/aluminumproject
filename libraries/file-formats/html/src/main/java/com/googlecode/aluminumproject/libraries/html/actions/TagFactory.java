@@ -51,10 +51,10 @@ public class TagFactory implements ActionFactory {
 		List<ActionParameterInformation> parameterInformation = new LinkedList<ActionParameterInformation>();
 
 		for (String attribute: attributes) {
-			parameterInformation.add(new ActionParameterInformation(attribute, String.class, false));
+			parameterInformation.add(new ActionParameterInformation(attribute, String.class, false, null));
 		}
 
-		information = new ActionInformation(name, parameterInformation, false);
+		information = new ActionInformation(name, parameterInformation, false, null);
 	}
 
 	public void disable() {}

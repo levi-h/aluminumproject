@@ -36,7 +36,7 @@ public class TestActionFactory implements ActionFactory {
 	 * Creates a test action factory.
 	 */
 	public TestActionFactory() {
-		information = new ActionInformation("test", Collections.<ActionParameterInformation>emptyList(), false);
+		information = new ActionInformation("test", Collections.<ActionParameterInformation>emptyList(), false, null);
 	}
 
 	public void initialise(Configuration configuration) {
