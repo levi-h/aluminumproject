@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.libraries.Library;
 
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,19 +30,25 @@ public class ActionInformation {
 	private List<ActionParameterInformation> parameterInformation;
 	private boolean dynamicallyParameterisable;
 
+	private Type resultTypeWhenFunction;
+
 	/**
 	 * Creates action information.
 	 *
 	 * @param name the name of the action
 	 * @param parameterInformation information about the parameters of the action
 	 * @param dynamicallyParameterisable whether the action supports dynamic parameters or not
+	 * @param resultTypeWhenFunction the result type of the action when it is used as if it were a function (may be
+	 *                               {@code null} to indicate that the action can not be used as a function)
 	 */
-	public ActionInformation(String name,
-			List<ActionParameterInformation> parameterInformation, boolean dynamicallyParameterisable) {
+	public ActionInformation(String name, List<ActionParameterInformation> parameterInformation,
+			boolean dynamicallyParameterisable, Type resultTypeWhenFunction) {
 		this.name = name;
 
 		this.parameterInformation = parameterInformation;
 		this.dynamicallyParameterisable = dynamicallyParameterisable;
+
+		this.resultTypeWhenFunction = resultTypeWhenFunction;
 	}
 
 	/**
@@ -69,5 +76,14 @@ public class ActionInformation {
 	 */
 	public boolean isDynamicallyParameterisable() {
 		return dynamicallyParameterisable;
+	}
+
+	/**
+	 * Returns the action's result type when it is used as a function.
+	 *
+	 * @return the result type of the action when it is used as if it were a function (possibly {@code null})
+	 */
+	public Type getResultTypeWhenFunction() {
+		return resultTypeWhenFunction;
 	}
 }

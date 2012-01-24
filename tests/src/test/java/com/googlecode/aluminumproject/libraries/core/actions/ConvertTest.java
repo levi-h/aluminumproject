@@ -42,4 +42,17 @@ public class ConvertTest extends CoreLibraryTest {
 	public void tryingIllegalConversionShouldCauseException() {
 		processTemplate("convert-illegal");
 	}
+
+	public void resultOfConversionFunctionShouldBeWritten() {
+		Context context = new DefaultContext();
+		context.setVariable("value", "8");
+
+		processTemplate("convert-as-function", context);
+
+		assert context.getVariableNames(Context.TEMPLATE_SCOPE).contains("converted-value");
+
+		Object convertedValue = context.getVariable(Context.TEMPLATE_SCOPE, "converted-value");
+		assert convertedValue instanceof Integer;
+		assert ((Integer) convertedValue).intValue() == 8;
+	}
 }

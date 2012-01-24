@@ -21,6 +21,7 @@ import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.annotations.Typed;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.context.Context;
@@ -34,10 +35,13 @@ import com.googlecode.aluminumproject.utilities.finders.FieldFinder.FieldFilter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * An {@link ActionFactory action factory} that takes an {@link Action action} class and examines it to collect
@@ -62,6 +66,10 @@ import java.util.Map;
  * Actions may support dynamic parameters by implementing {@link DynamicallyParameterisable the dynamically
  * parameterisable interface}. Any parameters that are supplied to the action factory but whose names don't match any of
  * the found parameter names will be set as dynamic parameters.
+ * <p>
+ * Actions that are annotated with {@link UsableAsFunction &#64;UsableAsFunction} can be used as if they were functions.
+ * The parameters of these actions that are available as function arguments are supplied as an annotation attribute;
+ * this list will at the least include all required parameters.
  * <p>
  * Actions will be created using the configured {@link ConfigurationElementFactory configuration element factory}. After
  * an action has been created, all of its fields that are annotated with {@link Injected &#64;Injected} will be fed with
@@ -89,8 +97,23 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 
 		parameterFields = new HashMap<String, Field>();
 
+		boolean dynamicallyParameterisable = DynamicallyParameterisable.class.isAssignableFrom(actionClass);
+
+		UsableAsFunction usableAsFunction = actionClass.getAnnotation(UsableAsFunction.class);
+
+		Type resultTypeWhenFunction;
+		List<String> functionArgumentParameters;
+
+		if (usableAsFunction == null) {
+			resultTypeWhenFunction = null;
+			functionArgumentParameters = null;
+		} else {
+			resultTypeWhenFunction = GenericsUtilities.getType(usableAsFunction.resultType(), "java.lang", "java.util");
+			functionArgumentParameters = Arrays.asList(usableAsFunction.argumentParameters());
+		}
+
 		information = new ActionInformation(getActionName(),
-			getParameterInformation(), DynamicallyParameterisable.class.isAssignableFrom(actionClass));
+			getParameterInformation(functionArgumentParameters), dynamicallyParameterisable, resultTypeWhenFunction);
 	}
 
 	private String getActionName() {
@@ -107,8 +130,15 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		return actionName;
 	}
 
-	private List<ActionParameterInformation> getParameterInformation() throws AluminumException {
+	private List<ActionParameterInformation> getParameterInformation(List<String> functionArguments)
+			throws AluminumException {
 		List<ActionParameterInformation> parameterInformation = new LinkedList<ActionParameterInformation>();
+
+		Set<String> unknownFunctionArguments = new HashSet<String>();
+
+		if (functionArguments != null) {
+			unknownFunctionArguments.addAll(functionArguments);
+		}
 
 		List<Field> parameterFields = FieldFinder.find(new FieldFilter() {
 			public boolean accepts(Field field) {
@@ -145,7 +175,24 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 
 			this.parameterFields.put(parameterName, parameterField);
 
-			parameterInformation.add(new ActionParameterInformation(parameterName, parameterType, required));
+			Integer argumentIndex = null;
+
+			if (functionArguments != null) {
+				if (functionArguments.contains(parameterName)) {
+					argumentIndex = functionArguments.indexOf(parameterName);
+					unknownFunctionArguments.remove(parameterName);
+				} else if (required) {
+					throw new AluminumException("required parameter '", parameterName, "' is missing ",
+						"from function argument list");
+				}
+			}
+
+			parameterInformation.add(
+				new ActionParameterInformation(parameterName, parameterType, required, argumentIndex));
+		}
+
+		if (!unknownFunctionArguments.isEmpty()) {
+			throw new AluminumException("unknown function argument parameters: ", unknownFunctionArguments);
 		}
 
 		return parameterInformation;

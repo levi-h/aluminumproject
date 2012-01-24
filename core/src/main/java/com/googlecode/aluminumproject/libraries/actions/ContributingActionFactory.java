@@ -22,6 +22,7 @@ import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,8 +57,10 @@ public class ContributingActionFactory extends AbstractLibraryElement implements
 		logger.debug("using action name '", actionName, "', parameter name '", parameterName, "', ",
 			"and parameter type ", parameterType, " for action contribution class ", actionContributionClass.getName());
 
-		actionInformation = new ActionInformation(actionName,
-			Collections.singletonList(new ActionParameterInformation(parameterName, parameterType, true)), false);
+		List<ActionParameterInformation> actionParameterInformation =
+			Collections.singletonList(new ActionParameterInformation(parameterName, parameterType, true, null));
+
+		actionInformation = new ActionInformation(actionName, actionParameterInformation, false, null);
 	}
 
 	public ActionInformation getInformation() {
