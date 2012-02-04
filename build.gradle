@@ -40,16 +40,12 @@ subprojects {
 		}
 
 		task createSources(type: Zip, visible: false) {
-			destinationDir = project.distsDir
-
 			classifier = 'src'
 
-			sourceSets.main.java.srcDirs.each {srcDir ->
-				from srcDir
-			}
+			from sourceSets.main.allSource
 		}
 
-		assemble.dependsOn << 'createSources'
+		assemble.dependsOn createSources
 
 		test.enabled = false
 	}
@@ -94,43 +90,24 @@ task createDistribution(type: Zip, dependsOn: createDocs) {
 		include 'docs/**'
 	}
 
-	Set libraries = [] as Set
-
 	subprojects.each {subproject ->
-		if (subproject.jar.enabled) {
-			from(subproject.distsDir) {
-				into 'src'
-				include '*-src.zip'
-			}
+		from(subproject.distsDir) {
+			into 'src'
+			include '*-src.zip'
+		}
 
-			from(subproject.libsDir) {
-				into 'lib'
-				include '*.jar'
-			}
+		into('lib') {
+			from subproject.libsDir
 
-			subproject.configurations.distribution.resolve().each {library ->
-				if (libraries.add(library.name)) {
-					from(library.parentFile.path) {
-						into 'lib'
-						include library.name
-					}
-				}
-			}
+			from files(subproject.configurations.distribution)
 
 			from(subproject.projectDir) {
-				into 'lib'
 				include '*.LICENSE'
 				include '*.NOTICE'
 			}
-
-			File distributionDir = file("${subproject.projectDir}/src/distribution")
-
-			if (distributionDir.exists()) {
-				from(distributionDir) {
-					include '**'
-				}
-			}
 		}
+
+		from subproject.file('src/distribution')
 	}
 }
 
