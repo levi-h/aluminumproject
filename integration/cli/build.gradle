@@ -22,7 +22,9 @@ dependencies {
 	distribution group: 'de.odysseus.juel', name: 'juel-impl', version: '2.2.4', transitive: false
 	distribution group: 'de.odysseus.juel', name: 'juel-spi', version: '2.2.4'
 
-	distribution group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.0'
+	distribution(group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.0') {
+		exclude group: 'org.slf4j'
+	}
 }
 
 javadoc {
