@@ -32,7 +32,6 @@ import javax.mail.internet.MimeMessage;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -41,24 +40,21 @@ import org.testng.annotations.Test;
 public class SendTest extends MailLibraryTest {
 	private GreenMail mailServer;
 
-	@BeforeClass
-	public void writeSessionPropertySet() {
+	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
 		Properties sessionPropertySet = new Properties();
 		sessionPropertySet.setProperty("mail.from", "from@aluminum");
 		sessionPropertySet.setProperty("mail.transport.protocol", "smtp");
 		sessionPropertySet.setProperty("mail.smtp.host", "localhost");
 		sessionPropertySet.setProperty("mail.smtp.port", "3025");
 
-		EnvironmentUtilities.getPropertySetContainer().writePropertySet("mail", sessionPropertySet);
+		EnvironmentUtilities.getPropertySetContainer().writePropertySet("send", sessionPropertySet);
+
+		configurationParameters.addParameter(MailContextProvider.SESSION_PROPERTY_SET_NAME, "send");
 	}
 
 	@AfterClass
 	public void removeSessionPropertySet() {
-		EnvironmentUtilities.getPropertySetContainer().removePropertySet("mail");
-	}
-
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
-		configurationParameters.addParameter(MailContextProvider.SESSION_PROPERTY_SET_NAME, "mail");
+		EnvironmentUtilities.getPropertySetContainer().removePropertySet("send");
 	}
 
 	@BeforeMethod
