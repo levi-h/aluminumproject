@@ -25,15 +25,11 @@ import com.googlecode.aluminumproject.writers.Writer;
  */
 @Named("annotated test")
 @Typed("String")
-public class AnnotatedActionContribution implements ActionContribution {
+public class AnnotatedActionContribution extends AbstractActionContribution {
 	/**
 	 * Creates an annotated action contribution.
 	 */
 	public AnnotatedActionContribution() {}
-
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options) {}
 }

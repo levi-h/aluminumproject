@@ -23,15 +23,11 @@ import com.googlecode.aluminumproject.writers.Writer;
  * An action contribution that is usable as if it were an action.
  */
 @UsableAsAction(parameterName = "test")
-public class TestActionContributionThatIsUsableAsAction implements ActionContribution {
+public class TestActionContributionThatIsUsableAsAction extends AbstractActionContribution {
 	/**
 	 * Creates a test action contribution that is usable as action.
 	 */
 	public TestActionContributionThatIsUsableAsAction() {}
-
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options) {}
 }

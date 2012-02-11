@@ -20,10 +20,9 @@ import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.Action;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
@@ -42,11 +41,7 @@ public class Variable {
 
 	@Named("variable name")
 	@Typed("String")
-	public static class Name implements ActionContribution {
-		public boolean canBeMadeTo(ActionFactory actionFactory) {
-			return true;
-		}
-
+	public static class Name extends AbstractActionContribution {
 		public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
 				throws AluminumException {
 			options.addInterceptor(new NameInterceptor((String) parameter.getValue(String.class, context)));
@@ -128,11 +123,7 @@ public class Variable {
 
 	@Named("variable scope")
 	@Typed("String")
-	public static class Scope implements ActionContribution {
-		public boolean canBeMadeTo(ActionFactory actionFactory) {
-			return true;
-		}
-
+	public static class Scope extends AbstractActionContribution {
 		public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
 				throws AluminumException {
 			options.addInterceptor(new ScopeInterceptor((String) parameter.getValue(String.class, context)));

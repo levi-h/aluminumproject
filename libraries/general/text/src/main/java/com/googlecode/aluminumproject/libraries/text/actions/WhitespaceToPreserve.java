@@ -19,9 +19,8 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.utilities.Logger;
@@ -31,7 +30,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
 @Typed("int")
-public abstract class WhitespaceToPreserve implements ActionContribution {
+public abstract class WhitespaceToPreserve extends AbstractActionContribution {
 	private WhitespaceType type;
 
 	private final Logger logger;
@@ -40,10 +39,6 @@ public abstract class WhitespaceToPreserve implements ActionContribution {
 		this.type = type;
 
 		logger = Logger.get(getClass());
-	}
-
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
 	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)

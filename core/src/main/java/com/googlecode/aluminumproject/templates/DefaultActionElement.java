@@ -131,7 +131,11 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 				actionContext.getActionContributionFactories();
 
 			for (ActionContributionDescriptor descriptor: actionContributionFactories.keySet()) {
-				ActionContribution actionContribution = actionContributionFactories.get(descriptor).create();
+				ActionContributionFactory actionContributionFactory = actionContributionFactories.get(descriptor);
+
+				ActionContribution actionContribution = actionContributionFactory.create();
+				actionContribution.setFactory(actionContributionFactory);
+
 				ActionFactory actionFactory = actionContext.getActionFactory();
 
 				if (actionContribution.canBeMadeTo(actionFactory)) {
@@ -168,6 +172,7 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 				logger.debug("creating action using ", actionFactory);
 
 				Action action = actionFactory.create(actionContext.getParameters(), actionContext.getContext());
+				action.setFactory(actionFactory);
 
 				Injector injector = new Injector();
 				injector.addValueProvider(new ClassBasedValueProvider(actionContext.getActionDescriptor()));

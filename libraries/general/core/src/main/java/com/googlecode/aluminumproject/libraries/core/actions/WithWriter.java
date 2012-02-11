@@ -19,20 +19,15 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
 @Typed("com.googlecode.aluminumproject.writers.Writer")
-public class WithWriter implements ActionContribution {
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
-
+public class WithWriter extends AbstractActionContribution {
 	public void make(Context context, Writer originalWriter,
 			final ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		options.addInterceptor(new WriterReplacer() {

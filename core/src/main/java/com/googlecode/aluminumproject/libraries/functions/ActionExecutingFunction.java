@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
 import com.googlecode.aluminumproject.libraries.actions.Action;
 import com.googlecode.aluminumproject.libraries.actions.ActionInformation;
 import com.googlecode.aluminumproject.writers.ListWriter;
@@ -27,7 +28,7 @@ import java.util.List;
  * Executes an {@link Action action} when it is called. Whatever is written by the action will become the result of the
  * function.
  */
-public class ActionExecutingFunction implements Function {
+public class ActionExecutingFunction extends AbstractLibraryElementCreation<FunctionFactory> implements Function {
 	private Action action;
 	private ActionInformation actionInformation;
 

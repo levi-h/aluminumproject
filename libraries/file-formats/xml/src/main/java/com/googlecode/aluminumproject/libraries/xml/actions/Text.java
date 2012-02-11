@@ -19,7 +19,9 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
+import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
 import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
@@ -30,7 +32,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
 @Typed("String")
-public class Text implements ActionContribution {
+public class Text extends AbstractLibraryElementCreation<ActionContributionFactory> implements ActionContribution {
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return (actionFactory instanceof DefaultActionFactory) &&
 			AbstractElement.class.isAssignableFrom(((DefaultActionFactory) actionFactory).getActionClass());

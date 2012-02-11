@@ -19,9 +19,8 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.WriterReplacer;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.writers.TrimWriter;
@@ -30,15 +29,11 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
 @Typed("com.googlecode.aluminumproject.writers.TrimWriter$TrimType")
-abstract class AbstractTrim implements ActionContribution {
+abstract class AbstractTrim extends AbstractActionContribution {
 	private boolean multiline;
 
 	protected AbstractTrim(boolean multiline) {
 		this.multiline = multiline;
-	}
-
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
 	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)

@@ -178,7 +178,10 @@ public class FunctionDelegateFactory {
 			arguments.add(new ConstantFunctionArgument(parameter, converterRegistry));
 		}
 
-		return functionContext.functionFactory.create(arguments, functionContext.context).call(functionContext.context);
+		Function function = functionContext.functionFactory.create(arguments, functionContext.context);
+		function.setFactory(functionContext.functionFactory);
+
+		return function.call(functionContext.context);
 	}
 
 	private static String getKey(String libraryUrl, String functionName) {
