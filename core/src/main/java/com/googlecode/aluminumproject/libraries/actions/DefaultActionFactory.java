@@ -75,7 +75,7 @@ import java.util.Set;
  * an action has been created, all of its fields that are annotated with {@link Injected &#64;Injected} will be fed with
  * an appropriate value.
  */
-public class DefaultActionFactory extends AbstractLibraryElement implements ActionFactory {
+public class DefaultActionFactory extends AbstractLibraryElement implements ClassBasedActionFactory {
 	private Class<? extends Action> actionClass;
 
 	private Map<String, Field> parameterFields;
@@ -202,11 +202,6 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Acti
 		return information;
 	}
 
-	/**
-	 * Returns the action class that will be instantiated.
-	 *
-	 * @return this default action factory's action class
-	 */
 	public Class<? extends Action> getActionClass() {
 		return actionClass;
 	}

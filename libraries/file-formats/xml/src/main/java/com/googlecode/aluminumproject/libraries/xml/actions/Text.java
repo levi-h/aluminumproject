@@ -25,7 +25,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactor
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
+import com.googlecode.aluminumproject.libraries.actions.ClassBasedActionFactory;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -34,8 +34,8 @@ import com.googlecode.aluminumproject.writers.Writer;
 @Typed("String")
 public class Text extends AbstractLibraryElementCreation<ActionContributionFactory> implements ActionContribution {
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return (actionFactory instanceof DefaultActionFactory) &&
-			AbstractElement.class.isAssignableFrom(((DefaultActionFactory) actionFactory).getActionClass());
+		return (actionFactory instanceof ClassBasedActionFactory) &&
+			AbstractElement.class.isAssignableFrom(((ClassBasedActionFactory) actionFactory).getActionClass());
 	}
 
 	public void make(Context context, Writer writer,
