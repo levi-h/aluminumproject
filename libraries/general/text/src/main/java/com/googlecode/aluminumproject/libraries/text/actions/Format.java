@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.ValidInside;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
@@ -196,6 +197,7 @@ public class Format extends AbstractDynamicallyParameterisableAction {
 	}
 
 	@Named("parameter")
+	@ValidInside(Format.class)
 	public static class FormatParameter extends AbstractAction {
 		private String name;
 

@@ -20,10 +20,12 @@ import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.annotations.UsableAsFunction;
+import com.googlecode.aluminumproject.annotations.ValidInside;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
+import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.Type;
@@ -365,5 +367,30 @@ public class DefaultActionFactoryTest {
 	public void includingUnknownParameterInFunctionArgumentListShouldCauseException() {
 		new DefaultActionFactory(ActionThatIsUsableAsFunctionWithUnknownArgumentParameter.class).initialise(
 			new TestConfiguration(new ConfigurationParameters()));
+	}
+
+	@ValidInside(TestAction.class)
+	public static class ActionThatIsOnlyValidInsideTestAction extends AbstractAction {
+		public void execute(Context context, Writer writer) {}
+	}
+
+	@Test(expectedExceptions = AluminumException.class)
+	public void omittingRequiredAncestorShouldCauseException() {
+		DefaultActionFactory actionFactory = new DefaultActionFactory(ActionThatIsOnlyValidInsideTestAction.class);
+		actionFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
+
+		actionFactory.create(Collections.<String, ActionParameter>emptyMap(), new DefaultContext());
+	}
+
+	public void supplyingRequiredAncestorShouldCreateAction() {
+		DefaultActionFactory actionFactory = new DefaultActionFactory(ActionThatIsOnlyValidInsideTestAction.class);
+		actionFactory.initialise(new TestConfiguration(new ConfigurationParameters()));
+
+		Map<String, ActionParameter> parameters = Collections.emptyMap();
+		Context context = new DefaultContext();
+
+		TemplateInformation.from(context).addAction(new TestAction());
+
+		assert actionFactory.create(parameters, context) instanceof ActionThatIsOnlyValidInsideTestAction;
 	}
 }
