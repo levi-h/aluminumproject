@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.mail.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.ValidInside;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -25,6 +26,7 @@ import javax.mail.Address;
 import javax.mail.Message.RecipientType;
 
 @SuppressWarnings("javadoc")
+@ValidInside(Send.class)
 public class AddRecipient extends AbstractAction {
 	private RecipientType type;
 	private @Required Address address;
@@ -34,12 +36,6 @@ public class AddRecipient extends AbstractAction {
 	}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
-		Send send = findAncestorOfType(Send.class);
-
-		if (send == null) {
-			throw new AluminumException("'add recipient' actions can only be used inside 'send' actions");
-		}
-
-		send.addRecipient(type, address);
+		findAncestorOfType(Send.class).addRecipient(type, address);
 	}
 }

@@ -17,23 +17,19 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.ValidInside;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
+@ValidInside(AbstractElement.class)
 public class Attribute extends AbstractAction {
 	private String prefix;
 	private @Required String name;
 	private @Required String value;
 
 	public void execute(Context context, Writer writer) throws AluminumException {
-		AbstractElement element = findAncestorOfType(AbstractElement.class);
-
-		if (element == null) {
-			throw new AluminumException("attributes should be nested inside an element");
-		} else {
-			element.addAttribute(prefix, name, value);
-		}
+		findAncestorOfType(AbstractElement.class).addAttribute(prefix, name, value);
 	}
 }

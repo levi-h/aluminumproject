@@ -17,22 +17,18 @@ package com.googlecode.aluminumproject.libraries.xml.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.ValidInside;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
+@ValidInside(SelectionContextContainer.class)
 public class Namespace extends AbstractAction {
 	private @Required String prefix;
 	private @Required String url;
 
 	public void execute(Context context, Writer writer) throws AluminumException {
-		SelectionContextContainer selectionContextContainer = findAncestorOfType(SelectionContextContainer.class);
-
-		if (selectionContextContainer == null) {
-			throw new AluminumException("namespace actions may only be used inside selection context containers");
-		} else {
-			selectionContextContainer.getSelectionContext().addNamespace(prefix, url);
-		}
+		findAncestorOfType(SelectionContextContainer.class).getSelectionContext().addNamespace(prefix, url);
 	}
 }

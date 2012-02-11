@@ -22,10 +22,12 @@ import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.annotations.UsableAsFunction;
+import com.googlecode.aluminumproject.annotations.ValidInside;
 import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.configuration.ConfigurationElementFactory;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
+import com.googlecode.aluminumproject.templates.TemplateInformation;
 import com.googlecode.aluminumproject.utilities.GenericsUtilities;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
 import com.googlecode.aluminumproject.utilities.StringUtilities;
@@ -207,6 +209,8 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Clas
 	}
 
 	public Action create(Map<String, ActionParameter> parameters, Context context) throws AluminumException {
+		validateNesting(context);
+
 		Action action =
 			getConfiguration().getConfigurationElementFactory().instantiate(actionClass.getName(), Action.class);
 
@@ -220,6 +224,22 @@ public class DefaultActionFactory extends AbstractLibraryElement implements Clas
 		logger.debug("injected fields");
 
 		return action;
+	}
+
+	private void validateNesting(Context context) throws AluminumException {
+		if (actionClass.isAnnotationPresent(ValidInside.class)) {
+			Action action = TemplateInformation.from(context).getCurrentAction();
+			Class<?> requiredAncestorType = actionClass.getAnnotation(ValidInside.class).value();
+
+			while ((action != null) && !requiredAncestorType.isAssignableFrom(action.getClass())) {
+				action = action.getParent();
+			}
+
+			if (action == null) {
+				throw new AluminumException("'", information.getName(), "' actions are only valid inside actions ",
+					"that are assignable to type ", requiredAncestorType.getSimpleName());
+			}
+		}
 	}
 
 	private void setParameters(
