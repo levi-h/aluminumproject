@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.libraries.functions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElement;
+import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  * A dynamic function that parses its name (which should have the form {@code addNandN[andN...]}, where <em>N</em> is a
  * number) and adds the terms that were found.
  */
-public class Add implements Function {
+public class Add extends AbstractLibraryElementCreation<FunctionFactory> implements Function {
 	private int[] terms;
 
 	private Add(int[] terms) {

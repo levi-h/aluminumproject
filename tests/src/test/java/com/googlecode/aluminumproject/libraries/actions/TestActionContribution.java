@@ -25,15 +25,11 @@ import com.googlecode.aluminumproject.writers.Writer;
  * package, since its {@link TestActionContributionFactory factory} is added to the {@link TestLibrary test library}.
  */
 @Ignored
-public class TestActionContribution implements ActionContribution {
+public class TestActionContribution extends AbstractActionContribution {
 	/**
 	 * Creates a test action contribution.
 	 */
 	public TestActionContribution() {}
-
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
 
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options) {}
 }

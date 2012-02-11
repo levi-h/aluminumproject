@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +25,7 @@ import java.lang.reflect.Method;
 /**
  * A {@link Function function} that invokes a static method.
  */
-public class StaticMethodInvokingFunction implements Function {
+public class StaticMethodInvokingFunction extends AbstractLibraryElementCreation<FunctionFactory> implements Function {
 	private Method method;
 	private Object[] parameters;
 

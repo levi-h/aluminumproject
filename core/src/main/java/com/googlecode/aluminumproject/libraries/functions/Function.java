@@ -17,11 +17,12 @@ package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.libraries.LibraryElementCreation;
 
 /**
  * Determines a result based on a number of {@link FunctionArgument arguments}.
  */
-public interface Function {
+public interface Function extends LibraryElementCreation<FunctionFactory> {
 	/**
 	 * Calls this function.
 	 *

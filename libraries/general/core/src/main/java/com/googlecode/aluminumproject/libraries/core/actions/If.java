@@ -19,20 +19,15 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.annotations.UsableAsAction;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
 @Typed("boolean")
 @UsableAsAction(parameterName = "condition")
-public class If implements ActionContribution {
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
-
+public class If extends AbstractActionContribution {
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
 			throws AluminumException {
 		if (!((Boolean) parameter.getValue(Boolean.TYPE, context)).booleanValue()) {

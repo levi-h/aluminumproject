@@ -22,9 +22,8 @@ import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NameBasedResourceBundleProvider;
 import com.googlecode.aluminumproject.context.g11n.ResourceBundleProvider;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
@@ -32,11 +31,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
 @Typed("String")
-public class WithResourceBundle implements ActionContribution {
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
-
+public class WithResourceBundle extends AbstractActionContribution {
 	public void make(Context context, Writer writer,
 			final ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.CREATION, ActionPhase.EXECUTION) {

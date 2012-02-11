@@ -17,12 +17,13 @@ package com.googlecode.aluminumproject.libraries.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.libraries.LibraryElementCreation;
 import com.googlecode.aluminumproject.writers.Writer;
 
 /**
  * The base building block of a template.
  */
-public interface Action {
+public interface Action extends LibraryElementCreation<ActionFactory> {
 	/**
 	 * Returns the parent of this action.
 	 *

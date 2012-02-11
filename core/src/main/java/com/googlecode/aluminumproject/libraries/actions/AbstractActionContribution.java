@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Aluminum project
+ * Copyright 2012 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.libraries.functions;
+package com.googlecode.aluminumproject.libraries.actions;
 
-import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
 
 /**
- * A function that can be used in tests.
+ * A contribution that can be made to any action.
  */
-public class TestFunction extends AbstractLibraryElementCreation<FunctionFactory> implements Function {
+public abstract class AbstractActionContribution
+		extends AbstractLibraryElementCreation<ActionContributionFactory> implements ActionContribution {
 	/**
-	 * Creates a test function.
+	 * Creates an abstract action contribution.
 	 */
-	public TestFunction() {}
+	protected AbstractActionContribution() {}
 
-	public Object call(Context context) {
-		return null;
+	public boolean canBeMadeTo(ActionFactory actionFactory) {
+		return true;
 	}
 }

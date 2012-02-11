@@ -19,9 +19,8 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Typed;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
@@ -31,11 +30,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
 @Typed("boolean")
-public class Mute implements ActionContribution {
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
-
+public class Mute extends AbstractActionContribution {
 	public void make(Context context, Writer writer, ActionParameter parameter, ActionContributionOptions options)
 			throws AluminumException {
 		final boolean mute = ((Boolean) parameter.getValue(Boolean.TYPE, context)).booleanValue();

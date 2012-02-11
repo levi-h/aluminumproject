@@ -21,9 +21,8 @@ import com.googlecode.aluminumproject.configuration.Configuration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.converters.ConverterRegistry;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContributionDescriptor;
 import com.googlecode.aluminumproject.utilities.Logger;
@@ -34,7 +33,7 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 
 @SuppressWarnings("javadoc")
-public class LocalisedParameter implements ActionContribution {
+public class LocalisedParameter extends AbstractActionContribution {
 	private @Injected ActionContributionDescriptor descriptor;
 
 	private @Injected Configuration configuration;
@@ -43,10 +42,6 @@ public class LocalisedParameter implements ActionContribution {
 
 	public LocalisedParameter() {
 		logger = Logger.get(getClass());
-	}
-
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
 	}
 
 	public void make(Context context, Writer writer,

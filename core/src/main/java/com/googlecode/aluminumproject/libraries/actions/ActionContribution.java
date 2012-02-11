@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.libraries.actions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.ActionInterceptor;
+import com.googlecode.aluminumproject.libraries.LibraryElementCreation;
 import com.googlecode.aluminumproject.writers.Writer;
 
 /**
@@ -37,7 +38,7 @@ import com.googlecode.aluminumproject.writers.Writer;
  * An action contribution is being created with a {@link ActionParameter parameter}. This parameter can be passed to the
  * action, but it can also be used to base logic on (e.g. whether or not the action should be executed).
  */
-public interface ActionContribution {
+public interface ActionContribution extends LibraryElementCreation<ActionContributionFactory> {
 	/**
 	 * Determines whether this action contribution can be made to a certain action.
 	 *

@@ -22,9 +22,8 @@ import com.googlecode.aluminumproject.context.g11n.ConstantLocaleProvider;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.LocaleProvider;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
-import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
@@ -34,11 +33,7 @@ import java.util.Locale;
 
 @SuppressWarnings("javadoc")
 @Typed("Locale")
-public class WithLocale implements ActionContribution {
-	public boolean canBeMadeTo(ActionFactory actionFactory) {
-		return true;
-	}
-
+public class WithLocale extends AbstractActionContribution {
 	public void make(Context context, Writer writer,
 			final ActionParameter parameter, ActionContributionOptions options) throws AluminumException {
 		options.addInterceptor(new AbstractActionInterceptor(ActionPhase.CREATION, ActionPhase.EXECUTION) {
