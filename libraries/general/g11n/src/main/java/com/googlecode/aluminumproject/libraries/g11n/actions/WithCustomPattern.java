@@ -31,7 +31,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactor
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
-import com.googlecode.aluminumproject.libraries.actions.DefaultActionFactory;
+import com.googlecode.aluminumproject.libraries.actions.ClassBasedActionFactory;
 import com.googlecode.aluminumproject.templates.ActionContext;
 import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -51,8 +51,8 @@ public class WithCustomPattern
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		boolean canBeMade;
 
-		if (canBeMade = (actionFactory instanceof DefaultActionFactory)) {
-			Class<? extends Action> actionClass = ((DefaultActionFactory) actionFactory).getActionClass();
+		if (canBeMade = (actionFactory instanceof ClassBasedActionFactory)) {
+			Class<? extends Action> actionClass = ((ClassBasedActionFactory) actionFactory).getActionClass();
 
 			canBeMade &= FormatDate.class.isAssignableFrom(actionClass) ||
 				FormatNumber.class.isAssignableFrom(actionClass);
