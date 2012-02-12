@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 package com.googlecode.aluminumproject.libraries.core.actions;
+
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
-
 
 @SuppressWarnings("javadoc")
 public class RemoveVariable extends AbstractAction {

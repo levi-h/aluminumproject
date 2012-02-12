@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.libraries.g11n.actions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
@@ -27,6 +28,7 @@ import java.util.Collections;
 import java.util.ResourceBundle;
 
 @SuppressWarnings("javadoc")
+@UsableAsFunction(argumentParameters = {"key", "default", "allow missing key"})
 public class Localise extends AbstractAction {
 	private @Required String key;
 
@@ -34,10 +36,6 @@ public class Localise extends AbstractAction {
 	private Object defaultResource;
 
 	private boolean allowMissingKey;
-
-	public Localise() {
-		defaultResource = NO_DEFAULT;
-	}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		Object resource;
@@ -48,7 +46,7 @@ public class Localise extends AbstractAction {
 
 		if (Collections.list(resourceBundle.getKeys()).contains(key)) {
 			resource = resourceBundle.getObject(key);
-		} else if (defaultResource != NO_DEFAULT) {
+		} else if (defaultResource != null) {
 			resource = defaultResource;
 		} else if (allowMissingKey) {
 			resource = String.format("??%s??", key);
@@ -60,6 +58,4 @@ public class Localise extends AbstractAction {
 
 		writer.write(resource);
 	}
-
-	private final static Object NO_DEFAULT = new Object();
 }

@@ -48,7 +48,7 @@ public class StaticMethodInvokingFunctionFactoryTest {
 		annotatedFunctionFactory.initialise(configuration);
 	}
 
-	public void unannotatedMethodShouldResultInMethodNameAsFunctionName() {
+	public void unannotatedMethodShouldResultInHumanisedMethodNameAsFunctionName() {
 		FunctionInformation information = unannotatedFunctionFactory.getInformation();
 		assert information != null;
 
@@ -63,10 +63,10 @@ public class StaticMethodInvokingFunctionFactoryTest {
 
 		String functionName = information.getName();
 		assert functionName != null;
-		assert functionName.equals("minimumValue");
+		assert functionName.equals("minimum value");
 	}
 
-	@Test(dependsOnMethods = "unannotatedMethodShouldResultInMethodNameAsFunctionName")
+	@Test(dependsOnMethods = "unannotatedMethodShouldResultInHumanisedMethodNameAsFunctionName")
 	public void unannotatedMethodParametersShouldResultInUnnamedFunctionArguments() {
 		FunctionInformation information = unannotatedFunctionFactory.getInformation();
 		assert information != null;
@@ -96,12 +96,12 @@ public class StaticMethodInvokingFunctionFactoryTest {
 		FunctionArgumentInformation firstArgumentInformation = argumentInformation.get(0);
 		assert firstArgumentInformation != null;
 		assert firstArgumentInformation.getName() != null;
-		assert firstArgumentInformation.getName().equals("firstValue");
+		assert firstArgumentInformation.getName().equals("first value");
 
 		FunctionArgumentInformation secondArgumentInformation = argumentInformation.get(1);
 		assert secondArgumentInformation != null;
 		assert secondArgumentInformation.getName() != null;
-		assert secondArgumentInformation.getName().equals("secondValue");
+		assert secondArgumentInformation.getName().equals("second value");
 	}
 
 	public void returnTypeShouldBecomeResultType() {

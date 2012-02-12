@@ -123,7 +123,7 @@ public class ElExpressionFactory implements ExpressionFactory {
 
 			return new ElExpression(expression, configuration);
 		} catch (ELException exception) {
-			throw new AluminumException(exception, "can't create expression");
+			throw new AluminumException(exception, "can't create expression ", value);
 		}
 	}
 

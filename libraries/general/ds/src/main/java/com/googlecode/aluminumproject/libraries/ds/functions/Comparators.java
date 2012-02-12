@@ -52,7 +52,7 @@ public class Comparators {
 		}
 	}
 
-	public static Comparator<Object> byProperty(@Named("propertyName") String propertyName) {
+	public static Comparator<Object> byProperty(@Named("property name") String propertyName) {
 		return new PropertyComparator(propertyName);
 	}
 

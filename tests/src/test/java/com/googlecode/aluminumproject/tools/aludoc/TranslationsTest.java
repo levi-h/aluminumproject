@@ -70,15 +70,24 @@ public class TranslationsTest {
 			for (ActionFactory actionFactory: library.getActionFactories()) {
 				ActionInformation actionInformation = actionFactory.getInformation();
 
-				String actionKeyPart = asKeyPart(actionInformation.getName(), false);
+				String actionKeyPart = asKeyPart(actionInformation.getName());
 
 				assertTranslationAvailable(library, String.format("%s.description", actionKeyPart));
 
 				for (ActionParameterInformation parameterInformation: actionInformation.getParameterInformation()) {
-					String parameterKeyPart = asKeyPart(parameterInformation.getName(), false);
+					String parameterKeyPart = asKeyPart(parameterInformation.getName());
 
 					assertTranslationAvailable(library,
 						String.format("%s.%s.description", actionKeyPart, parameterKeyPart));
+
+					if (parameterInformation.getIndexWhenFunctionArgument() != null) {
+						assertTranslationAvailable(library,
+							String.format("%s.%s.function_description", actionKeyPart, parameterKeyPart));
+					}
+				}
+
+				if (actionInformation.getResultTypeWhenFunction() != null) {
+					assertTranslationAvailable(library, String.format("%s.function_description", actionKeyPart));
 				}
 			}
 		}
@@ -89,7 +98,7 @@ public class TranslationsTest {
 			for (ActionContributionFactory contributionFactory: library.getActionContributionFactories()) {
 				ActionContributionInformation contributionInformation = contributionFactory.getInformation();
 
-				String contributionKeyPart = asKeyPart(contributionInformation.getName(), false);
+				String contributionKeyPart = asKeyPart(contributionInformation.getName());
 
 				assertTranslationAvailable(library, String.format("%s.description", contributionKeyPart));
 
@@ -99,7 +108,7 @@ public class TranslationsTest {
 					assertTranslationAvailable(library,
 						String.format("%s.contribution_description", contributionKeyPart));
 					assertTranslationAvailable(library,
-						String.format("%s.%s.description", contributionKeyPart, asKeyPart(parameterName, false)));
+						String.format("%s.%s.description", contributionKeyPart, asKeyPart(parameterName)));
 				}
 			}
 		}
@@ -110,12 +119,12 @@ public class TranslationsTest {
 			for (FunctionFactory functionFactory: library.getFunctionFactories()) {
 				FunctionInformation functionInformation = functionFactory.getInformation();
 
-				String functionKeyPart = asKeyPart(functionInformation.getName(), true);
+				String functionKeyPart = asKeyPart(functionInformation.getName());
 
 				assertTranslationAvailable(library, String.format("%s.description", functionKeyPart));
 
 				for (FunctionArgumentInformation argumentInformation: functionInformation.getArgumentInformation()) {
-					String argumentKeyPart = asKeyPart(argumentInformation.getName(), true);
+					String argumentKeyPart = asKeyPart(argumentInformation.getName());
 
 					assertTranslationAvailable(library,
 						String.format("%s.%s.description", functionKeyPart, argumentKeyPart));
@@ -124,8 +133,8 @@ public class TranslationsTest {
 		}
 	}
 
-	private String asKeyPart(String name, boolean humanise) {
-		return (humanise ? StringUtilities.humanise(name).toLowerCase() : name).replace(' ', '_');
+	private String asKeyPart(String name) {
+		return name.replace(' ', '_');
 	}
 
 	private void assertTranslationAvailable(Library library, String key) {

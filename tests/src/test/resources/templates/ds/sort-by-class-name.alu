@@ -15,4 +15,5 @@
 @library (c: http://aluminumproject.googlecode.com/core)
 @library (ds: http://aluminumproject.googlecode.com/ds)
 
-@ds.sort (elements: ${list}, comparator: '${ds:byProperty("class.name")}', c.variable name: sorted list)
+@c.set variable (name: sorted list)
+	${ds:sort(list, ds:byProperty('class.name'))}
