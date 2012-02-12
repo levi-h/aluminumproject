@@ -59,7 +59,7 @@ public class StaticMethodInvokingFunctionFactory extends AbstractLibraryElement 
 		if (method.isAnnotationPresent(Named.class)) {
 			functionName = method.getAnnotation(Named.class).value();
 		} else {
-			functionName = method.getName();
+			functionName = StringUtilities.humanise(method.getName()).toLowerCase();
 		}
 
 		logger.debug("using function name '", functionName, "' for method ", method);

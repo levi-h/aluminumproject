@@ -25,7 +25,12 @@
 		@c.include (name: aludoc/html/library_elements.alu, library: ${functionFactory.library})
 
 	@c.block (name: main)
-		@aludoc.translate (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.description', library: ${functionFactory.library})
+		@c.convert (value: false, type: boolean, c.variable name: libraryHasActionWithSameName)
+
+		@c.each (elements: ${functionFactory.library.actionFactories}, element name: actionFactory)
+			@c.set variable (name: libraryHasActionWithSameName, value: '${libraryHasActionWithSameName or (actionFactory.information.name eq functionFactory.information.name)}', scope: template)
+
+		@aludoc.translate (key: '${t:replace(functionFactory.information.name, " ", "_")}.${libraryHasActionWithSameName ? "function_" : ""}description', library: ${functionFactory.library})
 
 		@h.h2
 			@g.localise (key: block.summary)
@@ -61,4 +66,4 @@
 						@h.td
 							${aludoc:formatType(argumentInformation.type)}
 						@h.td
-							@aludoc.translate (key: '${t:replace(t:lowerCase(t:humanise(functionFactory.information.name)), " ", "_")}.${t:replace(t:lowerCase(t:humanise(argumentInformation.name)), " ", "_")}.description', library: ${functionFactory.library})
+							@aludoc.translate (key: '${t:replace(functionFactory.information.name, " ", "_")}.${t:replace(argumentInformation.name, " ", "_")}.${libraryHasActionWithSameName ? "function_" : ""}description', library: ${functionFactory.library})

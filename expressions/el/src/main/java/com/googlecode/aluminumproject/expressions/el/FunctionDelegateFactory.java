@@ -185,7 +185,7 @@ public class FunctionDelegateFactory {
 	}
 
 	private static String getKey(String libraryUrl, String functionName) {
-		return String.format("%s/%s", libraryUrl, functionName);
+		return String.format("%s/%s", libraryUrl, StringUtilities.camelCase(functionName));
 	}
 
 	private static AtomicInteger nextClassIndex;

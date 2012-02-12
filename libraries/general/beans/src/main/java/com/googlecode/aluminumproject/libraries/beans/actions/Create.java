@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.beans.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
@@ -25,6 +26,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.lang.reflect.Type;
 
 @SuppressWarnings("javadoc")
+@UsableAsFunction(argumentParameters = "type")
 public class Create extends AbstractAction {
 	private @Required Type type;
 

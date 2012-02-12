@@ -45,8 +45,8 @@ public class TestFunctions {
 	 * @param b the second value to compare
 	 * @return the lowest of the two values
 	 */
-	@Named("minimumValue")
-	public static int min(@Named("firstValue") int a, @Named("secondValue") int b) {
+	@Named("minimum value")
+	public static int min(@Named("first value") int a, @Named("second value") int b) {
 		return (a < b) ? a : b;
 	}
 

@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.g11n.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatType;
@@ -26,6 +27,7 @@ import com.googlecode.aluminumproject.writers.Writer;
 import java.text.NumberFormat;
 
 @SuppressWarnings("javadoc")
+@UsableAsFunction(resultType = "String", argumentParameters = {"value", "type"})
 public class FormatNumber extends AbstractAction {
 	private @Required Number value;
 

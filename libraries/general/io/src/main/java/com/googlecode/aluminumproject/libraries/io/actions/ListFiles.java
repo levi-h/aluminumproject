@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.libraries.io.actions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Named;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.writers.Writer;
@@ -27,6 +28,7 @@ import java.io.FileFilter;
 import java.util.Arrays;
 
 @SuppressWarnings("javadoc")
+@UsableAsFunction(resultType = "List<java.io.File>", argumentParameters = {"in", "filter"})
 public class ListFiles extends AbstractAction {
 	private @Named("in") @Required File location;
 

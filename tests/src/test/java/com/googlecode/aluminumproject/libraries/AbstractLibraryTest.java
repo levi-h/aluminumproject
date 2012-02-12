@@ -180,7 +180,7 @@ public class AbstractLibraryTest {
 
 		List<FunctionFactory> functionFactories = library.getFunctionFactories();
 		assert functionFactories != null;
-		assert getFunctionFactory(functionFactories, "minimumValue") != null;
+		assert getFunctionFactory(functionFactories, "minimum value") != null;
 		assert getFunctionFactory(functionFactories, "max") != null;
 		assert getFunctionFactory(functionFactories, "divide") != null;
 	}

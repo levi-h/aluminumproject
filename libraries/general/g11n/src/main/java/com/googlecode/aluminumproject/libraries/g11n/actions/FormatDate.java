@@ -17,6 +17,7 @@ package com.googlecode.aluminumproject.libraries.g11n.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Required;
+import com.googlecode.aluminumproject.annotations.UsableAsFunction;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.g11n.DateFormatType;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
@@ -27,6 +28,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 @SuppressWarnings("javadoc")
+@UsableAsFunction(resultType = "String", argumentParameters = {"value", "type"})
 public class FormatDate extends AbstractAction {
 	private @Required Date value;
 

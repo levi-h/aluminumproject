@@ -14,4 +14,4 @@
 
 @library (g: http://aluminumproject.googlecode.com/g11n)
 
-@g.format date (value: ${date}, type: medium date)
+@g.format date(value: ${date}, type: medium date)

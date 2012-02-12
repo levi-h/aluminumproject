@@ -85,4 +85,30 @@ public class StringUtilitiesTest {
 		assert humaniseResult != null;
 		assert humaniseResult.equals("URL decoder");
 	}
+
+	public void emptyStringShouldRemainEmptyWhenTurnedIntoCamelCase() {
+		String camelCaseResult = StringUtilities.camelCase("");
+		assert camelCaseResult != null;
+		assert camelCaseResult.equals("");
+	}
+
+	public void firstWordOfCamelCasedTextShouldNotBeCapitalised() {
+		String camelCaseResult = StringUtilities.camelCase("word");
+		assert camelCaseResult != null;
+		assert camelCaseResult.equals("word");
+	}
+
+	@Test(dependsOnMethods = "firstWordOfCamelCasedTextShouldNotBeCapitalised")
+	public void subsequentWordsOfCamelCasedTextShouldBeCapitalised() {
+		String camelCaseResult = StringUtilities.camelCase("trapped in a box");
+		assert camelCaseResult != null;
+		assert camelCaseResult.equals("trappedInABox");
+	}
+
+	public void wordsInUpperCaseShouldBeLeftAloneInCamelCasedText() {
+		String camelCaseResult = StringUtilities.camelCase("URL decoder");
+		assert camelCaseResult != null;
+		assert camelCaseResult.equals("URLDecoder");
+	}
+
 }

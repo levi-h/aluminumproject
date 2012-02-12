@@ -21,6 +21,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
 import com.googlecode.aluminumproject.libraries.g11n.GlobalisationLibraryTest;
+import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
 import org.testng.annotations.Test;
 
@@ -29,6 +30,8 @@ import org.testng.annotations.Test;
 public class LocaliseTest extends GlobalisationLibraryTest {
 	protected void addConfigurationParameters(ConfigurationParameters parameters) {
 		parameters.addParameter(GlobalisationContextProvider.LOCALE, "en");
+
+		parameters.addParameter(AluScriptParser.AUTOMATIC_NEWLINES, "false");
 	}
 
 	public void localisedResourceShouldBeFindableWithExistingKey() {

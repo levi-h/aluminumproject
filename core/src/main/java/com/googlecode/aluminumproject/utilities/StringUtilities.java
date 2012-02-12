@@ -121,5 +121,30 @@ public class StringUtilities {
 		}
 	}
 
+	/**
+	 * Turns a text into camel case. Each word (apart from the first one) will be capitalised; after that, all of the
+	 * words will be joined.
+	 *
+	 * @param text the text to turn into camel case
+	 * @return a camel-cased version of the given text
+	 */
+	public static String camelCase(String text) {
+		StringBuilder builder = new StringBuilder();
+
+		boolean turnIntoUpperCase = false;
+
+		for (char character: text.toCharArray()) {
+			if (character == ' ') {
+				turnIntoUpperCase = true;
+			} else {
+				builder.append(turnIntoUpperCase ? Character.toUpperCase(character) : character);
+
+				turnIntoUpperCase = false;
+			}
+		}
+
+		return builder.toString();
+	}
+
 	private final static Pattern HUMANISE_PATTERN = Pattern.compile("[A-Z]?[a-z]+");
 }
