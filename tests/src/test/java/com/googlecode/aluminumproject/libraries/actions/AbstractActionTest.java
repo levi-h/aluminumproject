@@ -30,25 +30,15 @@ import org.testng.annotations.Test;
 @SuppressWarnings("javadoc")
 @Test(groups = {"core", "fast"})
 public class AbstractActionTest {
-	public static class Grandparent extends AbstractContainerAction<Integer> {
-		@Override
+	public static class Grandparent extends AbstractAction {
 		public void execute(Context context, Writer writer) throws AluminumException {
 			writer.write("I'm the grandparent!");
 		}
-
-		protected Integer provideContainerObject(Context context) {
-			return 10;
-		}
 	}
 
-	public static class Parent extends AbstractContainerAction<Float> {
-		@Override
+	public static class Parent extends AbstractAction {
 		public void execute(Context context, Writer writer) throws AluminumException {
 			writer.write("I'm the parent!");
-		}
-
-		protected Float provideContainerObject(Context context) {
-			return 10F;
 		}
 	}
 
@@ -97,19 +87,6 @@ public class AbstractActionTest {
 
 	public void findingAncestorWithUnknownTypeShouldResultInNull() {
 		assert action.findAncestorOfType(Action.class) == null;
-	}
-
-	public void findingContainerAncestorShouldFindActionWithRequestedContainerType() {
-		assert parent.findAncestorContainingType(Integer.class) == grandparent;
-		assert action.findAncestorContainingType(Integer.class) == grandparent;
-	}
-
-	public void findingContainerAncestorShouldFindFirstAncestorIfMoreThanOneAncestorMatch() {
-		assert action.findAncestorContainingType(Number.class) == parent;
-	}
-
-	public void findingContainerAncestorWithUnknownContainerTypeShouldResultInNull() {
-		assert action.findAncestorContainingType(String.class) == null;
 	}
 
 	public void parentShouldBeObtainable() {
