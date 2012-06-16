@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.utilities;
 import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.testng.annotations.Test;
 
@@ -66,5 +67,22 @@ public class GlobalisationUtilitiesTest {
 	@Test(expectedExceptions = AluminumException.class)
 	public void convertingMoreThanThreeLocalePartsShouldCauseException() {
 		GlobalisationUtilities.convertLocale("nl_NL_Amsterdam_West");
+	}
+
+	public void idShouldBeConvertibleIntoTimeZone() {
+		TimeZone timeZone = GlobalisationUtilities.convertTimeZone("UTC");
+		assert timeZone != null;
+		assert timeZone.getID().equals("UTC");
+	}
+
+	public void timeZoneIdShouldBeCaseInsensitive() {
+		TimeZone timeZone = GlobalisationUtilities.convertTimeZone("utc");
+		assert timeZone != null;
+		assert timeZone.getID().equals("UTC");
+	}
+
+	@Test(expectedExceptions = AluminumException.class)
+	public void convertingNonexistentTimeZoneIdShouldCauseException() {
+		GlobalisationUtilities.convertTimeZone("unknown");
 	}
 }

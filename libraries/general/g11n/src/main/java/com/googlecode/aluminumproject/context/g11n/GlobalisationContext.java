@@ -27,6 +27,7 @@ import com.googlecode.aluminumproject.context.Context;
  */
 public class GlobalisationContext {
 	private LocaleProvider localeProvider;
+	private TimeZoneProvider timeZoneProvider;
 	private ResourceBundleProvider resourceBundleProvider;
 	private DateFormatProvider dateFormatProvider;
 	private NumberFormatProvider numberFormatProvider;
@@ -35,13 +36,16 @@ public class GlobalisationContext {
 	 * Creates a globalisation context.
 	 *
 	 * @param localeProvider the locale provider to use
+	 * @param timeZoneProvider the time zone provider to use
 	 * @param resourceBundleProvider the resource bundle provider to use
 	 * @param dateFormatProvider the date format provider to use
 	 * @param numberFormatProvider the number format provider to use
 	 */
-	public GlobalisationContext(LocaleProvider localeProvider, ResourceBundleProvider resourceBundleProvider,
-			DateFormatProvider dateFormatProvider, NumberFormatProvider numberFormatProvider) {
+	public GlobalisationContext(LocaleProvider localeProvider, TimeZoneProvider timeZoneProvider,
+			ResourceBundleProvider resourceBundleProvider, DateFormatProvider dateFormatProvider,
+			NumberFormatProvider numberFormatProvider) {
 		this.localeProvider = localeProvider;
+		this.timeZoneProvider = timeZoneProvider;
 		this.resourceBundleProvider = resourceBundleProvider;
 		this.dateFormatProvider = dateFormatProvider;
 		this.numberFormatProvider = numberFormatProvider;
@@ -63,6 +67,24 @@ public class GlobalisationContext {
 	 */
 	public void setLocaleProvider(LocaleProvider localeProvider) {
 		this.localeProvider = localeProvider;
+	}
+
+	/**
+	 * Returns this globalisation context's time zone provider.
+	 *
+	 * @return the time zone provider of this globalisation context
+	 */
+	public TimeZoneProvider getTimeZoneProvider() {
+		return timeZoneProvider;
+	}
+
+	/**
+	 * Replaces this globalisation context's time zone provider.
+	 *
+	 * @param timeZoneProvider the new time zone provider for this globalisation context
+	 */
+	public void setTimeZoneProvider(TimeZoneProvider timeZoneProvider) {
+		this.timeZoneProvider = timeZoneProvider;
 	}
 
 	/**

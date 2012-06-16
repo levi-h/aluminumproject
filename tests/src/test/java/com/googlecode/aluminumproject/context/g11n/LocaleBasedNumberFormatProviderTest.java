@@ -38,7 +38,7 @@ public class LocaleBasedNumberFormatProviderTest {
 
 		context = new DefaultContext();
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT,
-			new GlobalisationContext(localeProvider, null, null, numberFormatProvider));
+			new GlobalisationContext(localeProvider, null, null, null, numberFormatProvider));
 	}
 
 	public void numberTypeShouldResultInNumberProvider() {

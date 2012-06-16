@@ -27,6 +27,7 @@ import com.googlecode.aluminumproject.utilities.GlobalisationUtilities;
 import com.googlecode.aluminumproject.utilities.Logger;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Enriches the context with a {@link GlobalisationContext globalisation context}. Before each template, a globalisation
@@ -43,6 +44,11 @@ import java.util.Locale;
  * used with either the value of the configuration parameter {@value #LOCALE} or the {@link Locale#getDefault() default
  * locale}.
  * <p>
+ * The time zone provider contained by the globalisation context defaults to a {@link ConstantTimeZoneProvider constant
+ * one} that uses the {@link TimeZone#getDefault() default time zone}. Both the constant time zone and the time zone
+ * provider can be configured (using the {@value #TIME_ZONE} and {@value #TIME_ZONE_PROVIDER_CLASS} parameters,
+ * respectively).
+ * <p>
  * The globalisation context's resource bundle provider will be {@link NameBasedResourceBundleProvider name-based},
  * unless a different one is configured via a configuration parameter named {@value #RESOURCE_BUNDLE_PROVIDER_CLASS}.
  * The base name of the default resource bundle provider can be configured by using the {@value
@@ -50,16 +56,18 @@ import java.util.Locale;
  * <p>
  * The date format provider that will be used for the globalisation context can be configured by providing a parameter
  * named {@value #DATE_FORMAT_PROVIDER_CLASS}. If none is configured, the date format provider will be {@link
- * LocaleBasedDateFormatProvider locale-based}. Its custom pattern will be {@value #DEFAULT_DATE_FORMAT_CUSTOM_PATTERN},
- * unless the configuration contains a {@value #DATE_FORMAT_CUSTOM_PATTERN} parameter.
+ * EnvironmentBasedDateFormatProvider based on the current locale and time zone}. Its custom pattern will be {@value
+ * #DEFAULT_DATE_FORMAT_CUSTOM_PATTERN}, unless the configuration contains a {@value #DATE_FORMAT_CUSTOM_PATTERN}
+ * parameter.
  * <p>
  * The default number format provider for the globalisation context is {@link LocaleBasedNumberFormatProvider
- * locale-based}; a custom one can be configured through the {@value #NUMBER_FORMAT_PROVIDER_CLASS}. The {@value
- * #NUMBER_FORMAT_CUSTOM_PATTERN} parameter controls custom pattern of the locale-based number format provider; without
- * any configuration, {@value #DEFAULT_NUMBER_FORMAT_CUSTOM_PATTERN} will be used.
+ * locale-based}; a custom one can be configured through the {@value #NUMBER_FORMAT_PROVIDER_CLASS} parameter. The
+ * {@value #NUMBER_FORMAT_CUSTOM_PATTERN} parameter controls custom pattern of the locale-based number format provider;
+ * without any configuration, {@value #DEFAULT_NUMBER_FORMAT_CUSTOM_PATTERN} will be used.
  */
 public class GlobalisationContextProvider implements ContextEnricher {
 	private LocaleProvider localeProvider;
+	private TimeZoneProvider timeZoneProvider;
 	private ResourceBundleProvider resourceBundleProvider;
 	private DateFormatProvider dateFormatProvider;
 	private NumberFormatProvider numberFormatProvider;
@@ -74,15 +82,18 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	}
 
 	public void initialise(Configuration configuration) throws AluminumException {
-		createLocaleProvider(configuration);
-		createResourceBundleProvider(configuration);
-		createDateFormatProvider(configuration);
-		createNumberFormatProvider(configuration);
+		ConfigurationParameters parameters = configuration.getParameters();
+		ConfigurationElementFactory configurationElementFactory = configuration.getConfigurationElementFactory();
+
+		createLocaleProvider(parameters, configurationElementFactory);
+		createTimeZoneProvider(parameters, configurationElementFactory);
+		createResourceBundleProvider(parameters, configurationElementFactory);
+		createDateFormatProvider(parameters, configurationElementFactory);
+		createNumberFormatProvider(parameters, configurationElementFactory);
 	}
 
-	private void createLocaleProvider(Configuration configuration) throws AluminumException {
-		ConfigurationParameters parameters = configuration.getParameters();
-
+	private void createLocaleProvider(ConfigurationParameters parameters,
+			ConfigurationElementFactory configurationElementFactory) throws AluminumException {
 		String localeProviderClassName = parameters.getValue(LOCALE_PROVIDER_CLASS, null);
 
 		if (localeProviderClassName == null) {
@@ -106,15 +117,42 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		} else {
 			logger.debug("using configured locale provider of type ", localeProviderClassName);
 
-			ConfigurationElementFactory configurationElementFactory = configuration.getConfigurationElementFactory();
-
 			localeProvider = configurationElementFactory.instantiate(localeProviderClassName, LocaleProvider.class);
 		}
 	}
 
-	private void createResourceBundleProvider(Configuration configuration) throws AluminumException {
-		ConfigurationParameters parameters = configuration.getParameters();
+	private void createTimeZoneProvider(ConfigurationParameters parameters,
+			ConfigurationElementFactory configurationElementFactory) throws AluminumException {
+		String timeZoneProviderClassName = parameters.getValue(TIME_ZONE_PROVIDER_CLASS, null);
 
+		if (timeZoneProviderClassName == null) {
+			logger.debug("no time zone provider configured, using constant time zone provider");
+
+			TimeZone timeZone;
+
+			String configuredTimeZone = parameters.getValue(TIME_ZONE, null);
+
+			if (configuredTimeZone == null) {
+				logger.debug("no time zone configured, using default time zone");
+
+				timeZone = TimeZone.getDefault();
+			} else {
+				logger.debug("using configured time zone '", configuredTimeZone, "'");
+
+				timeZone = GlobalisationUtilities.convertTimeZone(configuredTimeZone);
+			}
+
+			timeZoneProvider = new ConstantTimeZoneProvider(timeZone);
+		} else {
+			logger.debug("using configured time zone provider of type ", timeZoneProviderClassName);
+
+			timeZoneProvider =
+				configurationElementFactory.instantiate(timeZoneProviderClassName, TimeZoneProvider.class);
+		}
+	}
+
+	private void createResourceBundleProvider(ConfigurationParameters parameters,
+			ConfigurationElementFactory configurationElementFactory) throws AluminumException {
 		String resourceBundleProviderClassName = parameters.getValue(RESOURCE_BUNDLE_PROVIDER_CLASS, null);
 
 		if (resourceBundleProviderClassName == null) {
@@ -127,14 +165,13 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		} else {
 			logger.debug("using configured resource bundle provider of type ", resourceBundleProviderClassName);
 
-			resourceBundleProvider = configuration.getConfigurationElementFactory().instantiate(
-				resourceBundleProviderClassName, ResourceBundleProvider.class);
+			resourceBundleProvider =
+				configurationElementFactory.instantiate(resourceBundleProviderClassName, ResourceBundleProvider.class);
 		}
 	}
 
-	private void createDateFormatProvider(Configuration configuration) throws AluminumException {
-		ConfigurationParameters parameters = configuration.getParameters();
-
+	private void createDateFormatProvider(ConfigurationParameters parameters,
+			ConfigurationElementFactory configurationElementFactory) throws AluminumException {
 		String dateFormatProviderClassName = parameters.getValue(DATE_FORMAT_PROVIDER_CLASS, null);
 
 		if (dateFormatProviderClassName == null) {
@@ -143,18 +180,17 @@ public class GlobalisationContextProvider implements ContextEnricher {
 			logger.debug("no date format provider configured, ",
 				"using locale-based date format provider with custom pattern '", customPattern, "'");
 
-			dateFormatProvider = new LocaleBasedDateFormatProvider(customPattern);
+			dateFormatProvider = new EnvironmentBasedDateFormatProvider(customPattern);
 		} else {
 			logger.debug("using configured date format provider of type ", dateFormatProviderClassName);
 
-			dateFormatProvider = configuration.getConfigurationElementFactory().instantiate(
-				dateFormatProviderClassName, DateFormatProvider.class);
+			dateFormatProvider =
+				configurationElementFactory.instantiate(dateFormatProviderClassName, DateFormatProvider.class);
 		}
 	}
 
-	private void createNumberFormatProvider(Configuration configuration) throws AluminumException {
-		ConfigurationParameters parameters = configuration.getParameters();
-
+	private void createNumberFormatProvider(ConfigurationParameters parameters,
+			ConfigurationElementFactory configurationElementFactory) throws AluminumException {
 		String numberFormatProviderClassName = parameters.getValue(NUMBER_FORMAT_PROVIDER_CLASS, null);
 
 		if (numberFormatProviderClassName == null) {
@@ -168,8 +204,8 @@ public class GlobalisationContextProvider implements ContextEnricher {
 		} else {
 			logger.debug("using configured number format provider of type ", numberFormatProviderClassName);
 
-			numberFormatProvider = configuration.getConfigurationElementFactory().instantiate(
-				numberFormatProviderClassName, NumberFormatProvider.class);
+			numberFormatProvider =
+				configurationElementFactory.instantiate(numberFormatProviderClassName, NumberFormatProvider.class);
 		}
 	}
 
@@ -184,7 +220,7 @@ public class GlobalisationContextProvider implements ContextEnricher {
 			globalisationContext = parentContext.getImplicitObject(GLOBALISATION_CONTEXT);
 		} else {
 			globalisationContext = new GlobalisationContext(
-				localeProvider, resourceBundleProvider, dateFormatProvider, numberFormatProvider);
+				localeProvider, timeZoneProvider, resourceBundleProvider, dateFormatProvider, numberFormatProvider);
 		}
 
 		context.addImplicitObject(GLOBALISATION_CONTEXT, globalisationContext);
@@ -204,6 +240,15 @@ public class GlobalisationContextProvider implements ContextEnricher {
 	 * when no locale provider is configured.
 	 */
 	public final static String LOCALE = "library.g11n.locale";
+
+	/** The name of the configuration parameter that controls which time zone provider will be used. */
+	public final static String TIME_ZONE_PROVIDER_CLASS = "library.g11n.time_zone_provider.class";
+
+	/**
+	 * The name of the configuration parameter that contains the time zone that should be provided when no time zone
+	 * provider is configured.
+	 */
+	public final static String TIME_ZONE = "library.g11n.time_zone";
 
 	/**
 	 * The name of the configuration parameter with the class name of the resource bundle provider that should be used.

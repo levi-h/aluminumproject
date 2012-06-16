@@ -18,6 +18,7 @@ package com.googlecode.aluminumproject.utilities;
 import com.googlecode.aluminumproject.AluminumException;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Provides utility methods related to globalisation.
@@ -65,5 +66,44 @@ public class GlobalisationUtilities {
 		}
 
 		return locale;
+	}
+
+	/**
+	 * Converts a {@link String string} into a {@link TimeZone time zone} using the {@link TimeZone#getTimeZone(String)
+	 * getTimeZone method}, with one exception: a time zone ID that is not recognised does not result in a default time
+	 * zone, but in an {@link AluminumException exception}.
+	 *
+	 * @param value the value to convert
+	 * @return the converted time zone
+	 * @throws AluminumException when the value can't be converted into a time zone
+	 */
+	public static TimeZone convertTimeZone(String value) throws AluminumException {
+		String id = null;
+		boolean foundExactMatch = false;
+
+		String[] availableIds = TimeZone.getAvailableIDs();
+		int i = 0;
+
+		while (!foundExactMatch && (i < availableIds.length)) {
+			String availableId = availableIds[i];
+
+			if (value.equals(availableId)) {
+				id = availableId;
+
+				foundExactMatch = true;
+			} else {
+				if (value.equalsIgnoreCase(availableId)) {
+					id = availableId;
+				}
+
+				i++;
+			}
+		}
+
+		if (id == null) {
+			throw new AluminumException("can't find time zone with ID '", value, "'");
+		} else {
+			return TimeZone.getTimeZone(id);
+		}
 	}
 }
