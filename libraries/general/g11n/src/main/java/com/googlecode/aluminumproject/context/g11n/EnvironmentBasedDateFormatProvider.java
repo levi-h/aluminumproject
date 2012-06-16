@@ -24,25 +24,28 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * A date format provider that provides date formats that are based on the current {@link Locale locale}. All date
- * formats have GMT timezones.
+ * A date format provider that provides date formats that are based on the current {@link Locale locale} and {@link
+ * TimeZone time zone}.
  */
-public class LocaleBasedDateFormatProvider implements DateFormatProvider {
+public class EnvironmentBasedDateFormatProvider implements DateFormatProvider {
 	private String customPattern;
 
 	/**
-	 * Creates a locale-based date format provider.
+	 * Creates an environment-based date format provider.
 	 *
 	 * @param customPattern the pattern to use for the custom date format type
 	 */
-	public LocaleBasedDateFormatProvider(String customPattern) {
+	public EnvironmentBasedDateFormatProvider(String customPattern) {
 		this.customPattern = customPattern;
 	}
 
 	public DateFormat provide(DateFormatType type, Context context) throws AluminumException {
 		DateFormat dateFormat;
 
-		Locale locale = GlobalisationContext.from(context).getLocaleProvider().provide(context);
+		GlobalisationContext globalisationContext = GlobalisationContext.from(context);
+
+		Locale locale = globalisationContext.getLocaleProvider().provide(context);
+		TimeZone timeZone = globalisationContext.getTimeZoneProvider().provide(context);
 
 		if (type == DateFormatType.SHORT_DATE) {
 			dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
@@ -68,7 +71,7 @@ public class LocaleBasedDateFormatProvider implements DateFormatProvider {
 			throw new AluminumException("unexpected date format type: ", type);
 		}
 
-		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		dateFormat.setTimeZone(timeZone);
 
 		return dateFormat;
 	}

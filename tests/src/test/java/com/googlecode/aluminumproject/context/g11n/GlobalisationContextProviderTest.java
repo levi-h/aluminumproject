@@ -24,6 +24,8 @@ import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextPr
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.NUMBER_FORMAT_PROVIDER_CLASS;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_BASE_NAME;
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_PROVIDER_CLASS;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.TIME_ZONE;
+import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.TIME_ZONE_PROVIDER_CLASS;
 
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.TestConfiguration;
@@ -38,6 +40,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -52,6 +55,7 @@ public class GlobalisationContextProviderTest {
 	private Context context;
 
 	private Locale defaultLocale;
+	private TimeZone defaultTimeZone;
 
 	@BeforeMethod
 	public void createGlobalisationContextProviderAndContext() {
@@ -61,15 +65,18 @@ public class GlobalisationContextProviderTest {
 	}
 
 	@BeforeClass
-	public void changeDefaultLocale() {
+	public void changeDefaultLocaleAndTimeZone() {
 		defaultLocale = Locale.getDefault();
+		defaultTimeZone = TimeZone.getDefault();
 
 		Locale.setDefault(Locale.ENGLISH);
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 	}
 
 	@AfterClass
-	public void restoreDefaultLocale() {
+	public void restoreDefaultLocaleAndTimeZone() {
 		Locale.setDefault(defaultLocale);
+		TimeZone.setDefault(defaultTimeZone);
 	}
 
 	private void initialiseGlobalisationContextProvider() {
@@ -172,6 +179,52 @@ public class GlobalisationContextProviderTest {
 		assert country != null;
 		assert country.equals("ES");
 	}
+
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
+	public void defaultTimeZoneProviderShouldProvideDefaultTimeZone() {
+		initialiseGlobalisationContextProvider();
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		TimeZone timeZone = GlobalisationContext.from(context).getTimeZoneProvider().provide(context);
+		assert timeZone != null;
+		assert timeZone.equals(TimeZone.getDefault());
+	}
+
+	@Test(dependsOnMethods = "defaultTimeZoneProviderShouldProvideDefaultTimeZone")
+	public void defaultTimeZoneShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TIME_ZONE, "UTC");
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		TimeZone timeZone = GlobalisationContext.from(context).getTimeZoneProvider().provide(context);
+		assert timeZone != null;
+		assert timeZone.getID().equals("UTC");
+	}
+
+	public static class UtcTimeZoneProvider extends ConstantTimeZoneProvider {
+		public UtcTimeZoneProvider() {
+			super(TimeZone.getTimeZone("UTC"));
+		}
+	}
+
+	@Test(dependsOnMethods = "globalisationContextShouldBeAddedToContextBeforeTemplate")
+	public void timeZoneProviderShouldBeConfigurable() {
+		ConfigurationParameters parameters = new ConfigurationParameters();
+		parameters.addParameter(TIME_ZONE_PROVIDER_CLASS, UtcTimeZoneProvider.class.getName());
+
+		initialiseGlobalisationContextProvider(parameters);
+
+		globalisationContextProvider.beforeTemplate(context);
+
+		TimeZone timeZone = GlobalisationContext.from(context).getTimeZoneProvider().provide(context);
+		assert timeZone != null;
+		assert timeZone.getID().equals("UTC");
+	}
+
 
 	@Test(dependsOnMethods = "defaultLocaleProviderShouldProvideDefaultLocale")
 	public void defaultResourceBundleProviderShouldProvideResourcesFromResourceBundleWithDefaultBaseName() {

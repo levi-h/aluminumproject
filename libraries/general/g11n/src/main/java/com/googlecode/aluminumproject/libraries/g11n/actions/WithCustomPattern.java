@@ -42,7 +42,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import java.util.TimeZone;
 
 @SuppressWarnings("javadoc")
 @Typed("String")
@@ -107,7 +106,7 @@ public class WithCustomPattern
 
 			if (type == DateFormatType.CUSTOM) {
 				dateFormat = new SimpleDateFormat(customPattern);
-				dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+				dateFormat.setTimeZone(GlobalisationContext.from(context).getTimeZoneProvider().provide(context));
 			} else {
 				dateFormat = delegate.provide(type, context);
 			}

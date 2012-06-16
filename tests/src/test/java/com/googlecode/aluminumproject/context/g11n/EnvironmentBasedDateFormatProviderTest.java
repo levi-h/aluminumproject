@@ -21,13 +21,14 @@ import com.googlecode.aluminumproject.context.DefaultContext;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-g11n", "fast"})
-public class LocaleBasedDateFormatProviderTest {
+public class EnvironmentBasedDateFormatProviderTest {
 	private DateFormatProvider dateFormatProvider;
 
 	private Context context;
@@ -36,11 +37,12 @@ public class LocaleBasedDateFormatProviderTest {
 
 	@BeforeMethod
 	public void createContextAndDate() {
-		ConstantLocaleProvider localeProvider = new ConstantLocaleProvider(new Locale("es"));
-		dateFormatProvider = new LocaleBasedDateFormatProvider("yyyyMMdd HHmm");
+		LocaleProvider localeProvider = new ConstantLocaleProvider(new Locale("es"));
+		TimeZoneProvider timeZoneProvider = new ConstantTimeZoneProvider(TimeZone.getTimeZone("GMT"));
+		dateFormatProvider = new EnvironmentBasedDateFormatProvider("yyyyMMdd HHmm");
 
 		GlobalisationContext globalisationContext =
-			new GlobalisationContext(localeProvider, null, dateFormatProvider, null);
+			new GlobalisationContext(localeProvider, timeZoneProvider, null, dateFormatProvider, null);
 
 		context = new DefaultContext();
 		context.addImplicitObject(GlobalisationContext.GLOBALISATION_CONTEXT, globalisationContext);

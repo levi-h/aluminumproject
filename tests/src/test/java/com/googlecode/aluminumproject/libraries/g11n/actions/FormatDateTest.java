@@ -39,6 +39,7 @@ public class FormatDateTest extends GlobalisationLibraryTest {
 
 	protected void addConfigurationParameters(ConfigurationParameters parameters) {
 		parameters.addParameter(GlobalisationContextProvider.LOCALE, "en");
+		parameters.addParameter(GlobalisationContextProvider.TIME_ZONE, "utc");
 	}
 
 	public void customDateFormatShouldBeUsedByDefault() {
@@ -52,6 +53,11 @@ public class FormatDateTest extends GlobalisationLibraryTest {
 	@Test(dependsOnMethods = "typeShouldBeUsed")
 	public void customLocaleShouldBeUsed() {
 		assert processTemplate("format-date-with-custom-locale", context).equals("1-gen-1970");
+	}
+
+	@Test(dependsOnMethods = "typeShouldBeUsed")
+	public void customTimeZoneShouldBeUsed() {
+		assert processTemplate("format-date-with-custom-time-zone", context).equals("1:00 AM");
 	}
 
 	@Test(dependsOnMethods = "customDateFormatShouldBeUsedByDefault")
