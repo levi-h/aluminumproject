@@ -85,9 +85,6 @@ public class CallFunction extends AbstractAction {
 			}
 		}
 
-		Function function = functionFactory.create(arguments, context);
-		function.setFactory(functionFactory);
-
-		return function;
+		return functionFactory.create(arguments, context);
 	}
 }

@@ -24,10 +24,8 @@ import com.googlecode.aluminumproject.context.g11n.GlobalisationContext;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatProvider;
 import com.googlecode.aluminumproject.context.g11n.NumberFormatType;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.Action;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
-import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
@@ -45,8 +43,7 @@ import java.util.Locale;
 
 @SuppressWarnings("javadoc")
 @Typed("String")
-public class WithCustomPattern
-		extends AbstractLibraryElementCreation<ActionContributionFactory> implements ActionContribution {
+public class WithCustomPattern extends AbstractActionContribution {
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		boolean canBeMade;
 

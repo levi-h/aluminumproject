@@ -131,10 +131,7 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 				actionContext.getActionContributionFactories();
 
 			for (ActionContributionDescriptor descriptor: actionContributionFactories.keySet()) {
-				ActionContributionFactory actionContributionFactory = actionContributionFactories.get(descriptor);
-
-				ActionContribution actionContribution = actionContributionFactory.create();
-				actionContribution.setFactory(actionContributionFactory);
+				ActionContribution actionContribution = actionContributionFactories.get(descriptor).create();
 
 				ActionFactory actionFactory = actionContext.getActionFactory();
 
@@ -167,12 +164,8 @@ public class DefaultActionElement extends AbstractTemplateElement implements Act
 
 		public void intercept(ActionContext actionContext) throws AluminumException {
 			if (actionContext.getAction() == null) {
-				ActionFactory actionFactory = actionContext.getActionFactory();
-
-				logger.debug("creating action using ", actionFactory);
-
-				Action action = actionFactory.create(actionContext.getParameters(), actionContext.getContext());
-				action.setFactory(actionFactory);
+				Action action =
+					actionContext.getActionFactory().create(actionContext.getParameters(), actionContext.getContext());
 
 				Injector injector = new Injector();
 				injector.addValueProvider(new ClassBasedValueProvider(actionContext.getActionDescriptor()));

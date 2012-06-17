@@ -15,17 +15,21 @@
  */
 package com.googlecode.aluminumproject.libraries.actions;
 
-import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
+import com.googlecode.aluminumproject.utilities.Logger;
 
 /**
  * A contribution that can be made to any action.
  */
-public abstract class AbstractActionContribution
-		extends AbstractLibraryElementCreation<ActionContributionFactory> implements ActionContribution {
+public abstract class AbstractActionContribution implements ActionContribution {
+	/** The logger to use. */
+	protected final Logger logger;
+
 	/**
 	 * Creates an abstract action contribution.
 	 */
-	protected AbstractActionContribution() {}
+	protected AbstractActionContribution() {
+		logger = Logger.get(getClass());
+	}
 
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
 		return true;

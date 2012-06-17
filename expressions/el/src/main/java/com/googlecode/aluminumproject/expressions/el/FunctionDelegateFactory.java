@@ -179,7 +179,6 @@ public class FunctionDelegateFactory {
 		}
 
 		Function function = functionContext.functionFactory.create(arguments, functionContext.context);
-		function.setFactory(functionContext.functionFactory);
 
 		return function.call(functionContext.context);
 	}
