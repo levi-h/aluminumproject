@@ -16,12 +16,11 @@
 package com.googlecode.aluminumproject.libraries.functions;
 
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
 
 /**
  * A function that can be used in tests.
  */
-public class TestFunction extends AbstractLibraryElementCreation<FunctionFactory> implements Function {
+public class TestFunction implements Function {
 	/**
 	 * Creates a test function.
 	 */

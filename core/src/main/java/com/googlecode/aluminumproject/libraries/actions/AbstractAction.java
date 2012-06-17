@@ -18,7 +18,7 @@ package com.googlecode.aluminumproject.libraries.actions;
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.context.Context;
-import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
+import com.googlecode.aluminumproject.utilities.Logger;
 import com.googlecode.aluminumproject.writers.DecorativeWriter;
 import com.googlecode.aluminumproject.writers.ListWriter;
 import com.googlecode.aluminumproject.writers.StringWriter;
@@ -30,14 +30,19 @@ import java.util.List;
 /**
  * Reduces the effort it takes to implement {@link Action the Action interface} and offers some convenience methods.
  */
-public abstract class AbstractAction extends AbstractLibraryElementCreation<ActionFactory> implements Action {
+public abstract class AbstractAction implements Action {
 	private @Ignored Action parent;
 	private @Ignored ActionBody body;
+
+	/** The logger to use. */
+	protected final Logger logger;
 
 	/**
 	 * Creates an abstract action.
 	 */
-	protected AbstractAction() {}
+	protected AbstractAction() {
+		logger = Logger.get(getClass());
+	}
 
 	public Action getParent() {
 		return parent;

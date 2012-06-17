@@ -19,9 +19,7 @@ import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.annotations.Injected;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.interceptors.AbstractActionInterceptor;
-import com.googlecode.aluminumproject.libraries.AbstractLibraryElementCreation;
-import com.googlecode.aluminumproject.libraries.actions.ActionContribution;
-import com.googlecode.aluminumproject.libraries.actions.ActionContributionFactory;
+import com.googlecode.aluminumproject.libraries.actions.AbstractActionContribution;
 import com.googlecode.aluminumproject.libraries.actions.ActionContributionOptions;
 import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameter;
@@ -32,8 +30,7 @@ import com.googlecode.aluminumproject.templates.ActionPhase;
 import com.googlecode.aluminumproject.writers.Writer;
 
 @SuppressWarnings("javadoc")
-public class DynamicAttribute
-		extends AbstractLibraryElementCreation<ActionContributionFactory> implements ActionContribution {
+public class DynamicAttribute extends AbstractActionContribution {
 	private @Injected ActionContributionDescriptor descriptor;
 
 	public boolean canBeMadeTo(ActionFactory actionFactory) {
