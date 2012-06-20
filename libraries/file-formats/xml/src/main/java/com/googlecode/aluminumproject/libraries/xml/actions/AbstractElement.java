@@ -31,6 +31,7 @@ import java.util.Map;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
+import nu.xom.IllegalDataException;
 import nu.xom.Node;
 import nu.xom.Text;
 
@@ -159,7 +160,11 @@ abstract class AbstractElement extends AbstractAction {
 					String attributeName = attribute.getKey();
 					String attributeValue = attribute.getValue();
 
-					element.addAttribute(new Attribute(attributeName, attributeValue));
+					try {
+						element.addAttribute(new Attribute(attributeName, attributeValue));
+					} catch (IllegalDataException exception) {
+						throw new AluminumException(exception, "can't add attribute '", attributeName, "'");
+					}
 				}
 			} else {
 				String namespaceUrl = findNamespaceUrl(namespacePrefix);
@@ -171,7 +176,12 @@ abstract class AbstractElement extends AbstractAction {
 						String attributeName = String.format("%s:%s", namespacePrefix, attribute.getKey());
 						String attributeValue = attribute.getValue();
 
-						element.addAttribute(new Attribute(attributeName, namespaceUrl, attributeValue));
+						try {
+							element.addAttribute(new Attribute(attributeName, namespaceUrl, attributeValue));
+						} catch (IllegalDataException exception) {
+							throw new AluminumException(exception,
+								"can't add attribute '", namespaceUrl, "/", attributeName, "'");
+						}
 					}
 				}
 			}
