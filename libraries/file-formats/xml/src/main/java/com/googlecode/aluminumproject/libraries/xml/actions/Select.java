@@ -34,8 +34,12 @@ public class Select extends AbstractAction implements SelectionContextContainer 
 	private @Required String expression;
 	private SelectionContext context;
 
+	private Type type;
+
 	public Select() {
 		context = new SelectionContext();
+
+		type = Type.AUTOMATIC;
 	}
 
 	public SelectionContext getSelectionContext() {
@@ -47,6 +51,38 @@ public class Select extends AbstractAction implements SelectionContextContainer 
 
 		List<?> results = element.select(expression, this.context);
 
-		writer.write((results.size() == 1) ? results.get(0) : results);
+		Object result;
+
+		switch (type) {
+			case SINGLE:
+				int resultCount = results.size();
+
+				if (resultCount == 1) {
+					result = results.get(0);
+				} else {
+					throw new AluminumException("expected single result, got ", resultCount);
+				}
+
+				break;
+
+			case MULTIPLE:
+				result = results;
+
+				break;
+
+			case AUTOMATIC:
+			default:
+				result = (results.size() == 1) ? results.get(0) : results;
+
+				break;
+		}
+
+		writer.write(result);
+	}
+
+	public static enum Type {
+		AUTOMATIC,
+		SINGLE,
+		MULTIPLE
 	}
 }

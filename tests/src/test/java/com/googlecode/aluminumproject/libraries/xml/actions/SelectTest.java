@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.xml.XmlLibraryTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -53,6 +54,19 @@ public class SelectTest extends XmlLibraryTest {
 
 		Object variable = context.getVariable(Context.TEMPLATE_SCOPE, "pages");
 		assert variable instanceof com.googlecode.aluminumproject.libraries.xml.model.Element;
+	}
+
+	@Test(dependsOnMethods = "elementsShouldBeSelectable")
+	public void singleResultShouldBeWrappedInListWithSuitableSelectionType() {
+		Context context = new DefaultContext();
+
+		processTemplate("select-with-type", context);
+
+		assert context.getVariableNames(Context.TEMPLATE_SCOPE).contains("text");
+
+		Object text = context.getVariable(Context.TEMPLATE_SCOPE, "text");
+		assert text != null;
+		assert text.equals(Arrays.asList("This is the first page."));
 	}
 
 	public void namespacesShouldBeSelectable() {
