@@ -25,7 +25,6 @@ import com.googlecode.aluminumproject.writers.Writer;
  */
 @Named("test")
 public class AnnotatedAction extends AbstractAction {
-	@SuppressWarnings("unused")
 	private @Named("desc") @Required String description;
 
 	/**

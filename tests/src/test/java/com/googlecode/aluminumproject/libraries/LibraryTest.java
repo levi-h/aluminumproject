@@ -53,7 +53,8 @@ public abstract class LibraryTest {
 		engine = new Aluminum(new DefaultConfiguration(configurationParameters));
 	}
 
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {}
+	protected void addConfigurationParameters(
+		@SuppressWarnings("unused") ConfigurationParameters configurationParameters) {}
 
 	@AfterClass
 	public final void stopTemplateEngine() {
