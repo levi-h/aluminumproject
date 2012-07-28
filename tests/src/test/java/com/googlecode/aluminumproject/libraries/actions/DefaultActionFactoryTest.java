@@ -180,7 +180,6 @@ public class DefaultActionFactoryTest {
 	}
 
 	public static class ParameterAction extends AbstractAction {
-		@SuppressWarnings("unused")
 		private @Typed("String") ActionParameter descriptionParameter;
 
 		public void execute(Context context, Writer writer) {}
@@ -345,7 +344,6 @@ public class DefaultActionFactoryTest {
 	@Ignored
 	@UsableAsFunction
 	public static class ActionThatIsUsableAsFunctionWithMissingArgumentParameter extends AbstractAction {
-		@SuppressWarnings("unused")
 		private @Required String description;
 
 		public void execute(Context context, Writer writer) {}
