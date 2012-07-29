@@ -16,24 +16,36 @@
 package com.googlecode.aluminumproject.libraries.beans.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
+import com.googlecode.aluminumproject.annotations.Ignored;
 import com.googlecode.aluminumproject.annotations.Required;
 import com.googlecode.aluminumproject.annotations.UsableAsFunction;
+import com.googlecode.aluminumproject.annotations.ValidInside;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.utilities.ReflectionUtilities;
+import com.googlecode.aluminumproject.writers.NullWriter;
 import com.googlecode.aluminumproject.writers.Writer;
 
 import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("javadoc")
 @UsableAsFunction(argumentParameters = "type")
 public class Create extends AbstractAction {
 	private @Required Type type;
+	private @Ignored List<Object> arguments;
+
+	public Create() {
+		arguments = new LinkedList<Object>();
+	}
 
 	public void execute(Context context, Writer writer) throws AluminumException {
 		if (type instanceof Class) {
+			getBody().invoke(context, new NullWriter());
+
 			Class<?> beanClass = (Class<?>) type;
-			Object bean = ReflectionUtilities.instantiate(beanClass);
+			Object bean = ReflectionUtilities.instantiate(beanClass, arguments.toArray());
 
 			logger.debug("created bean ", bean, " of type ", beanClass.getSimpleName());
 
@@ -41,5 +53,21 @@ public class Create extends AbstractAction {
 		} else {
 			throw new AluminumException("can't create bean of type ", type, ": it is not a class");
 		}
+	}
+
+	@ValidInside(Create.class)
+	public static class Argument extends AbstractAction {
+		private Object value;
+
+		public Argument() {
+			value = NO_VALUE;
+		}
+
+		public void execute(Context context, Writer writer) throws AluminumException {
+			findAncestorOfType(Create.class).arguments.add((value == NO_VALUE)
+				? getBodyObject(Object.class, context, writer) : value);
+		}
+
+		private final static Object NO_VALUE = new Object();
 	}
 }
