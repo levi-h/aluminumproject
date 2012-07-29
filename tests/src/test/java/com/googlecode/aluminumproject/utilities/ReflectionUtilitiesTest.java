@@ -83,6 +83,15 @@ public class ReflectionUtilitiesTest {
 		assert ReflectionUtilities.instantiate(Object.class) != null;
 	}
 
+	public void instantiatingClassWithArgumentsShouldWork() {
+		assert ReflectionUtilities.instantiate(HashMap.class, 10) != null;
+	}
+
+	@Test(expectedExceptions = AluminumException.class)
+	public void instantiatingClassWithNonMatchingArgumentsShouldFail() {
+		ReflectionUtilities.instantiate(HashMap.class, 10D);
+	}
+
 	public void gettingPackageNameShouldWork() {
 		String packageName;
 

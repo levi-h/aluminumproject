@@ -20,6 +20,7 @@ import com.googlecode.aluminumproject.AluminumException;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -62,15 +63,47 @@ public class ReflectionUtilities {
 	 *
 	 * @param <T> the type of the new object
 	 * @param beanClass the class to instantiate
+	 * @param arguments arguments to construct the bean class with
 	 * @return a new instance of the given class
 	 * @throws AluminumException when the class can't be instantiated
 	 */
-	public static <T> T instantiate(Class<T> beanClass) throws AluminumException {
+	public static <T> T instantiate(Class<T> beanClass, Object... arguments) throws AluminumException {
 		try {
-			return beanClass.newInstance();
+			return findConstructor(beanClass, arguments).newInstance(arguments);
 		} catch (Exception exception) {
 			throw new AluminumException(exception, "can't instantiate ", beanClass);
 		}
+	}
+
+	private static <T> Constructor<T> findConstructor(Class<T> beanClass, Object[] arguments) throws AluminumException {
+		Constructor<T>[] constructors = Utilities.typed(beanClass.getConstructors());
+		int i = 0;
+
+		while ((i < constructors.length) && !constructorMatchesArguments(constructors[i], arguments)) {
+			i++;
+		}
+
+		if (i == constructors.length) {
+			throw new AluminumException("can't find constructor for ", beanClass, " and arguments ", arguments);
+		} else {
+			return constructors[i];
+		}
+	}
+
+	private static boolean constructorMatchesArguments(Constructor<?> constructor, Object[] arguments) {
+		Class<?>[] argumentTypes = constructor.getParameterTypes();
+		int i = 0;
+
+		while ((i < argumentTypes.length) && (i < arguments.length)
+				&& argumentMatchesType(arguments[i], argumentTypes[i])) {
+			i++;
+		}
+
+		return (i == argumentTypes.length) && (i == arguments.length);
+	}
+
+	private static boolean argumentMatchesType(Object argument, Class<?> argumentType) {
+		return (argument == null) ? !argumentType.isPrimitive() : wrapPrimitiveType(argumentType).isInstance(argument);
 	}
 
 	/**
