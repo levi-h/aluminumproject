@@ -10,7 +10,7 @@ The aluminum distribution consists of the following directories:
     /           contains the license file and the readme (this file).
     bin/        contains the commands that are needed to run Aluminum from the
                 command line.
-    docs/       contains the API documentation.
+    docs/       contains the API documentation and AluDoc.
     lib/        contains the Aluminum JAR files and their dependencies.
     src/        contains the Aluminum sources, which can be used by your
                 favourite IDE.
