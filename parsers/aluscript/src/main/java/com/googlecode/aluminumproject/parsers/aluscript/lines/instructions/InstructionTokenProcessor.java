@@ -81,14 +81,6 @@ class InstructionTokenProcessor implements TokenProcessor {
 			}
 		});
 
-		stateTransitions.add(new InstructionStateTransition(INSTRUCTION_NAME_OR_PREFIX, INSTRUCTION_NAME, " *\\. *") {
-			@Override
-			public void makeTransition(
-					InstructionTokenProcessor instructionTokenProcessor, String token) throws AluminumException {
-				instructionTokenProcessor.getInstruction(false).setNamePrefix(token);
-			}
-		});
-
 		EnumSet<InstructionState> instructionName = EnumSet.of(INSTRUCTION_NAME_OR_PREFIX, INSTRUCTION_NAME);
 
 		stateTransitions.add(new InstructionStateTransition(instructionName, DONE, null) {
