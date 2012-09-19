@@ -42,6 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -213,6 +215,7 @@ public class FunctionDelegateFactory {
 		private int classIndex;
 
 		private AtomicBoolean initialised;
+		private Lock initialisationLock;
 
 		private Map<String, FunctionFactory> functionFactories;
 		private Map<String, Integer> delegateIndices;
@@ -226,43 +229,53 @@ public class FunctionDelegateFactory {
 			this.classIndex = classIndex;
 
 			initialised = new AtomicBoolean();
+			initialisationLock = new ReentrantLock();
 		}
 
 		public void initialise() throws CannotCompileException {
-			if (initialised.compareAndSet(false, true)) {
-				functionFactories = new HashMap<String, FunctionFactory>();
-				delegateIndices = new HashMap<String, Integer>();
+			initialisationLock.lock();
 
-				ClassPool classPool = new ClassPool();
-				classPool.appendClassPath(new LoaderClassPath(Thread.currentThread().getContextClassLoader()));
+			try {
+				if (initialised.compareAndSet(false, true)) {
+					functionFactories = new HashMap<String, FunctionFactory>();
+					delegateIndices = new HashMap<String, Integer>();
 
-				CtClass ctFunctions = classPool.makeClass(
-					String.format("com.googlecode.aluminumproject.expressions.el.Delegates%d", classIndex));
+					ClassPool classPool = new ClassPool();
+					classPool.appendClassPath(new LoaderClassPath(Thread.currentThread().getContextClassLoader()));
 
-				int delegateIndex = 0;
+					CtClass ctFunctions = classPool.makeClass(
+						String.format("com.googlecode.aluminumproject.expressions.el.Delegates%d", classIndex));
 
-				for (Library library: configuration.getLibraries()) {
-					LibraryInformation libraryInformation = library.getInformation();
+					int delegateIndex = 0;
 
-					for (String url: Arrays.asList(libraryInformation.getUrl(), libraryInformation.getVersionedUrl())) {
-						for (FunctionFactory functionFactory: library.getFunctionFactories()) {
-							String key =
-								FunctionDelegateFactory.getKey(url, functionFactory.getInformation().getName());
+					for (Library library: configuration.getLibraries()) {
+						LibraryInformation libraryInformation = library.getInformation();
 
-							functionFactories.put(key, functionFactory);
+						List<String> libraryUrls =
+							Arrays.asList(libraryInformation.getUrl(), libraryInformation.getVersionedUrl());
 
-							String delegate = getDelegate(key, functionFactory, delegateIndex);
-							ctFunctions.addMethod(CtNewMethod.make(delegate, ctFunctions));
+						for (String url: libraryUrls) {
+							for (FunctionFactory functionFactory: library.getFunctionFactories()) {
+								String key =
+									FunctionDelegateFactory.getKey(url, functionFactory.getInformation().getName());
 
-							delegateIndices.put(key, delegateIndex);
-							delegateIndex++;
+								functionFactories.put(key, functionFactory);
+
+								String delegate = getDelegate(key, functionFactory, delegateIndex);
+								ctFunctions.addMethod(CtNewMethod.make(delegate, ctFunctions));
+
+								delegateIndices.put(key, delegateIndex);
+								delegateIndex++;
+							}
 						}
 					}
+
+					delegates = ctFunctions.toClass();
+
+					dynamicDelegates = new ConcurrentHashMap<String, Class<?>>();
 				}
-
-				delegates = ctFunctions.toClass();
-
-				dynamicDelegates = new ConcurrentHashMap<String, Class<?>>();
+			} finally {
+				initialisationLock.unlock();
 			}
 		}
 
