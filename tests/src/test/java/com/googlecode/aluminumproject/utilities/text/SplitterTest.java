@@ -69,6 +69,15 @@ public class SplitterTest {
 		assert tokens.get(1).equals(new Token("b", "", null));
 	}
 
+	@Test(dependsOnMethods = "contiguousSeparatorsShouldResultInEmptyTokens")
+	public void firstSeparatorShouldWinWhenSeparatorPatternsOverlap() {
+		List<Token> tokens = split(new Splitter(Arrays.asList("ab?", "b?c")), "abc");
+		assert tokens.size() == 3;
+		assert tokens.get(0).equals(new Token("", "ab", "ab?"));
+		assert tokens.get(1).equals(new Token("", "c", "b?c"));
+		assert tokens.get(2).equals(new Token("", "", null));
+	}
+
 	@Test(dependsOnMethods = "splittingWithSingleSeparatorPatternShouldSeparateTokens")
 	public void escapeCharacterShouldPreventSeparation() {
 		List<Token> tokens = split(new Splitter(Arrays.asList(", ?"), '\\'), "a, b\\, c");
