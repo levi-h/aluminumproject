@@ -168,16 +168,33 @@ public class Splitter {
 	private List<Match> findMatches(StringBuilder buffer) {
 		List<Match> matches = new LinkedList<Match>();
 
-		for (Pattern separatorPattern: separatorPatterns) {
-			Matcher matcher = separatorPattern.matcher(buffer);
-			int i = 0;
+		Match match;
+		int i = 0;
 
-			while ((i < buffer.length()) && matcher.find(i)) {
-				matches.add(new Match(matcher.start(), matcher.end(), separatorPattern.pattern()));
+		do {
+			match = null;
 
-				i = matcher.end();
+			for (Pattern separatorPattern: separatorPatterns) {
+				Matcher matcher = separatorPattern.matcher(buffer);
+
+				if (matcher.find(i)) {
+					int startIndex = matcher.start();
+					int endIndex = matcher.end();
+
+					if ((match == null) || (startIndex < match.startIndex) ||
+							((startIndex == match.startIndex) &&
+								((endIndex - startIndex) > (match.endIndex - match.startIndex)))) {
+						match = new Match(startIndex, endIndex, separatorPattern.pattern());
+					}
+				}
 			}
-		}
+
+			if (match != null) {
+				matches.add(match);
+
+				i = match.endIndex;
+			}
+		} while ((i < buffer.length()) && (match != null));
 
 		return matches;
 	}
