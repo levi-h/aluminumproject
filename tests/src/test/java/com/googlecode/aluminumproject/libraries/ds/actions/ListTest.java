@@ -15,10 +15,6 @@
  */
 package com.googlecode.aluminumproject.libraries.ds.actions;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
@@ -43,8 +39,8 @@ public class ListTest extends DsLibraryTest {
 		processTemplate("empty-list", context);
 
 		java.util.List<?> list = Utilities.typed(context.getVariable(Context.TEMPLATE_SCOPE, "list"));
-		assertNotNull(list);
-		assertTrue(list.isEmpty());
+		assert list != null;
+		assert list.isEmpty();
 	}
 
 	public void listShouldBeCreatable() {
@@ -53,7 +49,7 @@ public class ListTest extends DsLibraryTest {
 		processTemplate("list", context);
 
 		java.util.List<?> list = Utilities.typed(context.getVariable(Context.TEMPLATE_SCOPE, "list"));
-		assertNotNull(list);
-		assertEquals(list, Arrays.asList("a", "b"));
+		assert list != null;
+		assert list.equals(Arrays.asList("a", "b"));
 	}
 }
