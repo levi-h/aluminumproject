@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,22 @@ public class AluScriptSettings {
 	 * Creates default AluScript settings.
 	 */
 	public AluScriptSettings() {
-		templateNameTranslator = new AluScriptTemplateNameTranslator();
+		this(true, new AluScriptTemplateNameTranslator());
+	}
 
-		automaticNewlines = true;
+	/**
+	 * Creates AluScript settings that are based upon other AluScript settings.
+	 *
+	 * @param settings the settings to copy
+	 */
+	public AluScriptSettings(AluScriptSettings settings) {
+		this(settings.automaticNewlines, settings.templateNameTranslator);
+	}
+
+	private AluScriptSettings(boolean automaticNewlines, TemplateNameTranslator templateNameTranslator) {
+		this.automaticNewlines = automaticNewlines;
+
+		this.templateNameTranslator = templateNameTranslator;
 
 		logger = Logger.get(getClass());
 	}
