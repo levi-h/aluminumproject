@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
 import com.googlecode.aluminumproject.libraries.Library;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
+import com.googlecode.aluminumproject.libraries.fragments.FragmentLibrary;
 import com.googlecode.aluminumproject.templates.TemplateProcessor;
 import com.googlecode.aluminumproject.writers.NullWriter;
 
@@ -48,8 +49,8 @@ import java.util.Map;
  * {@link #generate(String, String) one that doesn't}. In either case, the following context variables are available:
  * <ul>
  * <li>{@code "libraries"}, a {@link List list} that contains the libraries for which documentation is generated (by
- *     default, this list contains all available libraries, though certain libraries may be {@link
- *     #excludeLibrary(String) excluded});
+ *     default, this list contains all available non-{@link FragmentLibrary fragment} libraries, though certain
+ *     libraries may be {@link #excludeLibrary(String) excluded});
  * <li>{@code "location"}, the desired output location for the documentation.
  * </ul>
  */
@@ -134,12 +135,14 @@ public class AluDoc {
 	private List<Library> getLibraries(Configuration configuration) throws AluminumException {
 		List<Library> libraries = new LinkedList<Library>();
 
-
 		for (Library library: configuration.getLibraries()) {
 			LibraryInformation libraryInformation = library.getInformation();
 
-			if (!(excludedLibraryUrls.contains(libraryInformation.getUrl()) ||
-					excludedLibraryUrls.contains(libraryInformation.getVersionedUrl()))) {
+			boolean excludedLibrary = excludedLibraryUrls.contains(libraryInformation.getUrl()) ||
+				excludedLibraryUrls.contains(libraryInformation.getVersionedUrl());
+			boolean fragmentLibrary = (library instanceof FragmentLibrary);
+
+			if (!(excludedLibrary || fragmentLibrary)) {
 				libraries.add(library);
 			}
 		}
