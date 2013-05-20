@@ -12,4 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Hello!
+@library (tff: 'http://aluminumproject.googlecode.com/test/fragments/french')
+
+@tff.hello
