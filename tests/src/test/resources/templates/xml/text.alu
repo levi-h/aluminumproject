@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Aluminum project
+# Copyright 2010-2013 Aluminum project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
 # limitations under the License.
 
 @library(xml: 'http://aluminumproject.googlecode.com/xml')
+
+@setting (automatic newlines: false)
 
 @xml.format
 	@xml.document

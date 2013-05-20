@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,12 @@
 package com.googlecode.aluminumproject.libraries.html;
 
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
 import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-html", "slow"})
 public class Html4Test extends HtmlLibraryTest {
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
-		configurationParameters.addParameter(AluScriptParser.AUTOMATIC_NEWLINES, "false");
-	}
-
 	public void tagsShouldBeClosed() {
 		assert processTemplate("html4-tag").equals("<html></html>");
 	}
