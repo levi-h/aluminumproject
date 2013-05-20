@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.libraries.actions.ActionFactory;
 import com.googlecode.aluminumproject.libraries.actions.ActionInformation;
 import com.googlecode.aluminumproject.libraries.actions.ActionParameterInformation;
 import com.googlecode.aluminumproject.libraries.aludoc.AluDocLibrary;
+import com.googlecode.aluminumproject.libraries.fragments.FragmentLibrary;
 import com.googlecode.aluminumproject.libraries.functions.FunctionArgumentInformation;
 import com.googlecode.aluminumproject.libraries.functions.FunctionFactory;
 import com.googlecode.aluminumproject.libraries.functions.FunctionInformation;
@@ -50,7 +51,11 @@ public class TranslationsTest {
 		libraries = new LinkedList<Library>();
 
 		for (Library library: new DefaultConfiguration().getLibraries()) {
-			if (!Arrays.asList(AluDocLibrary.URL, TestLibrary.URL).contains(library.getInformation().getUrl())) {
+			boolean excludeLibrary =
+				Arrays.asList(AluDocLibrary.URL, TestLibrary.URL).contains(library.getInformation().getUrl());
+			boolean fragmentLibrary = (library instanceof FragmentLibrary);
+
+			if (!(excludeLibrary || fragmentLibrary)) {
 				libraries.add(library);
 			}
 		}
