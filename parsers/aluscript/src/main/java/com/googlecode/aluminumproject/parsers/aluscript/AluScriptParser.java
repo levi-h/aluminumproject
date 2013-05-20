@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Aluminum project
+ * Copyright 2009-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.parsers.TemplateNameTranslator;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.LibraryInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.NewlineInstruction;
+import com.googlecode.aluminumproject.parsers.aluscript.instructions.SettingInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.LineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.comments.CommentLineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.instructions.InstructionLineParser;
@@ -56,7 +57,7 @@ import java.util.List;
  * <p>
  * Each template is parsed in a new {@link AluScriptContext context}. This context contains everything that line parsers
  * need (e.g. all available instructions). It also contains a couple of {@link AluScriptSettings template settings}.
- * These settings have reasonable defaults, but they can be overridden:
+ * These settings can be changed on a per-template basis, but the defaults can be configured:
  * <ul>
  * <li>The template name translator can be configured using the configuration parameter {@value
  *     #TEMPLATE_NAME_TRANSLATOR_CLASS};
@@ -72,7 +73,7 @@ public class AluScriptParser implements Parser {
 
 	private String templateExtension;
 
-	private AluScriptSettings settings;
+	private AluScriptSettings defaultSettings;
 
 	private List<LineParser> lineParsers;
 
@@ -96,7 +97,7 @@ public class AluScriptParser implements Parser {
 			logger.debug("using template extension '", templateExtension, "'");
 		}
 
-		createSettings();
+		createDefaultSettings();
 
 		lineParsers = Arrays.<LineParser>asList(
 			new CommentLineParser(),
@@ -106,28 +107,29 @@ public class AluScriptParser implements Parser {
 
 		instructions = Arrays.<Instruction>asList(
 			new LibraryInstruction(),
-			new NewlineInstruction()
+			new NewlineInstruction(),
+			new SettingInstruction()
 		);
 	}
 
-	private void createSettings() throws AluminumException {
+	private void createDefaultSettings() throws AluminumException {
 		ConfigurationParameters parameters = configuration.getParameters();
 
-		settings = new AluScriptSettings();
+		defaultSettings = new AluScriptSettings();
 
 		String templateNameTranslatorClassName = parameters.getValue(TEMPLATE_NAME_TRANSLATOR_CLASS, null);
 
 		if (templateNameTranslatorClassName != null) {
 			ConfigurationElementFactory configurationElementFactory = configuration.getConfigurationElementFactory();
 
-			settings.setTemplateNameTranslator(
+			defaultSettings.setTemplateNameTranslator(
 				configurationElementFactory.instantiate(templateNameTranslatorClassName, TemplateNameTranslator.class));
 		}
 
 		String automaticNewlines = parameters.getValue(AUTOMATIC_NEWLINES, null);
 
 		if (automaticNewlines != null) {
-			settings.setAutomaticNewlines(Boolean.parseBoolean(automaticNewlines));
+			defaultSettings.setAutomaticNewlines(Boolean.parseBoolean(automaticNewlines));
 		}
 	}
 
@@ -136,6 +138,8 @@ public class AluScriptParser implements Parser {
 	public Template parseTemplate(String name) throws AluminumException {
 		String templateContents = readStream(name, getTemplateStream(name));
 		logger.debug("read template '", name, "': ", templateContents);
+
+		AluScriptSettings settings = new AluScriptSettings(defaultSettings);
 
 		AluScriptContext context = new AluScriptContext(configuration, name, settings, instructions);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Aluminum project
+ * Copyright 2009-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ public class AluScriptContext {
 	}
 
 	/**
-	 * Returns the configured template settings.
+	 * Returns the current template settings.
 	 *
 	 * @return the template settings to use
 	 */
