@@ -25,6 +25,7 @@ import com.googlecode.aluminumproject.parsers.aluscript.instructions.Instruction
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.LibraryInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.NewlineInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.instructions.SettingInstruction;
+import com.googlecode.aluminumproject.parsers.aluscript.instructions.TabInstruction;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.LineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.comments.CommentLineParser;
 import com.googlecode.aluminumproject.parsers.aluscript.lines.instructions.InstructionLineParser;
@@ -108,7 +109,8 @@ public class AluScriptParser implements Parser {
 		instructions = Arrays.<Instruction>asList(
 			new LibraryInstruction(),
 			new NewlineInstruction(),
-			new SettingInstruction()
+			new SettingInstruction(),
+			new TabInstruction()
 		);
 	}
 
