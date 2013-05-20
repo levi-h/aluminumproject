@@ -26,6 +26,6 @@ public class TabInstruction extends TextInstruction {
 		super(NAME, "\t");
 	}
 
-	/** The name of the newline instruction: {@value}. */
+	/** The name of the tab instruction: {@value}. */
 	public final static String NAME = "tab";
 }
