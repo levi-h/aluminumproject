@@ -12,4 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Hello!
+@library (tf: 'http://aluminumproject.googlecode.com/test/fragments/default')
+
+@tf.hello-with-name (name: 'world')
