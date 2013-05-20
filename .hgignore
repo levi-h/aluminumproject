@@ -1,4 +1,4 @@
-bin$
+(?<!src/distribution/)bin$
 build$
 (^|/)\.
 ^tests/test-output
