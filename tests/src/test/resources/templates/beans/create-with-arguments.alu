@@ -1,4 +1,4 @@
-# Copyright 2012 Aluminum project
+# Copyright 2012-2013 Aluminum project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
 
 @library (b: http://aluminumproject.googlecode.com/beans)
 @library (c: http://aluminumproject.googlecode.com/core)
+
+@setting (automatic newlines: false)
 
 @b.create (type: ${type}, c.variable name: bean)
 	@b.argument (value: ${firstArgument})

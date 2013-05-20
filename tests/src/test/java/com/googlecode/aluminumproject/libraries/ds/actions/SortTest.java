@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Aluminum project
+ * Copyright 2012-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 package com.googlecode.aluminumproject.libraries.ds.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.ds.DsLibraryTest;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,10 +28,6 @@ import org.testng.annotations.Test;
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-ds", "slow"})
 public class SortTest extends DsLibraryTest {
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
-		configurationParameters.addParameter(AluScriptParser.AUTOMATIC_NEWLINES, "false");
-	}
-
 	public void omittingComparatorShouldResultInNaturalOrdering() {
 		Context context = new DefaultContext();
 		context.setVariable("list", Arrays.asList("d", "b", "c", "a"));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.xml;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
 @SuppressWarnings("javadoc")
 public abstract class XmlLibraryTest extends LibraryTest {
 	public XmlLibraryTest() {
 		super("templates/xml", "aluscript");
-	}
-
-	@Override
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
-		configurationParameters.addParameter(AluScriptParser.AUTOMATIC_NEWLINES, "false");
 	}
 
 	protected String createXml(String... lines) {

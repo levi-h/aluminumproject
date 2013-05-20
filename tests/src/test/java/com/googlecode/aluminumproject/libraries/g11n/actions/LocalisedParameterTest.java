@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
 import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_PROVIDER_CLASS;
-import static com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser.AUTOMATIC_NEWLINES;
 
 import com.googlecode.aluminumproject.AluminumException;
 import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
@@ -48,8 +47,6 @@ public class LocalisedParameterTest extends GlobalisationLibraryTest {
 	}
 
 	protected void addConfigurationParameters(ConfigurationParameters parameters) {
-		parameters.addParameter(AUTOMATIC_NEWLINES, "false");
-
 		parameters.addParameter(RESOURCE_BUNDLE_PROVIDER_CLASS, ParameterResourceBundleProvider.class.getName());
 	}
 

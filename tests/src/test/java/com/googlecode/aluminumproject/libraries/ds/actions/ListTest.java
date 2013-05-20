@@ -15,11 +15,9 @@
  */
 package com.googlecode.aluminumproject.libraries.ds.actions;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.ds.DsLibraryTest;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 import com.googlecode.aluminumproject.utilities.Utilities;
 
 import java.util.Arrays;
@@ -29,10 +27,6 @@ import org.testng.annotations.Test;
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-ds", "slow"})
 public class ListTest extends DsLibraryTest {
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
-		configurationParameters.addParameter(AluScriptParser.AUTOMATIC_NEWLINES, "false");
-	}
-
 	public void emptyListShouldBeCreatable() {
 		Context context = new DefaultContext();
 

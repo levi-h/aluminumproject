@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Aluminum project
+ * Copyright 2012-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 package com.googlecode.aluminumproject.libraries.beans.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.libraries.beans.BeansLibraryTest;
-import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 
 import java.util.Calendar;
 
@@ -29,10 +27,6 @@ import org.testng.annotations.Test;
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-beans", "slow"})
 public class SetPropertyTest extends BeansLibraryTest {
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
-		configurationParameters.addParameter(AluScriptParser.AUTOMATIC_NEWLINES, "false");
-	}
-
 	public void valueShouldBeSet() {
 		Calendar calendar = Calendar.getInstance();
 
