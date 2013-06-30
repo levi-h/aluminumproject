@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Aluminum project
+ * Copyright 2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.beans;
 
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 
 @SuppressWarnings("javadoc")
-public abstract class BeansLibraryTest extends LibraryTest {
-	public BeansLibraryTest() {
-		super("templates/beans", "aluscript");
-	}
-}
+@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/beans")
+public abstract class BeansLibraryTest extends LibraryTest {}

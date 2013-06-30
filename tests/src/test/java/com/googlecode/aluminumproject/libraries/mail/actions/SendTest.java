@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 Aluminum project
+ * Copyright 2011-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package com.googlecode.aluminumproject.libraries.mail.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.mail.MailContextProvider;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 import com.googlecode.aluminumproject.libraries.mail.MailLibraryTest;
 import com.googlecode.aluminumproject.utilities.environment.EnvironmentUtilities;
 import com.icegreen.greenmail.util.GreenMail;
@@ -30,17 +30,20 @@ import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-mail", "slow"})
+@UseConfigurationParameter(name = MailContextProvider.SESSION_PROPERTY_SET_NAME, value = "send")
 public class SendTest extends MailLibraryTest {
 	private GreenMail mailServer;
 
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
+	@BeforeSuite
+	public static void createSessionPropertySet() {
 		Properties sessionPropertySet = new Properties();
 		sessionPropertySet.setProperty("mail.from", "from@aluminum");
 		sessionPropertySet.setProperty("mail.transport.protocol", "smtp");
@@ -48,12 +51,10 @@ public class SendTest extends MailLibraryTest {
 		sessionPropertySet.setProperty("mail.smtp.port", "3025");
 
 		EnvironmentUtilities.getPropertySetContainer().writePropertySet("send", sessionPropertySet);
-
-		configurationParameters.addParameter(MailContextProvider.SESSION_PROPERTY_SET_NAME, "send");
 	}
 
-	@AfterClass
-	public void removeSessionPropertySet() {
+	@AfterSuite
+	public static void removeSessionPropertySet() {
 		EnvironmentUtilities.getPropertySetContainer().removePropertySet("send");
 	}
 

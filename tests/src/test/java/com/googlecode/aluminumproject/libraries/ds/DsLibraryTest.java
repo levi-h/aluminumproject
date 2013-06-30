@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 Aluminum project
+ * Copyright 2011-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.ds;
 
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 
 @SuppressWarnings("javadoc")
-public class DsLibraryTest extends LibraryTest {
-	public DsLibraryTest() {
-		super("templates/ds", "aluscript");
-	}
-}
+@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/ds")
+public abstract class DsLibraryTest extends LibraryTest {}

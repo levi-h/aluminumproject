@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Aluminum project
+ * Copyright 2009-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.io;
 
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
+import com.googlecode.aluminumproject.libraries.UseXmlParser;
 import com.googlecode.aluminumproject.libraries.io.functions.Directories;
 
 import java.io.BufferedReader;
@@ -28,11 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("javadoc")
+@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/io")
+@UseXmlParser
 public abstract class IoLibraryTest extends LibraryTest {
-	public IoLibraryTest() {
-		super("templates/io", "xml");
-	}
-
 	protected File createTemporaryFile(int lineCount) throws IOException {
 		File file = createTemporaryFile();
 

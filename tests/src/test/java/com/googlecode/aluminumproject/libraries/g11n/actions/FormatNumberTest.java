@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 import com.googlecode.aluminumproject.libraries.g11n.GlobalisationLibraryTest;
 
 import org.testng.annotations.BeforeMethod;
@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-g11n", "slow"})
+@UseConfigurationParameter(name = GlobalisationContextProvider.LOCALE, value = "en_GB")
 public class FormatNumberTest extends GlobalisationLibraryTest {
 	private Context context;
 
@@ -33,10 +34,6 @@ public class FormatNumberTest extends GlobalisationLibraryTest {
 	public void createContext() {
 		context = new DefaultContext();
 		context.setVariable("number", 1234.5);
-	}
-
-	protected void addConfigurationParameters(ConfigurationParameters parameters) {
-		parameters.addParameter(GlobalisationContextProvider.LOCALE, "en_GB");
 	}
 
 	public void customNumberFormatShouldBeUsedByDefault() {

@@ -16,21 +16,18 @@
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 import com.googlecode.aluminumproject.libraries.g11n.GlobalisationLibraryTest;
 
 import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-g11n", "slow"})
+@UseConfigurationParameter(name = GlobalisationContextProvider.LOCALE, value = "en")
 public class LocaliseTest extends GlobalisationLibraryTest {
-	protected void addConfigurationParameters(ConfigurationParameters parameters) {
-		parameters.addParameter(GlobalisationContextProvider.LOCALE, "en");
-	}
-
 	public void localisedResourceShouldBeFindableWithExistingKey() {
 		assert processTemplate("localise").equals("a powerful and flexible template engine");
 	}

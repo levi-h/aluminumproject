@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Aluminum project
+ * Copyright 2009-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
  */
 package com.googlecode.aluminumproject.libraries.text;
 
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
+import com.googlecode.aluminumproject.libraries.UseXmlParser;
 
 @SuppressWarnings("javadoc")
-public abstract class TextLibraryTest extends LibraryTest {
-	public TextLibraryTest() {
-		super("templates/text", "xml");
-	}
-}
+@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/text")
+@UseXmlParser
+public abstract class TextLibraryTest extends LibraryTest {}

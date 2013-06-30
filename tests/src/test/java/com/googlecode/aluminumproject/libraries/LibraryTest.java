@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Aluminum project
+ * Copyright 2009-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,44 +20,92 @@ import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.configuration.DefaultConfiguration;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
-import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.parsers.aluscript.AluScriptParser;
 import com.googlecode.aluminumproject.parsers.xml.XmlParser;
 import com.googlecode.aluminumproject.writers.StringWriter;
 import com.googlecode.aluminumproject.writers.TextWriter;
 
-import org.testng.annotations.AfterClass;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 
 @SuppressWarnings("javadoc")
+@UseAluScriptParser
+@UseConfigurationParameters({
+	@UseConfigurationParameter(name = XmlParser.TEMPLATE_EXTENSION, value = "xml"),
+	@UseConfigurationParameter(name = AluScriptParser.TEMPLATE_EXTENSION, value = "alu"),
+})
 public abstract class LibraryTest {
-	private Aluminum engine;
+	private static Map<Map<String, String>, Aluminum> engines = new HashMap<Map<String, String>, Aluminum>();
 
-	private String templatePath;
+	private Aluminum engine;
 	private String parser;
 
-	protected LibraryTest(String templatePath, String parser) {
-		this.templatePath = templatePath;
-		this.parser = parser;
+	@BeforeClass
+	public final void selectEngine() {
+		Map<String, String> configurationParametersToUse = new HashMap<String, String>();
+		addConfigurationParametersToUse(getClass(), configurationParametersToUse);
+
+		if (!engines.containsKey(configurationParametersToUse)) {
+			ConfigurationParameters configurationParameters = new ConfigurationParameters();
+
+			for (String name: configurationParametersToUse.keySet()) {
+				configurationParameters.addParameter(name, configurationParametersToUse.get(name));
+			}
+
+			engines.put(configurationParametersToUse, new Aluminum(new DefaultConfiguration(configurationParameters)));
+		}
+
+		engine = engines.get(configurationParametersToUse);
+	}
+
+	private void addConfigurationParametersToUse(Class<?> testClass, Map<String, String> configurationParametersToUse) {
+		Class<?> superclass = testClass.getSuperclass();
+
+		if (superclass != null) {
+			addConfigurationParametersToUse(superclass, configurationParametersToUse);
+		}
+
+		if (testClass.isAnnotationPresent(UseConfigurationParameters.class)) {
+			for (UseConfigurationParameter annotation:
+					testClass.getAnnotation(UseConfigurationParameters.class).value()) {
+				configurationParametersToUse.put(annotation.name(), annotation.value());
+			}
+		}
+
+		if (testClass.isAnnotationPresent(UseConfigurationParameter.class)) {
+			UseConfigurationParameter annotation = testClass.getAnnotation(UseConfigurationParameter.class);
+
+			configurationParametersToUse.put(annotation.name(), annotation.value());
+		}
 	}
 
 	@BeforeClass
-	public final void createTemplateEngine() {
-		ConfigurationParameters configurationParameters = new ConfigurationParameters();
-		configurationParameters.addParameter(ClassPathTemplateFinder.TEMPLATE_PATH, templatePath);
-		configurationParameters.addParameter(XmlParser.TEMPLATE_EXTENSION, "xml");
-		configurationParameters.addParameter(AluScriptParser.TEMPLATE_EXTENSION, "alu");
+	public final void selectParser() {
+		String parser = null;
 
-		addConfigurationParameters(configurationParameters);
+		Class<?> testClass = getClass();
 
-		engine = new Aluminum(new DefaultConfiguration(configurationParameters));
+		while ((parser == null) && (testClass != null)) {
+			if (testClass.isAnnotationPresent(UseAluScriptParser.class)) {
+				parser = "aluscript";
+			} else if (testClass.isAnnotationPresent(UseXmlParser.class)) {
+				parser = "xml";
+			} else {
+				testClass = testClass.getSuperclass();
+			}
+		}
+
+		this.parser = parser;
 	}
 
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {}
-
-	@AfterClass
-	public final void stopTemplateEngine() {
-		engine.stop();
+	@AfterSuite
+	public final static void stopTemplateEngines() {
+		for (Aluminum engine: engines.values()) {
+			engine.stop();
+		}
 	}
 
 	protected final String processTemplate(String name) {
