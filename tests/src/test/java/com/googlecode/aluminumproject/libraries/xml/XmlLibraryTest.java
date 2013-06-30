@@ -15,14 +15,13 @@
  */
 package com.googlecode.aluminumproject.libraries.xml;
 
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 
 @SuppressWarnings("javadoc")
+@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/xml")
 public abstract class XmlLibraryTest extends LibraryTest {
-	public XmlLibraryTest() {
-		super("templates/xml", "aluscript");
-	}
-
 	protected String createXml(String... lines) {
 		StringBuilder xmlBuilder = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 

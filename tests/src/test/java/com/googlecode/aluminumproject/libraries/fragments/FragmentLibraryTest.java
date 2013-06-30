@@ -15,18 +15,17 @@
  */
 package com.googlecode.aluminumproject.libraries.fragments;
 
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.libraries.LibraryInformation;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 
 import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-fragments", "slow"})
+@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/fragments")
 public class FragmentLibraryTest extends LibraryTest {
-	public FragmentLibraryTest() {
-		super("templates/fragments", "aluscript");
-	}
-
 	public static class DefaultFragmentLibrary extends FragmentLibrary {
 		public LibraryInformation createInformation() {
 			return new LibraryInformation("http://aluminumproject.googlecode.com/test/fragments/default", "tf", "test");

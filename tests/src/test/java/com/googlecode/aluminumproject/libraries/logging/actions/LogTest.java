@@ -18,8 +18,8 @@ package com.googlecode.aluminumproject.libraries.logging.actions;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.logging.LoggingContextProvider;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 import com.googlecode.aluminumproject.libraries.logging.LoggingLibraryTest;
 
 import java.util.List;
@@ -28,12 +28,8 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-logging", "slow"})
+@UseConfigurationParameter(name = LoggingContextProvider.LOGGER_NAME_PREFIX, value = "test")
 public class LogTest extends LoggingLibraryTest {
-	@Override
-	protected void addConfigurationParameters(ConfigurationParameters configurationParameters) {
-		configurationParameters.addParameter(LoggingContextProvider.LOGGER_NAME_PREFIX, "test");
-	}
-
 	public void traceMessageShouldBeLogged() {
 		processTemplate("log-trace");
 

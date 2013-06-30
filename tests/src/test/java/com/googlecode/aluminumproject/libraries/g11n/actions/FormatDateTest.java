@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
 import com.googlecode.aluminumproject.context.DefaultContext;
 import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameters;
 import com.googlecode.aluminumproject.libraries.g11n.GlobalisationLibraryTest;
 
 import java.util.Date;
@@ -28,6 +29,10 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-g11n", "slow"})
+@UseConfigurationParameters({
+	@UseConfigurationParameter(name = GlobalisationContextProvider.LOCALE, value = "en"),
+	@UseConfigurationParameter(name = GlobalisationContextProvider.TIME_ZONE, value = "utc")
+})
 public class FormatDateTest extends GlobalisationLibraryTest {
 	private Context context;
 
@@ -35,11 +40,6 @@ public class FormatDateTest extends GlobalisationLibraryTest {
 	public void createContext() {
 		context = new DefaultContext();
 		context.setVariable("date", new Date(0L));
-	}
-
-	protected void addConfigurationParameters(ConfigurationParameters parameters) {
-		parameters.addParameter(GlobalisationContextProvider.LOCALE, "en");
-		parameters.addParameter(GlobalisationContextProvider.TIME_ZONE, "utc");
 	}
 
 	public void customDateFormatShouldBeUsedByDefault() {

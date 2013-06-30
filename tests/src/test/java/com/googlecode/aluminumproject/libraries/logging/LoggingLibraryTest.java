@@ -24,7 +24,9 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.read.ListAppender;
 
+import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
 import com.googlecode.aluminumproject.libraries.LibraryTest;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,15 +36,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 @SuppressWarnings("javadoc")
-public class LoggingLibraryTest extends LibraryTest {
+@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/logging")
+public abstract class LoggingLibraryTest extends LibraryTest {
 	private Appender<ILoggingEvent> originalAppender;
 	private Level originalLevel;
 
 	private ListAppender<ILoggingEvent> listAppender;
-
-	public LoggingLibraryTest() {
-		super("templates/logging", "aluscript");
-	}
 
 	@BeforeMethod
 	public void configureTestLogging() {

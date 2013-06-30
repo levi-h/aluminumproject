@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2013 Aluminum project
+ * Copyright 2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.aluminumproject.libraries.mail;
+package com.googlecode.aluminumproject.libraries;
 
-import com.googlecode.aluminumproject.finders.ClassPathTemplateFinder;
-import com.googlecode.aluminumproject.libraries.LibraryTest;
-import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+@Retention(RetentionPolicy.RUNTIME)
 @SuppressWarnings("javadoc")
-@UseConfigurationParameter(name = ClassPathTemplateFinder.TEMPLATE_PATH, value = "templates/mail")
-public abstract class MailLibraryTest extends LibraryTest {}
+@Target(ElementType.TYPE)
+public @interface UseConfigurationParameters {
+	UseConfigurationParameter[] value();
+}

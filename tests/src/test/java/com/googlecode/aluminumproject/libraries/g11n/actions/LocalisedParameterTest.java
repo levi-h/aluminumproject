@@ -15,12 +15,11 @@
  */
 package com.googlecode.aluminumproject.libraries.g11n.actions;
 
-import static com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider.RESOURCE_BUNDLE_PROVIDER_CLASS;
-
 import com.googlecode.aluminumproject.AluminumException;
-import com.googlecode.aluminumproject.configuration.ConfigurationParameters;
 import com.googlecode.aluminumproject.context.Context;
+import com.googlecode.aluminumproject.context.g11n.GlobalisationContextProvider;
 import com.googlecode.aluminumproject.context.g11n.ResourceBundleProvider;
+import com.googlecode.aluminumproject.libraries.UseConfigurationParameter;
 import com.googlecode.aluminumproject.libraries.g11n.GlobalisationLibraryTest;
 
 import java.util.ListResourceBundle;
@@ -30,26 +29,9 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-g11n", "slow"})
+@UseConfigurationParameter(name = GlobalisationContextProvider.RESOURCE_BUNDLE_PROVIDER_CLASS,
+	value = LocalisedParameterTest.PARAMETER_RESOURCE_BUNDLE_PROVIDER_CLASS)
 public class LocalisedParameterTest extends GlobalisationLibraryTest {
-	public static class ParameterResourceBundleProvider implements ResourceBundleProvider {
-		private final static ResourceBundle PARAMETER_RESOURCE_BUNDLE = new ListResourceBundle() {
-			protected Object[][] getContents() {
-				return new Object[][] {
-					new Object[] {"text", "five"},
-					new Object[] {"number", 5},
-				};
-			}
-		};
-
-		public ResourceBundle provide(Context context) throws AluminumException {
-			return PARAMETER_RESOURCE_BUNDLE;
-		}
-	}
-
-	protected void addConfigurationParameters(ConfigurationParameters parameters) {
-		parameters.addParameter(RESOURCE_BUNDLE_PROVIDER_CLASS, ParameterResourceBundleProvider.class.getName());
-	}
-
 	public void textualParameterShouldBeLocalisable() {
 		assert processTemplate("localised-parameter").equals("five");
 	}
@@ -67,4 +49,22 @@ public class LocalisedParameterTest extends GlobalisationLibraryTest {
 	public void missingKeyShouldCauseException() {
 		processTemplate("localised-parameter-with-missing-key");
 	}
+
+	public static class ParameterResourceBundleProvider implements ResourceBundleProvider {
+		private final static ResourceBundle PARAMETER_RESOURCE_BUNDLE = new ListResourceBundle() {
+			protected Object[][] getContents() {
+				return new Object[][] {
+					new Object[] {"text", "five"},
+					new Object[] {"number", 5},
+				};
+			}
+		};
+
+		public ResourceBundle provide(Context context) throws AluminumException {
+			return PARAMETER_RESOURCE_BUNDLE;
+		}
+	}
+
+	public final static String PARAMETER_RESOURCE_BUNDLE_PROVIDER_CLASS =
+		"com.googlecode.aluminumproject.libraries.g11n.actions.LocalisedParameterTest$ParameterResourceBundleProvider";
 }

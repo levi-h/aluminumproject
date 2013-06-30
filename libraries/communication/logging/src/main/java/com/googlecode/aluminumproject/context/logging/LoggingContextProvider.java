@@ -71,5 +71,5 @@ public class LoggingContextProvider implements ContextEnricher {
 	}
 
 	/** The name of the configuration parameter that controls the prefix that will be used for logger names. */
-	public static String LOGGER_NAME_PREFIX = "library.logging.logger_name_prefix";
+	public final static String LOGGER_NAME_PREFIX = "library.logging.logger_name_prefix";
 }
