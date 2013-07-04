@@ -1,4 +1,4 @@
-# Copyright 2009-2012 Aluminum project
+# Copyright 2009-2013 Aluminum project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,4 +14,4 @@
 
 @library (g: http://aluminumproject.googlecode.com/g11n)
 
-@g.format date (value: ${date}, g.with custom pattern: yyyyMMddHHmm)
+@g.format date (value: ${date}, g.with custom pattern: 'yyyy MMMMM dd HH:mm')
