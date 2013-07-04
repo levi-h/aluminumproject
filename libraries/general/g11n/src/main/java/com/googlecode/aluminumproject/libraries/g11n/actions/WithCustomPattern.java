@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,8 +102,10 @@ public class WithCustomPattern extends AbstractActionContribution {
 			DateFormat dateFormat;
 
 			if (type == DateFormatType.CUSTOM) {
-				dateFormat = new SimpleDateFormat(customPattern);
-				dateFormat.setTimeZone(GlobalisationContext.from(context).getTimeZoneProvider().provide(context));
+				GlobalisationContext globalisationContext = GlobalisationContext.from(context);
+
+				dateFormat = new SimpleDateFormat(customPattern, globalisationContext.getLocaleProvider().provide(context));
+				dateFormat.setTimeZone(globalisationContext.getTimeZoneProvider().provide(context));
 			} else {
 				dateFormat = delegate.provide(type, context);
 			}
