@@ -62,6 +62,6 @@ public class FormatDateTest extends GlobalisationLibraryTest {
 
 	@Test(dependsOnMethods = "customDateFormatShouldBeUsedByDefault")
 	public void customPatternShouldBeUsed() {
-		assert processTemplate("format-date-with-custom-pattern", context).equals("197001010000");
+		assert processTemplate("format-date-with-custom-pattern", context).equals("1970 January 01 00:00");
 	}
 }
