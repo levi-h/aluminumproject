@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Aluminum project
+ * Copyright 2009-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,8 +114,6 @@ task createDistribution(type: Zip, dependsOn: createDocs) {
 task clean(type: Delete) {
 	delete rootProject.buildDir
 }
-
-task createWrapper(type: Wrapper)
 
 applyScripts('root', project)
 
