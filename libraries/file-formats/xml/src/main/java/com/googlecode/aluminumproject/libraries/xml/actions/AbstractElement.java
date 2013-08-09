@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.googlecode.aluminumproject.libraries.actions.AbstractAction;
 import com.googlecode.aluminumproject.templates.ActionDescriptor;
 import com.googlecode.aluminumproject.writers.Writer;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,9 @@ abstract class AbstractElement extends AbstractAction {
 
 	private @Injected Configuration configuration;
 
+	private @Ignored Map<String, List<String>> processingInstructions;
+	private @Ignored Map<String, List<String>> documentProcessingInstructions;
+
 	private @Ignored Map<String, String> namespaces;
 
 	private @Ignored Map<String, Map<String, String>> attributes;
@@ -49,6 +53,9 @@ abstract class AbstractElement extends AbstractAction {
 	private @Ignored boolean moreChildrenAllowed;
 
 	protected AbstractElement() {
+		processingInstructions = new LinkedHashMap<String, List<String>>();
+		documentProcessingInstructions = new LinkedHashMap<String, List<String>>();
+
 		namespaces = new LinkedHashMap<String, String>();
 
 		attributes = new LinkedHashMap<String, Map<String, String>>();
@@ -58,6 +65,47 @@ abstract class AbstractElement extends AbstractAction {
 	}
 
 	protected abstract String getElementName();
+
+	protected void addProcessingInstruction(
+			String target, Map<String, String> pseudoAttributes, boolean addToDocument) {
+		if (addToDocument) {
+			AbstractElement parent = findAncestorOfType(AbstractElement.class);
+
+			if (parent == null) {
+				addProcessingInstructionData(documentProcessingInstructions, target, pseudoAttributes);
+			} else {
+				parent.addProcessingInstruction(target, pseudoAttributes, addToDocument);
+			}
+		} else {
+			addProcessingInstructionData(processingInstructions, target, pseudoAttributes);
+		}
+	}
+
+	private void addProcessingInstructionData(
+			Map<String, List<String>> processingInstructions, String target, Map<String, String> pseudoAttributes) {
+		StringBuilder dataBuilder = new StringBuilder();
+
+		for (Map.Entry<String, String> pseudoAttribute: pseudoAttributes.entrySet()) {
+			if (dataBuilder.length() > 0) {
+				dataBuilder.append(" ");
+			}
+
+			String value = pseudoAttribute.getValue();
+
+			value = value.replace("&", "&amp;");
+			value = value.replace("\"", "&quot;");
+			value = value.replace("'", "&apos;");
+			value = value.replace("<", "&lt;").replace(">", "&gt;");
+
+			dataBuilder.append(String.format("%s=\"%s\"", pseudoAttribute.getKey(), value));
+		}
+
+		if (!processingInstructions.containsKey(target)) {
+			processingInstructions.put(target, new LinkedList<String>());
+		}
+
+		processingInstructions.get(target).add(dataBuilder.toString());
+	}
 
 	protected void addChild(Element child) throws AluminumException {
 		addChildNode(child);
@@ -124,7 +172,7 @@ abstract class AbstractElement extends AbstractAction {
 		AbstractElement parent = findAncestorOfType(AbstractElement.class);
 
 		if (parent == null) {
-			writer.write(new XomElement(element));
+			writer.write(new XomElement(element, getProcessingInstructions(documentProcessingInstructions)));
 		} else {
 			parent.addChild(element);
 		}
@@ -143,6 +191,19 @@ abstract class AbstractElement extends AbstractAction {
 		}
 
 		return element;
+	}
+
+	private List<nu.xom.ProcessingInstruction> getProcessingInstructions(
+			Map<String, List<String>> sourceProcessingInstructions) {
+		List<nu.xom.ProcessingInstruction> processingInstructions = new ArrayList<nu.xom.ProcessingInstruction>();
+
+		for (String target: sourceProcessingInstructions.keySet()) {
+			for (String data: sourceProcessingInstructions.get(target)) {
+				processingInstructions.add(new nu.xom.ProcessingInstruction(target, data));
+			}
+		}
+
+		return processingInstructions;
 	}
 
 	private void addNamespaceDeclarations(Element element) {
@@ -189,6 +250,10 @@ abstract class AbstractElement extends AbstractAction {
 	}
 
 	private void addChildren(Element element) {
+		for (nu.xom.ProcessingInstruction processingInstruction: getProcessingInstructions(processingInstructions)) {
+			element.appendChild(processingInstruction);
+		}
+
 		for (Node child: children) {
 			element.appendChild(child);
 		}
