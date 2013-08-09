@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2013 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,17 @@ class XomElement implements Element {
 	private nu.xom.Element element;
 
 	public XomElement(nu.xom.Element element) {
-		this.element = (element.getDocument() == null) ? new Document(element).getRootElement() : element;
+		this.element = element;
+	}
+
+	public XomElement(nu.xom.Element element, List<nu.xom.ProcessingInstruction> processingInstructions) {
+		Document document = new Document(element);
+
+		for (int i = 0; i < processingInstructions.size(); i++) {
+			document.insertChild(processingInstructions.get(i), i);
+		}
+
+		this.element = document.getRootElement();
 	}
 
 	public List<?> select(String expression, SelectionContext context) throws AluminumException {
