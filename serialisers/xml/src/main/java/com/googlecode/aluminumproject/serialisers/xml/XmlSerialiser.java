@@ -103,9 +103,9 @@ public class XmlSerialiser implements Serialiser {
 	 */
 	protected void addTemplateElementSerialisers(
 			Map<Class<? extends TemplateElement>, TemplateElementSerialiser<?>> templateElementSerialisers) {
-		addTemplateElementSerialiser(ActionElement.class, new ActionElementSerialiser());
-		addTemplateElementSerialiser(TextElement.class, new TextElementSerialiser());
-		addTemplateElementSerialiser(ExpressionElement.class, new ExpressionElementSerialiser());
+		addTemplateElementSerialiser(ActionElement.class, new ActionElementSerialiser(), templateElementSerialisers);
+		addTemplateElementSerialiser(TextElement.class, new TextElementSerialiser(), templateElementSerialisers);
+		addTemplateElementSerialiser(ExpressionElement.class, new ExpressionElementSerialiser(), templateElementSerialisers);
 	}
 
 	/**
@@ -118,6 +118,12 @@ public class XmlSerialiser implements Serialiser {
 	 */
 	protected <E extends TemplateElement> void addTemplateElementSerialiser(
 			Class<E> templateElementType, TemplateElementSerialiser<E> templateElementSerialiser) {
+		addTemplateElementSerialiser(templateElementType, templateElementSerialiser, templateElementSerialisers);
+	}
+
+	private <E extends TemplateElement> void addTemplateElementSerialiser(
+			Class<E> templateElementType, TemplateElementSerialiser<E> templateElementSerialiser,
+			Map<Class<? extends TemplateElement>, TemplateElementSerialiser<?>> templateElementSerialisers) {
 		logger.debug("adding template element serialiser ", templateElementSerialiser,
 			" for template element type ", templateElementType.getName());
 
