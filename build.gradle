@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Aluminum project
+ * Copyright 2009-2014 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ subprojects {
 			options.links 'http://download.oracle.com/javase/6/docs/api/'
 		}
 
-		task createSources(type: Zip, visible: false) {
+		task createSources(type: Zip) {
 			classifier = 'src'
 
 			from sourceSets.main.allSource
@@ -55,14 +55,14 @@ subprojects {
 	rootProject.evaluationDependsOn name
 }
 
-task createAluDocs(type: JavaExec, visible: false, dependsOn: subprojects*.build) {
+task createAluDocs(type: JavaExec, dependsOn: subprojects*.build) {
 	main = 'com.googlecode.aluminumproject.cli.commands.aludoc.AluDoc'
 	args = ['--location', new File(project.buildDir, 'docs/aludoc').path]
 
 	classpath = project('aluminum-tests').configurations.testRuntime
 }
 
-task createApiDocs(type: Javadoc, visible: false)  {
+task createApiDocs(type: Javadoc)  {
 	destinationDir = new File(project.buildDir, 'docs/api')
 
 	Collection<Project> projects = subprojects.findAll {project -> project.name != 'aluminum-tests'}
