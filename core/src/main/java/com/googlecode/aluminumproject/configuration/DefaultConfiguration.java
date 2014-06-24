@@ -58,8 +58,9 @@ import java.util.Set;
  * DefaultTypeFinder default type finder} will be used instead.
  * <p>
  * The other configuration elements will be created using the {@link DefaultConfigurationElementFactory default
- * configuration element factory}, although a different implementation can be used by providing a value for the {@value
- * #CONFIGURATION_ELEMENT_FACTORY_CLASS} parameter.
+ * configuration element factory}, although a different implementation can be used by either providing a value for the
+ * {@value #CONFIGURATION_ELEMENT_FACTORY_CLASS} parameter or overriding {@link #createConfigurationElementFactory() the
+ * createConfigurationElementFactory method}.
  * <p>
  * For the converter registry, the configuration will look for a parameter with the name {@value
  * #CONVERTER_REGISTRY_CLASS}. If the parameter exists, its value will be interpreted as the class name of the converter
@@ -167,7 +168,7 @@ public class DefaultConfiguration implements Configuration {
 		createTypeFinder();
 		typeFinder.initialise(this);
 
-		createConfigurationElementFactory();
+		configurationElementFactory = createConfigurationElementFactory();
 		configurationElementFactory.initialise(this);
 
 		createConverterRegistry();
@@ -192,7 +193,15 @@ public class DefaultConfiguration implements Configuration {
 		typeFinder = instantiate(typeFinderClassName, TypeFinder.class, Thread.currentThread().getContextClassLoader());
 	}
 
-	private void createConfigurationElementFactory() throws AluminumException {
+	/**
+	 * Creates the configuration element factory. This implementation instantiates the class that is configured in the
+	 * configuration parameter named {@value #CONFIGURATION_ELEMENT_FACTORY_CLASS}, but subclasses may override this
+	 * method if they want to use a configuration element factory that should not be constructed through reflection.
+	 *
+	 * @return the factory that should be used to create the elements in this configuration
+	 * @throws AluminumException when the configuration element factory can't be created
+	 */
+	protected ConfigurationElementFactory createConfigurationElementFactory() throws AluminumException {
 		String configurationElementFactoryClassName = parameters.getValue(
 			CONFIGURATION_ELEMENT_FACTORY_CLASS, DefaultConfigurationElementFactory.class.getName());
 
@@ -200,8 +209,7 @@ public class DefaultConfiguration implements Configuration {
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-		configurationElementFactory =
-			instantiate(configurationElementFactoryClassName, ConfigurationElementFactory.class, classLoader);
+		return instantiate(configurationElementFactoryClassName, ConfigurationElementFactory.class, classLoader);
 	}
 
 	private void createConverterRegistry() throws AluminumException {
