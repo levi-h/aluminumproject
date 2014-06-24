@@ -56,7 +56,7 @@ public abstract class AbstractLibraryElement implements LibraryElement {
 	 *
 	 * @param injector the injector to add value providers to
 	 */
-	protected void addValueProviders(Injector injector) {}
+	protected void addValueProviders(@SuppressWarnings("unused") Injector injector) {}
 
 	public void disable() {}
 
