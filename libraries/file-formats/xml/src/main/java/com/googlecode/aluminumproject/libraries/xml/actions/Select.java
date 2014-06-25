@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2014 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public class Select extends AbstractAction implements SelectionContextContainer 
 
 			case AUTOMATIC:
 			default:
-				result = (results.size() == 1) ? results.get(0) : results;
+				result = (results.size() == 1) ? results.get(0) : results.isEmpty() ? null : results;
 
 				break;
 		}

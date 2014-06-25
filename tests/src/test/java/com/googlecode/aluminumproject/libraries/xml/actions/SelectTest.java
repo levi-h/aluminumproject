@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Aluminum project
+ * Copyright 2010-2014 Aluminum project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,17 @@ import org.testng.annotations.Test;
 @SuppressWarnings("javadoc")
 @Test(groups = {"libraries", "libraries-xml", "slow"})
 public class SelectTest extends XmlLibraryTest {
+	public void selectingNoElementShouldResultInNull() {
+		Context context = new DefaultContext();
+
+		processTemplate("select-no-elements", context);
+
+		assert context.getVariableNames(Context.TEMPLATE_SCOPE).contains("pages");
+
+		Object variable = context.getVariable(Context.TEMPLATE_SCOPE, "pages");
+		assert variable == null;
+	}
+
 	public void elementsShouldBeSelectable() {
 		Context context = new DefaultContext();
 
